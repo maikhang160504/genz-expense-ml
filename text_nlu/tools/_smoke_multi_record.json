@@ -1,0 +1,23 @@
+{
+  "intent": "Record",
+  "multi_record_task": true,
+  "multi_records": [
+    {
+      "segment": "bánh ngọt 29k",
+      "amount": 29000,
+      "category": "Food",
+      "item": null,
+      "category_ner": null,
+      "record_type": "Expense"
+    },
+    {
+      "segment": "bàn chải 18k",
+      "amount": 18000,
+      "category": "Entertainment",
+      "item": null,
+      "category_ner": null,
+      "record_type": "Expense"
+    }
+  ],
+  "amount_spent": 29000
+}

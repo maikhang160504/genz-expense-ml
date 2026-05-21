@@ -1,0 +1,26 @@
+{
+  "raw": "{\"gaps\":[\"Investment\",\"Social\",\"Entertainment\",\"Business (income)\",\"Salary (income)\",\"Bonus (income)\"],\"bad_patterns\":[\"Savings (lãi) mislabel\",\"Salary (thu hồi nợ) mislabel\",\"topics_md có lặp từ\",\"Meta-comment GenZ style\",\"Nguồn thu nhập chưa rõ ràng\"],\"themes_next\":[\"Hoạt động xã hội (cafe,",
+  "stats": {
+    "rows": 30484,
+    "expense": 28134,
+    "income": 2350,
+    "label_top": {
+      "Essentials": 10832,
+      "Food": 9296,
+      "Transport": 3113,
+      "Business": 1378,
+      "Beauty": 751,
+      "Housing": 721
+    },
+    "label_weak": {
+      "Shopping": 390,
+      "Health": 371,
+      "Education": 353,
+      "Bonus": 309,
+      "Debt": 299,
+      "Charity": 294,
+      "Savings": 231,
+      "Others": 226
+    }
+  }
+}

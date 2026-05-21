@@ -1,0 +1,328 @@
+{
+  "source": "gemini",
+  "count": 40,
+  "lines": [
+    "Đóng học phí 15 triệu.",
+    "Photocopy giáo trình 45k.",
+    "In tài liệu thuyết trình 20k.",
+    "Thanh toán tiền điện phòng 150k.",
+    "Đóng tiền wifi KTX 50k.",
+    "Trả tiền nước sinh hoạt 25k.",
+    "Order GrabFood 70k.",
+    "Nạp gói cày phim Netflix 70k.",
+    "Chi vé xem phim rạp 90k.",
+    "Mua bắp rang, nước ngọt 60k.",
+    "Nạp kim cương game 50k.",
+    "Mua skin mới Liên Quân 120k.",
+    "Đăng ký Spotify Premium 59k.",
+    "Chi gói mì tôm, trứng, rau 45k.",
+    "Mua gạo, dầu ăn siêu thị 180k.",
+    "Sắm sữa tắm, dầu gội 110k.",
+    "Đóng tiền điện phòng 230k.",
+    "Thanh toán tiền nước KTX 50k.",
+    "Đóng phí wifi KTX tháng 80k.",
+    "Order áo khoác Shopee 200k.",
+    "Mua ốp lưng TikTok Shop 75k.",
+    "Chi phụ kiện máy tính 150k.",
+    "Mua tai nghe Bluetooth 350k.",
+    "Tiền điện KTX tháng này 210k.",
+    "Grab đồ ăn vặt 60k.",
+    "Mua bình giữ nhiệt 100k.",
+    "Nạp thẻ điện thoại 50k.",
+    "Đi coi phim hết 120k.",
+    "Nạp game 50k.",
+    "Đóng tiền điện KTX 150k.",
+    "Đóng tiền wifi KTX 80k.",
+    "Đóng tiền nước KTX 30k.",
+    "Gọi Grab về 45k.",
+    "Đi xe ôm hết 25k.",
+    "Đổ xăng 50k.",
+    "Mua vé xe buýt 7k.",
+    "Đóng học phí 3 triệu.",
+    "Photo tài liệu 15k.",
+    "In tài liệu môn này 20k.",
+    "Ăn trưa căng tin 35k"
+  ],
+  "nlu": [
+    {
+      "text": "Đóng học phí 15 triệu.",
+      "intent": "Record",
+      "category": "Education",
+      "amount": 15000000,
+      "record_type": "Expense"
+    },
+    {
+      "text": "Photocopy giáo trình 45k.",
+      "intent": "Record",
+      "category": "Education",
+      "amount": 45000,
+      "record_type": "Expense"
+    },
+    {
+      "text": "In tài liệu thuyết trình 20k.",
+      "intent": "Record",
+      "category": "Education",
+      "amount": 20000,
+      "record_type": "Expense"
+    },
+    {
+      "text": "Thanh toán tiền điện phòng 150k.",
+      "intent": "Record",
+      "category": "Housing",
+      "amount": 150000,
+      "record_type": "Expense"
+    },
+    {
+      "text": "Đóng tiền wifi KTX 50k.",
+      "intent": "Record",
+      "category": "Housing",
+      "amount": 50000,
+      "record_type": "Expense"
+    },
+    {
+      "text": "Trả tiền nước sinh hoạt 25k.",
+      "intent": "Record",
+      "category": "Housing",
+      "amount": 25000,
+      "record_type": "Expense"
+    },
+    {
+      "text": "Order GrabFood 70k.",
+      "intent": "Record",
+      "category": "Food",
+      "amount": 70000,
+      "record_type": "Expense"
+    },
+    {
+      "text": "Nạp gói cày phim Netflix 70k.",
+      "intent": "Record",
+      "category": "Entertainment",
+      "amount": 70000,
+      "record_type": "Expense"
+    },
+    {
+      "text": "Chi vé xem phim rạp 90k.",
+      "intent": "Record",
+      "category": "Entertainment",
+      "amount": 90000,
+      "record_type": "Expense"
+    },
+    {
+      "text": "Mua bắp rang, nước ngọt 60k.",
+      "intent": "Record",
+      "category": "Entertainment",
+      "amount": 60000,
+      "record_type": "Expense"
+    },
+    {
+      "text": "Nạp kim cương game 50k.",
+      "intent": "Record",
+      "category": "Entertainment",
+      "amount": 50000,
+      "record_type": "Income"
+    },
+    {
+      "text": "Mua skin mới Liên Quân 120k.",
+      "intent": "Record",
+      "category": "Social",
+      "amount": 120000,
+      "record_type": "Expense"
+    },
+    {
+      "text": "Đăng ký Spotify Premium 59k.",
+      "intent": "Record",
+      "category": "Entertainment",
+      "amount": 59000,
+      "record_type": "Expense"
+    },
+    {
+      "text": "Chi gói mì tôm, trứng, rau 45k.",
+      "intent": "Record",
+      "category": "Essentials",
+      "amount": 45000,
+      "record_type": "Expense"
+    },
+    {
+      "text": "Mua gạo, dầu ăn siêu thị 180k.",
+      "intent": "Record",
+      "category": "Essentials",
+      "amount": 180000,
+      "record_type": "Expense"
+    },
+    {
+      "text": "Sắm sữa tắm, dầu gội 110k.",
+      "intent": "Record",
+      "category": "Essentials",
+      "amount": 110000,
+      "record_type": "Expense"
+    },
+    {
+      "text": "Đóng tiền điện phòng 230k.",
+      "intent": "Record",
+      "category": "Housing",
+      "amount": 230000,
+      "record_type": "Expense"
+    },
+    {
+      "text": "Thanh toán tiền nước KTX 50k.",
+      "intent": "Record",
+      "category": "Housing",
+      "amount": 50000,
+      "record_type": "Expense"
+    },
+    {
+      "text": "Đóng phí wifi KTX tháng 80k.",
+      "intent": "Record",
+      "category": "Housing",
+      "amount": 80000,
+      "record_type": "Expense"
+    },
+    {
+      "text": "Order áo khoác Shopee 200k.",
+      "intent": "Record",
+      "category": "Shopping",
+      "amount": 200000,
+      "record_type": "Expense"
+    },
+    {
+      "text": "Mua ốp lưng TikTok Shop 75k.",
+      "intent": "Record",
+      "category": "Shopping",
+      "amount": 75000,
+      "record_type": "Expense"
+    },
+    {
+      "text": "Chi phụ kiện máy tính 150k.",
+      "intent": "Record",
+      "category": "Health",
+      "amount": 150000,
+      "record_type": "Expense"
+    },
+    {
+      "text": "Mua tai nghe Bluetooth 350k.",
+      "intent": "Record",
+      "category": "Shopping",
+      "amount": 350000,
+      "record_type": "Expense"
+    },
+    {
+      "text": "Tiền điện KTX tháng này 210k.",
+      "intent": "Record",
+      "category": "Housing",
+      "amount": 210000,
+      "record_type": "Expense"
+    },
+    {
+      "text": "Grab đồ ăn vặt 60k.",
+      "intent": "Record",
+      "category": "Transport",
+      "amount": 60000,
+      "record_type": "Expense"
+    },
+    {
+      "text": "Mua bình giữ nhiệt 100k.",
+      "intent": "Record",
+      "category": "Shopping",
+      "amount": 100000,
+      "record_type": "Expense"
+    },
+    {
+      "text": "Nạp thẻ điện thoại 50k.",
+      "intent": "Record",
+      "category": "Entertainment",
+      "amount": 50000,
+      "record_type": "Expense"
+    },
+    {
+      "text": "Đi coi phim hết 120k.",
+      "intent": "Record",
+      "category": "Entertainment",
+      "amount": 120000,
+      "record_type": "Expense"
+    },
+    {
+      "text": "Nạp game 50k.",
+      "intent": "Record",
+      "category": "Entertainment",
+      "amount": 50000,
+      "record_type": "Expense"
+    },
+    {
+      "text": "Đóng tiền điện KTX 150k.",
+      "intent": "Record",
+      "category": "Housing",
+      "amount": 150000,
+      "record_type": "Expense"
+    },
+    {
+      "text": "Đóng tiền wifi KTX 80k.",
+      "intent": "Record",
+      "category": "Housing",
+      "amount": 80000,
+      "record_type": "Expense"
+    },
+    {
+      "text": "Đóng tiền nước KTX 30k.",
+      "intent": "Record",
+      "category": "Housing",
+      "amount": 30000,
+      "record_type": "Expense"
+    },
+    {
+      "text": "Gọi Grab về 45k.",
+      "intent": "Record",
+      "category": "Transport",
+      "amount": 45000,
+      "record_type": "Expense"
+    },
+    {
+      "text": "Đi xe ôm hết 25k.",
+      "intent": "Record",
+      "category": "Transport",
+      "amount": 25000,
+      "record_type": "Expense"
+    },
+    {
+      "text": "Đổ xăng 50k.",
+      "intent": "Record",
+      "category": "Transport",
+      "amount": 50000,
+      "record_type": "Expense"
+    },
+    {
+      "text": "Mua vé xe buýt 7k.",
+      "intent": "Record",
+      "category": "Transport",
+      "amount": 7000,
+      "record_type": "Expense"
+    },
+    {
+      "text": "Đóng học phí 3 triệu.",
+      "intent": "Record",
+      "category": "Education",
+      "amount": 3000000,
+      "record_type": "Expense"
+    },
+    {
+      "text": "Photo tài liệu 15k.",
+      "intent": "Record",
+      "category": "Education",
+      "amount": 15000,
+      "record_type": "Expense"
+    },
+    {
+      "text": "In tài liệu môn này 20k.",
+      "intent": "Record",
+      "category": "Education",
+      "amount": 20000,
+      "record_type": "Expense"
+    },
+    {
+      "text": "Ăn trưa căng tin 35k",
+      "intent": "Record",
+      "category": "Food",
+      "amount": 35000,
+      "record_type": "Expense"
+    }
+  ]
+}

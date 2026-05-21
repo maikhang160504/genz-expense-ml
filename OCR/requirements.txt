@@ -1,0 +1,24 @@
+torch>=2.0.0
+torchvision>=0.15.0
+opencv-python-headless>=4.8.0
+pandas>=2.0.0
+numpy>=1.26.4
+Pillow>=10.0.0
+matplotlib>=3.7.0
+paddleocr>=2.7.0,<3.0.0; python_version < "3.12"
+paddleocr>=3.0.0,<4.0.0; python_version >= "3.12"
+paddlepaddle>=2.5.0,<3.0.0; python_version < "3.12"
+paddlepaddle>=3.2.2,<3.3.0; python_version >= "3.12"
+langchain-text-splitters>=0.2.0; python_version >= "3.12"
+langchain>=0.2.0; python_version >= "3.12"
+langchain-community>=0.2.0; python_version >= "3.12"
+vietocr>=0.3.13
+lmdb>=1.4.0
+imgaug>=0.4.0
+pyyaml>=6.0
+fastapi>=0.110.0
+uvicorn[standard]>=0.27.0
+python-multipart>=0.0.9
+einops==0.2.0
+prefetch-generator>=1.0.3
+gdown>=4.7.0

@@ -1,0 +1,21 @@
+OK intent | 'Ăn phở sáng 45k' got=Record category=OK record_type=OK
+OK intent | 'Lương tháng về 12tr' got=Record record_type=OK
+OK intent | 'me cho 1tr' got=Record category=OK record_type=OK
+OK intent | 'mẹ ck 500k' got=Record record_type=OK
+OK intent | 'hoàn tiền 50k' got=Record record_type=OK
+OK intent | 'mua trên shopee 120k' got=Record category=OK
+OK intent | 'tiktok shop 89k' got=Record category=OK
+OK intent | 'gạo 50k' got=Record category=OK
+OK intent | 'mua quà cho mẹ 200k' got=Record category=OK record_type=OK
+OK intent | 'Mua Netflix tháng 109k' got=Record category=OK
+OK intent | 'ăn vặt 30k' got=Record
+OK intent | 'Tháng này tiêu bao nhiêu rồi' got=Action action_type=OK
+OK intent | 'tổng chi tháng này' got=Action action_type=OK
+OK intent | 'Xóa giao dịch vừa nhập' got=Action action_type=OK
+OK intent | 'Đặt hạn mức ăn uống 2tr' got=Action action_type=OK
+OK intent | 'Tìm khoản chi trên 500k' got=Action action_type=OK
+OK intent | 'Chào bot nha' got=Chitchat
+OK intent | 'okela di' got=Chitchat
+OK intent | 'Bạn là ai vậy' got=Chitchat
+OK intent | 'cho minh hoi app lam gi vay' got=Chitchat
+20/20 intent match | extra fields 18/18
