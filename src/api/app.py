@@ -43,6 +43,24 @@ PROMPTS_CONFIG = load_prompts(settings.PROMPTS_PATH)
 REQUEST_TEMPLATE = load_request_template(settings.REQUEST_TEMPLATE_PATH)
 
 
+@app.on_event("startup")
+def startup_event():
+    print("Warming up NLU models with a dummy inference...", flush=True)
+    try:
+        dummy_result = run_nlu(
+            "Tôi đã chi 50k ăn trưa",
+            INTENT_MODEL,
+            CATEGORY_MODEL,
+            ACTION_TYPE_MODEL,
+            RECORD_TYPE_MODEL,
+            SENTIMENT_MODEL,
+            NER_MODEL,
+        )
+        print(f"Model warm-up successful. Intent: {dummy_result.get('intent')}", flush=True)
+    except Exception as e:
+        print(f"Error during model warm-up: {e}", flush=True)
+
+
 def _nlu_result_from_pipeline(result: dict, user_text: str) -> dict:
     return {
         "intent": result.get("intent"),
@@ -54,6 +72,7 @@ def _nlu_result_from_pipeline(result: dict, user_text: str) -> dict:
         "income_type": result.get("income_type") if result.get("intent") == "Record" else None,
         "action_type": result.get("action_type"),
         "value": result.get("action_param"),
+        "relationship_tag": result.get("relationship_tag"),
     }
 
 

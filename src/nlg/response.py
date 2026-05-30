@@ -3,6 +3,30 @@ import unicodedata
 
 STATUS_ALLOWED = {"vui", "buon", "canh_bao", "trung_lap"}
 
+EMOTION_ALLOWED = {
+    "Alert", "Angry", "Approved", "Celebrate", "Chill", "Cooking", "Cool",
+    "Determined", "Error", "Excited", "Giggle", "Happy", "Hello", "Loading",
+    "Love", "Proud", "Relax", "Sad", "Sleepy", "Sassy", "Shopping", "Travel",
+    "Sorry", "Success", "Taunting", "Thankful", "Thinking", "Working", "Worried",
+}
+
+_EMOTION_LOWER_MAP: dict[str, str] = {e.lower(): e for e in EMOTION_ALLOWED}
+
+_EMOTION_ALIASES: dict[str, str] = {
+    "vui": "Happy",
+    "buon": "Sad",
+    "canh_bao": "Thinking",
+    "trung_lap": "Chill",
+    "dan_doi": "Sad",
+    "cham_choc": "Taunting",
+    "hai_huoc": "Sassy",
+    "dong_cam": "Approved",
+    "nghiem_tuc": "Thinking",
+    "can_than": "Alert",
+    "canh_bao_cam": "Alert",
+    "khong_ro": "Chill",
+}
+
 
 def _strip_accents(text: str) -> str:
     return "".join(
@@ -23,6 +47,26 @@ def normalize_status(value: str | None, is_triggered: bool) -> str:
     if lowered in {"trunglap", "trung-lap"}:
         return "trung_lap"
     return "canh_bao" if is_triggered else "trung_lap"
+
+
+def normalize_emotion(value: str | None, fallback: str = "Chill") -> str:
+    """Map LLM-returned emotion string → PascalCase Flutter asset name (one of EMOTION_ALLOWED)."""
+    if not value:
+        return fallback
+    v = value.strip()
+    if v in EMOTION_ALLOWED:
+        return v
+    lowered = v.lower().replace(" ", "_").replace("-", "_")
+    if lowered in _EMOTION_LOWER_MAP:
+        return _EMOTION_LOWER_MAP[lowered]
+    if lowered in _EMOTION_ALIASES:
+        return _EMOTION_ALIASES[lowered]
+    no_accent = _strip_accents(lowered)
+    if no_accent in _EMOTION_LOWER_MAP:
+        return _EMOTION_LOWER_MAP[no_accent]
+    if no_accent in _EMOTION_ALIASES:
+        return _EMOTION_ALIASES[no_accent]
+    return fallback
 
 
 def _parse_json_text(text: str) -> dict | None:

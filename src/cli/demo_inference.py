@@ -21,6 +21,13 @@ from src.nlu.action_executor import describe_action_execution
 from src.nlu.ner import load_ner_model
 from src.nlu.pipeline import run_nlu
 
+_STATUS_TO_ASSET = {
+    "vui": "Happy",
+    "buon": "Sad",
+    "canh_bao": "Thinking",
+    "trung_lap": "Chill",
+}
+
 
 def _pick_llm_text(gemini_json: dict | None, llama_json: dict | None) -> tuple[str | None, str | None]:
     story = None
@@ -76,14 +83,27 @@ def _print_demo_summary(
     else:
         lines.append("  → chitchat via LLM (no NLU sentiment)")
 
-    lines.append(f"context_meta ({context_metadata.get('source', '?')}): type={context_metadata.get('type')}")
+    ctx_parts = [
+        f"source={context_metadata.get('source', '?')}",
+        f"type={context_metadata.get('type')}",
+        f"time={context_metadata.get('time_of_day', '-')}",
+        f"wallet={context_metadata.get('wallet_health', '-')}",
+    ]
+    if context_metadata.get("weather") and context_metadata["weather"] != "không_rõ":
+        ctx_parts.append(f"weather={context_metadata['weather']}")
+    if context_metadata.get("days_to_payday") is not None:
+        ctx_parts.append(f"payday_in={context_metadata['days_to_payday']}d")
+    lines.append(f"context_meta: {' | '.join(ctx_parts)}")
+    if context_metadata.get("historical_fact"):
+        lines.append(f"  → fact: {context_metadata['historical_fact']}")
 
     story, src = _pick_llm_text(gemini_json, llama_json)
     if story:
-        status = (gemini_json or llama_json or {}).get("status")
+        llm_data = gemini_json if (gemini_json and gemini_json.get("story")) else (llama_json or {})
+        status = llm_data.get("status")
         lines.append(f"LLM ({src}) — story: {story}")
         if status is not None:
-            lines.append(f"LLM ({src}) — status: {status}")
+            lines.append(f"LLM ({src}) — status: {status} → mascot: {_STATUS_TO_ASSET.get(status, '?')}")
     elif intent == "Action" and result.get("action_ack"):
         ack = result["action_ack"]
         lines.append(f"Phản hồi (ack cục bộ): {ack.get('story')} [{ack.get('status')}]")

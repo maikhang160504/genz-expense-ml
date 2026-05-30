@@ -1,4 +1,5 @@
 import re
+import unicodedata
 
 from pyvi import ViTokenizer
 
@@ -19,6 +20,51 @@ MONEY_RE = re.compile(
     r"(\d+(?:[\.,]\d+)?\s?(k|đ|d|vnđ|vnd|ngan|nghin|triệu|trieu|củ|cu))",
     re.IGNORECASE,
 )
+
+_CHA_ME_KEYWORDS = {
+    "mẹ", "má", "ba", "bố", "cha", "cụ", "ông bà",
+    "mẹ ruột", "bố ruột", "ba ruột", "bà nội", "bà ngoại", "ông nội", "ông ngoại",
+    "báo hiếu", "phụng dưỡng", "cho mẹ", "cho ba", "cho bố", "cho cha",
+    "tặng mẹ", "tặng ba", "tặng bố", "tiền mẹ", "tiền ba", "tiền bố",
+    "mẹ ơi", "ba ơi", "bố ơi", "nuôi mẹ", "nuôi ba", "lo cho mẹ",
+    "thuốc cho mẹ", "thuốc cho ba", "viện phí", "bệnh viện",
+}
+
+_NGUOI_YEU_KEYWORDS = {
+    "bồ", "người yêu", "ny", "crush", "bạn gái", "bạn trai",
+    "bạn ghệ", "ghệ", "gf", "bf", "partner",
+    "em yêu", "anh yêu", "yêu ơi", "baby", "babe",
+    "hẹn hò", "date", "kỷ niệm", "anniversary", "valentine",
+    "dẫn bồ", "đưa bồ", "cho bồ", "tặng bồ", "mua cho bồ",
+    "dẫn người yêu", "đưa người yêu", "mua cho người yêu",
+}
+
+
+def _no_accent(s: str) -> str:
+    """Strip diacritics for accent-insensitive matching."""
+    return "".join(
+        ch for ch in unicodedata.normalize("NFD", s) if unicodedata.category(ch) != "Mn"
+    )
+
+
+_CHA_ME_NORM = {_no_accent(kw) for kw in _CHA_ME_KEYWORDS}
+_NGUOI_YEU_NORM = {_no_accent(kw) for kw in _NGUOI_YEU_KEYWORDS}
+
+
+def detect_relationship_tag(text: str) -> str | None:
+    """Quét từ khóa nhạy cảm để gán tag ẩn CHA_ME hoặc NGUOI_YEU.
+    Hỗ trợ cả text có dấu lẫn không dấu (GenZ typing).
+    Bill scan KHÔNG gọi hàm này (không có text chủ quan của user).
+    """
+    lowered = text.lower()
+    norm = _no_accent(lowered)
+    for kw in _NGUOI_YEU_NORM:
+        if kw in norm:
+            return "NGUOI_YEU"
+    for kw in _CHA_ME_NORM:
+        if kw in norm:
+            return "CHA_ME"
+    return None
 
 
 def classify_intent(text: str, intent_model: dict) -> tuple[str, float | None, dict[str, float]]:
@@ -169,6 +215,7 @@ def run_nlu(
         "clean_content": content,
         "multi_records": [],
         "multi_record_task": False,
+        "relationship_tag": detect_relationship_tag(user_text),
     }
 
     if intent == "Record":

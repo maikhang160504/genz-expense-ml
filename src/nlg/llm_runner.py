@@ -8,7 +8,7 @@ from typing import Any
 
 from src.llm.client import call_gemini, call_groq, ensure_gemini_system_instruction
 from src.nlg.prompt import build_nlg_prompt
-from src.nlg.response import normalize_status, parse_llm_response
+from src.nlg.response import normalize_emotion, normalize_status, parse_llm_response
 
 
 def load_request_template(path: Path) -> dict | None:
@@ -97,10 +97,13 @@ def attach_nlg_and_llm(
             result["gemini_response"] = raw
             gemini_json = parse_llm_response(raw, "gemini")
             if gemini_json:
+                if "response" in gemini_json and "story" not in gemini_json:
+                    gemini_json["story"] = gemini_json["response"]
                 gemini_json["status"] = normalize_status(
                     gemini_json.get("status"),
                     context_metadata.get("is_triggered", False),
                 )
+                gemini_json["emotion"] = normalize_emotion(gemini_json.get("emotion"))
             result["gemini_json"] = gemini_json
         except Exception as exc:
             result["gemini_error"] = str(exc)
@@ -118,10 +121,13 @@ def attach_nlg_and_llm(
             result["llama_response"] = raw
             llama_json = parse_llm_response(raw, "llama")
             if llama_json:
+                if "response" in llama_json and "story" not in llama_json:
+                    llama_json["story"] = llama_json["response"]
                 llama_json["status"] = normalize_status(
                     llama_json.get("status"),
                     context_metadata.get("is_triggered", False),
                 )
+                llama_json["emotion"] = normalize_emotion(llama_json.get("emotion"))
             result["llama_json"] = llama_json
         except Exception as exc:
             result["llama_error"] = str(exc)
