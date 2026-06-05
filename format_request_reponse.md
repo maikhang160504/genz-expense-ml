@@ -17,22 +17,22 @@
     "responseSchema": {
       "type": "object",
       "properties": {
-        "story": {"type": "string"},
-        "status": {"type": "string"}
+        "response": {"type": "string"},
+        "mimo_emotion": {"type": "string"}
       },
-      "required": ["story", "status"]
+      "required": ["response", "mimo_emotion"]
     },
     "thinkingConfig": {
       "thinkingBudget": 0
     }
   },
-  "systemInstruction": "Bạn là chuyên gia tài chính Gen Z. Trả về định dạng JSON gồm hai trường: \"story\" (câu chuyện bắt trend) và \"status\" (một trong: vui, buon, canh_bao, trung_lap — không dấu, snake_case)."
+  "systemInstruction": "Placeholder — runtime ghi đè bằng nlg_prompt.system."
 }
 
 
 {
-  "story": "60k trà sữa thì 'ngoan xinh yêu' đấy, nhưng ví tiền của bạn đang ở trạng thái 'ét ô ét' vì lố 10% ngân sách rồi nhé! 🧋",
-  "status": "canh_bao",
+  "response": "60k trà sữa thì 'ngoan xinh yêu' đấy, nhưng ví tiền của bạn đang ở trạng thái 'ét ô ét' vì lố 10% ngân sách rồi nhé! 🧋",
+  "mimo_emotion": "Worried",
   "usage_metadata": {
     "prompt_token_count": 85,
     "candidates_token_count": 42,

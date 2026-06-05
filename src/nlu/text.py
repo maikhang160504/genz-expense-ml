@@ -19,6 +19,12 @@ TR_COMPOSITE_RE = re.compile(
     re.IGNORECASE,
 )
 
+# Số thuần: 69000, 69,000, 69.000 (không cần k/tr/triệu)
+PLAIN_AMOUNT_RE = re.compile(
+    r"(?<![\d.])(?P<raw>\d{1,3}(?:[.,]\d{3})+|\d{4,})(?!\s*(?:k|ngan|nghin|tr|trieu|triệu|cu|củ)\b)",
+    re.IGNORECASE,
+)
+
 
 def normalize_text(text: str) -> str:
     text = text.lower().strip()
@@ -33,6 +39,26 @@ def clean_content(text: str) -> str:
         cleaned = cleaned.replace(src, dst)
     cleaned = re.sub(r"\s+", " ", cleaned).strip()
     return cleaned
+
+
+def _parse_plain_amount(raw: str) -> int | None:
+    token = raw.strip()
+    if not token:
+        return None
+    if "," in token and "." in token:
+        if token.rfind(",") > token.rfind("."):
+            token = token.replace(".", "").replace(",", "")
+        else:
+            token = token.replace(",", "")
+    elif "." in token and re.fullmatch(r"\d{1,3}(?:\.\d{3})+", token):
+        token = token.replace(".", "")
+    else:
+        token = token.replace(",", "").replace(".", "")
+    try:
+        value = int(token)
+    except ValueError:
+        return None
+    return value if value > 0 else None
 
 
 def extract_amounts(text: str) -> list[int]:
@@ -58,4 +84,9 @@ def extract_amounts(text: str) -> list[int]:
         elif unit in {"d", "đ", "vnd", "vnđ"}:
             value *= 1
         amounts.append(int(round(value)))
+
+    for m in PLAIN_AMOUNT_RE.finditer(text):
+        parsed = _parse_plain_amount(m.group("raw"))
+        if parsed is not None:
+            amounts.append(parsed)
     return amounts

@@ -599,6 +599,106 @@ def augment_record_grabfood_delivery(existing: set[str]) -> list[dict]:
     return rows
 
 
+def augment_record_cafe_and_record_vs_action_edges(existing: set[str]) -> list[dict]:
+    rows: list[dict] = []
+    # Cafe - Food vs Entertainment
+    food_cafe = [
+        "mua cà phê sữa đá {a}",
+        "mua cafe sữa đá {a}",
+        "mua cafe mang đi {a}",
+        "mua hạt cà phê {a}",
+        "order 2 ly cafe {a}",
+        "order cà phê mang về {a}",
+        "mua 1 ly cafe sữa {a}",
+        "mua cafe đen {a}",
+    ]
+    ent_cafe = [
+        "đi cà phê với bạn bè hết {a}",
+        "đi cafe với bạn {a}",
+        "đi cf với người yêu {a}",
+        "tối đi uống cà phê với bạn {a}",
+        "đi cafe sữa đá với nhóm bạn {a}",
+        "đi uống cà phê tám chuyện {a}",
+        "hẹn đi cafe sữa đá {a}",
+        "tụ tập đi cf {a}",
+    ]
+    amts = ["19k", "25k", "35k", "40k", "50k", "80k", "90k", "120k"]
+    for tpl in food_cafe:
+        for a in amts:
+            text = tpl.format(a=a).strip()
+            if text not in existing:
+                existing.add(text)
+                rows.append({"text": text, "label": "Food", "type": "expense", "is_money": 1})
+    for tpl in ent_cafe:
+        for a in amts:
+            text = tpl.format(a=a).strip()
+            if text not in existing:
+                existing.add(text)
+                rows.append({"text": text, "label": "Entertainment", "type": "expense", "is_money": 1})
+
+    # Record vs Action hard negatives
+    record_negatives = [
+        "mới tiêu {a}",
+        "đã tiêu {a} rồi",
+        "hôm nay tiêu hết {a}",
+        "ghi chép {a} chi tiêu",
+        "tiêu {a} ăn uống",
+        "chi tiêu hết {a}",
+        "mua đồ hết {a}",
+        "tiêu hết {a} cho ăn uống",
+        "thanh toán {a} tiền nhà",
+        "đóng {a} tiền học",
+    ]
+    amts_large = ["200k", "500k", "1tr", "2tr", "3tr", "5tr", "10tr", "1.5 triệu", "2 triệu", "3 triệu", "5 triệu", "10 triệu"]
+    for tpl in record_negatives:
+        for a in amts_large:
+            text = tpl.format(a=a).strip()
+            if text not in existing:
+                existing.add(text)
+                lab = "Food"
+                if "tiền nhà" in text:
+                    lab = "Housing"
+                elif "tiền học" in text:
+                    lab = "Education"
+                rows.append({"text": text, "label": lab, "type": "expense", "is_money": 1})
+    return rows
+
+
+def augment_action_limits_and_operators(existing: set[str]) -> list[dict]:
+    rows: list[dict] = []
+    limit_actions = [
+        "Đặt giới hạn chi tiêu thành {a}",
+        "cài đặt hạn mức chi tiêu {a}",
+        "đặt giới hạn ăn uống {a}",
+        "thay đổi hạn mức chi tiêu thành {a}",
+        "cài hạn mức ăn uống là {a}",
+        "đặt hạn mức chi tiêu thành {a}",
+        "đặt giới hạn chi tiêu là {a}",
+        "thiết lập hạn mức ăn uống thành {a}",
+        "thiết lập giới hạn chi tiêu {a}",
+        "chốt hạn mức chi tiêu {a}",
+        "đặt lại giới hạn thành {a}",
+        "Thêm {a} vào ăn uống",
+        "cộng thêm {a} vào hạn mức đi lại",
+        "tăng thêm {a} cho mua sắm",
+        "bù vào mục tiêu tiết kiệm {a}",
+        "bổ sung {a} vào hạn mức",
+        "tăng hạn mức ăn uống lên {a}",
+        "bớt {a} từ giới hạn giải trí",
+        "giảm {a} hạn mức đi lại",
+        "trừ đi {a} hạn mức ăn uống",
+        "giảm giới hạn ăn uống xuống {a}",
+    ]
+    amts_large = ["200k", "500k", "1tr", "2tr", "3tr", "5tr", "10tr", "1.5 triệu", "2 triệu", "3 triệu", "5 triệu", "10 triệu"]
+    for tpl in limit_actions:
+        for a in amts_large:
+            text = tpl.format(a=a).strip()
+            if text not in existing:
+                existing.add(text)
+                rows.append({"text": text, "intent": "Action", "action_type": "SET_LIMIT"})
+    return rows
+
+
 def main() -> None:
     print("=== Fix disambiguation labels (mua/bán, cafe, gạo…) ===")
     from fix_disambiguation_labels import main as fix_disambiguation_main
@@ -617,6 +717,8 @@ def main() -> None:
     add_r.extend(augment_record_transport_food_edges(ex_r))
     ex_r |= {r["text"] for r in add_r}
     add_r.extend(augment_record_grabfood_delivery(ex_r))
+    ex_r |= {r["text"] for r in add_r}
+    add_r.extend(augment_record_cafe_and_record_vs_action_edges(ex_r))
     if add_r:
         rec = pd.concat([rec, pd.DataFrame(add_r)], ignore_index=True)
     rec.to_csv(RECORD_CSV, index=False, encoding="utf-8-sig")
@@ -630,6 +732,8 @@ def main() -> None:
     add_a = augment_action(ex_a)
     ex_a |= {r["text"] for r in add_a}
     add_a.extend(augment_action_dark_mode_edges(ex_a))
+    ex_a |= {r["text"] for r in add_a}
+    add_a.extend(augment_action_limits_and_operators(ex_a))
     if add_a:
         act = pd.concat([act, pd.DataFrame(add_a)], ignore_index=True)
     act.to_csv(ACTION_CSV, index=False, encoding="utf-8-sig")

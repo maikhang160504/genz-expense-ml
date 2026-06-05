@@ -1,5 +1,7 @@
 import re
 import unicodedata
+import json
+from pathlib import Path
 
 from pyvi import ViTokenizer
 
@@ -12,12 +14,32 @@ from src.nlu.ner import (
     select_record_item_from_slots,
 )
 from src.nlu.multi_record import extract_multi_records
-from src.nlu.action_query import is_action_query, report_general_action_type
+from src.nlu.action_query import is_action_query, report_general_action_type, is_limit_or_goal_action
+from src.nlu.time_parser import parse_time_range
 from src.nlu.income_phrase import is_clear_income_phrase
 from pipeline.text_preprocessing import clean_category_text
 
+_DISAMBIGUATION_KEYWORDS_PATH = Path(__file__).resolve().parent / "disambiguation_keywords.json"
+
+_VERBS = ["di", "hen", "tu tap", "giao luu"]
+_ACTIVITIES = ["ca phe", "cafe", "cf", "tra sua", "quan", "nhau", "bida", "phim", "bar", "pub", "club", "rap"]
+_COMPANIONS = ["voi", "cung", "ban", "ghe", "bo", "crush", "nguoi yeu", "ny", "dong nghiep", "anh em", "be"]
+
+if _DISAMBIGUATION_KEYWORDS_PATH.exists():
+    try:
+        _data = json.loads(_DISAMBIGUATION_KEYWORDS_PATH.read_text(encoding="utf-8"))
+        _VERBS = _data.get("normalized_verbs", _VERBS)
+        _ACTIVITIES = _data.get("normalized_activities_places", _ACTIVITIES)
+        _COMPANIONS = _data.get("normalized_companions", _COMPANIONS)
+    except Exception as e:
+        print(f"[NLU] Warning: Failed to load disambiguation keywords: {e}")
+
+_RE_VERBS = re.compile(r"\b(" + "|".join(re.escape(k) for k in _VERBS) + r")\b", re.I)
+_RE_ACTIVITIES = re.compile(r"\b(" + "|".join(re.escape(k) for k in _ACTIVITIES) + r")\b", re.I)
+_RE_COMPANIONS = re.compile(r"\b(" + "|".join(re.escape(k) for k in _COMPANIONS) + r")\b", re.I)
+
 MONEY_RE = re.compile(
-    r"(\d+(?:[\.,]\d+)?\s?(k|đ|d|vnđ|vnd|ngan|nghin|triệu|trieu|củ|cu))",
+    r"(\d+(?:[\.,]\d+)?\s?(k|đ|d|vnđ|vnd|ngan|nghin|tr|triệu|trieu|củ|cu))",
     re.IGNORECASE,
 )
 
@@ -158,7 +180,25 @@ INCOME_TYPE_LABELS = {"salary", "bonus", "investment", "business"}
 
 def build_action_details_from_slots(slots: dict | None, text: str, category_mapper=None) -> dict:
     slots = slots or {}
-    verb = slots.get("VERB", [None])[0]
+    raw_verb = slots.get("VERB", [None])[0]
+    
+    norm_text = _no_accent(text.lower()).replace("đ", "d")
+    verb = "SET"
+    
+    if any(kw in norm_text for kw in ["cong them", "tang them", "bo sung", "them", "tang", "bu vao"]):
+        verb = "ADD"
+    elif any(kw in norm_text for kw in ["bot", "giam", "tru di", "giam di"]):
+        verb = "SUB"
+    elif any(kw in norm_text for kw in ["thay doi thanh", "dat lai", "thiet lap", "dat", "thanh", "la", "chot"]):
+        verb = "SET"
+    elif raw_verb:
+        norm_v = _no_accent(raw_verb.lower()).replace("đ", "d")
+        if any(kw in norm_v for kw in ["them", "cong", "tang", "bu", "bo sung"]):
+            verb = "ADD"
+        elif any(kw in norm_v for kw in ["bot", "giam", "tru"]):
+            verb = "SUB"
+        else:
+            verb = "SET"
     target = slots.get("CATEGORY", [None])[0]
     if category_mapper and target:
         mapped_target = category_mapper(target)
@@ -188,6 +228,64 @@ def build_action_details_from_slots(slots: dict | None, text: str, category_mapp
     }
 
 
+def find_matching_correction(
+    user_text: str,
+    user_corrections: list[dict],
+    vectorizer,
+    threshold: float = 0.85,
+) -> dict | None:
+    if not user_corrections:
+        return None
+
+    cleaned_input = clean_category_text(user_text).strip().lower()
+
+    # 1. Layer 1: Exact Match
+    for c in user_corrections:
+        c_text = c.get("text", "").strip().lower()
+        if c_text == cleaned_input:
+            match = c.copy()
+            match["match_type"] = "exact"
+            return match
+
+    # 2. Layer 2: Semantic Similarity
+    if not vectorizer:
+        return None
+
+    texts_to_compare = []
+    valid_corrections = []
+    for c in user_corrections:
+        c_text = c.get("text", "").strip().lower()
+        if c_text:
+            texts_to_compare.append(c_text)
+            valid_corrections.append(c)
+
+    if not texts_to_compare:
+        return None
+
+    try:
+        from sklearn.metrics.pairwise import cosine_similarity
+
+        # Transform both using the loaded global NLU vectorizer
+        input_vec = vectorizer.transform([cleaned_input])
+        corrections_vec = vectorizer.transform(texts_to_compare)
+
+        # Calculate cosine similarity
+        similarities = cosine_similarity(input_vec, corrections_vec)[0]
+
+        best_idx = int(similarities.argmax())
+        best_score = float(similarities[best_idx])
+
+        if best_score >= threshold:
+            match = valid_corrections[best_idx].copy()
+            match["match_type"] = "similarity"
+            match["similarity_score"] = best_score
+            return match
+    except Exception as e:
+        print(f"[NLU Personalization] Error calculating similarity: {e}")
+
+    return None
+
+
 def run_nlu(
     user_text: str,
     intent_model,
@@ -199,17 +297,32 @@ def run_nlu(
     *,
     run_llm: bool = False,
     user_id: str | None = None,
+    user_corrections: list[dict] | None = None,
 ) -> dict:
     intent, intent_conf, intent_proba = classify_intent(user_text, intent_model)
     if is_action_query(user_text) and intent != "Action":
         intent = "Action"
+    if is_limit_or_goal_action(user_text) and intent != "Action":
+        intent = "Action"
+
+    # Personalization Hybrid Layer: exact match or semantic similarity match
+    match = None
+    if user_corrections:
+        vectorizer = category_model.get("vectorizer")
+        match = find_matching_correction(user_text, user_corrections, vectorizer)
+
+    if match:
+        if match.get("intent"):
+            intent = match["intent"]
+            intent_conf = match.get("similarity_score", 1.0)
+
     amounts = extract_amounts(user_text)
     content = clean_content(user_text)
 
     result = {
         "text": user_text,
         "intent": intent,
-        "intent_backend": intent_model.get("backend"),
+        "intent_backend": intent_model.get("backend") if not match or not match.get("intent") else f"user_{match['match_type']}",
         "intent_confidence": intent_conf,
         "intent_proba": intent_proba or None,
         "clean_content": content,
@@ -221,21 +334,25 @@ def run_nlu(
     if intent == "Record":
         result["amount_spent"] = amounts[0] if amounts else None
         rec_pred: str | None = None
-        if record_type_model.get("backend") == "encoder" and record_type_model.get("bundle"):
-            from src.nlu.encoder_runtime import predict_record_type_encoder
-
-            rec_pred = predict_record_type_encoder(record_type_model["bundle"], user_text)
-            result["record_type_backend"] = "encoder"
-        elif record_type_model.get("backend") == "tfidf" and record_type_model.get("vectorizer"):
-            rec_vec = record_type_model["vectorizer"].transform([clean_category_text(user_text)])
-            rec_pred = str(record_type_model["model"].predict(rec_vec)[0]).lower()
-            result["record_type_backend"] = "tfidf"
-        if rec_pred is not None:
-            result["record_type"] = "Income" if rec_pred == "income" else "Expense"
+        if match and match.get("record_type"):
+            result["record_type"] = match["record_type"]
+            result["record_type_backend"] = f"user_{match['match_type']}"
         else:
-            result["record_type"] = None
-        if is_clear_income_phrase(user_text):
-            result["record_type"] = "Income"
+            if record_type_model.get("backend") == "encoder" and record_type_model.get("bundle"):
+                from src.nlu.encoder_runtime import predict_record_type_encoder
+
+                rec_pred = predict_record_type_encoder(record_type_model["bundle"], user_text)
+                result["record_type_backend"] = "encoder"
+            elif record_type_model.get("backend") == "tfidf" and record_type_model.get("vectorizer"):
+                rec_vec = record_type_model["vectorizer"].transform([clean_category_text(user_text)])
+                rec_pred = str(record_type_model["model"].predict(rec_vec)[0]).lower()
+                result["record_type_backend"] = "tfidf"
+            if rec_pred is not None:
+                result["record_type"] = "Income" if rec_pred == "income" else "Expense"
+            else:
+                result["record_type"] = None
+            if is_clear_income_phrase(user_text):
+                result["record_type"] = "Income"
         result["income_type"] = None
 
         slots = None
@@ -250,16 +367,26 @@ def run_nlu(
         result["item"] = ner_category
 
         raw_category = None
-        if category_model.get("backend") == "encoder" and category_model.get("bundle"):
-            from src.nlu.encoder_runtime import predict_category_encoder
+        if match and match.get("category_code"):
+            raw_category = match["category_code"]
+            result["category_backend"] = f"user_{match['match_type']}"
+        else:
+            if category_model.get("backend") == "encoder" and category_model.get("bundle"):
+                from src.nlu.encoder_runtime import predict_category_encoder
 
-            raw_category = predict_category_encoder(category_model["bundle"], user_text)
-            result["category_backend"] = "encoder"
-        elif category_model.get("backend") == "tfidf" and category_model.get("vectorizer"):
-            cat_input = clean_category_text(user_text)
-            cat_vec = category_model["vectorizer"].transform([cat_input])
-            raw_category = category_model["model"].predict(cat_vec)[0]
-            result["category_backend"] = "tfidf"
+                raw_category = predict_category_encoder(category_model["bundle"], user_text)
+                result["category_backend"] = "encoder"
+            elif category_model.get("backend") == "tfidf" and category_model.get("vectorizer"):
+                cat_input = clean_category_text(user_text)
+                cat_vec = category_model["vectorizer"].transform([cat_input])
+                raw_category = category_model["model"].predict(cat_vec)[0]
+                result["category_backend"] = "tfidf"
+        if raw_category == "Food" and user_text:
+            lower_text = _no_accent(user_text.lower()).replace("đ", "d")
+            if _RE_VERBS.search(lower_text) and \
+               _RE_ACTIVITIES.search(lower_text) and \
+               _RE_COMPANIONS.search(lower_text):
+                raw_category = "Entertainment"
         if raw_category is not None:
             result["category"] = raw_category
             if result["record_type"] == "Income" and raw_category:
@@ -304,6 +431,10 @@ def run_nlu(
             result["action_details"] = build_action_details_from_slots(slots, user_text, map_category_to_label)
         else:
             result["action_details"] = None
+        time_slots = (result.get("action_details") or {}).get("time")
+        if isinstance(time_slots, str):
+            time_slots = [time_slots]
+        result["time_range"] = parse_time_range(user_text, time_slots)
 
     else:
         # Chitchat: tone + gợi ý hành động do LLM (không phân Positive/Negative/Neutral bằng NLU)

@@ -1,8 +1,8 @@
 {
   "format": "gemini",
   "response_schema": {
-    "story": "string",
-    "status": "string"
+    "response": "string",
+    "mimo_emotion": "string"
   },
   "mood_personas": {
     "VUI_VE": {
@@ -26,12 +26,14 @@
   },
   "common": {
     "context_diversity_rule": "PHẢI phối hợp ≥2 yếu tố từ CONTEXT_META (ví dụ: time_of_day + wallet_health; weather + days_to_payday; historical_fact + day_of_month) để tạo lời thoại độc bản. Không lặp lại cấu trúc câu giữa các lần gọi.",
-    "response_rules": "Chỉ trả về JSON thuần gồm 2 trường: \"story\" (câu thoại ngắn gọn tối đa 20 từ (tuyệt đối không vượt quá), bắt trend Gen Z, phải có ít nhất 1-2 emoji icon phù hợp), \"status\". Giá trị \"status\" chỉ được là: vui, buon, canh_bao, trung_lap. Không giải thích, không bọc code block, không thêm chữ ngoài JSON. Không đổi tên món/hạng mục; phải dùng đúng item trong input.",
-    "action_response_rules": "Chỉ trả về JSON thuần gồm \"story\" và \"status\". \"story\" là câu xác nhận hành động ngắn gọn tối đa 20 từ (tuyệt đối không vượt quá), phải có ít nhất 1-2 emoji icon phù hợp, không kể thêm giao dịch mới, không bịa số liệu. \"status\": trung_lap hoặc canh_bao nếu thay đổi lớn.",
-    "style": "Ngôn ngữ Gen Z, có emoji, slang đa dạng, không bịa thêm dữ liệu ngoài input.",
-    "action_user": "Xác nhận yêu cầu và kết quả thao tác, không kể chuyện giao dịch chi tiêu.",
-    "chitchat_response_rules": "Chỉ trả về JSON thuần gồm \"story\" và \"status\". \"story\": trả lời đúng chủ đề câu user (hỏi app / tâm sự / chào hỏi), thân thiện GenZ ngắn gọn tối đa 20 từ (tuyệt đối không vượt quá), cuối câu gợi ý 1 hành động (ghi chi tiêu hoặc xem báo cáo) và phải có ít nhất 1-2 emoji icon phù hợp — không bịa số tiền. \"status\": vui, buon, hoặc trung_lap — tự suy từ câu user.",
-    "chitchat_user": "Đối thoại chitchat: LLM quyết tone và nội dung; không invent giao dịch."
+    "response_rules": "Chỉ trả về JSON thuần gồm \"response\" (tối đa 30 từ) và \"mimo_emotion\" (PascalCase, tên file PNG). Không bọc code block. Không đổi tên món/hạng mục.",
+    "action_response_rules": "Chỉ trả về JSON \"response\" + \"mimo_emotion\" (PascalCase, đa dạng: Success/Worried/Alert/Celebrate/Approved — không luôn Thinking). Giọng nghiêm túc, súc tích; không bịa số liệu.",
+    "style": "Tiếng Việt tự nhiên, emoji tiết chế khi cần, không bịa dữ liệu ngoài input.",
+    "action_user": "Xác nhận yêu cầu và kết quả thao tác đã thực hiện, không kể chuyện giao dịch chi tiêu.",
+    "chitchat_response_rules": "Chỉ trả về JSON \"response\" + \"mimo_emotion\". \"response\": trả lời đúng chủ đề, tối đa 30 từ, gợi ý nhẹ 1 hành động — không bịa số tiền.",
+    "chitchat_user": "Đối thoại chitchat: LLM quyết tone và nội dung; không invent giao dịch.",
+    "record_expense_rules": "Đây là CHI TIÊU (Expense): dùng động từ chi/mua/trừ ví; không gọi là thu nhập.",
+    "record_income_rules": "Đây là THU NHẬP (Income): dùng động từ thu/nhận/cộng ví; không gọi là chi tiêu hay cảnh báo tiêu xài."
   },
   "emotions": {
     "vui": {

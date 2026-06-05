@@ -1,12 +1,40 @@
 import json
 from typing import Any
 
-_LIST_EMOTION_INSTRUCTION = (
-    "\nYÊU CẦU ĐẦU RA JSON: Trả về một đối tượng JSON có chính xác 2 trường:\n"
-    "1. \"response\": Câu thoại nhận xét chi tiêu hoặc câu thoại chitchat tương ứng. "
-    "**QUAN TRỌNG: Giới hạn tối đa 30 từ. Ngắn gọn, súc tích, đúng vai.**\n"
-    "2. \"emotion\": Chọn chính xác 1 trong danh sách emotions sau ( PascalCase ): "
-    "Alert, Angry, Approved, Celebrate, Chill, Cooking, Cool, Determined, Error, Excited, Giggle, Happy, Hello, Loading, Love, Proud, Relax, Sad, Sleepy, Sassy, Shopping, Travel, Sorry, Success, Taunting, Thankful, Thinking, Working, Worried."
+from src.nlg.mimo_assets import MIMO_ASSET_NAMES
+
+_MIMO_ASSET_LIST = ", ".join(sorted(MIMO_ASSET_NAMES))
+
+def _is_income_record(nlu_result: dict[str, Any]) -> bool:
+    if nlu_result.get("record_type") == "Income":
+        return True
+    return nlu_result.get("is_expense") is False
+
+
+def _record_type_instruction(nlu_result: dict[str, Any]) -> str:
+    if _is_income_record(nlu_result):
+        income_type = nlu_result.get("income_type") or ""
+        extra = f" Loại thu: {income_type}." if income_type else ""
+        return (
+            "LOẠI GIAO DỊCH: Thu nhập (Income)."
+            f"{extra} "
+            "Phản hồi phải nói tiền VÀO ví / thu / nhận — "
+            "TUYỆT ĐỐI KHÔNG nói chi tiêu, mua, tiêu xài, ngân sách cạn, ét ô ét vì mất tiền. "
+            "mimo_emotion gợi ý: Celebrate, Happy, Thankful, Success."
+        )
+    return (
+        "LOẠI GIAO DỊCH: Chi tiêu (Expense). "
+        "Phản hồi phải nói tiền RA / chi / mua — "
+        "TUYỆT ĐỐI KHÔNG nói thu nhập, lương về, tiền vào ví. "
+        "Có thể nhắc ngân sách nếu CONTEXT_META có cảnh báo. "
+        "mimo_emotion gợi ý: Worried, Alert, Giggle, Chill (không Celebrate cho chi tiêu thường)."
+    )
+
+
+_MIMO_EMOTION_INSTRUCTION = (
+    "\nYÊU CẦU ĐẦU RA JSON: Trả về đúng 2 trường:\n"
+    "1. \"response\": Câu thoại (tối đa 30 từ).\n"
+    f"2. \"mimo_emotion\": Dựa vào ngữ nghĩa của đầu vào và reponse, hãy chọn ĐÚNG 1 tên trong danh sách (PascalCase): {_MIMO_ASSET_LIST}. "
 )
 
 
@@ -30,15 +58,27 @@ def _format_context_meta(ctx: dict[str, Any]) -> str:
             ctx["wallet_health"], ctx["wallet_health"]
         )
         parts.append(f"- Sức khoẻ ví: {health_label}")
+    if ctx.get("record_type"):
+        label = "Thu nhập" if ctx["record_type"] == "Income" else "Chi tiêu"
+        parts.append(f"- Loại giao dịch: {label} ({ctx['record_type']})")
     if ctx.get("historical_fact"):
         parts.append(f"- Sự kiện tài chính: {ctx['historical_fact']}")
+    if ctx.get("spent_last_month") is not None:
+        parts.append(f"- Chi tiêu tháng trước: {ctx['spent_last_month']:,}đ")
     msg_data = ctx.get("message_data") or {}
     if msg_data.get("remaining") is not None:
         parts.append(f"- Ngân sách còn lại: {msg_data['remaining']:,}đ")
-    return "\n".join(parts) if parts else json.dumps(ctx, ensure_ascii=False)
+    if parts:
+        return "\n".join(parts)
+    item = ctx.get("item")
+    amount = ctx.get("record_amount")
+    if item or amount is not None:
+        amount_str = f"{amount:,}đ" if amount is not None else ""
+        return f"- Giao dịch: {item or 'không rõ'} {amount_str}".strip()
+    return "(không có ngữ cảnh bổ đoán — bám sát câu người dùng)"
 
 
-def _build_relationship_instruction(prompts: dict[str, Any], relationship_tag: str | None, emotion: str) -> str:
+def _build_relationship_instruction(prompts: dict[str, Any], relationship_tag: str | None, nlg_persona: str) -> str:
     """Trả về chỉ thị override nếu có relationship_tag."""
     if not relationship_tag:
         return ""
@@ -50,7 +90,7 @@ def _build_relationship_instruction(prompts: dict[str, Any], relationship_tag: s
     if tag == "NGUOI_YEU":
         cfg = overrides.get("NGUOI_YEU", {})
         positive_emotions = {"vui", "hai_huoc", "dong_cam"}
-        if emotion in positive_emotions:
+        if nlg_persona in positive_emotions:
             return cfg.get("rule_happy", "")
         return cfg.get("rule_sad", "")
     return ""
@@ -58,15 +98,18 @@ def _build_relationship_instruction(prompts: dict[str, Any], relationship_tag: s
 
 def build_nlg_prompt(
     prompts: dict[str, Any],
-    emotion: str,
+    nlg_persona: str,
     nlu_result: dict[str, Any],
     context_metadata: dict[str, Any],
+    chat_history: list | None = None,
+    chat_summary: str | None = None,
 ) -> dict[str, Any]:
+    """nlg_persona: key prompts.emotions (hai_huoc, dan_doi, ...) — không phải tên file PNG."""
     common = prompts.get("common", {})
-    emotion_cfg = prompts.get("emotions", {}).get(emotion, {})
+    emotion_cfg = prompts.get("emotions", {}).get(nlg_persona, {})
     diversity_rule = common.get("context_diversity_rule", "")
     relationship_tag = nlu_result.get("relationship_tag")
-    rel_instruction = _build_relationship_instruction(prompts, relationship_tag, emotion)
+    rel_instruction = _build_relationship_instruction(prompts, relationship_tag, nlg_persona)
     ctx_text = _format_context_meta(context_metadata)
 
     system_parts = [emotion_cfg.get("system"), common.get("style"), common.get("response_rules")]
@@ -78,6 +121,7 @@ def build_nlg_prompt(
     system_prompt = " ".join(s for s in system_parts if s)
 
     intent = nlu_result.get("intent")
+    meta_block = f"CONTEXT_META:\n{ctx_text}\n" if context_metadata else ""
 
     if intent == "Chitchat":
         rules = common.get("chitchat_response_rules") or common.get("response_rules")
@@ -89,9 +133,9 @@ def build_nlg_prompt(
         user_prompt = (
             f"{base_user} {rules} "
             f"Câu người dùng: \"{user_msg}\". "
-            "Đọc câu để trả lời đúng chủ đề; chọn status (vui/buon/trung_lap) từ ngữ cảnh câu — không dùng nhãn sentiment NLU.\n"
-            f"CONTEXT_META:\n{ctx_text}"
-            f"{_LIST_EMOTION_INSTRUCTION}"
+            "Đọc câu để trả lời đúng chủ đề; chọn mimo_emotion PascalCase phù hợp ngữ cảnh.\n"
+            f"{meta_block}"
+            f"{_MIMO_EMOTION_INSTRUCTION}"
         )
 
     elif intent == "Action":
@@ -101,12 +145,22 @@ def build_nlg_prompt(
         )
         base_user = common.get("action_user") or emotion_cfg.get("user")
         action_type = nlu_result.get("action_type")
+        action_facts = context_metadata.get("action_facts")
+        facts_block = ""
+        if action_facts:
+            facts_block = (
+                f"\nACTION_FACTS (chỉ dùng số liệu dưới đây, không bịa thêm): "
+                f"{json.dumps(action_facts, ensure_ascii=False)}\n"
+            )
         user_prompt = (
             f"{base_user} {rules} "
             f"Loại thao tác: {action_type}. "
             "Không đặt tên món ăn giả; không thêm giao dịch không có trong input.\n"
-            f"CONTEXT_META:\n{ctx_text}"
-            f"{_LIST_EMOTION_INSTRUCTION}"
+            "mimo_emotion phải khớp ngữ cảnh: Success (hoàn tất/báo cáo), Worried hoặc Alert "
+            "(cảnh báo chi tiêu), Celebrate (tin tốt), Approved (xác nhận). "
+            f"{facts_block}"
+            f"{meta_block}"
+            f"{_MIMO_EMOTION_INSTRUCTION}"
         )
 
     else:
@@ -115,14 +169,61 @@ def build_nlg_prompt(
         amount = nlu_result.get("amount")
         context_type = context_metadata.get("type") or "NONE"
         amount_str = f"{amount:,}đ" if amount is not None else "không rõ"
+        record_rules = (
+            common.get("record_income_rules")
+            if _is_income_record(nlu_result)
+            else common.get("record_expense_rules")
+        ) or ""
+        meta_label = f"CONTEXT_META (phối hợp ≥1 yếu tố):\n{ctx_text}\n" if context_metadata else ""
         user_prompt = (
             f"{base_user} {common.get('response_rules', '')} "
+            f"{record_rules} "
+            f"{_record_type_instruction(nlu_result)} "
             f"Món hoặc hạng mục: {item}. Số tiền: {amount_str}. "
-            f"Kiểu cảnh báo: {context_type}. "
+            f"Kiểu cảnh báo (chỉ Expense): {context_type}. "
             f"{rel_instruction + ' ' if rel_instruction else ''}"
-            f"CONTEXT_META (phối hợp ≥2 yếu tố):\n{ctx_text}"
-            f"{_LIST_EMOTION_INSTRUCTION}"
+            f"{meta_label}"
+            f"{_MIMO_EMOTION_INSTRUCTION}"
         )
+
+    # Format chat history & summary & previous action context
+    history_block = ""
+    prev_action_context = ""
+    
+    if chat_history and isinstance(chat_history, list):
+        history_msgs = chat_history[:-1] if chat_history[-1].get("role") == "user" else chat_history
+        
+        # Check for previous action context (search results or reports)
+        for msg in reversed(history_msgs):
+            intent_act = msg.get("intent_action") or {}
+            nlu_data = intent_act.get("nlu") or {}
+            action_res = nlu_data.get("action_result") or {}
+            if action_res.get("kind") == "search" and action_res.get("items"):
+                items = action_res["items"]
+                formatted_items = []
+                for idx, it in enumerate(items, 1):
+                    formatted_items.append(f"[{idx}] {it.get('note')} {it.get('amount'):,}đ ({it.get('categoryCode')})")
+                prev_action_context = f"KẾT QUẢ TÌM KIẾM GẦN NHẤT:\n" + "\n".join(formatted_items) + "\n\n"
+                break
+            elif action_res.get("kind") == "report":
+                prev_action_context = f"BÁO CÁO CHI TIÊU GẦN NHẤT: {action_res.get('period_label')} - Tổng chi: {action_res.get('total_expense'):,}đ\n\n"
+                break
+
+        history_block += "LỊCH SỬ ĐỐI THOẠI GẦN ĐÂY:\n"
+        for msg in history_msgs:
+            role_label = "Người dùng" if msg.get("role") == "user" else "Mascot MiMo"
+            content = msg.get("content", "")
+            history_block += f"- {role_label}: {content}\n"
+        history_block += "\n"
+
+    if chat_summary:
+        history_block = f"BỐI CẢNH TRÒ CHUYỆN TRƯỚC ĐÓ:\n- {chat_summary}\n\n" + history_block
+
+    if prev_action_context:
+        history_block = prev_action_context + history_block
+
+    if history_block:
+        user_prompt = history_block + user_prompt
 
     return {
         "system": system_prompt.strip(),
@@ -130,6 +231,6 @@ def build_nlg_prompt(
         "input": {
             "nlu_result": nlu_result,
             "context_metadata": context_metadata,
-            "emotion": emotion,
+            "nlg_persona": nlg_persona,
         },
     }

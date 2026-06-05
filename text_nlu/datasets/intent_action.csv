@@ -3555,6 +3555,14 @@ Xóa khoản điện thoại vừa thêm,Action,DELETE_RECORD
 Xóa khoản đầu tư vừa thêm,Action,DELETE_RECORD
 Xóa khoản đồ gia dụng vừa thêm,Action,DELETE_RECORD
 bao cao tong chi thang nay,Action,REPORT_GENERAL
+bao cao tong chi thang nay ?,Action,REPORT_GENERAL
+bao cao tong chi thang nay a,Action,REPORT_GENERAL
+bao cao tong chi thang nay bot,Action,REPORT_GENERAL
+bao cao tong chi thang nay ha,Action,REPORT_GENERAL
+bao cao tong chi thang nay hả,Action,REPORT_GENERAL
+bao cao tong chi thang nay nha,Action,REPORT_GENERAL
+bao cao tong chi thang nay vậy,Action,REPORT_GENERAL
+bao cao tong chi thang nay đi,Action,REPORT_GENERAL
 bat che do toi,Action,Setting
 bat dark mode,Action,Setting
 bật chế độ tối,Action,Setting
@@ -3566,6 +3574,15 @@ bật giao diện tối đi,Action,Setting
 bật lại chế độ tối sau khi cập nhật,Action,Setting
 bật night mode,Action,Setting
 bật theme tối,Action,Setting
+chi hết bao nhiêu tháng này,Action,REPORT_GENERAL
+chi hết bao nhiêu tháng này ?,Action,REPORT_GENERAL
+chi hết bao nhiêu tháng này a,Action,REPORT_GENERAL
+chi hết bao nhiêu tháng này bot,Action,REPORT_GENERAL
+chi hết bao nhiêu tháng này ha,Action,REPORT_GENERAL
+chi hết bao nhiêu tháng này hả,Action,REPORT_GENERAL
+chi hết bao nhiêu tháng này nha,Action,REPORT_GENERAL
+chi hết bao nhiêu tháng này vậy,Action,REPORT_GENERAL
+chi hết bao nhiêu tháng này đi,Action,REPORT_GENERAL
 cho mình bật chế độ tối,Action,Setting
 chuyển app sang chế độ tối,Action,Setting
 dạo này mình đã chi cho học phí bao nhiêu rồi,Action,Report
@@ -3590,7 +3607,10 @@ hôm nay mình đã chi cho hội họp bao nhiêu rồi,Action,Report
 hôm nay mình đã chi cho mua sắm bao nhiêu rồi,Action,Report
 hôm nay mình đã tiêu hết bao nhiêu,Action,REPORT_GENERAL
 hôm nay đã tiêu mấy,Action,REPORT_GENERAL
+hôm nay đã tiêu mấy ?,Action,REPORT_GENERAL
+hôm nay đã tiêu mấy a,Action,REPORT_GENERAL
 hôm nay đã tiêu mấy bot,Action,REPORT_GENERAL
+hôm nay đã tiêu mấy ha,Action,REPORT_GENERAL
 hôm nay đã tiêu mấy hả,Action,REPORT_GENERAL
 hôm nay đã tiêu mấy nha,Action,REPORT_GENERAL
 hôm nay đã tiêu mấy vậy,Action,REPORT_GENERAL
@@ -3600,9 +3620,14 @@ hôm qua mình đã tiêu hết bao nhiêu,Action,REPORT_GENERAL
 kích hoạt dark mode,Action,Setting
 kích hoạt giao diện tối,Action,Setting
 minh da tieu bao nhieu thang nay,Action,REPORT_GENERAL
+minh da tieu bao nhieu thang nay ?,Action,REPORT_GENERAL
+minh da tieu bao nhieu thang nay a,Action,REPORT_GENERAL
 minh da tieu bao nhieu thang nay bot,Action,REPORT_GENERAL
 minh da tieu bao nhieu thang nay ha,Action,REPORT_GENERAL
+minh da tieu bao nhieu thang nay hả,Action,REPORT_GENERAL
 minh da tieu bao nhieu thang nay nha,Action,REPORT_GENERAL
+minh da tieu bao nhieu thang nay vậy,Action,REPORT_GENERAL
+minh da tieu bao nhieu thang nay đi,Action,REPORT_GENERAL
 mo che do toi,Action,Setting
 mấy hôm nay mình đã chi cho du lịch bao nhiêu rồi,Action,Report
 mấy hôm nay mình đã chi cho mỹ phẩm bao nhiêu rồi,Action,Report
@@ -3688,19 +3713,39 @@ tháng này mình đã chi cho học phí bao nhiêu rồi,Action,Report
 tháng này mình đã chi cho internet bao nhiêu rồi,Action,Report
 tháng này mình đã chi cho linh tinh bao nhiêu rồi,Action,Report
 tháng này mình đã tiêu hết bao nhiêu,Action,REPORT_GENERAL
+tháng này tiêu bao nhiêu,Action,REPORT_GENERAL
+tháng này tiêu bao nhiêu ?,Action,REPORT_GENERAL
+tháng này tiêu bao nhiêu a,Action,REPORT_GENERAL
+tháng này tiêu bao nhiêu bot,Action,REPORT_GENERAL
+tháng này tiêu bao nhiêu ha,Action,REPORT_GENERAL
+tháng này tiêu bao nhiêu hả,Action,REPORT_GENERAL
+tháng này tiêu bao nhiêu nha,Action,REPORT_GENERAL
 tháng này tiêu bao nhiêu rồi,Action,REPORT_GENERAL
+tháng này tiêu bao nhiêu rồi ?,Action,REPORT_GENERAL
+tháng này tiêu bao nhiêu rồi a,Action,REPORT_GENERAL
 tháng này tiêu bao nhiêu rồi bot,Action,REPORT_GENERAL
 tháng này tiêu bao nhiêu rồi ha,Action,REPORT_GENERAL
 tháng này tiêu bao nhiêu rồi hả,Action,REPORT_GENERAL
 tháng này tiêu bao nhiêu rồi nha,Action,REPORT_GENERAL
 tháng này tiêu bao nhiêu rồi vậy,Action,REPORT_GENERAL
 tháng này tiêu bao nhiêu rồi đi,Action,REPORT_GENERAL
+tháng này tiêu bao nhiêu vậy,Action,REPORT_GENERAL
+tháng này tiêu bao nhiêu đi,Action,REPORT_GENERAL
 tháng trước mình đã chi cho cà phê bao nhiêu rồi,Action,Report
 tháng trước mình đã chi cho sửa xe bao nhiêu rồi,Action,Report
 tháng trước mình đã chi cho xăng xe bao nhiêu rồi,Action,Report
 tháng trước mình đã chi cho ăn uống bao nhiêu rồi,Action,Report
 tháng trước mình đã chi cho điện nước bao nhiêu rồi,Action,Report
 tháng trước mình đã tiêu hết bao nhiêu,Action,REPORT_GENERAL
+thống kê chi tiêu tháng này,Action,REPORT_GENERAL
+thống kê chi tiêu tháng này ?,Action,REPORT_GENERAL
+thống kê chi tiêu tháng này a,Action,REPORT_GENERAL
+thống kê chi tiêu tháng này bot,Action,REPORT_GENERAL
+thống kê chi tiêu tháng này ha,Action,REPORT_GENERAL
+thống kê chi tiêu tháng này hả,Action,REPORT_GENERAL
+thống kê chi tiêu tháng này nha,Action,REPORT_GENERAL
+thống kê chi tiêu tháng này vậy,Action,REPORT_GENERAL
+thống kê chi tiêu tháng này đi,Action,REPORT_GENERAL
 tim kiem khoan giải trí lon hon 1.5tr,Action,SEARCH_RECORD
 tim kiem khoan giải trí lon hon 100k,Action,SEARCH_RECORD
 tim kiem khoan giải trí lon hon 1tr,Action,SEARCH_RECORD
@@ -3765,7 +3810,18 @@ tim kiem khoan điện nước lon hon 2tr,Action,SEARCH_RECORD
 tim kiem khoan điện nước lon hon 300k,Action,SEARCH_RECORD
 tim kiem khoan điện nước lon hon 500k,Action,SEARCH_RECORD
 tim kiem khoan điện nước lon hon 50k,Action,SEARCH_RECORD
+tiêu bao nhiêu tháng này,Action,REPORT_GENERAL
+tiêu bao nhiêu tháng này ?,Action,REPORT_GENERAL
+tiêu bao nhiêu tháng này a,Action,REPORT_GENERAL
+tiêu bao nhiêu tháng này bot,Action,REPORT_GENERAL
+tiêu bao nhiêu tháng này ha,Action,REPORT_GENERAL
+tiêu bao nhiêu tháng này hả,Action,REPORT_GENERAL
+tiêu bao nhiêu tháng này nha,Action,REPORT_GENERAL
+tiêu bao nhiêu tháng này vậy,Action,REPORT_GENERAL
+tiêu bao nhiêu tháng này đi,Action,REPORT_GENERAL
 tong chi thang nay,Action,REPORT_GENERAL
+tong chi thang nay ?,Action,REPORT_GENERAL
+tong chi thang nay a,Action,REPORT_GENERAL
 tong chi thang nay bot,Action,REPORT_GENERAL
 tong chi thang nay ha,Action,REPORT_GENERAL
 tong chi thang nay hả,Action,REPORT_GENERAL
@@ -3794,14 +3850,52 @@ tôi muốn bật chế độ tối,Action,Setting
 tắt chế độ tối đi,Action,Setting
 tắt dark mode giúp mình,Action,Setting
 tắt night mode,Action,Setting
+tổng chi hôm nay,Action,REPORT_GENERAL
+tổng chi hôm nay ?,Action,REPORT_GENERAL
+tổng chi hôm nay a,Action,REPORT_GENERAL
+tổng chi hôm nay bot,Action,REPORT_GENERAL
+tổng chi hôm nay ha,Action,REPORT_GENERAL
+tổng chi hôm nay hả,Action,REPORT_GENERAL
+tổng chi hôm nay nha,Action,REPORT_GENERAL
+tổng chi hôm nay vậy,Action,REPORT_GENERAL
+tổng chi hôm nay đi,Action,REPORT_GENERAL
 tổng chi tháng này,Action,REPORT_GENERAL
+tổng chi tháng này ?,Action,REPORT_GENERAL
+tổng chi tháng này a,Action,REPORT_GENERAL
 tổng chi tháng này bot,Action,REPORT_GENERAL
 tổng chi tháng này ha,Action,REPORT_GENERAL
 tổng chi tháng này hả,Action,REPORT_GENERAL
 tổng chi tháng này nha,Action,REPORT_GENERAL
 tổng chi tháng này vậy,Action,REPORT_GENERAL
 tổng chi tháng này đi,Action,REPORT_GENERAL
+tổng chi tháng trước,Action,REPORT_GENERAL
+tổng chi tháng trước ?,Action,REPORT_GENERAL
+tổng chi tháng trước a,Action,REPORT_GENERAL
+tổng chi tháng trước bot,Action,REPORT_GENERAL
+tổng chi tháng trước ha,Action,REPORT_GENERAL
+tổng chi tháng trước hả,Action,REPORT_GENERAL
+tổng chi tháng trước nha,Action,REPORT_GENERAL
+tổng chi tháng trước vậy,Action,REPORT_GENERAL
+tổng chi tháng trước đi,Action,REPORT_GENERAL
+tổng chi tuần này,Action,REPORT_GENERAL
+tổng chi tuần này ?,Action,REPORT_GENERAL
+tổng chi tuần này a,Action,REPORT_GENERAL
+tổng chi tuần này bot,Action,REPORT_GENERAL
+tổng chi tuần này ha,Action,REPORT_GENERAL
+tổng chi tuần này hả,Action,REPORT_GENERAL
+tổng chi tuần này nha,Action,REPORT_GENERAL
+tổng chi tuần này vậy,Action,REPORT_GENERAL
+tổng chi tuần này đi,Action,REPORT_GENERAL
 xem tong chi tuan nay,Action,REPORT_GENERAL
+xem tổng chi tháng này,Action,REPORT_GENERAL
+xem tổng chi tháng này ?,Action,REPORT_GENERAL
+xem tổng chi tháng này a,Action,REPORT_GENERAL
+xem tổng chi tháng này bot,Action,REPORT_GENERAL
+xem tổng chi tháng này ha,Action,REPORT_GENERAL
+xem tổng chi tháng này hả,Action,REPORT_GENERAL
+xem tổng chi tháng này nha,Action,REPORT_GENERAL
+xem tổng chi tháng này vậy,Action,REPORT_GENERAL
+xem tổng chi tháng này đi,Action,REPORT_GENERAL
 xem tổng chi tuần này,Action,REPORT_GENERAL
 xem tổng chi tuần này bot,Action,REPORT_GENERAL
 xem tổng chi tuần này hả,Action,REPORT_GENERAL
@@ -4591,108 +4685,266 @@ xoa ban ghi gan nhat,Action,DELETE_RECORD
 Đổi tên mình thành Thanh,Action,SET_USERNAME
 Đổi tên mình thành Trinh,Action,SET_USERNAME
 Đổi tên mình thành Vy,Action,SET_USERNAME
-đóng chế độ tối,Action,Setting
-đợt vừa rồi mình đã tiêu hết bao nhiêu,Action,REPORT_GENERAL
-tổng chi tháng này ?,Action,REPORT_GENERAL
-tổng chi tháng này a,Action,REPORT_GENERAL
-tong chi thang nay ?,Action,REPORT_GENERAL
-tong chi thang nay a,Action,REPORT_GENERAL
-tổng chi tuần này,Action,REPORT_GENERAL
-tổng chi tuần này bot,Action,REPORT_GENERAL
-tổng chi tuần này nha,Action,REPORT_GENERAL
-tổng chi tuần này ha,Action,REPORT_GENERAL
-tổng chi tuần này hả,Action,REPORT_GENERAL
-tổng chi tuần này vậy,Action,REPORT_GENERAL
-tổng chi tuần này đi,Action,REPORT_GENERAL
-tổng chi tuần này ?,Action,REPORT_GENERAL
-tổng chi tuần này a,Action,REPORT_GENERAL
-tổng chi hôm nay,Action,REPORT_GENERAL
-tổng chi hôm nay bot,Action,REPORT_GENERAL
-tổng chi hôm nay nha,Action,REPORT_GENERAL
-tổng chi hôm nay ha,Action,REPORT_GENERAL
-tổng chi hôm nay hả,Action,REPORT_GENERAL
-tổng chi hôm nay vậy,Action,REPORT_GENERAL
-tổng chi hôm nay đi,Action,REPORT_GENERAL
-tổng chi hôm nay ?,Action,REPORT_GENERAL
-tổng chi hôm nay a,Action,REPORT_GENERAL
-tổng chi tháng trước,Action,REPORT_GENERAL
-tổng chi tháng trước bot,Action,REPORT_GENERAL
-tổng chi tháng trước nha,Action,REPORT_GENERAL
-tổng chi tháng trước ha,Action,REPORT_GENERAL
-tổng chi tháng trước hả,Action,REPORT_GENERAL
-tổng chi tháng trước vậy,Action,REPORT_GENERAL
-tổng chi tháng trước đi,Action,REPORT_GENERAL
-tổng chi tháng trước ?,Action,REPORT_GENERAL
-tổng chi tháng trước a,Action,REPORT_GENERAL
-tiêu bao nhiêu tháng này,Action,REPORT_GENERAL
-tiêu bao nhiêu tháng này bot,Action,REPORT_GENERAL
-tiêu bao nhiêu tháng này nha,Action,REPORT_GENERAL
-tiêu bao nhiêu tháng này ha,Action,REPORT_GENERAL
-tiêu bao nhiêu tháng này hả,Action,REPORT_GENERAL
-tiêu bao nhiêu tháng này vậy,Action,REPORT_GENERAL
-tiêu bao nhiêu tháng này đi,Action,REPORT_GENERAL
-tiêu bao nhiêu tháng này ?,Action,REPORT_GENERAL
-tiêu bao nhiêu tháng này a,Action,REPORT_GENERAL
-tháng này tiêu bao nhiêu,Action,REPORT_GENERAL
-tháng này tiêu bao nhiêu bot,Action,REPORT_GENERAL
-tháng này tiêu bao nhiêu nha,Action,REPORT_GENERAL
-tháng này tiêu bao nhiêu ha,Action,REPORT_GENERAL
-tháng này tiêu bao nhiêu hả,Action,REPORT_GENERAL
-tháng này tiêu bao nhiêu vậy,Action,REPORT_GENERAL
-tháng này tiêu bao nhiêu đi,Action,REPORT_GENERAL
-tháng này tiêu bao nhiêu ?,Action,REPORT_GENERAL
-tháng này tiêu bao nhiêu a,Action,REPORT_GENERAL
-tháng này tiêu bao nhiêu rồi ?,Action,REPORT_GENERAL
-tháng này tiêu bao nhiêu rồi a,Action,REPORT_GENERAL
-hôm nay đã tiêu mấy ha,Action,REPORT_GENERAL
-hôm nay đã tiêu mấy ?,Action,REPORT_GENERAL
-hôm nay đã tiêu mấy a,Action,REPORT_GENERAL
-minh da tieu bao nhieu thang nay hả,Action,REPORT_GENERAL
-minh da tieu bao nhieu thang nay vậy,Action,REPORT_GENERAL
-minh da tieu bao nhieu thang nay đi,Action,REPORT_GENERAL
-minh da tieu bao nhieu thang nay ?,Action,REPORT_GENERAL
-minh da tieu bao nhieu thang nay a,Action,REPORT_GENERAL
-thống kê chi tiêu tháng này,Action,REPORT_GENERAL
-thống kê chi tiêu tháng này bot,Action,REPORT_GENERAL
-thống kê chi tiêu tháng này nha,Action,REPORT_GENERAL
-thống kê chi tiêu tháng này ha,Action,REPORT_GENERAL
-thống kê chi tiêu tháng này hả,Action,REPORT_GENERAL
-thống kê chi tiêu tháng này vậy,Action,REPORT_GENERAL
-thống kê chi tiêu tháng này đi,Action,REPORT_GENERAL
-thống kê chi tiêu tháng này ?,Action,REPORT_GENERAL
-thống kê chi tiêu tháng này a,Action,REPORT_GENERAL
-xem tổng chi tháng này,Action,REPORT_GENERAL
-xem tổng chi tháng này bot,Action,REPORT_GENERAL
-xem tổng chi tháng này nha,Action,REPORT_GENERAL
-xem tổng chi tháng này ha,Action,REPORT_GENERAL
-xem tổng chi tháng này hả,Action,REPORT_GENERAL
-xem tổng chi tháng này vậy,Action,REPORT_GENERAL
-xem tổng chi tháng này đi,Action,REPORT_GENERAL
-xem tổng chi tháng này ?,Action,REPORT_GENERAL
-xem tổng chi tháng này a,Action,REPORT_GENERAL
-bao cao tong chi thang nay bot,Action,REPORT_GENERAL
-bao cao tong chi thang nay nha,Action,REPORT_GENERAL
-bao cao tong chi thang nay ha,Action,REPORT_GENERAL
-bao cao tong chi thang nay hả,Action,REPORT_GENERAL
-bao cao tong chi thang nay vậy,Action,REPORT_GENERAL
-bao cao tong chi thang nay đi,Action,REPORT_GENERAL
-bao cao tong chi thang nay ?,Action,REPORT_GENERAL
-bao cao tong chi thang nay a,Action,REPORT_GENERAL
-chi hết bao nhiêu tháng này,Action,REPORT_GENERAL
-chi hết bao nhiêu tháng này bot,Action,REPORT_GENERAL
-chi hết bao nhiêu tháng này nha,Action,REPORT_GENERAL
-chi hết bao nhiêu tháng này ha,Action,REPORT_GENERAL
-chi hết bao nhiêu tháng này hả,Action,REPORT_GENERAL
-chi hết bao nhiêu tháng này vậy,Action,REPORT_GENERAL
-chi hết bao nhiêu tháng này đi,Action,REPORT_GENERAL
-chi hết bao nhiêu tháng này ?,Action,REPORT_GENERAL
-chi hết bao nhiêu tháng này a,Action,REPORT_GENERAL
 đã tiêu bao nhiêu tháng này,Action,REPORT_GENERAL
-đã tiêu bao nhiêu tháng này bot,Action,REPORT_GENERAL
-đã tiêu bao nhiêu tháng này nha,Action,REPORT_GENERAL
-đã tiêu bao nhiêu tháng này ha,Action,REPORT_GENERAL
-đã tiêu bao nhiêu tháng này hả,Action,REPORT_GENERAL
-đã tiêu bao nhiêu tháng này vậy,Action,REPORT_GENERAL
-đã tiêu bao nhiêu tháng này đi,Action,REPORT_GENERAL
 đã tiêu bao nhiêu tháng này ?,Action,REPORT_GENERAL
 đã tiêu bao nhiêu tháng này a,Action,REPORT_GENERAL
+đã tiêu bao nhiêu tháng này bot,Action,REPORT_GENERAL
+đã tiêu bao nhiêu tháng này ha,Action,REPORT_GENERAL
+đã tiêu bao nhiêu tháng này hả,Action,REPORT_GENERAL
+đã tiêu bao nhiêu tháng này nha,Action,REPORT_GENERAL
+đã tiêu bao nhiêu tháng này vậy,Action,REPORT_GENERAL
+đã tiêu bao nhiêu tháng này đi,Action,REPORT_GENERAL
+đóng chế độ tối,Action,Setting
+đợt vừa rồi mình đã tiêu hết bao nhiêu,Action,REPORT_GENERAL
+Đặt giới hạn chi tiêu thành 200k,Action,SET_LIMIT
+Đặt giới hạn chi tiêu thành 500k,Action,SET_LIMIT
+Đặt giới hạn chi tiêu thành 1tr,Action,SET_LIMIT
+Đặt giới hạn chi tiêu thành 2tr,Action,SET_LIMIT
+Đặt giới hạn chi tiêu thành 3tr,Action,SET_LIMIT
+Đặt giới hạn chi tiêu thành 5tr,Action,SET_LIMIT
+Đặt giới hạn chi tiêu thành 10tr,Action,SET_LIMIT
+Đặt giới hạn chi tiêu thành 1.5 triệu,Action,SET_LIMIT
+Đặt giới hạn chi tiêu thành 2 triệu,Action,SET_LIMIT
+Đặt giới hạn chi tiêu thành 3 triệu,Action,SET_LIMIT
+Đặt giới hạn chi tiêu thành 5 triệu,Action,SET_LIMIT
+Đặt giới hạn chi tiêu thành 10 triệu,Action,SET_LIMIT
+cài đặt hạn mức chi tiêu 200k,Action,SET_LIMIT
+cài đặt hạn mức chi tiêu 500k,Action,SET_LIMIT
+cài đặt hạn mức chi tiêu 1tr,Action,SET_LIMIT
+cài đặt hạn mức chi tiêu 2tr,Action,SET_LIMIT
+cài đặt hạn mức chi tiêu 3tr,Action,SET_LIMIT
+cài đặt hạn mức chi tiêu 5tr,Action,SET_LIMIT
+cài đặt hạn mức chi tiêu 10tr,Action,SET_LIMIT
+cài đặt hạn mức chi tiêu 1.5 triệu,Action,SET_LIMIT
+cài đặt hạn mức chi tiêu 2 triệu,Action,SET_LIMIT
+cài đặt hạn mức chi tiêu 3 triệu,Action,SET_LIMIT
+cài đặt hạn mức chi tiêu 5 triệu,Action,SET_LIMIT
+cài đặt hạn mức chi tiêu 10 triệu,Action,SET_LIMIT
+đặt giới hạn ăn uống 200k,Action,SET_LIMIT
+đặt giới hạn ăn uống 500k,Action,SET_LIMIT
+đặt giới hạn ăn uống 1tr,Action,SET_LIMIT
+đặt giới hạn ăn uống 2tr,Action,SET_LIMIT
+đặt giới hạn ăn uống 3tr,Action,SET_LIMIT
+đặt giới hạn ăn uống 5tr,Action,SET_LIMIT
+đặt giới hạn ăn uống 10tr,Action,SET_LIMIT
+đặt giới hạn ăn uống 1.5 triệu,Action,SET_LIMIT
+đặt giới hạn ăn uống 2 triệu,Action,SET_LIMIT
+đặt giới hạn ăn uống 3 triệu,Action,SET_LIMIT
+đặt giới hạn ăn uống 5 triệu,Action,SET_LIMIT
+đặt giới hạn ăn uống 10 triệu,Action,SET_LIMIT
+thay đổi hạn mức chi tiêu thành 200k,Action,SET_LIMIT
+thay đổi hạn mức chi tiêu thành 500k,Action,SET_LIMIT
+thay đổi hạn mức chi tiêu thành 1tr,Action,SET_LIMIT
+thay đổi hạn mức chi tiêu thành 2tr,Action,SET_LIMIT
+thay đổi hạn mức chi tiêu thành 3tr,Action,SET_LIMIT
+thay đổi hạn mức chi tiêu thành 5tr,Action,SET_LIMIT
+thay đổi hạn mức chi tiêu thành 10tr,Action,SET_LIMIT
+thay đổi hạn mức chi tiêu thành 1.5 triệu,Action,SET_LIMIT
+thay đổi hạn mức chi tiêu thành 2 triệu,Action,SET_LIMIT
+thay đổi hạn mức chi tiêu thành 3 triệu,Action,SET_LIMIT
+thay đổi hạn mức chi tiêu thành 5 triệu,Action,SET_LIMIT
+thay đổi hạn mức chi tiêu thành 10 triệu,Action,SET_LIMIT
+cài hạn mức ăn uống là 200k,Action,SET_LIMIT
+cài hạn mức ăn uống là 500k,Action,SET_LIMIT
+cài hạn mức ăn uống là 1tr,Action,SET_LIMIT
+cài hạn mức ăn uống là 2tr,Action,SET_LIMIT
+cài hạn mức ăn uống là 3tr,Action,SET_LIMIT
+cài hạn mức ăn uống là 5tr,Action,SET_LIMIT
+cài hạn mức ăn uống là 10tr,Action,SET_LIMIT
+cài hạn mức ăn uống là 1.5 triệu,Action,SET_LIMIT
+cài hạn mức ăn uống là 2 triệu,Action,SET_LIMIT
+cài hạn mức ăn uống là 3 triệu,Action,SET_LIMIT
+cài hạn mức ăn uống là 5 triệu,Action,SET_LIMIT
+cài hạn mức ăn uống là 10 triệu,Action,SET_LIMIT
+đặt hạn mức chi tiêu thành 200k,Action,SET_LIMIT
+đặt hạn mức chi tiêu thành 500k,Action,SET_LIMIT
+đặt hạn mức chi tiêu thành 1tr,Action,SET_LIMIT
+đặt hạn mức chi tiêu thành 2tr,Action,SET_LIMIT
+đặt hạn mức chi tiêu thành 3tr,Action,SET_LIMIT
+đặt hạn mức chi tiêu thành 5tr,Action,SET_LIMIT
+đặt hạn mức chi tiêu thành 10tr,Action,SET_LIMIT
+đặt hạn mức chi tiêu thành 1.5 triệu,Action,SET_LIMIT
+đặt hạn mức chi tiêu thành 2 triệu,Action,SET_LIMIT
+đặt hạn mức chi tiêu thành 3 triệu,Action,SET_LIMIT
+đặt hạn mức chi tiêu thành 5 triệu,Action,SET_LIMIT
+đặt hạn mức chi tiêu thành 10 triệu,Action,SET_LIMIT
+đặt giới hạn chi tiêu là 200k,Action,SET_LIMIT
+đặt giới hạn chi tiêu là 500k,Action,SET_LIMIT
+đặt giới hạn chi tiêu là 1tr,Action,SET_LIMIT
+đặt giới hạn chi tiêu là 2tr,Action,SET_LIMIT
+đặt giới hạn chi tiêu là 3tr,Action,SET_LIMIT
+đặt giới hạn chi tiêu là 5tr,Action,SET_LIMIT
+đặt giới hạn chi tiêu là 10tr,Action,SET_LIMIT
+đặt giới hạn chi tiêu là 1.5 triệu,Action,SET_LIMIT
+đặt giới hạn chi tiêu là 2 triệu,Action,SET_LIMIT
+đặt giới hạn chi tiêu là 3 triệu,Action,SET_LIMIT
+đặt giới hạn chi tiêu là 5 triệu,Action,SET_LIMIT
+đặt giới hạn chi tiêu là 10 triệu,Action,SET_LIMIT
+thiết lập hạn mức ăn uống thành 200k,Action,SET_LIMIT
+thiết lập hạn mức ăn uống thành 500k,Action,SET_LIMIT
+thiết lập hạn mức ăn uống thành 1tr,Action,SET_LIMIT
+thiết lập hạn mức ăn uống thành 2tr,Action,SET_LIMIT
+thiết lập hạn mức ăn uống thành 3tr,Action,SET_LIMIT
+thiết lập hạn mức ăn uống thành 5tr,Action,SET_LIMIT
+thiết lập hạn mức ăn uống thành 10tr,Action,SET_LIMIT
+thiết lập hạn mức ăn uống thành 1.5 triệu,Action,SET_LIMIT
+thiết lập hạn mức ăn uống thành 2 triệu,Action,SET_LIMIT
+thiết lập hạn mức ăn uống thành 3 triệu,Action,SET_LIMIT
+thiết lập hạn mức ăn uống thành 5 triệu,Action,SET_LIMIT
+thiết lập hạn mức ăn uống thành 10 triệu,Action,SET_LIMIT
+thiết lập giới hạn chi tiêu 200k,Action,SET_LIMIT
+thiết lập giới hạn chi tiêu 500k,Action,SET_LIMIT
+thiết lập giới hạn chi tiêu 1tr,Action,SET_LIMIT
+thiết lập giới hạn chi tiêu 2tr,Action,SET_LIMIT
+thiết lập giới hạn chi tiêu 3tr,Action,SET_LIMIT
+thiết lập giới hạn chi tiêu 5tr,Action,SET_LIMIT
+thiết lập giới hạn chi tiêu 10tr,Action,SET_LIMIT
+thiết lập giới hạn chi tiêu 1.5 triệu,Action,SET_LIMIT
+thiết lập giới hạn chi tiêu 2 triệu,Action,SET_LIMIT
+thiết lập giới hạn chi tiêu 3 triệu,Action,SET_LIMIT
+thiết lập giới hạn chi tiêu 5 triệu,Action,SET_LIMIT
+thiết lập giới hạn chi tiêu 10 triệu,Action,SET_LIMIT
+chốt hạn mức chi tiêu 200k,Action,SET_LIMIT
+chốt hạn mức chi tiêu 500k,Action,SET_LIMIT
+chốt hạn mức chi tiêu 1tr,Action,SET_LIMIT
+chốt hạn mức chi tiêu 2tr,Action,SET_LIMIT
+chốt hạn mức chi tiêu 3tr,Action,SET_LIMIT
+chốt hạn mức chi tiêu 5tr,Action,SET_LIMIT
+chốt hạn mức chi tiêu 10tr,Action,SET_LIMIT
+chốt hạn mức chi tiêu 1.5 triệu,Action,SET_LIMIT
+chốt hạn mức chi tiêu 2 triệu,Action,SET_LIMIT
+chốt hạn mức chi tiêu 3 triệu,Action,SET_LIMIT
+chốt hạn mức chi tiêu 5 triệu,Action,SET_LIMIT
+chốt hạn mức chi tiêu 10 triệu,Action,SET_LIMIT
+đặt lại giới hạn thành 200k,Action,SET_LIMIT
+đặt lại giới hạn thành 500k,Action,SET_LIMIT
+đặt lại giới hạn thành 1tr,Action,SET_LIMIT
+đặt lại giới hạn thành 2tr,Action,SET_LIMIT
+đặt lại giới hạn thành 3tr,Action,SET_LIMIT
+đặt lại giới hạn thành 5tr,Action,SET_LIMIT
+đặt lại giới hạn thành 10tr,Action,SET_LIMIT
+đặt lại giới hạn thành 1.5 triệu,Action,SET_LIMIT
+đặt lại giới hạn thành 2 triệu,Action,SET_LIMIT
+đặt lại giới hạn thành 3 triệu,Action,SET_LIMIT
+đặt lại giới hạn thành 5 triệu,Action,SET_LIMIT
+đặt lại giới hạn thành 10 triệu,Action,SET_LIMIT
+Thêm 200k vào ăn uống,Action,SET_LIMIT
+Thêm 500k vào ăn uống,Action,SET_LIMIT
+Thêm 1tr vào ăn uống,Action,SET_LIMIT
+Thêm 2tr vào ăn uống,Action,SET_LIMIT
+Thêm 3tr vào ăn uống,Action,SET_LIMIT
+Thêm 5tr vào ăn uống,Action,SET_LIMIT
+Thêm 10tr vào ăn uống,Action,SET_LIMIT
+Thêm 1.5 triệu vào ăn uống,Action,SET_LIMIT
+Thêm 2 triệu vào ăn uống,Action,SET_LIMIT
+Thêm 3 triệu vào ăn uống,Action,SET_LIMIT
+Thêm 5 triệu vào ăn uống,Action,SET_LIMIT
+Thêm 10 triệu vào ăn uống,Action,SET_LIMIT
+cộng thêm 200k vào hạn mức đi lại,Action,SET_LIMIT
+cộng thêm 500k vào hạn mức đi lại,Action,SET_LIMIT
+cộng thêm 1tr vào hạn mức đi lại,Action,SET_LIMIT
+cộng thêm 2tr vào hạn mức đi lại,Action,SET_LIMIT
+cộng thêm 3tr vào hạn mức đi lại,Action,SET_LIMIT
+cộng thêm 5tr vào hạn mức đi lại,Action,SET_LIMIT
+cộng thêm 10tr vào hạn mức đi lại,Action,SET_LIMIT
+cộng thêm 1.5 triệu vào hạn mức đi lại,Action,SET_LIMIT
+cộng thêm 2 triệu vào hạn mức đi lại,Action,SET_LIMIT
+cộng thêm 3 triệu vào hạn mức đi lại,Action,SET_LIMIT
+cộng thêm 5 triệu vào hạn mức đi lại,Action,SET_LIMIT
+cộng thêm 10 triệu vào hạn mức đi lại,Action,SET_LIMIT
+tăng thêm 200k cho mua sắm,Action,SET_LIMIT
+tăng thêm 500k cho mua sắm,Action,SET_LIMIT
+tăng thêm 1tr cho mua sắm,Action,SET_LIMIT
+tăng thêm 2tr cho mua sắm,Action,SET_LIMIT
+tăng thêm 3tr cho mua sắm,Action,SET_LIMIT
+tăng thêm 5tr cho mua sắm,Action,SET_LIMIT
+tăng thêm 10tr cho mua sắm,Action,SET_LIMIT
+tăng thêm 1.5 triệu cho mua sắm,Action,SET_LIMIT
+tăng thêm 2 triệu cho mua sắm,Action,SET_LIMIT
+tăng thêm 3 triệu cho mua sắm,Action,SET_LIMIT
+tăng thêm 5 triệu cho mua sắm,Action,SET_LIMIT
+tăng thêm 10 triệu cho mua sắm,Action,SET_LIMIT
+bù vào mục tiêu tiết kiệm 200k,Action,SET_LIMIT
+bù vào mục tiêu tiết kiệm 500k,Action,SET_LIMIT
+bù vào mục tiêu tiết kiệm 1tr,Action,SET_LIMIT
+bù vào mục tiêu tiết kiệm 2tr,Action,SET_LIMIT
+bù vào mục tiêu tiết kiệm 3tr,Action,SET_LIMIT
+bù vào mục tiêu tiết kiệm 5tr,Action,SET_LIMIT
+bù vào mục tiêu tiết kiệm 10tr,Action,SET_LIMIT
+bù vào mục tiêu tiết kiệm 1.5 triệu,Action,SET_LIMIT
+bù vào mục tiêu tiết kiệm 2 triệu,Action,SET_LIMIT
+bù vào mục tiêu tiết kiệm 3 triệu,Action,SET_LIMIT
+bù vào mục tiêu tiết kiệm 5 triệu,Action,SET_LIMIT
+bù vào mục tiêu tiết kiệm 10 triệu,Action,SET_LIMIT
+bổ sung 200k vào hạn mức,Action,SET_LIMIT
+bổ sung 500k vào hạn mức,Action,SET_LIMIT
+bổ sung 1tr vào hạn mức,Action,SET_LIMIT
+bổ sung 2tr vào hạn mức,Action,SET_LIMIT
+bổ sung 3tr vào hạn mức,Action,SET_LIMIT
+bổ sung 5tr vào hạn mức,Action,SET_LIMIT
+bổ sung 10tr vào hạn mức,Action,SET_LIMIT
+bổ sung 1.5 triệu vào hạn mức,Action,SET_LIMIT
+bổ sung 2 triệu vào hạn mức,Action,SET_LIMIT
+bổ sung 3 triệu vào hạn mức,Action,SET_LIMIT
+bổ sung 5 triệu vào hạn mức,Action,SET_LIMIT
+bổ sung 10 triệu vào hạn mức,Action,SET_LIMIT
+tăng hạn mức ăn uống lên 200k,Action,SET_LIMIT
+tăng hạn mức ăn uống lên 500k,Action,SET_LIMIT
+tăng hạn mức ăn uống lên 1tr,Action,SET_LIMIT
+tăng hạn mức ăn uống lên 2tr,Action,SET_LIMIT
+tăng hạn mức ăn uống lên 3tr,Action,SET_LIMIT
+tăng hạn mức ăn uống lên 5tr,Action,SET_LIMIT
+tăng hạn mức ăn uống lên 10tr,Action,SET_LIMIT
+tăng hạn mức ăn uống lên 1.5 triệu,Action,SET_LIMIT
+tăng hạn mức ăn uống lên 2 triệu,Action,SET_LIMIT
+tăng hạn mức ăn uống lên 3 triệu,Action,SET_LIMIT
+tăng hạn mức ăn uống lên 5 triệu,Action,SET_LIMIT
+tăng hạn mức ăn uống lên 10 triệu,Action,SET_LIMIT
+bớt 200k từ giới hạn giải trí,Action,SET_LIMIT
+bớt 500k từ giới hạn giải trí,Action,SET_LIMIT
+bớt 1tr từ giới hạn giải trí,Action,SET_LIMIT
+bớt 2tr từ giới hạn giải trí,Action,SET_LIMIT
+bớt 3tr từ giới hạn giải trí,Action,SET_LIMIT
+bớt 5tr từ giới hạn giải trí,Action,SET_LIMIT
+bớt 10tr từ giới hạn giải trí,Action,SET_LIMIT
+bớt 1.5 triệu từ giới hạn giải trí,Action,SET_LIMIT
+bớt 2 triệu từ giới hạn giải trí,Action,SET_LIMIT
+bớt 3 triệu từ giới hạn giải trí,Action,SET_LIMIT
+bớt 5 triệu từ giới hạn giải trí,Action,SET_LIMIT
+bớt 10 triệu từ giới hạn giải trí,Action,SET_LIMIT
+giảm 200k hạn mức đi lại,Action,SET_LIMIT
+giảm 500k hạn mức đi lại,Action,SET_LIMIT
+giảm 1tr hạn mức đi lại,Action,SET_LIMIT
+giảm 2tr hạn mức đi lại,Action,SET_LIMIT
+giảm 3tr hạn mức đi lại,Action,SET_LIMIT
+giảm 5tr hạn mức đi lại,Action,SET_LIMIT
+giảm 10tr hạn mức đi lại,Action,SET_LIMIT
+giảm 1.5 triệu hạn mức đi lại,Action,SET_LIMIT
+giảm 2 triệu hạn mức đi lại,Action,SET_LIMIT
+giảm 3 triệu hạn mức đi lại,Action,SET_LIMIT
+giảm 5 triệu hạn mức đi lại,Action,SET_LIMIT
+giảm 10 triệu hạn mức đi lại,Action,SET_LIMIT
+trừ đi 200k hạn mức ăn uống,Action,SET_LIMIT
+trừ đi 500k hạn mức ăn uống,Action,SET_LIMIT
+trừ đi 1tr hạn mức ăn uống,Action,SET_LIMIT
+trừ đi 2tr hạn mức ăn uống,Action,SET_LIMIT
+trừ đi 3tr hạn mức ăn uống,Action,SET_LIMIT
+trừ đi 5tr hạn mức ăn uống,Action,SET_LIMIT
+trừ đi 10tr hạn mức ăn uống,Action,SET_LIMIT
+trừ đi 1.5 triệu hạn mức ăn uống,Action,SET_LIMIT
+trừ đi 2 triệu hạn mức ăn uống,Action,SET_LIMIT
+trừ đi 3 triệu hạn mức ăn uống,Action,SET_LIMIT
+trừ đi 5 triệu hạn mức ăn uống,Action,SET_LIMIT
+trừ đi 10 triệu hạn mức ăn uống,Action,SET_LIMIT
+giảm giới hạn ăn uống xuống 200k,Action,SET_LIMIT
+giảm giới hạn ăn uống xuống 500k,Action,SET_LIMIT
+giảm giới hạn ăn uống xuống 1tr,Action,SET_LIMIT
+giảm giới hạn ăn uống xuống 2tr,Action,SET_LIMIT
+giảm giới hạn ăn uống xuống 3tr,Action,SET_LIMIT
+giảm giới hạn ăn uống xuống 5tr,Action,SET_LIMIT
+giảm giới hạn ăn uống xuống 10tr,Action,SET_LIMIT
+giảm giới hạn ăn uống xuống 1.5 triệu,Action,SET_LIMIT
+giảm giới hạn ăn uống xuống 2 triệu,Action,SET_LIMIT
+giảm giới hạn ăn uống xuống 3 triệu,Action,SET_LIMIT
+giảm giới hạn ăn uống xuống 5 triệu,Action,SET_LIMIT
+giảm giới hạn ăn uống xuống 10 triệu,Action,SET_LIMIT

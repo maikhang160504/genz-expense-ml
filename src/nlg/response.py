@@ -1,72 +1,36 @@
 import json
-import unicodedata
 
-STATUS_ALLOWED = {"vui", "buon", "canh_bao", "trung_lap"}
-
-EMOTION_ALLOWED = {
-    "Alert", "Angry", "Approved", "Celebrate", "Chill", "Cooking", "Cool",
-    "Determined", "Error", "Excited", "Giggle", "Happy", "Hello", "Loading",
-    "Love", "Proud", "Relax", "Sad", "Sleepy", "Sassy", "Shopping", "Travel",
-    "Sorry", "Success", "Taunting", "Thankful", "Thinking", "Working", "Worried",
-}
-
-_EMOTION_LOWER_MAP: dict[str, str] = {e.lower(): e for e in EMOTION_ALLOWED}
-
-_EMOTION_ALIASES: dict[str, str] = {
-    "vui": "Happy",
-    "buon": "Sad",
-    "canh_bao": "Thinking",
-    "trung_lap": "Chill",
-    "dan_doi": "Sad",
-    "cham_choc": "Taunting",
-    "hai_huoc": "Sassy",
-    "dong_cam": "Approved",
-    "nghiem_tuc": "Thinking",
-    "can_than": "Alert",
-    "canh_bao_cam": "Alert",
-    "khong_ro": "Chill",
-}
+from src.nlg.mimo_assets import MIMO_ASSET_NAMES, coerce_mimo_asset
 
 
-def _strip_accents(text: str) -> str:
-    return "".join(
-        ch for ch in unicodedata.normalize("NFD", text) if unicodedata.category(ch) != "Mn"
-    )
+def intent_mimo_fallback(intent: str | None, record_type: str | None = None) -> str:
+    """Chỉ khi LLM không trả mimo_emotion hợp lệ."""
+    if intent == "Record":
+        if record_type == "Income":
+            return "Celebrate"
+        return "Success"
+    if intent == "Action":
+        return "Approved"
+    return "Hello"
 
 
-def normalize_status(value: str | None, is_triggered: bool) -> str:
-    if not value:
-        return "canh_bao" if is_triggered else "trung_lap"
-    lowered = value.strip().lower()
-    lowered = _strip_accents(lowered)
-    lowered = lowered.replace(" ", "_")
-    if lowered in STATUS_ALLOWED:
-        return lowered
-    if lowered in {"canhbao", "canh-bao"}:
-        return "canh_bao"
-    if lowered in {"trunglap", "trung-lap"}:
-        return "trung_lap"
-    return "canh_bao" if is_triggered else "trung_lap"
+def extract_mimo_emotion_from_llm_block(block: dict | None) -> str | None:
+    """Chỉ đọc mimo_emotion / emotion (PascalCase) — không dùng status tiếng Việt cũ."""
+    if not block:
+        return None
+    for key in ("mimo_emotion", "emotion"):
+        coerced = coerce_mimo_asset(block.get(key))
+        if coerced:
+            return coerced
+    return None
 
 
-def normalize_emotion(value: str | None, fallback: str = "Chill") -> str:
-    """Map LLM-returned emotion string → PascalCase Flutter asset name (one of EMOTION_ALLOWED)."""
-    if not value:
-        return fallback
-    v = value.strip()
-    if v in EMOTION_ALLOWED:
-        return v
-    lowered = v.lower().replace(" ", "_").replace("-", "_")
-    if lowered in _EMOTION_LOWER_MAP:
-        return _EMOTION_LOWER_MAP[lowered]
-    if lowered in _EMOTION_ALIASES:
-        return _EMOTION_ALIASES[lowered]
-    no_accent = _strip_accents(lowered)
-    if no_accent in _EMOTION_LOWER_MAP:
-        return _EMOTION_LOWER_MAP[no_accent]
-    if no_accent in _EMOTION_ALIASES:
-        return _EMOTION_ALIASES[no_accent]
-    return fallback
+def normalize_mimo_emotion(value: str | None, fallback: str = "Hello") -> str:
+    return coerce_mimo_asset(value) or fallback
+
+
+def normalize_emotion(value: str | None, fallback: str = "Hello") -> str:
+    return normalize_mimo_emotion(value, fallback)
 
 
 def _parse_json_text(text: str) -> dict | None:
@@ -99,3 +63,7 @@ def parse_llm_response(response: dict, source: str) -> dict | None:
             text = choices[0].get("message", {}).get("content", "")
             return _parse_json_text(text)
     return None
+
+
+# Backward-compat exports
+EMOTION_ALLOWED = set(MIMO_ASSET_NAMES)

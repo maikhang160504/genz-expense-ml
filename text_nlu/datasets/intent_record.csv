@@ -2,7 +2,7 @@
 Ăn sáng vỉa hè: phở gà 45k,Food,expense,1
 Order GrabFood: cơm sườn 58k,Food,expense,1
 "Mua trà sữa tại quán, 49k",Food,expense,1
-"Tối đi nhậu bạn bè, bia + đồ nhắm 230k",Food,expense,1
+"Tối đi nhậu bạn bè, bia + đồ nhắm 230k",Entertainment,expense,1
 Ăn trưa công ty: cơm phần 35k,Food,expense,1
 ShopeeFood giao: bánh mì chảo 32k,Food,expense,1
 Cà phê sáng take-away 28k,Food,expense,1
@@ -866,7 +866,7 @@ Gửi tiết kiệm ngoại tệ 1.1tr,Savings,expense,1
 Bỏ lợn mua điện thoại 700k,Savings,expense,1
 Gửi tiết kiệm tích luỹ 4tr,Savings,expense,1
 Bỏ heo 90k mỗi tháng,Savings,expense,1
-Quỹ đi du lịch 2tr5,Savings,expense,1
+Quỹ đi du lịch 2tr5,Entertainment,expense,1
 Gửi tiết kiệm online 250k,Savings,expense,1
 Bỏ lợn mua máy tính 3tr,Savings,expense,1
 Gửi tiết kiệm đợt Tết 6tr,Savings,expense,1
@@ -1322,7 +1322,7 @@ Nhận quà tặng thương hiệu 88k,Bonus,income,1
 Bán vật dụng gia đình 370k,Business,income,1
 Thu nhập lẻ từ app 23k,Business,income,1
 Nhận tiền đổi thưởng 125k,Bonus,income,1
-OMG đi cafe chill 49k ☕️✨,Social,expense,1
+OMG đi cafe chill 49k ☕️✨,Entertainment,expense,1
 "Sinh nhật bff, mua quà 199k 🎁 lol",Social,expense,1
 "Quẩy nhẹ: pizza + tip 220k, so lit",Social,expense,1
 Mua hoa tặng crush 99k 🌹 ugh,Social,expense,1
@@ -1802,7 +1802,7 @@ nhà nội làm combo bảo hiểm y tế; chốt 29.2củ bằng banking app,He
 "Nhận tiền từ lẩu mini ở quán cóc: +12củ, về ví qua quẹt thẻ",Business,income,1
 "Case văn phòng: mua đồ tech tại coworking, trả 35tr qua quẹt thẻ, order trên Shopee",Shopping,expense,1
 sảnh tòa nhà làm combo support fee; chốt 423k bằng tiền mặt,Others,expense,1
-"Gia đình ở pantry văn phòng: đi spa tổng 2tr, xử lý bằng scan qr",Beauty,expense,1
+"Gia đình ở pantry văn phòng: đi spa tổng 2tr, xử lý bằng scan qr",Entertainment,expense,1
 "Case văn phòng: thu hồi khoản vay tại nhà nội, trả 88 ngàn qua tiền mặt",Debt,expense,1
 "Story time 7: hẻm nhỏ du lịch ngắn ngày xong, mất 99k đồng, khum",Entertainment,expense,1
 "phí cầu đường ở xe đẩy đầu ngõ, scan qr 23.7tr, gấp gấp",Transport,expense,1
@@ -2039,7 +2039,7 @@ pantry văn phòng làm combo gội dưỡng sinh; chốt 69k bằng tiền mặ
 "Boi tien roi ne: quà handmade +20k vnđ, chợ đêm",Business,income,1
 "Story time 246: mall lunch zone workshop xong, mất 33.7tr, gấp gấp, hóa đơn định kỳ",Education,expense,1
 "Case văn phòng: mua gạo tại chung cư, trả 21.4củ qua scan qr",Essentials,expense,1
-"An sang khong dau: đi spa 2.781k vnđ tai mall lunch zone, tra banking app",Beauty,expense,1
+"An sang khong dau: đi spa 2.781k vnđ tai mall lunch zone, tra banking app",Entertainment,expense,1
 "English boi: misc payment in nhà ngoại, pay 69k by tiền mặt",Others,expense,1
 "Thu nhập hôm nay: mua tài khoản học online 25 nghìn, bắn qua quẹt thẻ, hóa đơn định kỳ",Business,income,1
 "Nay vỉa hè có vụ đầu tư quỹ mở hết 3.506 ngàn, thanh toán chuyển khoản",Investment,expense,1
@@ -2514,7 +2514,7 @@ khu trọ làm combo chi phí linh tinh; chốt 2.436k đồng bằng quẹt th�
 "An sang khong dau: gift card 4557k đồng tai nhà nội, tra chuyển khoản",Social,expense,1
 "Đi nhà nội rồi trái cây, bay 29.9củ, cảm giác lụm",Essentials,expense,1
 oke de toi check #741,Business,income,0
-pantry văn phòng làm combo đi spa; chốt 4.476 nghìn bằng tiền mặt,Beauty,expense,1
+pantry văn phòng làm combo đi spa; chốt 4.476 nghìn bằng tiền mặt,Entertainment,expense,1
 "Cash-in from để dành mua nhà at chợ đêm: 45 ngàn, done by chuyển khoản",Business,income,1
 "Nay có khoản về từ workshop, 26củ chuyển khoản cái rẹt",Business,income,1
 "An sang khong dau: để dành mua nhà 23củ tai xe đẩy đầu ngõ, tra tiền mặt",Savings,expense,1
@@ -3169,7 +3169,7 @@ coworking ơi app nay lag qua troi,Business,income,0
 "Story time 1412: xe đẩy đầu ngõ đi pub xong, mất 332k vnđ, gấp gấp",Entertainment,expense,1
 "An sang khong dau: siêu thị tuần 6256 nghìn tai nhà nội, tra scan qr",Essentials,expense,1
 "Nay khu trọ có vụ ủng hộ hết 18k đồng, thanh toán scan qr",Charity,expense,1
-"Gia đình ở mall lunch zone: đi spa tổng 25k vnđ, xử lý bằng banking app",Beauty,expense,1
+"Gia đình ở mall lunch zone: đi spa tổng 25k vnđ, xử lý bằng banking app",Entertainment,expense,1
 "Cash-in from thanh toán nợ thẻ at vỉa hè: 924k, done by quẹt thẻ",Business,income,1
 "Nay có khoản về từ random charge, 378k đồng chuyển khoản cái rẹt",Business,income,1
 chot keo luc toi #1419,Business,income,0
@@ -3239,7 +3239,7 @@ hom nay troi oi la troi #1458,Business,income,0
 "Teencode mode on: mua kem chống nắng 99 ngàn ở food court trung tâm thương mại, mlem",Beauty,expense,1
 hẻm nhỏ làm combo đi pub; chốt 99 ngàn bằng chuyển khoản,Entertainment,expense,1
 "nạp game ở hẻm nhỏ, banking app 32.3tr, khum",Entertainment,expense,1
-"Case văn phòng: đi spa tại mall lunch zone, trả 20 nghìn qua scan qr",Beauty,expense,1
+"Case văn phòng: đi spa tại mall lunch zone, trả 20 nghìn qua scan qr",Entertainment,expense,1
 "Nay quán cóc có vụ trả nợ hết 45k vnđ, thanh toán tiền mặt",Debt,expense,1
 "Teencode mode on: khám mắt 16.8tr ở chung cư, khum",Health,expense,1
 "Story time 1493: chợ đêm vé lễ hội xong, mất 15k, chill",Entertainment,expense,1
@@ -3296,7 +3296,7 @@ khu trọ làm combo xét nghiệm; chốt 6137k đồng bằng quẹt thẻ,Hea
 "Nhận tiền từ mua tài khoản học online ở food court trung tâm thương mại: +3518k vnđ, về ví qua scan qr, hóa đơn định kỳ",Bonus,income,1
 "Teencode mode on: đồ pet 45 nghìn ở ở nhà, flex nhẹ",Essentials,expense,1
 "Đòi được tiền: mua quà sinh nhật, vào tài khoản 16củ, khum",Business,income,1
-"Nay sảnh tòa nhà có vụ đi spa hết 6.9củ, thanh toán chuyển khoản",Beauty,expense,1
+"Nay sảnh tòa nhà có vụ đi spa hết 6.9củ, thanh toán chuyển khoản",Entertainment,expense,1
 "Story time 1549: quán cóc mua trái phiếu xong, mất 188 nghìn, gấp gấp",Investment,expense,1
 "Đi nhà nội rồi sửa ống nước, bay 4.1củ, cảm giác vibe ổn",Housing,expense,1
 "Case văn phòng: cho tặng bữa ăn tại khu trọ, trả 406k qua tiền mặt",Charity,expense,1
@@ -3312,7 +3312,7 @@ khu trọ làm combo xét nghiệm; chốt 6137k đồng bằng quẹt thẻ,Hea
 "An sang khong dau: đòi nợ 6500 nghìn tai nhà nội, tra scan qr",Debt,expense,1
 "Gia đình ở coworking: gội dưỡng sinh tổng 3.273k, xử lý bằng chuyển khoản",Beauty,expense,1
 "Story time 1564: chợ đêm nạp game xong, mất 88k, mlem",Entertainment,expense,1
-"English boi: đi spa in mall lunch zone, pay 26củ by banking app",Beauty,expense,1
+"English boi: đi spa in mall lunch zone, pay 26củ by banking app",Entertainment,expense,1
 "vitamin ở ở nhà, quẹt thẻ 51k, chill",Health,expense,1
 mall lunch zone làm combo đóng học phí; chốt 8.841k bằng chuyển khoản,Education,expense,1
 "Case văn phòng: tiền thuê nhà tại ở nhà, trả 7tr qua banking app",Housing,expense,1
@@ -3414,7 +3414,7 @@ quán cóc làm combo be car; chốt 451 ngàn bằng chuyển khoản,Transport
 sảnh tòa nhà làm combo nhuộm tóc; chốt 184k vnđ bằng tiền mặt,Beauty,expense,1
 "Cash-in from đòi nợ at coworking: 912 nghìn, done by quẹt thẻ",Business,income,1
 "Lương thưởng style genz: chi phí linh tinh +18 ngàn, nhận tại hẻm nhỏ",Salary,income,1
-"An sang khong dau: đi spa 65k vnđ tai coworking, tra quẹt thẻ",Beauty,expense,1
+"An sang khong dau: đi spa 65k vnđ tai coworking, tra quẹt thẻ",Entertainment,expense,1
 "English boi: mua tai nghe in mall lunch zone, pay 3446 ngàn by tiền mặt",Shopping,expense,1
 cmt giup tui cai #1673,Business,income,0
 "Boi tien roi ne: mua cổ phiếu +69k đồng, chung cư",Business,income,1
@@ -3499,7 +3499,7 @@ nhà ngoại làm combo khám mắt; chốt 651k bằng scan qr,Health,expense,1
 "English boi: mua tài khoản học online in food court trung tâm thương mại, pay 7756k by quẹt thẻ",Education,expense,1
 "Gia đình ở vỉa hè: gift card tổng 354k vnđ, xử lý bằng scan qr",Social,expense,1
 "Teencode mode on: khám nha 2.2củ ở nhà ngoại, hơi cấn",Health,expense,1
-"Story time 1759: mall lunch zone đi spa xong, mất 88 nghìn, mlem",Beauty,expense,1
+"Story time 1759: mall lunch zone đi spa xong, mất 88 nghìn, mlem",Entertainment,expense,1
 "English boi: tiền điện in nhà nội, pay 415k đồng by quẹt thẻ",Housing,expense,1
 quán cóc ơi nha co ai onl hem,Business,income,0
 "Gia đình ở mall lunch zone: wax tổng 2.571 ngàn, xử lý bằng quẹt thẻ",Beauty,expense,1
@@ -3681,7 +3681,7 @@ xe đẩy đầu ngõ làm combo grab bike; chốt 628 nghìn bằng quẹt th�
 "Đòi được tiền: vay tạm, vào tài khoản 27tr, căng phết",Business,income,1
 "Nay có khoản về từ gia sư, 2.895 nghìn chuyển khoản cái rẹt",Business,income,1
 vỉa hè làm combo quỹ dự phòng; chốt 225 nghìn bằng scan qr,Savings,expense,1
-"English boi: đi spa in mall lunch zone, pay 7tr by quẹt thẻ",Beauty,expense,1
+"English boi: đi spa in mall lunch zone, pay 7tr by quẹt thẻ",Entertainment,expense,1
 "Nay có khoản về từ random charge, 797 ngàn chuyển khoản cái rẹt",Business,income,1
 "An sang khong dau: trả nợ 15 nghìn tai pantry văn phòng, tra tiền mặt",Debt,expense,1
 "Cash-in from gift card at nhà ngoại: 45k đồng, done by chuyển khoản",Business,income,1
@@ -3731,7 +3731,7 @@ pantry văn phòng làm combo thanh toán nợ thẻ; chốt 4166k vnđ bằng q
 "Teencode mode on: bánh mì 6củ ở chợ đêm, gấp gấp",Food,expense,1
 "Teencode mode on: gia sư 20.3củ ở mall lunch zone, flex nhẹ",Education,expense,1
 "An sang khong dau: escape room 27.1tr tai vỉa hè, tra tiền mặt",Entertainment,expense,1
-"Teencode mode on: đi spa 336 nghìn ở mall lunch zone, okela",Beauty,expense,1
+"Teencode mode on: đi spa 336 nghìn ở mall lunch zone, okela",Entertainment,expense,1
 "Nay food court trung tâm thương mại có vụ wax hết 21.6củ, thanh toán banking app",Beauty,expense,1
 "Gia đình ở pantry văn phòng: mua đồ tech tổng 7.431k vnđ, xử lý bằng tiền mặt",Shopping,expense,1
 "Teencode mode on: mua trái phiếu 88 ngàn ở sảnh tòa nhà, chill",Investment,expense,1
@@ -3887,7 +3887,7 @@ di choi khong ne #2153,Business,income,0
 "An sang khong dau: du lịch ngắn ngày 99k tai chợ đêm, tra scan qr",Entertainment,expense,1
 "Lương thưởng style genz: random charge +3.4tr, nhận tại chung cư",Salary,income,1
 "Đòi được tiền: gia sư, vào tài khoản 8965 nghìn, khum",Business,income,1
-"English boi: đi spa in coworking, pay 6.968 ngàn by banking app",Beauty,expense,1
+"English boi: đi spa in coworking, pay 6.968 ngàn by banking app",Entertainment,expense,1
 "Thu nhập hôm nay: hoàn tiền mượn 7571k đồng, bắn qua tiền mặt",Business,income,1
 "Đi chợ đêm rồi thanh toán nợ thẻ, bay 21tr, cảm giác hơi cấn",Debt,expense,1
 "Teencode mode on: góp quỹ lớp 930k vnđ ở food court trung tâm thương mại, chill",Social,expense,1
@@ -4024,7 +4024,7 @@ xe đẩy đầu ngõ làm combo đi pub; chốt 20 ngàn bằng quẹt thẻ,En
 "Thu nhập hôm nay: mua ETF 12.5tr, bắn qua chuyển khoản",Business,income,1
 "English boi: wax in sảnh tòa nhà, pay 12 ngàn by scan qr",Beauty,expense,1
 "Thu nhập hôm nay: trả nợ ngân hàng 549k, bắn qua tiền mặt",Business,income,1
-"An sang khong dau: đi spa 4210 nghìn tai mall lunch zone, tra tiền mặt",Beauty,expense,1
+"An sang khong dau: đi spa 4210 nghìn tai mall lunch zone, tra tiền mặt",Entertainment,expense,1
 "Đòi được tiền: workshop, vào tài khoản 959 nghìn, vibe ổn, hóa đơn định kỳ",Business,income,1
 "Case văn phòng: quỹ khẩn cấp tại sảnh tòa nhà, trả 88 ngàn qua quẹt thẻ",Savings,expense,1
 "Story time 2303: ở nhà sửa máy lạnh xong, mất 15 ngàn, căng phết",Housing,expense,1
@@ -4066,7 +4066,7 @@ chợ đêm ơi nha co ai onl hem,Business,income,0
 "Đòi được tiền: mua quà sinh nhật, vào tài khoản 410k, khum",Business,income,1
 "Nay coworking có vụ mua toner hết 941 nghìn, thanh toán tiền mặt",Beauty,expense,1
 "Teencode mode on: mua thịt 902 nghìn ở chung cư, căng phết",Essentials,expense,1
-"An sang khong dau: đi spa 4756k tai mall lunch zone, tra banking app",Beauty,expense,1
+"An sang khong dau: đi spa 4756k tai mall lunch zone, tra banking app",Entertainment,expense,1
 "An sang khong dau: gửi xe 25k đồng tai chợ đêm, tra tiền mặt",Transport,expense,1
 "Teencode mode on: lệ phí thi 605 nghìn ở food court trung tâm thương mại, xỉu up xỉu down",Education,expense,1
 "Teencode mode on: gia sư 12k đồng ở sảnh tòa nhà, okela",Education,expense,1
@@ -4107,7 +4107,7 @@ hẻm nhỏ làm combo gửi phong bì; chốt 23tr bằng banking app,Bonus,inc
 "Story time 2385: food court trung tâm thương mại mua tài khoản học online xong, mất 12k, vibe ổn",Education,expense,1
 "English boi: mua tai nghe in sảnh tòa nhà, pay 572 ngàn by quẹt thẻ, order trên Tiki",Shopping,expense,1
 "Case văn phòng: siêu thị tuần tại chung cư, trả 25k qua quẹt thẻ",Essentials,expense,1
-"English boi: đi spa in sảnh tòa nhà, pay 2.6tr by chuyển khoản",Beauty,expense,1
+"English boi: đi spa in sảnh tòa nhà, pay 2.6tr by chuyển khoản",Entertainment,expense,1
 "Nhận tiền từ tiệc bạn bè ở coworking: +12k vnđ, về ví qua quẹt thẻ",Business,income,1
 "Gia đình ở nhà ngoại: gift card tổng 447k đồng, xử lý bằng tiền mặt",Social,expense,1
 "Story time 2392: nhà nội hùn vốn xong, mất 389 nghìn, vibe ổn",Investment,expense,1
@@ -4201,7 +4201,7 @@ sảnh tòa nhà làm combo mua tài liệu; chốt 7.039k đồng bằng scan q
 "English boi: trip cuối tuần in hẻm nhỏ, pay 30.8tr by tiền mặt",Entertainment,expense,1
 "Teencode mode on: lệ phí thi 25tr ở pantry văn phòng, chill",Education,expense,1
 "Nhận tiền từ tiệc bạn bè ở chung cư: +99 ngàn, về ví qua tiền mặt",Business,income,1
-"Teencode mode on: đi spa 35.5tr ở food court trung tâm thương mại, xỉu up xỉu down",Beauty,expense,1
+"Teencode mode on: đi spa 35.5tr ở food court trung tâm thương mại, xỉu up xỉu down",Entertainment,expense,1
 "Teencode mode on: quyên góp 18 nghìn ở vỉa hè, lụm",Charity,expense,1
 "English boi: karaoke in hẻm nhỏ, pay 12k đồng by quẹt thẻ",Entertainment,expense,1
 "Nhận tiền từ mua hoa ở sảnh tòa nhà: +33k vnđ, về ví qua quẹt thẻ",Business,income,1
@@ -10287,170 +10287,170 @@ vừa cat toc 791 xị,Beauty,expense,1
 cat toc ~799.663đ,Beauty,expense,1
 spend cat toc 808k,Beauty,expense,1
 đi spa 816 ngan,Entertainment,expense,1
-0.82 tr cho đi spa,Beauty,expense,1
+0.82 tr cho đi spa,Entertainment,expense,1
 đi spa hết 833 nghìn,Entertainment,expense,1
 "đi spa,841.428 vnd",Entertainment,expense,1
-mua đi spa 849K,Beauty,expense,1
-chi đi spa 858 nghin,Beauty,expense,1
-order đi spa 8 củ,Beauty,expense,1
-trả đi spa 874 ngàn,Beauty,expense,1
-đi đi spa 883k VND,Beauty,expense,1
+mua đi spa 849K,Entertainment,expense,1
+chi đi spa 858 nghin,Entertainment,expense,1
+order đi spa 8 củ,Entertainment,expense,1
+trả đi spa 874 ngàn,Entertainment,expense,1
+đi đi spa 883k VND,Entertainment,expense,1
 đi spa 891 xị nha,Entertainment,expense,1
 đi spa tầm 899.899đ,Entertainment,expense,1
-vừa đi spa 908k,Beauty,expense,1
+vừa đi spa 908k,Entertainment,expense,1
 đi spa ~916 ngan,Entertainment,expense,1
-spend đi spa 0.92 tr,Beauty,expense,1
-mua đi spa ở st 933 nghìn,Beauty,expense,1
+spend đi spa 0.92 tr,Entertainment,expense,1
+mua đi spa ở st 933 nghìn,Entertainment,expense,1
 đi spa st 941.664 vnd,Entertainment,expense,1
-order đi spa st 950K,Beauty,expense,1
-st: đi spa 958 nghin,Beauty,expense,1
-quẹt st đi spa 9 củ,Beauty,expense,1
+order đi spa st 950K,Entertainment,expense,1
+st: đi spa 958 nghin,Entertainment,expense,1
+quẹt st đi spa 9 củ,Entertainment,expense,1
 đi salon 975 ngàn,Entertainment,expense,1
-983k VND cho đi salon,Essentials,expense,1
+983k VND cho đi salon,Entertainment,expense,1
 đi salon hết 991 xị,Entertainment,expense,1
 "đi salon,1.000.135đ",Entertainment,expense,1
-mua đi salon 1008k,Essentials,expense,1
-chi đi salon 1016 ngan,Essentials,expense,1
-order đi salon 1.03 tr,Essentials,expense,1
-trả đi salon 1033 nghìn,Essentials,expense,1
-đi đi salon 1.041.900 vnd,Essentials,expense,1
+mua đi salon 1008k,Entertainment,expense,1
+chi đi salon 1016 ngan,Entertainment,expense,1
+order đi salon 1.03 tr,Entertainment,expense,1
+trả đi salon 1033 nghìn,Entertainment,expense,1
+đi đi salon 1.041.900 vnd,Entertainment,expense,1
 đi salon 1050K nha,Entertainment,expense,1
 đi salon tầm 1058 nghin,Entertainment,expense,1
-vừa đi salon 10 củ,Essentials,expense,1
+vừa đi salon 10 củ,Entertainment,expense,1
 đi salon ~1075 ngàn,Entertainment,expense,1
-spend đi salon 1083k VND,Essentials,expense,1
+spend đi salon 1083k VND,Entertainment,expense,1
 đi massage 1092 xị,Entertainment,expense,1
-1.100.371đ cho đi massage,Essentials,expense,1
+1.100.371đ cho đi massage,Entertainment,expense,1
 đi massage hết 1108k,Entertainment,expense,1
 "đi massage,1117 ngan",Entertainment,expense,1
-mua đi massage 1.13 tr,Essentials,expense,1
-chi đi massage 1133 nghìn,Essentials,expense,1
-order đi massage 1.142.136 vnd,Essentials,expense,1
-trả đi massage 1150K,Essentials,expense,1
-đi đi massage 1158 nghin,Essentials,expense,1
+mua đi massage 1.13 tr,Entertainment,expense,1
+chi đi massage 1133 nghìn,Entertainment,expense,1
+order đi massage 1.142.136 vnd,Entertainment,expense,1
+trả đi massage 1150K,Entertainment,expense,1
+đi đi massage 1158 nghin,Entertainment,expense,1
 đi massage 11 củ nha,Entertainment,expense,1
 đi massage tầm 1175 ngàn,Entertainment,expense,1
-vừa đi massage 1183k VND,Essentials,expense,1
+vừa đi massage 1183k VND,Entertainment,expense,1
 đi massage ~1192 xị,Entertainment,expense,1
-spend đi massage 1.200.607đ,Essentials,expense,1
-mua đi massage ở Grab 1208k,Essentials,expense,1
+spend đi massage 1.200.607đ,Entertainment,expense,1
+mua đi massage ở Grab 1208k,Entertainment,expense,1
 đi massage Grab 1217 ngan,Entertainment,expense,1
-order đi massage Grab 1.23 tr,Essentials,expense,1
-Grab: đi massage 1234 nghìn,Essentials,expense,1
-quẹt Grab đi massage 1.242.372 vnd,Essentials,expense,1
+order đi massage Grab 1.23 tr,Entertainment,expense,1
+Grab: đi massage 1234 nghìn,Entertainment,expense,1
+quẹt Grab đi massage 1.242.372 vnd,Entertainment,expense,1
 đi du lịch 1250K,Entertainment,expense,1
-1259 nghin cho đi du lịch,Essentials,expense,1
+1259 nghin cho đi du lịch,Entertainment,expense,1
 đi du lịch hết 12 củ,Entertainment,expense,1
 "đi du lịch,1275 ngàn",Entertainment,expense,1
-mua đi du lịch 1284k VND,Essentials,expense,1
-chi đi du lịch 1292 xị,Essentials,expense,1
-order đi du lịch 1.300.843đ,Essentials,expense,1
-trả đi du lịch 1309k,Essentials,expense,1
-đi đi du lịch 1317 ngan,Essentials,expense,1
+mua đi du lịch 1284k VND,Entertainment,expense,1
+chi đi du lịch 1292 xị,Entertainment,expense,1
+order đi du lịch 1.300.843đ,Entertainment,expense,1
+trả đi du lịch 1309k,Entertainment,expense,1
+đi đi du lịch 1317 ngan,Entertainment,expense,1
 đi du lịch 1.33 tr nha,Entertainment,expense,1
 đi du lịch tầm 1334 nghìn,Entertainment,expense,1
-vừa đi du lịch 1.342.608 vnd,Essentials,expense,1
+vừa đi du lịch 1.342.608 vnd,Entertainment,expense,1
 đi du lịch ~1350K,Entertainment,expense,1
-spend đi du lịch 1359 nghin,Essentials,expense,1
+spend đi du lịch 1359 nghin,Entertainment,expense,1
 đi du lich 13 củ,Entertainment,expense,1
-1376 ngàn cho đi du lich,Essentials,expense,1
+1376 ngàn cho đi du lich,Entertainment,expense,1
 đi du lich hết 1384k VND,Entertainment,expense,1
 "đi du lich,1392 xị",Entertainment,expense,1
-mua đi du lich 1.401.079đ,Essentials,expense,1
-chi đi du lich 1409k,Essentials,expense,1
-order đi du lich 1417 ngan,Essentials,expense,1
-trả đi du lich 1.43 tr,Essentials,expense,1
-đi đi du lich 1434 nghìn,Essentials,expense,1
+mua đi du lich 1.401.079đ,Entertainment,expense,1
+chi đi du lich 1409k,Entertainment,expense,1
+order đi du lich 1417 ngan,Entertainment,expense,1
+trả đi du lich 1.43 tr,Entertainment,expense,1
+đi đi du lich 1434 nghìn,Entertainment,expense,1
 đi du lich 1.442.844 vnd nha,Entertainment,expense,1
 đi du lich tầm 1451K,Entertainment,expense,1
-vừa đi du lich 1459 nghin,Essentials,expense,1
+vừa đi du lich 1459 nghin,Entertainment,expense,1
 đi du lich ~14 củ,Entertainment,expense,1
-spend đi du lich 1476 ngàn,Essentials,expense,1
-mua đi du lich ở quán 1484k VND,Essentials,expense,1
+spend đi du lich 1476 ngàn,Entertainment,expense,1
+mua đi du lich ở quán 1484k VND,Entertainment,expense,1
 đi du lich quán 1492 xị,Entertainment,expense,1
-order đi du lich quán 1.501.315đ,Essentials,expense,1
-quán: đi du lich 1509k,Essentials,expense,1
-quẹt quán đi du lich 1518 ngan,Essentials,expense,1
+order đi du lich quán 1.501.315đ,Entertainment,expense,1
+quán: đi du lich 1509k,Entertainment,expense,1
+quẹt quán đi du lich 1518 ngan,Entertainment,expense,1
 đi restaurant 1.53 tr,Entertainment,expense,1
-1534 nghìn cho đi restaurant,Essentials,expense,1
+1534 nghìn cho đi restaurant,Entertainment,expense,1
 đi restaurant hết 1.543.080 vnd,Entertainment,expense,1
 "đi restaurant,1551K",Entertainment,expense,1
-mua đi restaurant 1559 nghin,Essentials,expense,1
-chi đi restaurant 15 củ,Essentials,expense,1
-order đi restaurant 1576 ngàn,Essentials,expense,1
-trả đi restaurant 1584k VND,Essentials,expense,1
-đi đi restaurant 1593 xị,Essentials,expense,1
+mua đi restaurant 1559 nghin,Entertainment,expense,1
+chi đi restaurant 15 củ,Entertainment,expense,1
+order đi restaurant 1576 ngàn,Entertainment,expense,1
+trả đi restaurant 1584k VND,Entertainment,expense,1
+đi đi restaurant 1593 xị,Entertainment,expense,1
 đi restaurant 1.601.551đ nha,Entertainment,expense,1
 đi restaurant tầm 1609k,Entertainment,expense,1
-vừa đi restaurant 1618 ngan,Essentials,expense,1
+vừa đi restaurant 1618 ngan,Entertainment,expense,1
 đi restaurant ~1.63 tr,Entertainment,expense,1
-spend đi restaurant 1634 nghìn,Essentials,expense,1
+spend đi restaurant 1634 nghìn,Entertainment,expense,1
 đi cafe 1.643.316 vnd,Entertainment,expense,1
-1651K cho đi cafe,Essentials,expense,1
+1651K cho đi cafe,Entertainment,expense,1
 đi cafe hết 1660 nghin,Entertainment,expense,1
 "đi cafe,16 củ",Entertainment,expense,1
-mua đi cafe 1676 ngàn,Essentials,expense,1
-chi đi cafe 1685k VND,Essentials,expense,1
-order đi cafe 1693 xị,Essentials,expense,1
-trả đi cafe 1.701.787đ,Essentials,expense,1
-đi đi cafe 1710k,Essentials,expense,1
+mua đi cafe 1676 ngàn,Entertainment,expense,1
+chi đi cafe 1685k VND,Entertainment,expense,1
+order đi cafe 1693 xị,Entertainment,expense,1
+trả đi cafe 1.701.787đ,Entertainment,expense,1
+đi đi cafe 1710k,Entertainment,expense,1
 đi cafe 1718 ngan nha,Entertainment,expense,1
 đi cafe tầm 1.73 tr,Entertainment,expense,1
-vừa đi cafe 1735 nghìn,Essentials,expense,1
+vừa đi cafe 1735 nghìn,Entertainment,expense,1
 đi cafe ~1.743.552 vnd,Entertainment,expense,1
-spend đi cafe 1751K,Essentials,expense,1
-mua đi cafe ở Coopmart 1760 nghin,Essentials,expense,1
+spend đi cafe 1751K,Entertainment,expense,1
+mua đi cafe ở Coopmart 1760 nghin,Entertainment,expense,1
 đi cafe Coopmart 17 củ,Entertainment,expense,1
-order đi cafe Coopmart 1776 ngàn,Essentials,expense,1
-Coopmart: đi cafe 1785k VND,Essentials,expense,1
-quẹt Coopmart đi cafe 1793 xị,Essentials,expense,1
+order đi cafe Coopmart 1776 ngàn,Entertainment,expense,1
+Coopmart: đi cafe 1785k VND,Entertainment,expense,1
+quẹt Coopmart đi cafe 1793 xị,Entertainment,expense,1
 đi bar 1.802.023đ,Entertainment,expense,1
-1810k cho đi bar,Essentials,expense,1
+1810k cho đi bar,Entertainment,expense,1
 đi bar hết 1818 ngan,Entertainment,expense,1
 "đi bar,1.83 tr",Entertainment,expense,1
-mua đi bar 1835 nghìn,Essentials,expense,1
-chi đi bar 1.843.788 vnd,Essentials,expense,1
-order đi bar 1852K,Essentials,expense,1
-trả đi bar 1860 nghin,Essentials,expense,1
-đi đi bar 18 củ,Essentials,expense,1
+mua đi bar 1835 nghìn,Entertainment,expense,1
+chi đi bar 1.843.788 vnd,Entertainment,expense,1
+order đi bar 1852K,Entertainment,expense,1
+trả đi bar 1860 nghin,Entertainment,expense,1
+đi đi bar 18 củ,Entertainment,expense,1
 đi bar 1877 ngàn nha,Entertainment,expense,1
 đi bar tầm 1885k VND,Entertainment,expense,1
-vừa đi bar 1893 xị,Essentials,expense,1
+vừa đi bar 1893 xị,Entertainment,expense,1
 đi bar ~1.902.259đ,Entertainment,expense,1
-spend đi bar 1910k,Essentials,expense,1
+spend đi bar 1910k,Entertainment,expense,1
 đi pub 1918 ngan,Entertainment,expense,1
-1.93 tr cho đi pub,Essentials,expense,1
+1.93 tr cho đi pub,Entertainment,expense,1
 đi pub hết 1935 nghìn,Entertainment,expense,1
 "đi pub,1.944.024 vnd",Entertainment,expense,1
-mua đi pub 1952K,Essentials,expense,1
-chi đi pub 1960 nghin,Essentials,expense,1
-order đi pub 19 củ,Essentials,expense,1
-trả đi pub 1977 ngàn,Essentials,expense,1
-đi đi pub 1985k VND,Essentials,expense,1
+mua đi pub 1952K,Entertainment,expense,1
+chi đi pub 1960 nghin,Entertainment,expense,1
+order đi pub 19 củ,Entertainment,expense,1
+trả đi pub 1977 ngàn,Entertainment,expense,1
+đi đi pub 1985k VND,Entertainment,expense,1
 đi pub 1994 xị nha,Entertainment,expense,1
 đi pub tầm 2.002.495đ,Entertainment,expense,1
-vừa đi pub 2010k,Essentials,expense,1
+vừa đi pub 2010k,Entertainment,expense,1
 đi pub ~2019 ngan,Entertainment,expense,1
-spend đi pub 2.03 tr,Essentials,expense,1
-mua đi pub ở st 2035 nghìn,Essentials,expense,1
+spend đi pub 2.03 tr,Entertainment,expense,1
+mua đi pub ở st 2035 nghìn,Entertainment,expense,1
 đi pub st 2.044.260 vnd,Entertainment,expense,1
-order đi pub st 2052K,Essentials,expense,1
-st: đi pub 2060 nghin,Essentials,expense,1
-quẹt st đi pub 20 củ,Essentials,expense,1
+order đi pub st 2052K,Entertainment,expense,1
+st: đi pub 2060 nghin,Entertainment,expense,1
+quẹt st đi pub 20 củ,Entertainment,expense,1
 đi club 2077 ngàn,Entertainment,expense,1
-2086k VND cho đi club,Essentials,expense,1
+2086k VND cho đi club,Entertainment,expense,1
 đi club hết 2094 xị,Entertainment,expense,1
 "đi club,2.102.731đ",Entertainment,expense,1
-mua đi club 2111k,Essentials,expense,1
-chi đi club 2119 ngan,Essentials,expense,1
-order đi club 2.13 tr,Essentials,expense,1
-trả đi club 2136 nghìn,Essentials,expense,1
-đi đi club 2.144.496 vnd,Essentials,expense,1
+mua đi club 2111k,Entertainment,expense,1
+chi đi club 2119 ngan,Entertainment,expense,1
+order đi club 2.13 tr,Entertainment,expense,1
+trả đi club 2136 nghìn,Entertainment,expense,1
+đi đi club 2.144.496 vnd,Entertainment,expense,1
 đi club 2152K nha,Entertainment,expense,1
 đi club tầm 2161 nghin,Entertainment,expense,1
-vừa đi club 21 củ,Essentials,expense,1
+vừa đi club 21 củ,Entertainment,expense,1
 đi club ~2177 ngàn,Entertainment,expense,1
-spend đi club 2186k VND,Essentials,expense,1
+spend đi club 2186k VND,Entertainment,expense,1
 du lịch,Essentials,expense,0
 du lịch 2194 xị,Essentials,expense,1
 2.202.967đ cho du lịch,Essentials,expense,1
@@ -22575,172 +22575,172 @@ vừa cat toc 932 xị,Beauty,expense,1
 cat toc ~941.327đ,Beauty,expense,1
 spend cat toc 949k,Beauty,expense,1
 đi spa 958 ngan,Entertainment,expense,1
-0.97 tr cho đi spa,Beauty,expense,1
+0.97 tr cho đi spa,Entertainment,expense,1
 đi spa hết 974 nghìn,Entertainment,expense,1
 "đi spa,983.092 vnd",Entertainment,expense,1
-mua đi spa 991K,Beauty,expense,1
-chi đi spa 999 nghin,Beauty,expense,1
-order đi spa 10 củ,Beauty,expense,1
-trả đi spa 1016 ngàn,Beauty,expense,1
-đi đi spa 1024k VND,Beauty,expense,1
+mua đi spa 991K,Entertainment,expense,1
+chi đi spa 999 nghin,Entertainment,expense,1
+order đi spa 10 củ,Entertainment,expense,1
+trả đi spa 1016 ngàn,Entertainment,expense,1
+đi đi spa 1024k VND,Entertainment,expense,1
 đi spa 1033 xị nha,Entertainment,expense,1
 đi spa tầm 1.041.563đ,Entertainment,expense,1
-vừa đi spa 1049k,Beauty,expense,1
+vừa đi spa 1049k,Entertainment,expense,1
 đi spa ~1058 ngan,Entertainment,expense,1
-spend đi spa 1.07 tr,Beauty,expense,1
-mua đi spa ở st 1074 nghìn,Beauty,expense,1
+spend đi spa 1.07 tr,Entertainment,expense,1
+mua đi spa ở st 1074 nghìn,Entertainment,expense,1
 đi spa st 1.083.328 vnd,Entertainment,expense,1
-order đi spa st 1091K,Beauty,expense,1
-st: đi spa 1100 nghin,Beauty,expense,1
-quẹt st đi spa 11 củ,Beauty,expense,1
+order đi spa st 1091K,Entertainment,expense,1
+st: đi spa 1100 nghin,Entertainment,expense,1
+quẹt st đi spa 11 củ,Entertainment,expense,1
 đi salon 1116 ngàn,Entertainment,expense,1
-1125k VND cho đi salon,Essentials,expense,1
+1125k VND cho đi salon,Entertainment,expense,1
 đi salon hết 1133 xị,Entertainment,expense,1
 "đi salon,1.141.799đ",Entertainment,expense,1
-mua đi salon 1150k,Essentials,expense,1
-chi đi salon 1158 ngan,Essentials,expense,1
-order đi salon 1.17 tr,Essentials,expense,1
-trả đi salon 1175 nghìn,Essentials,expense,1
-đi đi salon 1.183.564 vnd,Essentials,expense,1
+mua đi salon 1150k,Entertainment,expense,1
+chi đi salon 1158 ngan,Entertainment,expense,1
+order đi salon 1.17 tr,Entertainment,expense,1
+trả đi salon 1175 nghìn,Entertainment,expense,1
+đi đi salon 1.183.564 vnd,Entertainment,expense,1
 đi salon 1191K nha,Entertainment,expense,1
 đi salon tầm 1200 nghin,Entertainment,expense,1
-vừa đi salon 12 củ,Essentials,expense,1
+vừa đi salon 12 củ,Entertainment,expense,1
 đi salon ~1216 ngàn,Entertainment,expense,1
-spend đi salon 1225k VND,Essentials,expense,1
+spend đi salon 1225k VND,Entertainment,expense,1
 đi massage 1233 xị,Entertainment,expense,1
-1.242.035đ cho đi massage,Essentials,expense,1
+1.242.035đ cho đi massage,Entertainment,expense,1
 đi massage hết 1250k,Entertainment,expense,1
 "đi massage,1258 ngan",Entertainment,expense,1
-mua đi massage 1.27 tr,Essentials,expense,1
-chi đi massage 1275 nghìn,Essentials,expense,1
-order đi massage 1.283.800 vnd,Essentials,expense,1
-trả đi massage 1292K,Essentials,expense,1
-đi đi massage 1300 nghin,Essentials,expense,1
+mua đi massage 1.27 tr,Entertainment,expense,1
+chi đi massage 1275 nghìn,Entertainment,expense,1
+order đi massage 1.283.800 vnd,Entertainment,expense,1
+trả đi massage 1292K,Entertainment,expense,1
+đi đi massage 1300 nghin,Entertainment,expense,1
 đi massage 13 củ nha,Entertainment,expense,1
 đi massage tầm 1317 ngàn,Entertainment,expense,1
-vừa đi massage 1325k VND,Essentials,expense,1
+vừa đi massage 1325k VND,Entertainment,expense,1
 đi massage ~1333 xị,Entertainment,expense,1
-spend đi massage 1.342.271đ,Essentials,expense,1
-mua đi massage ở Grab 1350k,Essentials,expense,1
+spend đi massage 1.342.271đ,Entertainment,expense,1
+mua đi massage ở Grab 1350k,Entertainment,expense,1
 đi massage Grab 1358 ngan,Entertainment,expense,1
-order đi massage Grab 1.37 tr,Essentials,expense,1
-Grab: đi massage 1375 nghìn,Essentials,expense,1
-quẹt Grab đi massage 1.384.036 vnd,Essentials,expense,1
+order đi massage Grab 1.37 tr,Entertainment,expense,1
+Grab: đi massage 1375 nghìn,Entertainment,expense,1
+quẹt Grab đi massage 1.384.036 vnd,Entertainment,expense,1
 đi du lịch 1392K,Entertainment,expense,1
-1400 nghin cho đi du lịch,Essentials,expense,1
+1400 nghin cho đi du lịch,Entertainment,expense,1
 đi du lịch hết 14 củ,Entertainment,expense,1
 "đi du lịch,1417 ngàn",Entertainment,expense,1
-mua đi du lịch 1425k VND,Essentials,expense,1
-chi đi du lịch 1434 xị,Essentials,expense,1
-order đi du lịch 1.442.507đ,Essentials,expense,1
-trả đi du lịch 1450k,Essentials,expense,1
-đi đi du lịch 1459 ngan,Essentials,expense,1
+mua đi du lịch 1425k VND,Entertainment,expense,1
+chi đi du lịch 1434 xị,Entertainment,expense,1
+order đi du lịch 1.442.507đ,Entertainment,expense,1
+trả đi du lịch 1450k,Entertainment,expense,1
+đi đi du lịch 1459 ngan,Entertainment,expense,1
 đi du lịch 1.47 tr nha,Entertainment,expense,1
 đi du lịch tầm 1475 nghìn,Entertainment,expense,1
-vừa đi du lịch 1.484.272 vnd,Essentials,expense,1
+vừa đi du lịch 1.484.272 vnd,Entertainment,expense,1
 đi du lịch ~1492K,Entertainment,expense,1
-spend đi du lịch 1500 nghin,Essentials,expense,1
+spend đi du lịch 1500 nghin,Entertainment,expense,1
 đi du lich,Entertainment,expense,0
 đi du lich 15 củ,Entertainment,expense,1
-1517 ngàn cho đi du lich,Essentials,expense,1
+1517 ngàn cho đi du lich,Entertainment,expense,1
 đi du lich hết 1526k VND,Entertainment,expense,1
 "đi du lich,1534 xị",Entertainment,expense,1
-mua đi du lich 1.542.743đ,Essentials,expense,1
-chi đi du lich 1551k,Essentials,expense,1
-order đi du lich 1559 ngan,Essentials,expense,1
-trả đi du lich 1.57 tr,Essentials,expense,1
-đi đi du lich 1576 nghìn,Essentials,expense,1
+mua đi du lich 1.542.743đ,Entertainment,expense,1
+chi đi du lich 1551k,Entertainment,expense,1
+order đi du lich 1559 ngan,Entertainment,expense,1
+trả đi du lich 1.57 tr,Entertainment,expense,1
+đi đi du lich 1576 nghìn,Entertainment,expense,1
 đi du lich 1.584.508 vnd nha,Entertainment,expense,1
 đi du lich tầm 1592K,Entertainment,expense,1
-vừa đi du lich 1601 nghin,Essentials,expense,1
+vừa đi du lich 1601 nghin,Entertainment,expense,1
 đi du lich ~16 củ,Entertainment,expense,1
-spend đi du lich 1617 ngàn,Essentials,expense,1
-mua đi du lich ở quán 1626k VND,Essentials,expense,1
+spend đi du lich 1617 ngàn,Entertainment,expense,1
+mua đi du lich ở quán 1626k VND,Entertainment,expense,1
 đi du lich quán 1634 xị,Entertainment,expense,1
-order đi du lich quán 1.642.979đ,Essentials,expense,1
-quán: đi du lich 1651k,Essentials,expense,1
-quẹt quán đi du lich 1659 ngan,Essentials,expense,1
+order đi du lich quán 1.642.979đ,Entertainment,expense,1
+quán: đi du lich 1651k,Entertainment,expense,1
+quẹt quán đi du lich 1659 ngan,Entertainment,expense,1
 đi restaurant 1.67 tr,Entertainment,expense,1
-1676 nghìn cho đi restaurant,Essentials,expense,1
+1676 nghìn cho đi restaurant,Entertainment,expense,1
 đi restaurant hết 1.684.744 vnd,Entertainment,expense,1
 "đi restaurant,1693K",Entertainment,expense,1
-mua đi restaurant 1701 nghin,Essentials,expense,1
-chi đi restaurant 17 củ,Essentials,expense,1
-order đi restaurant 1718 ngàn,Essentials,expense,1
-trả đi restaurant 1726k VND,Essentials,expense,1
-đi đi restaurant 1734 xị,Essentials,expense,1
+mua đi restaurant 1701 nghin,Entertainment,expense,1
+chi đi restaurant 17 củ,Entertainment,expense,1
+order đi restaurant 1718 ngàn,Entertainment,expense,1
+trả đi restaurant 1726k VND,Entertainment,expense,1
+đi đi restaurant 1734 xị,Entertainment,expense,1
 đi restaurant 1.743.215đ nha,Entertainment,expense,1
 đi restaurant tầm 1751k,Entertainment,expense,1
-vừa đi restaurant 1759 ngan,Essentials,expense,1
+vừa đi restaurant 1759 ngan,Entertainment,expense,1
 đi restaurant ~1.77 tr,Entertainment,expense,1
-spend đi restaurant 1776 nghìn,Essentials,expense,1
+spend đi restaurant 1776 nghìn,Entertainment,expense,1
 đi cafe 1.784.980 vnd,Entertainment,expense,1
-1793K cho đi cafe,Essentials,expense,1
+1793K cho đi cafe,Entertainment,expense,1
 đi cafe hết 1801 nghin,Entertainment,expense,1
 "đi cafe,18 củ",Entertainment,expense,1
-mua đi cafe 1818 ngàn,Essentials,expense,1
-chi đi cafe 1826k VND,Essentials,expense,1
-order đi cafe 1835 xị,Essentials,expense,1
-trả đi cafe 1.843.451đ,Essentials,expense,1
-đi đi cafe 1851k,Essentials,expense,1
+mua đi cafe 1818 ngàn,Entertainment,expense,1
+chi đi cafe 1826k VND,Entertainment,expense,1
+order đi cafe 1835 xị,Entertainment,expense,1
+trả đi cafe 1.843.451đ,Entertainment,expense,1
+đi đi cafe 1851k,Entertainment,expense,1
 đi cafe 1860 ngan nha,Entertainment,expense,1
 đi cafe tầm 1.87 tr,Entertainment,expense,1
-vừa đi cafe 1876 nghìn,Essentials,expense,1
+vừa đi cafe 1876 nghìn,Entertainment,expense,1
 đi cafe ~1.885.216 vnd,Entertainment,expense,1
-spend đi cafe 1893K,Essentials,expense,1
-mua đi cafe ở Coopmart 1901 nghin,Essentials,expense,1
+spend đi cafe 1893K,Entertainment,expense,1
+mua đi cafe ở Coopmart 1901 nghin,Entertainment,expense,1
 đi cafe Coopmart 19 củ,Entertainment,expense,1
-order đi cafe Coopmart 1918 ngàn,Essentials,expense,1
-Coopmart: đi cafe 1926k VND,Essentials,expense,1
-quẹt Coopmart đi cafe 1935 xị,Essentials,expense,1
+order đi cafe Coopmart 1918 ngàn,Entertainment,expense,1
+Coopmart: đi cafe 1926k VND,Entertainment,expense,1
+quẹt Coopmart đi cafe 1935 xị,Entertainment,expense,1
 đi bar 1.943.687đ,Entertainment,expense,1
-1952k cho đi bar,Essentials,expense,1
+1952k cho đi bar,Entertainment,expense,1
 đi bar hết 1960 ngan,Entertainment,expense,1
 "đi bar,1.97 tr",Entertainment,expense,1
-mua đi bar 1977 nghìn,Essentials,expense,1
-chi đi bar 1.985.452 vnd,Essentials,expense,1
-order đi bar 1993K,Essentials,expense,1
-trả đi bar 2002 nghin,Essentials,expense,1
-đi đi bar 20 củ,Essentials,expense,1
+mua đi bar 1977 nghìn,Entertainment,expense,1
+chi đi bar 1.985.452 vnd,Entertainment,expense,1
+order đi bar 1993K,Entertainment,expense,1
+trả đi bar 2002 nghin,Entertainment,expense,1
+đi đi bar 20 củ,Entertainment,expense,1
 đi bar 2018 ngàn nha,Entertainment,expense,1
 đi bar tầm 2027k VND,Entertainment,expense,1
-vừa đi bar 2035 xị,Essentials,expense,1
+vừa đi bar 2035 xị,Entertainment,expense,1
 đi bar ~2.043.923đ,Entertainment,expense,1
-spend đi bar 2052k,Essentials,expense,1
+spend đi bar 2052k,Entertainment,expense,1
 đi pub 2060 ngan,Entertainment,expense,1
-2.07 tr cho đi pub,Essentials,expense,1
+2.07 tr cho đi pub,Entertainment,expense,1
 đi pub hết 2077 nghìn,Entertainment,expense,1
 "đi pub,2.085.688 vnd",Entertainment,expense,1
-mua đi pub 2094K,Essentials,expense,1
-chi đi pub 2102 nghin,Essentials,expense,1
-order đi pub 21 củ,Essentials,expense,1
-trả đi pub 2119 ngàn,Essentials,expense,1
-đi đi pub 2127k VND,Essentials,expense,1
+mua đi pub 2094K,Entertainment,expense,1
+chi đi pub 2102 nghin,Entertainment,expense,1
+order đi pub 21 củ,Entertainment,expense,1
+trả đi pub 2119 ngàn,Entertainment,expense,1
+đi đi pub 2127k VND,Entertainment,expense,1
 đi pub 2135 xị nha,Entertainment,expense,1
 đi pub tầm 2.144.159đ,Entertainment,expense,1
-vừa đi pub 2152k,Essentials,expense,1
+vừa đi pub 2152k,Entertainment,expense,1
 đi pub ~2160 ngan,Entertainment,expense,1
-spend đi pub 2.17 tr,Essentials,expense,1
-mua đi pub ở st 2177 nghìn,Essentials,expense,1
+spend đi pub 2.17 tr,Entertainment,expense,1
+mua đi pub ở st 2177 nghìn,Entertainment,expense,1
 đi pub st 2.185.924 vnd,Entertainment,expense,1
-order đi pub st 2194K,Essentials,expense,1
-st: đi pub 2202 nghin,Essentials,expense,1
-quẹt st đi pub 22 củ,Essentials,expense,1
+order đi pub st 2194K,Entertainment,expense,1
+st: đi pub 2202 nghin,Entertainment,expense,1
+quẹt st đi pub 22 củ,Entertainment,expense,1
 đi club,Entertainment,expense,0
 đi club 2219 ngàn,Entertainment,expense,1
-2227k VND cho đi club,Essentials,expense,1
+2227k VND cho đi club,Entertainment,expense,1
 đi club hết 2236 xị,Entertainment,expense,1
 "đi club,2.244.395đ",Entertainment,expense,1
-mua đi club 2252k,Essentials,expense,1
-chi đi club 2261 ngan,Essentials,expense,1
-order đi club 2.27 tr,Essentials,expense,1
-trả đi club 2277 nghìn,Essentials,expense,1
-đi đi club 2.286.160 vnd,Essentials,expense,1
+mua đi club 2252k,Entertainment,expense,1
+chi đi club 2261 ngan,Entertainment,expense,1
+order đi club 2.27 tr,Entertainment,expense,1
+trả đi club 2277 nghìn,Entertainment,expense,1
+đi đi club 2.286.160 vnd,Entertainment,expense,1
 đi club 2294K nha,Entertainment,expense,1
 đi club tầm 2302 nghin,Entertainment,expense,1
-vừa đi club 23 củ,Essentials,expense,1
+vừa đi club 23 củ,Entertainment,expense,1
 đi club ~2319 ngàn,Entertainment,expense,1
-spend đi club 2327k VND,Essentials,expense,1
+spend đi club 2327k VND,Entertainment,expense,1
 du lịch 2336 xị,Essentials,expense,1
 2.344.631đ cho du lịch,Essentials,expense,1
 du lịch hết 2352k,Essentials,expense,1
@@ -28074,170 +28074,170 @@ order cat toc Grab 1.87 tr,Beauty,expense,1
 Grab: cat toc 1882 nghìn,Beauty,expense,1
 quẹt Grab cat toc 1.891.180 vnd,Beauty,expense,1
 đi spa 1899K,Entertainment,expense,1
-1907 nghin cho đi spa,Beauty,expense,1
+1907 nghin cho đi spa,Entertainment,expense,1
 đi spa hết 19 củ,Entertainment,expense,1
 "đi spa,1924 ngàn",Entertainment,expense,1
-mua đi spa 1932k VND,Beauty,expense,1
-chi đi spa 1941 xị,Beauty,expense,1
-order đi spa 1.949.651đ,Beauty,expense,1
-trả đi spa 1958k,Beauty,expense,1
-đi đi spa 1966 ngan,Beauty,expense,1
+mua đi spa 1932k VND,Entertainment,expense,1
+chi đi spa 1941 xị,Entertainment,expense,1
+order đi spa 1.949.651đ,Entertainment,expense,1
+trả đi spa 1958k,Entertainment,expense,1
+đi đi spa 1966 ngan,Entertainment,expense,1
 đi spa 1.97 tr nha,Entertainment,expense,1
 đi spa tầm 1983 nghìn,Entertainment,expense,1
-vừa đi spa 1.991.416 vnd,Beauty,expense,1
+vừa đi spa 1.991.416 vnd,Entertainment,expense,1
 đi spa ~1999K,Entertainment,expense,1
-spend đi spa 2008 nghin,Beauty,expense,1
+spend đi spa 2008 nghin,Entertainment,expense,1
 đi salon 20 củ,Entertainment,expense,1
-2024 ngàn cho đi salon,Essentials,expense,1
+2024 ngàn cho đi salon,Entertainment,expense,1
 đi salon hết 2033k VND,Entertainment,expense,1
 "đi salon,2041 xị",Entertainment,expense,1
-mua đi salon 2.049.887đ,Essentials,expense,1
-chi đi salon 2058k,Essentials,expense,1
-order đi salon 2066 ngan,Essentials,expense,1
-trả đi salon 2.07 tr,Essentials,expense,1
-đi đi salon 2083 nghìn,Essentials,expense,1
+mua đi salon 2.049.887đ,Entertainment,expense,1
+chi đi salon 2058k,Entertainment,expense,1
+order đi salon 2066 ngan,Entertainment,expense,1
+trả đi salon 2.07 tr,Entertainment,expense,1
+đi đi salon 2083 nghìn,Entertainment,expense,1
 đi salon 2.091.652 vnd nha,Entertainment,expense,1
 đi salon tầm 2100K,Entertainment,expense,1
-vừa đi salon 2108 nghin,Essentials,expense,1
+vừa đi salon 2108 nghin,Entertainment,expense,1
 đi salon ~21 củ,Entertainment,expense,1
-spend đi salon 2125 ngàn,Essentials,expense,1
-mua đi salon ở quán 2133k VND,Essentials,expense,1
+spend đi salon 2125 ngàn,Entertainment,expense,1
+mua đi salon ở quán 2133k VND,Entertainment,expense,1
 đi salon quán 2141 xị,Entertainment,expense,1
-order đi salon quán 2.150.123đ,Essentials,expense,1
-quán: đi salon 2158k,Essentials,expense,1
-quẹt quán đi salon 2166 ngan,Essentials,expense,1
+order đi salon quán 2.150.123đ,Entertainment,expense,1
+quán: đi salon 2158k,Entertainment,expense,1
+quẹt quán đi salon 2166 ngan,Entertainment,expense,1
 đi massage 2.18 tr,Entertainment,expense,1
-2183 nghìn cho đi massage,Essentials,expense,1
+2183 nghìn cho đi massage,Entertainment,expense,1
 đi massage hết 2.191.888 vnd,Entertainment,expense,1
 "đi massage,2200K",Entertainment,expense,1
-mua đi massage 2208 nghin,Essentials,expense,1
-chi đi massage 22 củ,Essentials,expense,1
-order đi massage 2225 ngàn,Essentials,expense,1
-trả đi massage 2233k VND,Essentials,expense,1
-đi đi massage 2242 xị,Essentials,expense,1
+mua đi massage 2208 nghin,Entertainment,expense,1
+chi đi massage 22 củ,Entertainment,expense,1
+order đi massage 2225 ngàn,Entertainment,expense,1
+trả đi massage 2233k VND,Entertainment,expense,1
+đi đi massage 2242 xị,Entertainment,expense,1
 đi massage 2.250.359đ nha,Entertainment,expense,1
 đi massage tầm 2258k,Entertainment,expense,1
-vừa đi massage 2267 ngan,Essentials,expense,1
+vừa đi massage 2267 ngan,Entertainment,expense,1
 đi massage ~2.28 tr,Entertainment,expense,1
-spend đi massage 2283 nghìn,Essentials,expense,1
+spend đi massage 2283 nghìn,Entertainment,expense,1
 đi du lịch 2.292.124 vnd,Entertainment,expense,1
-2300K cho đi du lịch,Essentials,expense,1
+2300K cho đi du lịch,Entertainment,expense,1
 đi du lịch hết 2308 nghin,Entertainment,expense,1
 "đi du lịch,23 củ",Entertainment,expense,1
-mua đi du lịch 2325 ngàn,Essentials,expense,1
-chi đi du lịch 2333k VND,Essentials,expense,1
-order đi du lịch 2342 xị,Essentials,expense,1
-trả đi du lịch 2.350.595đ,Essentials,expense,1
-đi đi du lịch 2358k,Essentials,expense,1
+mua đi du lịch 2325 ngàn,Entertainment,expense,1
+chi đi du lịch 2333k VND,Entertainment,expense,1
+order đi du lịch 2342 xị,Entertainment,expense,1
+trả đi du lịch 2.350.595đ,Entertainment,expense,1
+đi đi du lịch 2358k,Entertainment,expense,1
 đi du lịch 2367 ngan nha,Entertainment,expense,1
 đi du lịch tầm 2.38 tr,Entertainment,expense,1
-vừa đi du lịch 2384 nghìn,Essentials,expense,1
+vừa đi du lịch 2384 nghìn,Entertainment,expense,1
 đi du lịch ~2.392.360 vnd,Entertainment,expense,1
-spend đi du lịch 2400K,Essentials,expense,1
-mua đi du lịch ở Coopmart 2409 nghin,Essentials,expense,1
+spend đi du lịch 2400K,Entertainment,expense,1
+mua đi du lịch ở Coopmart 2409 nghin,Entertainment,expense,1
 đi du lịch Coopmart 24 củ,Entertainment,expense,1
-order đi du lịch Coopmart 2425 ngàn,Essentials,expense,1
-Coopmart: đi du lịch 2434k VND,Essentials,expense,1
-quẹt Coopmart đi du lịch 2442 xị,Essentials,expense,1
+order đi du lịch Coopmart 2425 ngàn,Entertainment,expense,1
+Coopmart: đi du lịch 2434k VND,Entertainment,expense,1
+quẹt Coopmart đi du lịch 2442 xị,Entertainment,expense,1
 đi du lich 2.450.831đ,Entertainment,expense,1
-2459k cho đi du lich,Essentials,expense,1
+2459k cho đi du lich,Entertainment,expense,1
 đi du lich hết 2467 ngan,Entertainment,expense,1
 "đi du lich,2.48 tr",Entertainment,expense,1
-mua đi du lich 2484 nghìn,Essentials,expense,1
-chi đi du lich 2.492.596 vnd,Essentials,expense,1
-order đi du lich 2500K,Essentials,expense,1
-trả đi du lich 9 nghin,Essentials,expense,1
-đi đi du lich 17.6k,Essentials,expense,1
+mua đi du lich 2484 nghìn,Entertainment,expense,1
+chi đi du lich 2.492.596 vnd,Entertainment,expense,1
+order đi du lich 2500K,Entertainment,expense,1
+trả đi du lich 9 nghin,Entertainment,expense,1
+đi đi du lich 17.6k,Entertainment,expense,1
 đi du lich 26 ngàn nha,Entertainment,expense,1
 đi du lich tầm 34k VND,Entertainment,expense,1
-vừa đi du lich 42 xị,Essentials,expense,1
+vừa đi du lich 42 xị,Entertainment,expense,1
 đi du lich ~51.067đ,Entertainment,expense,1
-spend đi du lich 59k,Essentials,expense,1
+spend đi du lich 59k,Entertainment,expense,1
 đi restaurant 67 ngan,Entertainment,expense,1
-76.1k cho đi restaurant,Essentials,expense,1
+76.1k cho đi restaurant,Entertainment,expense,1
 đi restaurant hết 84 nghìn,Entertainment,expense,1
 "đi restaurant,92.832 vnd",Entertainment,expense,1
-mua đi restaurant 101K,Essentials,expense,1
-chi đi restaurant 109 nghin,Essentials,expense,1
-order đi restaurant 117.8k,Essentials,expense,1
-trả đi restaurant 126 ngàn,Essentials,expense,1
-đi đi restaurant 134k VND,Essentials,expense,1
+mua đi restaurant 101K,Entertainment,expense,1
+chi đi restaurant 109 nghin,Entertainment,expense,1
+order đi restaurant 117.8k,Entertainment,expense,1
+trả đi restaurant 126 ngàn,Entertainment,expense,1
+đi đi restaurant 134k VND,Entertainment,expense,1
 đi restaurant 142 xị nha,Entertainment,expense,1
 đi restaurant tầm 151.303đ,Entertainment,expense,1
-vừa đi restaurant 159k,Essentials,expense,1
+vừa đi restaurant 159k,Entertainment,expense,1
 đi restaurant ~168 ngan,Entertainment,expense,1
-spend đi restaurant 0.18 tr,Essentials,expense,1
-mua đi restaurant ở st 184 nghìn,Essentials,expense,1
+spend đi restaurant 0.18 tr,Entertainment,expense,1
+mua đi restaurant ở st 184 nghìn,Entertainment,expense,1
 đi restaurant st 193.068 vnd,Entertainment,expense,1
-order đi restaurant st 201K,Essentials,expense,1
-st: đi restaurant 209 nghin,Essentials,expense,1
-quẹt st đi restaurant 218.1k,Essentials,expense,1
+order đi restaurant st 201K,Entertainment,expense,1
+st: đi restaurant 209 nghin,Entertainment,expense,1
+quẹt st đi restaurant 218.1k,Entertainment,expense,1
 đi cafe 226 ngàn,Entertainment,expense,1
-234k VND cho đi cafe,Essentials,expense,1
+234k VND cho đi cafe,Entertainment,expense,1
 đi cafe hết 243 xị,Entertainment,expense,1
 "đi cafe,251.539đ",Entertainment,expense,1
-mua đi cafe 259k,Essentials,expense,1
-chi đi cafe 268 ngan,Essentials,expense,1
-order đi cafe 0.28 tr,Essentials,expense,1
-trả đi cafe 284 nghìn,Essentials,expense,1
-đi đi cafe 293.304 vnd,Essentials,expense,1
+mua đi cafe 259k,Entertainment,expense,1
+chi đi cafe 268 ngan,Entertainment,expense,1
+order đi cafe 0.28 tr,Entertainment,expense,1
+trả đi cafe 284 nghìn,Entertainment,expense,1
+đi đi cafe 293.304 vnd,Entertainment,expense,1
 đi cafe 301K nha,Entertainment,expense,1
 đi cafe tầm 310 nghin,Entertainment,expense,1
-vừa đi cafe 318.3k,Essentials,expense,1
+vừa đi cafe 318.3k,Entertainment,expense,1
 đi cafe ~326 ngàn,Entertainment,expense,1
-spend đi cafe 335k VND,Essentials,expense,1
+spend đi cafe 335k VND,Entertainment,expense,1
 đi bar 343 xị,Entertainment,expense,1
-351.775đ cho đi bar,Essentials,expense,1
+351.775đ cho đi bar,Entertainment,expense,1
 đi bar hết 360k,Entertainment,expense,1
 "đi bar,368 ngan",Entertainment,expense,1
-mua đi bar 0.38 tr,Essentials,expense,1
-chi đi bar 385 nghìn,Essentials,expense,1
-order đi bar 393.540 vnd,Essentials,expense,1
-trả đi bar 401K,Essentials,expense,1
-đi đi bar 410 nghin,Essentials,expense,1
+mua đi bar 0.38 tr,Entertainment,expense,1
+chi đi bar 385 nghìn,Entertainment,expense,1
+order đi bar 393.540 vnd,Entertainment,expense,1
+trả đi bar 401K,Entertainment,expense,1
+đi đi bar 410 nghin,Entertainment,expense,1
 đi bar 418.5k nha,Entertainment,expense,1
 đi bar tầm 426 ngàn,Entertainment,expense,1
-vừa đi bar 435k VND,Essentials,expense,1
+vừa đi bar 435k VND,Entertainment,expense,1
 đi bar ~443 xị,Entertainment,expense,1
-spend đi bar 452.011đ,Essentials,expense,1
-mua đi bar ở Grab 460k,Essentials,expense,1
+spend đi bar 452.011đ,Entertainment,expense,1
+mua đi bar ở Grab 460k,Entertainment,expense,1
 đi bar Grab 468 ngan,Entertainment,expense,1
-order đi bar Grab 0.48 tr,Essentials,expense,1
-Grab: đi bar 485 nghìn,Essentials,expense,1
-quẹt Grab đi bar 493.776 vnd,Essentials,expense,1
+order đi bar Grab 0.48 tr,Entertainment,expense,1
+Grab: đi bar 485 nghìn,Entertainment,expense,1
+quẹt Grab đi bar 493.776 vnd,Entertainment,expense,1
 đi pub 502K,Entertainment,expense,1
-510 nghin cho đi pub,Essentials,expense,1
+510 nghin cho đi pub,Entertainment,expense,1
 đi pub hết 5 củ,Entertainment,expense,1
 "đi pub,527 ngàn",Entertainment,expense,1
-mua đi pub 535k VND,Essentials,expense,1
-chi đi pub 543 xị,Essentials,expense,1
-order đi pub 552.247đ,Essentials,expense,1
-trả đi pub 560k,Essentials,expense,1
-đi đi pub 568 ngan,Essentials,expense,1
+mua đi pub 535k VND,Entertainment,expense,1
+chi đi pub 543 xị,Entertainment,expense,1
+order đi pub 552.247đ,Entertainment,expense,1
+trả đi pub 560k,Entertainment,expense,1
+đi đi pub 568 ngan,Entertainment,expense,1
 đi pub 0.58 tr nha,Entertainment,expense,1
 đi pub tầm 585 nghìn,Entertainment,expense,1
-vừa đi pub 594.012 vnd,Essentials,expense,1
+vừa đi pub 594.012 vnd,Entertainment,expense,1
 đi pub ~602K,Entertainment,expense,1
-spend đi pub 610 nghin,Essentials,expense,1
+spend đi pub 610 nghin,Entertainment,expense,1
 đi club 6 củ,Entertainment,expense,1
-627 ngàn cho đi club,Essentials,expense,1
+627 ngàn cho đi club,Entertainment,expense,1
 đi club hết 635k VND,Entertainment,expense,1
 "đi club,644 xị",Entertainment,expense,1
-mua đi club 652.483đ,Essentials,expense,1
-chi đi club 660k,Essentials,expense,1
-order đi club 669 ngan,Essentials,expense,1
-trả đi club 0.68 tr,Essentials,expense,1
-đi đi club 685 nghìn,Essentials,expense,1
+mua đi club 652.483đ,Entertainment,expense,1
+chi đi club 660k,Entertainment,expense,1
+order đi club 669 ngan,Entertainment,expense,1
+trả đi club 0.68 tr,Entertainment,expense,1
+đi đi club 685 nghìn,Entertainment,expense,1
 đi club 694.248 vnd nha,Entertainment,expense,1
 đi club tầm 702K,Entertainment,expense,1
-vừa đi club 710 nghin,Essentials,expense,1
+vừa đi club 710 nghin,Entertainment,expense,1
 đi club ~7 củ,Entertainment,expense,1
-spend đi club 727 ngàn,Essentials,expense,1
-mua đi club ở quán 736k VND,Essentials,expense,1
+spend đi club 727 ngàn,Entertainment,expense,1
+mua đi club ở quán 736k VND,Entertainment,expense,1
 đi club quán 744 xị,Entertainment,expense,1
-order đi club quán 752.719đ,Essentials,expense,1
-quán: đi club 761k,Essentials,expense,1
-quẹt quán đi club 769 ngan,Essentials,expense,1
+order đi club quán 752.719đ,Entertainment,expense,1
+quán: đi club 761k,Entertainment,expense,1
+quẹt quán đi club 769 ngan,Entertainment,expense,1
 du lịch 0.78 tr,Essentials,expense,1
 786 nghìn cho du lịch,Essentials,expense,1
 du lịch hết 794.484 vnd,Essentials,expense,1
@@ -30004,7 +30004,7 @@ Mua bánh sinh nhật cho con 380k,Social,expense,1
 Tiền đi liên hoan 550k,Social,expense,1
 Quà sinh nhật cho em trai 270k,Social,expense,1
 Mời bạn ăn sáng 80k,Social,expense,1
-Hẹn hò đi bar 750k,Social,expense,1
+Hẹn hò đi bar 750k,Entertainment,expense,1
 Tiền trà sữa cho cả nhóm 160k,Social,expense,1
 Mua trà sữa cho cả nhóm hết 120k ở The Alley hôm qua.,Food,expense,1
 "Order đồ ăn tối trên ShopeeFood hết 85 ngàn, ship hơi đắt.",Food,expense,1
@@ -33567,7 +33567,6 @@ bán thịt thịt 500k,Business,income,1
 order thịt thịt 11 củ,Food,expense,1
 mua thịt thịt 680k,Food,expense,1
 bán thịt thịt 680k,Business,income,1
-mua thịt thịt 1.2tr,Food,expense,1
 mua thịt thịt 1.2tr,Food,expense,1
 bán thịt thịt 1.2tr,Business,income,1
 chi thịt thịt 1247k,Food,expense,1
@@ -39269,7 +39268,6 @@ chi cắt tóc 1381k,Beauty,expense,1
 mua cắt tóc 680k,Beauty,expense,1
 bán cắt tóc 680k,Business,income,1
 mua cắt tóc 1430.9k,Beauty,expense,1
-mua cắt tóc 1.2tr,Beauty,expense,1
 bán cắt tóc 1.2tr,Business,income,1
 trả cắt tóc 14tr80k,Beauty,expense,1
 mua cắt tóc 1.8tr,Beauty,expense,1
@@ -39338,69 +39336,69 @@ trả đi spa 2318k,Entertainment,expense,1
 mua đi spa 1.8tr,Entertainment,expense,1
 bán đi spa 1.8tr,Business,income,1
 thanh toán đi spa 2368 ngan,Entertainment,expense,1
-mua đi salon 15k,Essentials,expense,1
+mua đi salon 15k,Entertainment,expense,1
 bán đi salon 15k,Business,income,1
-trả đi salon 2208 ngan,Essentials,expense,1
-mua đi salon 18k,Essentials,expense,1
+trả đi salon 2208 ngan,Entertainment,expense,1
+mua đi salon 18k,Entertainment,expense,1
 bán đi salon 18k,Business,income,1
-order đi salon 2258k,Essentials,expense,1
-mua đi salon 22k,Essentials,expense,1
+order đi salon 2258k,Entertainment,expense,1
+mua đi salon 22k,Entertainment,expense,1
 bán đi salon 22k,Business,income,1
-order đi salon 2308.5k,Essentials,expense,1
-mua đi salon 35k,Essentials,expense,1
+order đi salon 2308.5k,Entertainment,expense,1
+mua đi salon 35k,Entertainment,expense,1
 bán đi salon 35k,Business,income,1
-mua đi salon 23tr58k,Essentials,expense,1
-mua đi salon 48k,Essentials,expense,1
+mua đi salon 23tr58k,Entertainment,expense,1
+mua đi salon 48k,Entertainment,expense,1
 bán đi salon 48k,Business,income,1
-mua đi salon 2408k,Essentials,expense,1
-mua đi salon 55k,Essentials,expense,1
+mua đi salon 2408k,Entertainment,expense,1
+mua đi salon 55k,Entertainment,expense,1
 bán đi salon 55k,Business,income,1
-chi đi salon 24 củ,Essentials,expense,1
-mua đi salon 68k,Essentials,expense,1
+chi đi salon 24 củ,Entertainment,expense,1
+mua đi salon 68k,Entertainment,expense,1
 bán đi salon 68k,Business,income,1
-thanh toán đi salon 2.5tr,Essentials,expense,1
-mua đi salon 88k,Essentials,expense,1
+thanh toán đi salon 2.5tr,Entertainment,expense,1
+mua đi salon 88k,Entertainment,expense,1
 bán đi salon 88k,Business,income,1
-trả đi salon 2557k,Essentials,expense,1
-mua đi salon 99k,Essentials,expense,1
+trả đi salon 2557k,Entertainment,expense,1
+mua đi salon 99k,Entertainment,expense,1
 bán đi salon 99k,Business,income,1
-thanh toán đi salon 2607 ngan,Essentials,expense,1
-mua đi salon 120k,Essentials,expense,1
+thanh toán đi salon 2607 ngan,Entertainment,expense,1
+mua đi salon 120k,Entertainment,expense,1
 bán đi salon 120k,Business,income,1
-trả đi salon 2657k,Essentials,expense,1
-mua đi salon 150k,Essentials,expense,1
+trả đi salon 2657k,Entertainment,expense,1
+mua đi salon 150k,Entertainment,expense,1
 bán đi salon 150k,Business,income,1
-thanh toán đi salon 2707.5k,Essentials,expense,1
-mua đi salon 188k,Essentials,expense,1
+thanh toán đi salon 2707.5k,Entertainment,expense,1
+mua đi salon 188k,Entertainment,expense,1
 bán đi salon 188k,Business,income,1
-order đi salon 27tr57k,Essentials,expense,1
-mua đi salon 199k,Essentials,expense,1
+order đi salon 27tr57k,Entertainment,expense,1
+mua đi salon 199k,Entertainment,expense,1
 bán đi salon 199k,Business,income,1
-order đi salon 2807k,Essentials,expense,1
-mua đi salon 250k,Essentials,expense,1
+order đi salon 2807k,Entertainment,expense,1
+mua đi salon 250k,Entertainment,expense,1
 bán đi salon 250k,Business,income,1
-thanh toán đi salon 28 củ,Essentials,expense,1
-mua đi salon 299k,Essentials,expense,1
+thanh toán đi salon 28 củ,Entertainment,expense,1
+mua đi salon 299k,Entertainment,expense,1
 bán đi salon 299k,Business,income,1
-chi đi salon 2.9tr,Essentials,expense,1
-mua đi salon 350k,Essentials,expense,1
+chi đi salon 2.9tr,Entertainment,expense,1
+mua đi salon 350k,Entertainment,expense,1
 bán đi salon 350k,Business,income,1
-order đi salon 2956k,Essentials,expense,1
-mua đi salon 420k,Essentials,expense,1
+order đi salon 2956k,Entertainment,expense,1
+mua đi salon 420k,Entertainment,expense,1
 bán đi salon 420k,Business,income,1
-chi đi salon 3006 ngan,Essentials,expense,1
-mua đi salon 500k,Essentials,expense,1
+chi đi salon 3006 ngan,Entertainment,expense,1
+mua đi salon 500k,Entertainment,expense,1
 bán đi salon 500k,Business,income,1
-order đi salon 3056k,Essentials,expense,1
-mua đi salon 680k,Essentials,expense,1
+order đi salon 3056k,Entertainment,expense,1
+mua đi salon 680k,Entertainment,expense,1
 bán đi salon 680k,Business,income,1
-mua đi salon 3106.4k,Essentials,expense,1
-mua đi salon 1.2tr,Essentials,expense,1
+mua đi salon 3106.4k,Entertainment,expense,1
+mua đi salon 1.2tr,Entertainment,expense,1
 bán đi salon 1.2tr,Business,income,1
-mua đi salon 31tr56k,Essentials,expense,1
-mua đi salon 1.8tr,Essentials,expense,1
+mua đi salon 31tr56k,Entertainment,expense,1
+mua đi salon 1.8tr,Entertainment,expense,1
 bán đi salon 1.8tr,Business,income,1
-thanh toán đi salon 3206k,Essentials,expense,1
+thanh toán đi salon 3206k,Entertainment,expense,1
 mua đi massage 15k,Entertainment,expense,1
 bán đi massage 15k,Business,income,1
 trả đi massage 3046k,Entertainment,expense,1
@@ -39527,69 +39525,69 @@ thanh toán đi du lịch 48tr31k,Entertainment,expense,1
 mua đi du lịch 1.8tr,Entertainment,expense,1
 bán đi du lịch 1.8tr,Business,income,1
 trả đi du lịch 4881k,Entertainment,expense,1
-mua đi restaurant 15k,Essentials,expense,1
+mua đi restaurant 15k,Entertainment,expense,1
 bán đi restaurant 15k,Business,income,1
-thanh toán đi restaurant 4722k,Essentials,expense,1
-mua đi restaurant 18k,Essentials,expense,1
+thanh toán đi restaurant 4722k,Entertainment,expense,1
+mua đi restaurant 18k,Entertainment,expense,1
 bán đi restaurant 18k,Business,income,1
-mua đi restaurant 47 củ,Essentials,expense,1
-mua đi restaurant 22k,Essentials,expense,1
+mua đi restaurant 47 củ,Entertainment,expense,1
+mua đi restaurant 22k,Entertainment,expense,1
 bán đi restaurant 22k,Business,income,1
-chi đi restaurant 4.8tr,Essentials,expense,1
-mua đi restaurant 35k,Essentials,expense,1
+chi đi restaurant 4.8tr,Entertainment,expense,1
+mua đi restaurant 35k,Entertainment,expense,1
 bán đi restaurant 35k,Business,income,1
-thanh toán đi restaurant 4871k,Essentials,expense,1
-mua đi restaurant 48k,Essentials,expense,1
+thanh toán đi restaurant 4871k,Entertainment,expense,1
+mua đi restaurant 48k,Entertainment,expense,1
 bán đi restaurant 48k,Business,income,1
-trả đi restaurant 4921 ngan,Essentials,expense,1
-mua đi restaurant 55k,Essentials,expense,1
+trả đi restaurant 4921 ngan,Entertainment,expense,1
+mua đi restaurant 55k,Entertainment,expense,1
 bán đi restaurant 55k,Business,income,1
-chi đi restaurant 4971k,Essentials,expense,1
-mua đi restaurant 68k,Essentials,expense,1
+chi đi restaurant 4971k,Entertainment,expense,1
+mua đi restaurant 68k,Entertainment,expense,1
 bán đi restaurant 68k,Business,income,1
-thanh toán đi restaurant 5021.2k,Essentials,expense,1
-mua đi restaurant 88k,Essentials,expense,1
+thanh toán đi restaurant 5021.2k,Entertainment,expense,1
+mua đi restaurant 88k,Entertainment,expense,1
 bán đi restaurant 88k,Business,income,1
-thanh toán đi restaurant 50tr71k,Essentials,expense,1
-mua đi restaurant 99k,Essentials,expense,1
+thanh toán đi restaurant 50tr71k,Entertainment,expense,1
+mua đi restaurant 99k,Entertainment,expense,1
 bán đi restaurant 99k,Business,income,1
-order đi restaurant 5120k,Essentials,expense,1
-mua đi restaurant 120k,Essentials,expense,1
+order đi restaurant 5120k,Entertainment,expense,1
+mua đi restaurant 120k,Entertainment,expense,1
 bán đi restaurant 120k,Business,income,1
-chi đi restaurant 51 củ,Essentials,expense,1
-mua đi restaurant 150k,Essentials,expense,1
+chi đi restaurant 51 củ,Entertainment,expense,1
+mua đi restaurant 150k,Entertainment,expense,1
 bán đi restaurant 150k,Business,income,1
-thanh toán đi restaurant 5.2tr,Essentials,expense,1
-mua đi restaurant 188k,Essentials,expense,1
+thanh toán đi restaurant 5.2tr,Entertainment,expense,1
+mua đi restaurant 188k,Entertainment,expense,1
 bán đi restaurant 188k,Business,income,1
-order đi restaurant 5270k,Essentials,expense,1
-mua đi restaurant 199k,Essentials,expense,1
+order đi restaurant 5270k,Entertainment,expense,1
+mua đi restaurant 199k,Entertainment,expense,1
 bán đi restaurant 199k,Business,income,1
-trả đi restaurant 5320 ngan,Essentials,expense,1
-mua đi restaurant 250k,Essentials,expense,1
+trả đi restaurant 5320 ngan,Entertainment,expense,1
+mua đi restaurant 250k,Entertainment,expense,1
 bán đi restaurant 250k,Business,income,1
-thanh toán đi restaurant 5370k,Essentials,expense,1
-mua đi restaurant 299k,Essentials,expense,1
+thanh toán đi restaurant 5370k,Entertainment,expense,1
+mua đi restaurant 299k,Entertainment,expense,1
 bán đi restaurant 299k,Business,income,1
-order đi restaurant 5420.1k,Essentials,expense,1
-mua đi restaurant 350k,Essentials,expense,1
+order đi restaurant 5420.1k,Entertainment,expense,1
+mua đi restaurant 350k,Entertainment,expense,1
 bán đi restaurant 350k,Business,income,1
-order đi restaurant 54tr70k,Essentials,expense,1
-mua đi restaurant 420k,Essentials,expense,1
+order đi restaurant 54tr70k,Entertainment,expense,1
+mua đi restaurant 420k,Entertainment,expense,1
 bán đi restaurant 420k,Business,income,1
-chi đi restaurant 5519k,Essentials,expense,1
-mua đi restaurant 500k,Essentials,expense,1
+chi đi restaurant 5519k,Entertainment,expense,1
+mua đi restaurant 500k,Entertainment,expense,1
 bán đi restaurant 500k,Business,income,1
-order đi restaurant 55 củ,Essentials,expense,1
-mua đi restaurant 680k,Essentials,expense,1
+order đi restaurant 55 củ,Entertainment,expense,1
+mua đi restaurant 680k,Entertainment,expense,1
 bán đi restaurant 680k,Business,income,1
-thanh toán đi restaurant 5.6tr,Essentials,expense,1
-mua đi restaurant 1.2tr,Essentials,expense,1
+thanh toán đi restaurant 5.6tr,Entertainment,expense,1
+mua đi restaurant 1.2tr,Entertainment,expense,1
 bán đi restaurant 1.2tr,Business,income,1
-mua đi restaurant 5669k,Essentials,expense,1
-mua đi restaurant 1.8tr,Essentials,expense,1
+mua đi restaurant 5669k,Entertainment,expense,1
+mua đi restaurant 1.8tr,Entertainment,expense,1
 bán đi restaurant 1.8tr,Business,income,1
-trả đi restaurant 5719 ngan,Essentials,expense,1
+trả đi restaurant 5719 ngan,Entertainment,expense,1
 mua đi cafe 15k,Entertainment,expense,1
 bán đi cafe 15k,Business,income,1
 thanh toán đi cafe 5559 ngan,Entertainment,expense,1
@@ -43614,7 +43612,6 @@ mua đổi gas 2.2tr,Essentials,expense,1
 mua đổi gas 1.2tr,Essentials,expense,1
 bán đổi gas 1.2tr,Business,income,1
 thanh toán đổi gas 2284k,Essentials,expense,1
-mua đổi gas 1.8tr,Essentials,expense,1
 bán đổi gas 1.8tr,Business,income,1
 trả đổi gas 2334 ngan,Essentials,expense,1
 mua shoppe 15k,Essentials,expense,1
@@ -44307,7 +44304,6 @@ mua cá 1949.5k,Food,expense,1
 mua cá 1.2tr,Food,expense,1
 bán cá 1.2tr,Business,income,1
 thanh toán cá 19tr99k,Food,expense,1
-mua cá 1.8tr,Food,expense,1
 bán cá 1.8tr,Business,income,1
 trả cá 2049k,Food,expense,1
 mua cá hồi 15k,Food,expense,1
@@ -46822,194 +46818,7 @@ mua ly cf mang về 88k,Food,expense,1
 mua ly cf mang về 99k,Food,expense,1
 mua ly cf mang về 120k,Food,expense,1
 gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
-gạo 50k,Essentials,expense,1
 mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua gạo 50k,Essentials,expense,1
-mua sạc 120k,Shopping,expense,1
-mua sạc 120k,Shopping,expense,1
-mua sạc 120k,Shopping,expense,1
-mua sạc 120k,Shopping,expense,1
-mua sạc 120k,Shopping,expense,1
-mua sạc 120k,Shopping,expense,1
-mua sạc 120k,Shopping,expense,1
-mua sạc 120k,Shopping,expense,1
-mua sạc 120k,Shopping,expense,1
-mua sạc 120k,Shopping,expense,1
-mua sạc 120k,Shopping,expense,1
-mua sạc 120k,Shopping,expense,1
-mua sạc 120k,Shopping,expense,1
-mua sạc 120k,Shopping,expense,1
-mua sạc 120k,Shopping,expense,1
-mua sạc 120k,Shopping,expense,1
-mua sạc 120k,Shopping,expense,1
-mua sạc 120k,Shopping,expense,1
-mua sạc 120k,Shopping,expense,1
-mua sạc 120k,Shopping,expense,1
-mua sạc 120k,Shopping,expense,1
-mua sạc 120k,Shopping,expense,1
-mua sạc 120k,Shopping,expense,1
-mua sạc 120k,Shopping,expense,1
-mua sạc 120k,Shopping,expense,1
-mua sạc 120k,Shopping,expense,1
-mua sạc 120k,Shopping,expense,1
-mua sạc 120k,Shopping,expense,1
-mua sạc 120k,Shopping,expense,1
 mua sạc 120k,Shopping,expense,1
 Lương tháng về 12tr,Salary,income,1
 lương tháng về 12tr,Salary,income,1
@@ -47018,3 +46827,251 @@ lg tháng về 14tr,Salary,income,1
 lg ve 10tr,Salary,income,1
 nhận lương 15tr,Salary,income,1
 nhan luong 8tr,Salary,income,1
+mua cà phê sữa đá 19k,Food,expense,1
+mua cà phê sữa đá 25k,Food,expense,1
+mua cà phê sữa đá 35k,Food,expense,1
+mua cà phê sữa đá 40k,Food,expense,1
+mua cà phê sữa đá 50k,Food,expense,1
+mua cà phê sữa đá 80k,Food,expense,1
+mua cà phê sữa đá 90k,Food,expense,1
+mua cà phê sữa đá 120k,Food,expense,1
+mua cafe sữa đá 19k,Food,expense,1
+mua cafe sữa đá 25k,Food,expense,1
+mua cafe sữa đá 35k,Food,expense,1
+mua cafe sữa đá 40k,Food,expense,1
+mua cafe sữa đá 50k,Food,expense,1
+mua cafe sữa đá 80k,Food,expense,1
+mua cafe sữa đá 90k,Food,expense,1
+mua cafe sữa đá 120k,Food,expense,1
+mua cafe mang đi 19k,Food,expense,1
+mua cafe mang đi 25k,Food,expense,1
+mua cafe mang đi 35k,Food,expense,1
+mua cafe mang đi 40k,Food,expense,1
+mua cafe mang đi 50k,Food,expense,1
+mua cafe mang đi 80k,Food,expense,1
+mua cafe mang đi 90k,Food,expense,1
+mua cafe mang đi 120k,Food,expense,1
+mua hạt cà phê 19k,Food,expense,1
+mua hạt cà phê 25k,Food,expense,1
+mua hạt cà phê 35k,Food,expense,1
+mua hạt cà phê 40k,Food,expense,1
+mua hạt cà phê 50k,Food,expense,1
+mua hạt cà phê 80k,Food,expense,1
+mua hạt cà phê 90k,Food,expense,1
+mua hạt cà phê 120k,Food,expense,1
+order 2 ly cafe 19k,Food,expense,1
+order 2 ly cafe 25k,Food,expense,1
+order 2 ly cafe 35k,Food,expense,1
+order 2 ly cafe 40k,Food,expense,1
+order 2 ly cafe 50k,Food,expense,1
+order 2 ly cafe 80k,Food,expense,1
+order 2 ly cafe 90k,Food,expense,1
+order 2 ly cafe 120k,Food,expense,1
+order cà phê mang về 19k,Food,expense,1
+order cà phê mang về 25k,Food,expense,1
+order cà phê mang về 35k,Food,expense,1
+order cà phê mang về 40k,Food,expense,1
+order cà phê mang về 50k,Food,expense,1
+order cà phê mang về 80k,Food,expense,1
+order cà phê mang về 90k,Food,expense,1
+order cà phê mang về 120k,Food,expense,1
+mua 1 ly cafe sữa 19k,Food,expense,1
+mua 1 ly cafe sữa 25k,Food,expense,1
+mua 1 ly cafe sữa 35k,Food,expense,1
+mua 1 ly cafe sữa 40k,Food,expense,1
+mua 1 ly cafe sữa 50k,Food,expense,1
+mua 1 ly cafe sữa 80k,Food,expense,1
+mua 1 ly cafe sữa 90k,Food,expense,1
+mua 1 ly cafe sữa 120k,Food,expense,1
+mua cafe đen 19k,Food,expense,1
+mua cafe đen 25k,Food,expense,1
+mua cafe đen 35k,Food,expense,1
+mua cafe đen 40k,Food,expense,1
+mua cafe đen 50k,Food,expense,1
+mua cafe đen 80k,Food,expense,1
+mua cafe đen 90k,Food,expense,1
+mua cafe đen 120k,Food,expense,1
+đi cà phê với bạn bè hết 19k,Entertainment,expense,1
+đi cà phê với bạn bè hết 25k,Entertainment,expense,1
+đi cà phê với bạn bè hết 35k,Entertainment,expense,1
+đi cà phê với bạn bè hết 40k,Entertainment,expense,1
+đi cà phê với bạn bè hết 50k,Entertainment,expense,1
+đi cà phê với bạn bè hết 80k,Entertainment,expense,1
+đi cà phê với bạn bè hết 90k,Entertainment,expense,1
+đi cà phê với bạn bè hết 120k,Entertainment,expense,1
+đi cafe với bạn 19k,Entertainment,expense,1
+đi cafe với bạn 25k,Entertainment,expense,1
+đi cafe với bạn 35k,Entertainment,expense,1
+đi cafe với bạn 40k,Entertainment,expense,1
+đi cafe với bạn 50k,Entertainment,expense,1
+đi cafe với bạn 80k,Entertainment,expense,1
+đi cafe với bạn 90k,Entertainment,expense,1
+đi cafe với bạn 120k,Entertainment,expense,1
+đi cf với người yêu 19k,Entertainment,expense,1
+đi cf với người yêu 25k,Entertainment,expense,1
+đi cf với người yêu 35k,Entertainment,expense,1
+đi cf với người yêu 40k,Entertainment,expense,1
+đi cf với người yêu 50k,Entertainment,expense,1
+đi cf với người yêu 80k,Entertainment,expense,1
+đi cf với người yêu 90k,Entertainment,expense,1
+đi cf với người yêu 120k,Entertainment,expense,1
+tối đi uống cà phê với bạn 19k,Entertainment,expense,1
+tối đi uống cà phê với bạn 25k,Entertainment,expense,1
+tối đi uống cà phê với bạn 35k,Entertainment,expense,1
+tối đi uống cà phê với bạn 40k,Entertainment,expense,1
+tối đi uống cà phê với bạn 50k,Entertainment,expense,1
+tối đi uống cà phê với bạn 80k,Entertainment,expense,1
+tối đi uống cà phê với bạn 90k,Entertainment,expense,1
+tối đi uống cà phê với bạn 120k,Entertainment,expense,1
+đi cafe sữa đá với nhóm bạn 19k,Entertainment,expense,1
+đi cafe sữa đá với nhóm bạn 25k,Entertainment,expense,1
+đi cafe sữa đá với nhóm bạn 35k,Entertainment,expense,1
+đi cafe sữa đá với nhóm bạn 40k,Entertainment,expense,1
+đi cafe sữa đá với nhóm bạn 50k,Entertainment,expense,1
+đi cafe sữa đá với nhóm bạn 80k,Entertainment,expense,1
+đi cafe sữa đá với nhóm bạn 90k,Entertainment,expense,1
+đi cafe sữa đá với nhóm bạn 120k,Entertainment,expense,1
+đi uống cà phê tám chuyện 19k,Entertainment,expense,1
+đi uống cà phê tám chuyện 25k,Entertainment,expense,1
+đi uống cà phê tám chuyện 35k,Entertainment,expense,1
+đi uống cà phê tám chuyện 40k,Entertainment,expense,1
+đi uống cà phê tám chuyện 50k,Entertainment,expense,1
+đi uống cà phê tám chuyện 80k,Entertainment,expense,1
+đi uống cà phê tám chuyện 90k,Entertainment,expense,1
+đi uống cà phê tám chuyện 120k,Entertainment,expense,1
+hẹn đi cafe sữa đá 19k,Entertainment,expense,1
+hẹn đi cafe sữa đá 25k,Entertainment,expense,1
+hẹn đi cafe sữa đá 35k,Entertainment,expense,1
+hẹn đi cafe sữa đá 40k,Entertainment,expense,1
+hẹn đi cafe sữa đá 50k,Entertainment,expense,1
+hẹn đi cafe sữa đá 80k,Entertainment,expense,1
+hẹn đi cafe sữa đá 90k,Entertainment,expense,1
+hẹn đi cafe sữa đá 120k,Entertainment,expense,1
+tụ tập đi cf 19k,Entertainment,expense,1
+tụ tập đi cf 25k,Entertainment,expense,1
+tụ tập đi cf 35k,Entertainment,expense,1
+tụ tập đi cf 40k,Entertainment,expense,1
+tụ tập đi cf 50k,Entertainment,expense,1
+tụ tập đi cf 80k,Entertainment,expense,1
+tụ tập đi cf 90k,Entertainment,expense,1
+tụ tập đi cf 120k,Entertainment,expense,1
+mới tiêu 200k,Food,expense,1
+mới tiêu 500k,Food,expense,1
+mới tiêu 1tr,Food,expense,1
+mới tiêu 2tr,Food,expense,1
+mới tiêu 3tr,Food,expense,1
+mới tiêu 5tr,Food,expense,1
+mới tiêu 10tr,Food,expense,1
+mới tiêu 1.5 triệu,Food,expense,1
+mới tiêu 2 triệu,Food,expense,1
+mới tiêu 3 triệu,Food,expense,1
+mới tiêu 5 triệu,Food,expense,1
+mới tiêu 10 triệu,Food,expense,1
+đã tiêu 200k rồi,Food,expense,1
+đã tiêu 500k rồi,Food,expense,1
+đã tiêu 1tr rồi,Food,expense,1
+đã tiêu 2tr rồi,Food,expense,1
+đã tiêu 3tr rồi,Food,expense,1
+đã tiêu 5tr rồi,Food,expense,1
+đã tiêu 10tr rồi,Food,expense,1
+đã tiêu 1.5 triệu rồi,Food,expense,1
+đã tiêu 2 triệu rồi,Food,expense,1
+đã tiêu 3 triệu rồi,Food,expense,1
+đã tiêu 5 triệu rồi,Food,expense,1
+đã tiêu 10 triệu rồi,Food,expense,1
+hôm nay tiêu hết 200k,Food,expense,1
+hôm nay tiêu hết 500k,Food,expense,1
+hôm nay tiêu hết 1tr,Food,expense,1
+hôm nay tiêu hết 2tr,Food,expense,1
+hôm nay tiêu hết 3tr,Food,expense,1
+hôm nay tiêu hết 5tr,Food,expense,1
+hôm nay tiêu hết 10tr,Food,expense,1
+hôm nay tiêu hết 1.5 triệu,Food,expense,1
+hôm nay tiêu hết 2 triệu,Food,expense,1
+hôm nay tiêu hết 3 triệu,Food,expense,1
+hôm nay tiêu hết 5 triệu,Food,expense,1
+hôm nay tiêu hết 10 triệu,Food,expense,1
+ghi chép 200k chi tiêu,Food,expense,1
+ghi chép 500k chi tiêu,Food,expense,1
+ghi chép 1tr chi tiêu,Food,expense,1
+ghi chép 2tr chi tiêu,Food,expense,1
+ghi chép 3tr chi tiêu,Food,expense,1
+ghi chép 5tr chi tiêu,Food,expense,1
+ghi chép 10tr chi tiêu,Food,expense,1
+ghi chép 1.5 triệu chi tiêu,Food,expense,1
+ghi chép 2 triệu chi tiêu,Food,expense,1
+ghi chép 3 triệu chi tiêu,Food,expense,1
+ghi chép 5 triệu chi tiêu,Food,expense,1
+ghi chép 10 triệu chi tiêu,Food,expense,1
+tiêu 200k ăn uống,Food,expense,1
+tiêu 500k ăn uống,Food,expense,1
+tiêu 1tr ăn uống,Food,expense,1
+tiêu 2tr ăn uống,Food,expense,1
+tiêu 3tr ăn uống,Food,expense,1
+tiêu 5tr ăn uống,Food,expense,1
+tiêu 10tr ăn uống,Food,expense,1
+tiêu 1.5 triệu ăn uống,Food,expense,1
+tiêu 2 triệu ăn uống,Food,expense,1
+tiêu 3 triệu ăn uống,Food,expense,1
+tiêu 5 triệu ăn uống,Food,expense,1
+tiêu 10 triệu ăn uống,Food,expense,1
+chi tiêu hết 200k,Food,expense,1
+chi tiêu hết 500k,Food,expense,1
+chi tiêu hết 1tr,Food,expense,1
+chi tiêu hết 2tr,Food,expense,1
+chi tiêu hết 3tr,Food,expense,1
+chi tiêu hết 5tr,Food,expense,1
+chi tiêu hết 10tr,Food,expense,1
+chi tiêu hết 1.5 triệu,Food,expense,1
+chi tiêu hết 2 triệu,Food,expense,1
+chi tiêu hết 3 triệu,Food,expense,1
+chi tiêu hết 5 triệu,Food,expense,1
+chi tiêu hết 10 triệu,Food,expense,1
+mua đồ hết 200k,Food,expense,1
+mua đồ hết 500k,Food,expense,1
+mua đồ hết 1tr,Food,expense,1
+mua đồ hết 2tr,Food,expense,1
+mua đồ hết 3tr,Food,expense,1
+mua đồ hết 5tr,Food,expense,1
+mua đồ hết 10tr,Food,expense,1
+mua đồ hết 1.5 triệu,Food,expense,1
+mua đồ hết 2 triệu,Food,expense,1
+mua đồ hết 3 triệu,Food,expense,1
+mua đồ hết 5 triệu,Food,expense,1
+mua đồ hết 10 triệu,Food,expense,1
+tiêu hết 200k cho ăn uống,Food,expense,1
+tiêu hết 500k cho ăn uống,Food,expense,1
+tiêu hết 1tr cho ăn uống,Food,expense,1
+tiêu hết 2tr cho ăn uống,Food,expense,1
+tiêu hết 3tr cho ăn uống,Food,expense,1
+tiêu hết 5tr cho ăn uống,Food,expense,1
+tiêu hết 10tr cho ăn uống,Food,expense,1
+tiêu hết 1.5 triệu cho ăn uống,Food,expense,1
+tiêu hết 2 triệu cho ăn uống,Food,expense,1
+tiêu hết 3 triệu cho ăn uống,Food,expense,1
+tiêu hết 5 triệu cho ăn uống,Food,expense,1
+tiêu hết 10 triệu cho ăn uống,Food,expense,1
+thanh toán 200k tiền nhà,Housing,expense,1
+thanh toán 500k tiền nhà,Housing,expense,1
+thanh toán 1tr tiền nhà,Housing,expense,1
+thanh toán 2tr tiền nhà,Housing,expense,1
+thanh toán 3tr tiền nhà,Housing,expense,1
+thanh toán 5tr tiền nhà,Housing,expense,1
+thanh toán 10tr tiền nhà,Housing,expense,1
+thanh toán 1.5 triệu tiền nhà,Housing,expense,1
+thanh toán 2 triệu tiền nhà,Housing,expense,1
+thanh toán 3 triệu tiền nhà,Housing,expense,1
+thanh toán 5 triệu tiền nhà,Housing,expense,1
+thanh toán 10 triệu tiền nhà,Housing,expense,1
+đóng 200k tiền học,Education,expense,1
+đóng 500k tiền học,Education,expense,1
+đóng 1tr tiền học,Education,expense,1
+đóng 2tr tiền học,Education,expense,1
+đóng 3tr tiền học,Education,expense,1
+đóng 5tr tiền học,Education,expense,1
+đóng 10tr tiền học,Education,expense,1
+đóng 1.5 triệu tiền học,Education,expense,1
+đóng 2 triệu tiền học,Education,expense,1
+đóng 3 triệu tiền học,Education,expense,1
+đóng 5 triệu tiền học,Education,expense,1
+đóng 10 triệu tiền học,Education,expense,1

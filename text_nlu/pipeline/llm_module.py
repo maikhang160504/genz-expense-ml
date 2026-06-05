@@ -43,13 +43,30 @@ def _gemini_fallback_models(primary: str) -> list[str]:
     return out
 
 
-def _is_retryable_gemini_error(exc: BaseException) -> bool:
-    if genai_errors and isinstance(exc, genai_errors.ServerError):
+def _is_quota_or_rate_limit(exc: BaseException) -> bool:
+    """429 / hết quota — đổi API key trong .env, không retry cùng key."""
+    if genai_errors and isinstance(
+        exc, (genai_errors.ClientError, genai_errors.ServerError)
+    ):
         code = getattr(exc, "code", None) or getattr(exc, "status_code", None)
-        if code in (429, 500, 503, 504):
+        if code == 429:
             return True
     msg = str(exc).lower()
-    return any(x in msg for x in ("503", "429", "unavailable", "high demand", "resource exhausted"))
+    return any(
+        x in msg
+        for x in ("429", "resource exhausted", "resource_exhausted", "quota", "rate limit")
+    )
+
+
+def _is_retryable_gemini_error(exc: BaseException) -> bool:
+    if _is_quota_or_rate_limit(exc):
+        return False
+    if genai_errors and isinstance(exc, genai_errors.ServerError):
+        code = getattr(exc, "code", None) or getattr(exc, "status_code", None)
+        if code in (500, 503, 504):
+            return True
+    msg = str(exc).lower()
+    return any(x in msg for x in ("503", "unavailable", "high demand", "504"))
 
 
 def _call_gemini_once(client, model_name: str, contents, config) -> dict:
@@ -89,6 +106,8 @@ def call_gemini(api_key: str, model: str, payload: dict) -> dict:
                 return _call_gemini_once(client, model_name, contents, config)
             except Exception as exc:
                 last_exc = exc
+                if _is_quota_or_rate_limit(exc):
+                    raise
                 if not _is_retryable_gemini_error(exc):
                     raise
                 wait = base_sleep * (2**attempt)

@@ -71,7 +71,7 @@ def train_model(df: pd.DataFrame) -> tuple[TfidfVectorizer, LogisticRegression, 
 
     vectorizer = TfidfVectorizer(
         tokenizer=vi_tokenize,
-        ngram_range=(1, 2),
+        ngram_range=(1, 3),
         max_features=5000,
     )
 

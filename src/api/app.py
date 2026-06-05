@@ -17,7 +17,7 @@ from src.nlg.llm_runner import (
     load_prompts,
     load_request_template,
 )
-from src.nlg.response import normalize_status, parse_llm_response
+from src.nlg.response import intent_mimo_fallback, parse_llm_response
 from src.nlu.models import (
     load_action_type_model,
     load_category_model,
@@ -68,6 +68,7 @@ def _nlu_result_from_pipeline(result: dict, user_text: str) -> dict:
         "item": result.get("item"),
         "category": result.get("category"),
         "amount": result.get("amount_spent") if result.get("intent") == "Record" else result.get("action_param"),
+        "record_type": result.get("record_type") if result.get("intent") == "Record" else None,
         "is_expense": result.get("record_type") == "Expense" if result.get("intent") == "Record" else None,
         "income_type": result.get("income_type") if result.get("intent") == "Record" else None,
         "action_type": result.get("action_type"),
@@ -106,6 +107,9 @@ def infer(payload: dict):
     if result.get("intent") == "Chitchat":
         os.environ.setdefault("RUN_LLM_CHITCHAT", "1")
 
+    chat_history = payload.get("chat_history")
+    chat_summary = payload.get("chat_summary")
+
     attach_nlg_and_llm(
         result,
         user_text=user_text,
@@ -114,22 +118,25 @@ def infer(payload: dict):
         prompts_config=payload.get("prompts") or PROMPTS_CONFIG,
         request_template=REQUEST_TEMPLATE,
         emotion=emotion,
+        chat_history=chat_history,
+        chat_summary=chat_summary,
     )
 
     if result.get("intent") == "Action" and not result.get("gemini_json"):
+        ack_emotion = (
+            "Worried"
+            if context_metadata.get("is_triggered")
+            else intent_mimo_fallback("Action")
+        )
         result["action_ack"] = {
-            "story": "Đã ghi nhận yêu cầu và sẽ cập nhật thiết lập.",
-            "status": "canh_bao" if context_metadata.get("is_triggered") else "trung_lap",
+            "response": "Đã ghi nhận yêu cầu và sẽ cập nhật thiết lập.",
+            "mimo_emotion": ack_emotion,
         }
 
     # Legacy: client vẫn có thể gửi gemini_response đã parse sẵn
     if payload.get("gemini_response") and not result.get("gemini_json"):
-        gemini_json = parse_llm_response(payload.get("gemini_response", {}), "gemini")
-        if gemini_json:
-            gemini_json["status"] = normalize_status(
-                gemini_json.get("status"),
-                context_metadata.get("is_triggered", False),
-            )
-        result["gemini_json"] = gemini_json
+        result["gemini_json"] = parse_llm_response(
+            payload.get("gemini_response", {}), "gemini"
+        )
 
     return json_sanitize(result)

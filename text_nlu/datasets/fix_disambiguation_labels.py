@@ -47,12 +47,12 @@ _ACTION_IN_RECORD = re.compile(
 _SELL_INCOME = re.compile(r"^(bán|ban|thu\s+tiền\s+từ\s+bán|nhận\s+tiền\s+bán|nhan\s+tien\s+ban)\b", re.I)
 _BUY_EXPENSE = re.compile(r"^(mua|order|chi|thanh\s+toán|thanh\s+toan|trả|tra|đóng|dong)\b", re.I)
 _GO_ENTERTAIN = re.compile(
-    r"^đi\s+(?:cà\s+phê|cafe|cf|bar|pub|club|spa|salon|massage|"
+    r"\bđi\s+(?:cà\s+phê|cafe|cf|bar|pub|club|spa|salon|massage|"
     r"karaoke|kaoke|bida|phim|cinema|rạp|rap|du\s+lịch|du\s+lich|restaurant|nhậu|nhau)\b",
     re.I,
 )
 _BUY_COFFEE_PRODUCT = re.compile(
-    r"^mua\s+(?:cà\s+phê|cafe|cf|hạt\s+cà\s+phê|hat\s+ca\s+phe|bột\s+cà\s+phê|bot\s+ca\s+phe)\b",
+    r"\bmua\s+(?:cà\s+phê|cafe|cf|hạt\s+cà\s+phê|hat\s+ca\s+phe|bột\s+cà\s+phê|bot\s+ca\s+phe)\b",
     re.I,
 )
 _SHOPPING_GADGET = re.compile(

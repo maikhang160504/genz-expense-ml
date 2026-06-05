@@ -20,9 +20,11 @@ htmlcov/
 
 # models
 *.pth
-
 *.safetensors
 *.zip
 *.bin
 *.pt
 archive/
+
+# Environment files
+.env
