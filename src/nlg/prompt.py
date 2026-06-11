@@ -19,15 +19,13 @@ def _record_type_instruction(nlu_result: dict[str, Any]) -> str:
             "LOẠI GIAO DỊCH: Thu nhập (Income)."
             f"{extra} "
             "Phản hồi phải nói tiền VÀO ví / thu / nhận — "
-            "TUYỆT ĐỐI KHÔNG nói chi tiêu, mua, tiêu xài, ngân sách cạn, ét ô ét vì mất tiền. "
-            "mimo_emotion gợi ý: Celebrate, Happy, Thankful, Success."
+            "TUYỆT ĐỐI KHÔNG nói chi tiêu, mua, tiêu xài, ngân sách cạn, ét ô ét vì mất tiền."
         )
     return (
         "LOẠI GIAO DỊCH: Chi tiêu (Expense). "
         "Phản hồi phải nói tiền RA / chi / mua — "
         "TUYỆT ĐỐI KHÔNG nói thu nhập, lương về, tiền vào ví. "
-        "Có thể nhắc ngân sách nếu CONTEXT_META có cảnh báo. "
-        "mimo_emotion gợi ý: Worried, Alert, Giggle, Chill (không Celebrate cho chi tiêu thường)."
+        "Có thể nhắc ngân sách nếu CONTEXT_META có cảnh báo."
     )
 
 
@@ -112,11 +110,18 @@ def build_nlg_prompt(
     rel_instruction = _build_relationship_instruction(prompts, relationship_tag, nlg_persona)
     ctx_text = _format_context_meta(context_metadata)
 
+    slang_list = emotion_cfg.get("slang_pool", [])
+    slang_instruction = ""
+    if slang_list:
+        slang_instruction = f"[SLANG GỢI Ý]: Bạn có thể sử dụng các từ slang sau để phản hồi tự nhiên: {', '.join(slang_list)}."
+
     system_parts = [emotion_cfg.get("system"), common.get("style"), common.get("response_rules")]
     if diversity_rule:
         system_parts.append(diversity_rule)
     if rel_instruction:
         system_parts.insert(1, f"[QUAN HỆ OVERRIDE] {rel_instruction}")
+    if slang_instruction:
+        system_parts.append(slang_instruction)
 
     system_prompt = " ".join(s for s in system_parts if s)
 
@@ -125,9 +130,10 @@ def build_nlg_prompt(
 
     if intent == "Chitchat":
         rules = common.get("chitchat_response_rules") or common.get("response_rules")
-        system_prompt = " ".join(
-            s for s in [emotion_cfg.get("system"), common.get("style"), diversity_rule, rules] if s
-        )
+        system_parts_chitchat = [emotion_cfg.get("system"), common.get("style"), diversity_rule, rules]
+        if slang_instruction:
+            system_parts_chitchat.append(slang_instruction)
+        system_prompt = " ".join(s for s in system_parts_chitchat if s)
         base_user = common.get("chitchat_user") or emotion_cfg.get("user")
         user_msg = nlu_result.get("text") or ""
         user_prompt = (
@@ -140,9 +146,10 @@ def build_nlg_prompt(
 
     elif intent == "Action":
         rules = common.get("action_response_rules") or common.get("response_rules")
-        system_prompt = " ".join(
-            s for s in [emotion_cfg.get("system"), common.get("style"), rules] if s
-        )
+        system_parts_action = [emotion_cfg.get("system"), common.get("style"), rules]
+        if slang_instruction:
+            system_parts_action.append(slang_instruction)
+        system_prompt = " ".join(s for s in system_parts_action if s)
         base_user = common.get("action_user") or emotion_cfg.get("user")
         action_type = nlu_result.get("action_type")
         action_facts = context_metadata.get("action_facts")

@@ -1,7 +1,7 @@
 """
 Sinh >30 câu nhập chi tiêu kiểu sinh viên (Gemini) + chạy NLU demo.
 
-Cần .env: gemini_API, GEMINI_MODEL (mặc định gemini-2.5-flash)
+Cần .env: gemini_API, GEMINI_MODEL (mặc định gemini-3-flash)
 
 Chạy:
   python text_nlu/tools/gemini_demo_student_expenses.py
@@ -48,7 +48,7 @@ def _get_gemini():
     api_key = os.environ.get("gemini_API") or os.environ.get("GEMINI_API")
     if not api_key:
         raise RuntimeError("Thiếu gemini_API trong .env")
-    model = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash")
+    model = os.environ.get("GEMINI_MODEL", "gemini-3-flash")
     return call_gemini, api_key, model
 
 

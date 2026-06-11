@@ -141,7 +141,7 @@ def build_context_metadata(nlu_result: dict[str, Any], profile: dict[str, Any]) 
         budget_remain = profile.get("budget_remain")
         budget_total = profile.get("budget_total")
         threshold = profile.get("amount_threshold")
-        frequency_week = cat.get("frequency_week") or profile.get("frequency_week") or 0
+        frequency_week = cat.get("frequency_week") or 0
         category_pct = cat.get("pct") or 0
 
         is_triggered = False

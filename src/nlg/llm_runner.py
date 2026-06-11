@@ -133,6 +133,7 @@ def attach_nlg_and_llm(
     emotion: str | None = None,  # deprecated alias
     chat_history: list | None = None,
     chat_summary: str | None = None,
+    run_llm: bool | None = None,
 ) -> dict[str, Any]:
     """Bổ sung nlg_prompt, gemini_json, llama_json vào result (in-place + return)."""
     persona = nlg_persona or emotion or "hai_huoc"
@@ -157,7 +158,8 @@ def attach_nlg_and_llm(
     result.pop("gemini_error", None)
     result.pop("llama_error", None)
 
-    if not should_run_llm(str(result.get("intent", ""))):
+    should_run = run_llm if run_llm is not None else should_run_llm(str(result.get("intent", "")))
+    if not should_run:
         return result
     if not request_template:
         result["llm_skipped"] = "no_request_template"
@@ -168,7 +170,7 @@ def attach_nlg_and_llm(
     llm_user_text = f"{nlg_user}\n\n{fusion_text}"
 
     llama_api = os.environ.get("Llama_API")
-    gemini_model = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash")
+    gemini_model = os.environ.get("GEMINI_MODEL", "gemini-3-flash")
     llama_model = os.environ.get("LLAMA_MODEL", "llama-3.1-8b-instant")
     llm_mode = os.environ.get("LLM_MODE", "both")
     is_triggered = bool(context_metadata.get("is_triggered", False))

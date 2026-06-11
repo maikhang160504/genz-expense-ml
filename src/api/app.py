@@ -120,6 +120,7 @@ def infer(payload: dict):
         emotion=emotion,
         chat_history=chat_history,
         chat_summary=chat_summary,
+        run_llm=run_llm_flag,
     )
 
     if result.get("intent") == "Action" and not result.get("gemini_json"):

@@ -205,7 +205,7 @@ def get_gemini_client():
     api_key = os.environ.get("gemini_API") or os.environ.get("GEMINI_API")
     if not api_key:
         raise RuntimeError("Thiếu gemini_API trong .env")
-    model = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash")
+    model = os.environ.get("GEMINI_MODEL", "gemini-3-flash")
     return call_gemini, api_key, model
 
 

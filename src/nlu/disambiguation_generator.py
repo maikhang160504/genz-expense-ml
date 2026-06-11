@@ -34,7 +34,7 @@ def main() -> None:
     print("=== Fetching Expanded Disambiguation Keywords from Gemini API ===")
 
     # Prepare request
-    gemini_model = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash")
+    gemini_model = os.environ.get("GEMINI_MODEL", "gemini-3-flash")
 
     system_prompt = (
         "Bạn là một chuyên gia ngôn ngữ học Tiếng Việt và chuyên gia phân tích hội thoại Chatbot FinTech.\n"

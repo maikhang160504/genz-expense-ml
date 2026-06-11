@@ -20,6 +20,20 @@ def coerce_mimo_asset(value: str | None) -> str | None:
     if not value or not str(value).strip():
         return None
     v = str(value).strip()
+    v_lower = v.lower()
+    
+    # Map persona keys directly to visual mascot emotions
+    PERSONA_TO_EMOTION = {
+        "vui": "Happy",
+        "dan_doi": "Worried",
+        "cham_choc": "Taunting",
+        "dong_cam": "Chill",
+        "nghiem_tuc": "Approved",
+        "hai_huoc": "Giggle"
+    }
+    if v_lower in PERSONA_TO_EMOTION:
+        return PERSONA_TO_EMOTION[v_lower]
+
     if v in NLG_PERSONA_KEYS:
         return None
     if v in MIMO_ASSET_NAMES:
