@@ -61,12 +61,14 @@ def _is_quota_or_rate_limit(exc: BaseException) -> bool:
 def _is_retryable_gemini_error(exc: BaseException) -> bool:
     if _is_quota_or_rate_limit(exc):
         return False
+    msg = str(exc).lower()
+    if "high demand" in msg:
+        return False
     if genai_errors and isinstance(exc, genai_errors.ServerError):
         code = getattr(exc, "code", None) or getattr(exc, "status_code", None)
         if code in (500, 503, 504):
             return True
-    msg = str(exc).lower()
-    return any(x in msg for x in ("503", "unavailable", "high demand", "504"))
+    return any(x in msg for x in ("503", "unavailable", "504"))
 
 
 def _call_gemini_once(client, model_name: str, contents, config) -> dict:
@@ -95,7 +97,7 @@ def call_gemini(api_key: str, model: str, payload: dict) -> dict:
         generation_config.setdefault("systemInstruction", system_instruction)
     config = genai.types.GenerateContentConfig(**generation_config)
 
-    max_retries = int(os.environ.get("GEMINI_MAX_RETRIES", "5"))
+    max_retries = int(os.environ.get("GEMINI_MAX_RETRIES", "1"))
     base_sleep = float(os.environ.get("GEMINI_RETRY_SLEEP", "3"))
     models = _gemini_fallback_models(model)
     last_exc: BaseException | None = None

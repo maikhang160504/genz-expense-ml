@@ -27,7 +27,7 @@ python text_nlu\tools\demo_nlu_random20.py
 
 ### Demo chat tương tác (NLU + Gemini)
 
-Cần `.env`: `gemini_API`, `GEMINI_MODEL=gemini-3-flash`
+Cần `.env`: `gemini_API`, `GEMINI_MODEL=gemini-2.5-flash`
 
 ```powershell
 $env:RUN_LLM='1'
@@ -122,7 +122,7 @@ python text_nlu\train\train_ner_only.py
 | Biến | Mục đích |
 |------|----------|
 | `gemini_API` | Gemini NLG + demo sinh viên |
-| `GEMINI_MODEL` | Mặc định `gemini-3-flash` |
+| `GEMINI_MODEL` | Mặc định `gemini-3.5-flash` |
 | `RUN_LLM` | `1` = gọi LLM mọi intent |
 | `RUN_LLM_CHITCHAT` | `1` = Chitchat luôn gọi LLM (mặc định) |
 | `LLM_MODE` | `gemini` \| `both` |

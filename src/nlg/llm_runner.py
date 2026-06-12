@@ -170,7 +170,7 @@ def attach_nlg_and_llm(
     llm_user_text = f"{nlg_user}\n\n{fusion_text}"
 
     llama_api = os.environ.get("Llama_API")
-    gemini_model = os.environ.get("GEMINI_MODEL", "gemini-3-flash")
+    gemini_model = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash")
     llama_model = os.environ.get("LLAMA_MODEL", "llama-3.1-8b-instant")
     llm_mode = os.environ.get("LLM_MODE", "both")
     is_triggered = bool(context_metadata.get("is_triggered", False))

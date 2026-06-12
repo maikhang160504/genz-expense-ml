@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 
 const apiKey = "AIzaSyCQOdynrywuy2-Et-uKlfyB08IzJN5lfas";
-const model = "gemini-3-flash";
+const model = "gemini-2.5-flash";
 
 // Helper to load prompts.json
 function loadPrompts() {
