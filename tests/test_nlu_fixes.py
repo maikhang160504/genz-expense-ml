@@ -48,6 +48,11 @@ def main() -> None:
         ("bớt 50k từ hạn mức giải trí", "Action", None, "SET_LIMIT", "SUB"),
         ("giảm giới hạn ăn uống đi 100k", "Action", None, "SET_LIMIT", "SUB"),
         ("Đặt lại giới hạn thành 500k", "Action", None, "SET_LIMIT", "SET"),
+
+        # Suggest budget vs report
+        ("gợi ý chi tiêu tuần này", "Action", None, "SUGGEST_BUDGET"),
+        ("goi y chi tieu thang nay", "Action", None, "SUGGEST_BUDGET"),
+        ("tổng chi tháng này", "Action", None, "REPORT_GENERAL"),
     ]
 
     failed = 0
@@ -80,10 +85,10 @@ def main() -> None:
             errors.append(f"Expected verb={expected_verb}, got {verb}")
 
         if errors:
-            print(f"  ❌ FAILED: {', '.join(errors)}")
+            print(f"  [FAILED]: {', '.join(errors)}")
             failed += 1
         else:
-            print("  ✅ PASSED")
+            print("  [PASSED]")
 
     print("\n=== Verification Summary ===")
     if failed == 0:

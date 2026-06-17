@@ -32,8 +32,29 @@ def _mode(series: pd.Series) -> str:
     return str(m.iloc[0]) if len(m) else str(series.iloc[0])
 
 
+import re
+
+MONEY_RE = re.compile(
+    r"(\d+(?:[\.,]\d+)?\s?(k|đ|d|vnđ|vnd|ngan|nghin|tr|triệu|trieu|củ|cu))",
+    re.IGNORECASE,
+)
+
 def dedupe_record(df: pd.DataFrame) -> pd.DataFrame:
-    return df.drop_duplicates(subset=["text"], keep="first").reset_index(drop=True)
+    # Drop exact text duplicates first
+    df = df.drop_duplicates(subset=["text"], keep="first")
+    
+    # Drop duplicates that only differ by amount
+    def clean_amt(t):
+        t = str(t).lower().strip()
+        t = MONEY_RE.sub(" <AMOUNT> ", t)
+        t = " ".join(t.split())
+        return t
+        
+    df = df.copy()
+    df["_normalized_text"] = df["text"].map(clean_amt)
+    df = df.drop_duplicates(subset=["_normalized_text"], keep="first")
+    df = df.drop(columns=["_normalized_text"])
+    return df.reset_index(drop=True)
 
 
 def dedupe_action(df: pd.DataFrame) -> pd.DataFrame:
@@ -197,6 +218,49 @@ def augment_action(existing: set[str]) -> list[dict]:
         ("bao cao tong chi thang nay", "REPORT_GENERAL"),
         ("xoa ban ghi gan nhat", "DELETE_RECORD"),
         ("sua lai khoan {cat} thanh {amt}", "UPDATE_RECORD"),
+        ("Báo cáo chi tiêu tháng", "REPORT_GENERAL"),
+        ("Báo cáo chi tiêu tuần", "REPORT_GENERAL"),
+        ("Báo cáo chi tiêu năm", "REPORT_GENERAL"),
+        ("Báo cáo chi tiêu ngày", "REPORT_GENERAL"),
+        ("Báo cáo chi tiêu cuối tuần", "REPORT_GENERAL"),
+        ("Báo cáo chi tiêu ngày thường", "REPORT_GENERAL"),
+        ("Báo cáo chi tiêu ngày lễ", "REPORT_GENERAL"),
+        ("chi tiêu ngày thứ 2", "REPORT_GENERAL"),
+        ("chi tiêu ngày thứ hai", "REPORT_GENERAL"),
+        ("chi tiêu ngày thứ 3", "REPORT_GENERAL"),
+        ("chi tiêu ngày thứ ba", "REPORT_GENERAL"),
+        ("chi tiêu ngày thứ 4", "REPORT_GENERAL"),
+        ("chi tiêu ngày thứ tư", "REPORT_GENERAL"),
+        ("chi tiêu ngày thứ 5", "REPORT_GENERAL"),
+        ("chi tiêu ngày thứ năm", "REPORT_GENERAL"),
+        ("chi tiêu ngày thứ 6", "REPORT_GENERAL"),
+        ("chi tiêu ngày thứ sáu", "REPORT_GENERAL"),
+        ("chi tiêu ngày thứ 7", "REPORT_GENERAL"),
+        ("chi tiêu ngày thứ bảy", "REPORT_GENERAL"),
+        ("chi tiêu ngày chủ nhật", "REPORT_GENERAL"),
+        ("chi tiêu thứ 2", "REPORT_GENERAL"),
+        ("chi tiêu cuối tuần", "REPORT_GENERAL"),
+        ("chi tiêu ngày thường", "REPORT_GENERAL"),
+        ("chi tiêu ngày lễ", "REPORT_GENERAL"),
+        ("thống kê chi tiêu ngày thứ 2", "REPORT_GENERAL"),
+        ("thống kê chi tiêu cuối tuần", "REPORT_GENERAL"),
+        ("thống kê chi tiêu ngày thường", "REPORT_GENERAL"),
+        ("chi tieu ngay thu 2", "REPORT_GENERAL"),
+        ("chi tieu cuoi tuan", "REPORT_GENERAL"),
+        ("chi tieu ngay thuong", "REPORT_GENERAL"),
+        ("bao cao chi tieu thang", "REPORT_GENERAL"),
+        ("bao cao chi tieu tuan", "REPORT_GENERAL"),
+        ("bao cao chi tieu ngay", "REPORT_GENERAL"),
+        ("gợi ý chi tiêu cho mình", "SUGGEST_BUDGET"),
+        ("gợi ý chi tiêu tuần này", "SUGGEST_BUDGET"),
+        ("gợi ý chi tiêu tháng này", "SUGGEST_BUDGET"),
+        ("cho mình gợi ý chi tiêu", "SUGGEST_BUDGET"),
+        ("đề xuất gợi ý chi tiêu", "SUGGEST_BUDGET"),
+        ("gợi ý tiết kiệm tháng này", "SUGGEST_BUDGET"),
+        ("gợi ý chi tiêu", "SUGGEST_BUDGET"),
+        ("gợi ý tiết kiệm", "SUGGEST_BUDGET"),
+        ("cho xin goi y chi tieu", "SUGGEST_BUDGET"),
+        ("goi y chi tieu tuan nay", "SUGGEST_BUDGET"),
     ]
     cats = [
         "ăn uống",
@@ -310,6 +374,36 @@ def augment_ner(existing: set[str]) -> list[dict]:
         ("order GrabFood bún bò 55k", [("GrabFood", "CATEGORY"), ("55k", "AMOUNT")]),
         ("lương tháng về 14tr", [("lương", "CATEGORY"), ("14tr", "AMOUNT")]),
         ("hoa hồng bán hàng 800k", [("hoa hồng", "CATEGORY"), ("800k", "AMOUNT")]),
+        ("báo cáo chi tiêu tháng", [("báo cáo", "ACTION_TYPE"), ("tháng", "TIME")]),
+        ("báo cáo chi tiêu tuần", [("báo cáo", "ACTION_TYPE"), ("tuần", "TIME")]),
+        ("báo cáo chi tiêu năm", [("báo cáo", "ACTION_TYPE"), ("năm", "TIME")]),
+        ("báo cáo chi tiêu ngày", [("báo cáo", "ACTION_TYPE"), ("ngày", "TIME")]),
+        ("báo cáo chi tiêu cuối tuần", [("báo cáo", "ACTION_TYPE"), ("cuối tuần", "TIME")]),
+        ("báo cáo chi tiêu ngày thường", [("báo cáo", "ACTION_TYPE"), ("ngày thường", "TIME")]),
+        ("báo cáo chi tiêu ngày lễ", [("báo cáo", "ACTION_TYPE"), ("ngày lễ", "TIME")]),
+        ("chi tiêu ngày thứ 2", [("ngày thứ 2", "TIME")]),
+        ("chi tiêu ngày thứ hai", [("ngày thứ hai", "TIME")]),
+        ("chi tiêu ngày thứ 3", [("ngày thứ 3", "TIME")]),
+        ("chi tiêu ngày thứ ba", [("ngày thứ ba", "TIME")]),
+        ("chi tiêu ngày thứ 4", [("ngày thứ 4", "TIME")]),
+        ("chi tiêu ngày thứ tư", [("ngày thứ tư", "TIME")]),
+        ("chi tiêu ngày thứ 5", [("ngày thứ 5", "TIME")]),
+        ("chi tiêu ngày thứ năm", [("ngày thứ năm", "TIME")]),
+        ("chi tiêu ngày thứ 6", [("ngày thứ 6", "TIME")]),
+        ("chi tiêu ngày thứ sáu", [("ngày thứ sáu", "TIME")]),
+        ("chi tiêu ngày thứ 7", [("ngày thứ 7", "TIME")]),
+        ("chi tiêu ngày thứ bảy", [("ngày thứ bảy", "TIME")]),
+        ("chi tiêu ngày chủ nhật", [("ngày chủ nhật", "TIME")]),
+        ("chi tiêu cuối tuần", [("cuối tuần", "TIME")]),
+        ("chi tiêu ngày thường", [("ngày thường", "TIME")]),
+        ("chi tiêu ngày lễ", [("ngày lễ", "TIME")]),
+        ("thống kê chi tiêu cuối tuần", [("thống kê", "ACTION_TYPE"), ("cuối tuần", "TIME")]),
+        ("thống kê chi tiêu ngày thường", [("thống kê", "ACTION_TYPE"), ("ngày thường", "TIME")]),
+        ("gợi ý chi tiêu tháng này", [("gợi ý chi tiêu", "ACTION_TYPE"), ("tháng này", "TIME")]),
+        ("gợi ý chi tiêu tuần này", [("gợi ý chi tiêu", "ACTION_TYPE"), ("tuần này", "TIME")]),
+        ("đề xuất gợi ý chi tiêu hôm nay", [("gợi ý chi tiêu", "ACTION_TYPE"), ("hôm nay", "TIME")]),
+        ("gợi ý tiết kiệm tháng này", [("gợi ý tiết kiệm", "ACTION_TYPE"), ("tháng này", "TIME")]),
+        ("goi y chi tieu tuan nay", [("goi y chi tieu", "ACTION_TYPE"), ("tuan nay", "TIME")]),
     ]
     for t, plist in pairs:
         add(t, plist)

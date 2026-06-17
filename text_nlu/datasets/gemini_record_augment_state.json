@@ -2,6 +2,7 @@
   "done_theme_ids": [
     "debt_charity",
     "dorm_essentials",
+    "expense_weak_labels",
     "genz_food_short",
     "genz_transport",
     "health_edu",
@@ -13,6 +14,6 @@
     "student_income",
     "subs_digital"
   ],
-  "last_added": 80,
-  "total_added": 966
+  "last_added": 74,
+  "total_added": 1040
 }

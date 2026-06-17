@@ -150,6 +150,62 @@ def _call_groq_http(api_key: str, model: str, system_prompt: str, user_prompt: s
         return json.loads(resp.read().decode("utf-8"))
 
 
+def call_lmstudio(
+    base_url: str,
+    model: str,
+    system_prompt: str,
+    user_prompt: str,
+    *,
+    temperature: float = 0.15,
+    max_tokens: int = 4096,
+    timeout: float = 120.0,
+) -> dict:
+    """OpenAI-compatible chat API (LM Studio, Ollama, v.v.)."""
+    url = base_url.rstrip("/")
+    if not url.endswith("/chat/completions"):
+        url = f"{url}/v1/chat/completions" if "/v1" not in url else f"{url}/chat/completions"
+
+    payload = {
+        "model": model,
+        "messages": [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_prompt},
+        ],
+        "temperature": temperature,
+        "max_tokens": max_tokens,
+        "stream": False,
+    }
+    data = json.dumps(payload).encode("utf-8")
+    req = urllib.request.Request(
+        url,
+        data=data,
+        headers={"Content-Type": "application/json"},
+        method="POST",
+    )
+    with urllib.request.urlopen(req, timeout=timeout) as resp:
+        return json.loads(resp.read().decode("utf-8"))
+
+
+def extract_chat_text(resp: dict) -> str:
+    """Lấy text từ response OpenAI hoặc Gemini."""
+    if not resp:
+        return ""
+    choices = resp.get("choices") or []
+    for c in choices:
+        msg = c.get("message") or {}
+        t = msg.get("content")
+        if t:
+            return str(t)
+    candidates = resp.get("candidates") or []
+    for c in candidates:
+        content = c.get("content") or {}
+        for p in content.get("parts") or []:
+            t = p.get("text")
+            if t:
+                return str(t)
+    return str(resp.get("text") or "")
+
+
 def call_groq(
     api_key: str,
     model: str,

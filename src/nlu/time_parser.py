@@ -17,6 +17,17 @@ _GRANULARITY_LABELS = {
     "quarter": "Quý này",
     "rolling_7d": "7 ngày qua",
     "rolling_30d": "30 ngày qua",
+    "year": "Năm nay",
+    "weekend": "Cuối tuần",
+    "weekday": "Ngày thường",
+    "holiday": "Ngày lễ",
+    "monday": "Thứ hai",
+    "tuesday": "Thứ ba",
+    "wednesday": "Thứ tư",
+    "thursday": "Thứ năm",
+    "friday": "Thứ sáu",
+    "saturday": "Thứ bảy",
+    "sunday": "Chủ nhật",
 }
 
 
@@ -139,6 +150,53 @@ def _match_range(norm_text: str, now: datetime) -> dict | None:
     if re.search(r"\b30 ngay\b|\b30 ngay qua\b", norm_text):
         start = today - timedelta(days=29)
         return _build_result(granularity="rolling_30d", start=start, end=_end_of_day(now), label_prefix="30 ngày qua")
+
+    # 1. Weekend / Weekday / Holiday
+    if re.search(r"\bcuoi tuan\b", norm_text):
+        mon = _monday_of(today)
+        sat = mon + timedelta(days=5)
+        sun = mon + timedelta(days=6)
+        return _build_result(granularity="weekend", start=sat, end=_end_of_day(sun), label_prefix="Cuối tuần")
+
+    if re.search(r"\bngay thuong\b", norm_text):
+        mon = _monday_of(today)
+        fri = mon + timedelta(days=4)
+        return _build_result(granularity="weekday", start=mon, end=_end_of_day(fri), label_prefix="Ngày thường")
+
+    if re.search(r"\bngay le\b", norm_text):
+        return _build_result(granularity="holiday", start=today, end=_end_of_day(now), label_prefix="Ngày lễ")
+
+    # 2. Days of week
+    weekday_map = {
+        r"\bthu (?:2|hai)\b": (0, "Thứ hai"),
+        r"\bthu (?:3|ba)\b": (1, "Thứ ba"),
+        r"\bthu (?:4|tu)\b": (2, "Thứ tư"),
+        r"\bthu (?:5|nam)\b": (3, "Thứ năm"),
+        r"\bthu (?:6|sau)\b": (4, "Thứ sáu"),
+        r"\bthu (?:7|bay)\b": (5, "Thứ bảy"),
+        r"\bchu nhat\b": (6, "Chủ nhật"),
+    }
+    for pat, (w_idx, label) in weekday_map.items():
+        if re.search(pat, norm_text):
+            day_dt = _monday_of(today) + timedelta(days=w_idx)
+            gran = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"][w_idx]
+            return _build_result(granularity=gran, start=day_dt, end=_end_of_day(day_dt), label_prefix=label)
+
+    # 3. Single base words fallback
+    if re.search(r"\bthang\b", norm_text):
+        start = today.replace(day=1)
+        return _build_result(granularity="month", start=start, end=_end_of_day(now), label_prefix="Tháng này")
+
+    if re.search(r"\btuan\b", norm_text):
+        start = _monday_of(today)
+        return _build_result(granularity="week", start=start, end=_end_of_day(now), label_prefix="Tuần này")
+
+    if re.search(r"\bngay\b", norm_text):
+        return _build_result(granularity="day", start=today, end=_end_of_day(now), label_prefix="Hôm nay")
+
+    if re.search(r"\bnam\b", norm_text):
+        start = today.replace(month=1, day=1)
+        return _build_result(granularity="year", start=start, end=_end_of_day(now), label_prefix="Năm nay")
 
     return None
 

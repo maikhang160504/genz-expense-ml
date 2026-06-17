@@ -6,16 +6,16 @@
       "segment": "bánh ngọt 29k",
       "amount": 29000,
       "category": "Food",
-      "item": null,
-      "category_ner": null,
+      "item": "ngọt",
+      "category_ner": "Essentials",
       "record_type": "Expense"
     },
     {
       "segment": "bàn chải 18k",
       "amount": 18000,
-      "category": "Entertainment",
-      "item": null,
-      "category_ner": null,
+      "category": "Business",
+      "item": "bàn chải",
+      "category_ner": "Business",
       "record_type": "Expense"
     }
   ],

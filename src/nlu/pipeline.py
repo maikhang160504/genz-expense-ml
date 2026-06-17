@@ -7,60 +7,27 @@ from pyvi import ViTokenizer
 
 from src.nlu.text import clean_content, extract_amounts, normalize_text
 from src.nlu.ner import (
-    CATEGORY_LABELS,
     extract_ner_slots,
-    map_category_to_label,
     map_product_brand_hint,
     select_record_item_from_slots,
 )
 from src.nlu.multi_record import extract_multi_records
-from src.nlu.action_query import is_action_query, report_general_action_type, is_limit_or_goal_action
+from src.nlu.action_query import (
+    is_action_query,
+    report_general_action_type,
+    suggest_budget_action_type,
+    is_limit_or_goal_action,
+)
 from src.nlu.time_parser import parse_time_range
 from src.nlu.income_phrase import is_clear_income_phrase
 from pipeline.text_preprocessing import clean_category_text
 
-_DISAMBIGUATION_KEYWORDS_PATH = Path(__file__).resolve().parent / "disambiguation_keywords.json"
 
-_VERBS = ["di", "hen", "tu tap", "giao luu"]
-_ACTIVITIES = ["ca phe", "cafe", "cf", "tra sua", "quan", "nhau", "bida", "phim", "bar", "pub", "club", "rap"]
-_COMPANIONS = ["voi", "cung", "ban", "ghe", "bo", "crush", "nguoi yeu", "ny", "dong nghiep", "anh em", "be"]
-
-if _DISAMBIGUATION_KEYWORDS_PATH.exists():
-    try:
-        _data = json.loads(_DISAMBIGUATION_KEYWORDS_PATH.read_text(encoding="utf-8"))
-        _VERBS = _data.get("normalized_verbs", _VERBS)
-        _ACTIVITIES = _data.get("normalized_activities_places", _ACTIVITIES)
-        _COMPANIONS = _data.get("normalized_companions", _COMPANIONS)
-    except Exception as e:
-        print(f"[NLU] Warning: Failed to load disambiguation keywords: {e}")
-
-_RE_VERBS = re.compile(r"\b(" + "|".join(re.escape(k) for k in _VERBS) + r")\b", re.I)
-_RE_ACTIVITIES = re.compile(r"\b(" + "|".join(re.escape(k) for k in _ACTIVITIES) + r")\b", re.I)
-_RE_COMPANIONS = re.compile(r"\b(" + "|".join(re.escape(k) for k in _COMPANIONS) + r")\b", re.I)
 
 MONEY_RE = re.compile(
     r"(\d+(?:[\.,]\d+)?\s?(k|đ|d|vnđ|vnd|ngan|nghin|tr|triệu|trieu|củ|cu))",
     re.IGNORECASE,
 )
-
-_CHA_ME_KEYWORDS = {
-    "mẹ", "má", "ba", "bố", "cha", "cụ", "ông bà",
-    "mẹ ruột", "bố ruột", "ba ruột", "bà nội", "bà ngoại", "ông nội", "ông ngoại",
-    "báo hiếu", "phụng dưỡng", "cho mẹ", "cho ba", "cho bố", "cho cha",
-    "tặng mẹ", "tặng ba", "tặng bố", "tiền mẹ", "tiền ba", "tiền bố",
-    "mẹ ơi", "ba ơi", "bố ơi", "nuôi mẹ", "nuôi ba", "lo cho mẹ",
-    "thuốc cho mẹ", "thuốc cho ba", "viện phí", "bệnh viện",
-}
-
-_NGUOI_YEU_KEYWORDS = {
-    "bồ", "người yêu", "ny", "crush", "bạn gái", "bạn trai",
-    "bạn ghệ", "ghệ", "gf", "bf", "partner",
-    "em yêu", "anh yêu", "yêu ơi", "baby", "babe",
-    "hẹn hò", "date", "kỷ niệm", "anniversary", "valentine",
-    "dẫn bồ", "đưa bồ", "cho bồ", "tặng bồ", "mua cho bồ",
-    "dẫn người yêu", "đưa người yêu", "mua cho người yêu",
-}
-
 
 def _no_accent(s: str) -> str:
     """Strip diacritics for accent-insensitive matching."""
@@ -69,23 +36,15 @@ def _no_accent(s: str) -> str:
     )
 
 
-_CHA_ME_NORM = {_no_accent(kw) for kw in _CHA_ME_KEYWORDS}
-_NGUOI_YEU_NORM = {_no_accent(kw) for kw in _NGUOI_YEU_KEYWORDS}
-
-
-def detect_relationship_tag(text: str) -> str | None:
-    """Quét từ khóa nhạy cảm để gán tag ẩn CHA_ME hoặc NGUOI_YEU.
-    Hỗ trợ cả text có dấu lẫn không dấu (GenZ typing).
-    Bill scan KHÔNG gọi hàm này (không có text chủ quan của user).
-    """
-    lowered = text.lower()
-    norm = _no_accent(lowered)
-    for kw in _NGUOI_YEU_NORM:
-        if kw in norm:
-            return "NGUOI_YEU"
-    for kw in _CHA_ME_NORM:
-        if kw in norm:
-            return "CHA_ME"
+def detect_relationship_tag(text: str, slots: dict | None = None) -> str | None:
+    """Phát hiện quan hệ CHA_ME hoặc NGUOI_YEU dựa trên slots COMPANION hoặc fallback."""
+    if slots and "COMPANION" in slots:
+        for val in slots["COMPANION"]:
+            norm = _no_accent(val.lower())
+            if any(w in norm for w in ["me", "ma", "ba", "bo", "cha", "cu", "ong ba", "bo me", "ba me"]):
+                return "CHA_ME"
+            if any(w in norm for w in ["bo", "nguoi yeu", "ny", "crush", "ban gai", "ban trai", "ghe", "gf", "bf"]):
+                return "NGUOI_YEU"
     return None
 
 
@@ -113,66 +72,7 @@ def classify_intent(text: str, intent_model: dict) -> tuple[str, float | None, d
         conf = None
     return intent, conf, dist
 
-
-def parse_action_details(text: str) -> dict:
-    normalized = normalize_text(ViTokenizer.tokenize(text).replace("_", " "))
-    verbs_set = ["dat", "đặt", "dat lai", "đặt lại", "thiet lap", "thiết lập", "chot", "chốt"]
-    verbs_inc = ["tang", "tăng", "them", "thêm", "nang", "nâng"]
-    verbs_dec = ["giam", "giảm", "ha", "hạ", "bot", "bớt"]
-
-    verb = "SET"
-    if any(v in normalized for v in verbs_inc):
-        verb = "INCREASE"
-    elif any(v in normalized for v in verbs_dec):
-        verb = "DECREASE"
-    elif any(v in normalized for v in verbs_set):
-        verb = "SET"
-
-    categories = list(CATEGORY_LABELS)
-    target = None
-    for cat in categories:
-        if cat in normalized:
-            target = cat
-            break
-
-    amounts = extract_amounts(text)
-    value = amounts[0] if amounts else None
-
-    target_type = None
-    if any(k in normalized for k in ["han muc", "hạn mức", "gioi han", "giới hạn", "ngan sach", "ngân sách"]):
-        target_type = "LIMIT"
-    elif any(k in normalized for k in ["muc tieu", "mục tiêu", "tiet kiem", "tiết kiệm"]):
-        target_type = "GOAL"
-    elif any(k in normalized for k in ["phong cach", "phong cách", "giong", "giọng", "tone"]):
-        target_type = "STYLE"
-    elif any(k in normalized for k in ["thu nhap", "thu nhập", "luong", "lương"]):
-        target_type = "INCOME"
-    elif any(k in normalized for k in ["doi ten", "đổi tên", "ten", "tên", "goi", "gọi"]):
-        target_type = "USERNAME"
-
-    style_value = None
-    for style in ["dận dữ", "tức giận", "vui vẻ", "vui ve", "dễ thương", "de thuong", "nghiêm túc", "nghiem tuc"]:
-        if style in normalized:
-            style_value = style
-            break
-
-    name_value = None
-    name_match = re.search(
-        r"\b(?:goi minh la|gọi mình là|ten cua toi la|tên của tôi là|doi ten thanh|đổi tên thành)\s+(?P<name>.+)$",
-        normalized,
-    )
-    if name_match:
-        name_value = name_match.group("name").strip()
-
-    return {
-        "verb": verb,
-        "target": target,
-        "target_type": target_type,
-        "value": value,
-        "unit": "VND",
-        "style": style_value,
-        "name": name_value,
-    }
+from src.nlu.models import predict_category_from_text
 
 
 INCOME_TYPE_LABELS = {"salary", "bonus", "investment", "business"}
@@ -319,6 +219,11 @@ def run_nlu(
     amounts = extract_amounts(user_text)
     content = clean_content(user_text)
 
+    # Extract slots early for all intents (useful for relationship tags and actions)
+    slots = None
+    if ner_model:
+        slots = extract_ner_slots(user_text, ner_model)
+
     result = {
         "text": user_text,
         "intent": intent,
@@ -328,8 +233,10 @@ def run_nlu(
         "clean_content": content,
         "multi_records": [],
         "multi_record_task": False,
-        "relationship_tag": detect_relationship_tag(user_text),
+        "relationship_tag": detect_relationship_tag(user_text, slots),
     }
+    if slots:
+        result["slots"] = slots
 
     if intent == "Record":
         result["amount_spent"] = amounts[0] if amounts else None
@@ -355,15 +262,10 @@ def run_nlu(
                 result["record_type"] = "Income"
         result["income_type"] = None
 
-        slots = None
-        if ner_model:
-            slots = extract_ner_slots(user_text, ner_model)
-            if slots:
-                result["slots"] = slots
         ner_category = None
         if slots:
             ner_category = select_record_item_from_slots(slots)
-        mapped_category = map_category_to_label(ner_category) or map_product_brand_hint(ner_category)
+        mapped_category = predict_category_from_text(ner_category, category_model)
         result["item"] = ner_category
 
         raw_category = None
@@ -381,16 +283,14 @@ def run_nlu(
                 cat_vec = category_model["vectorizer"].transform([cat_input])
                 raw_category = category_model["model"].predict(cat_vec)[0]
                 result["category_backend"] = "tfidf"
-        if raw_category == "Food" and user_text:
-            lower_text = _no_accent(user_text.lower()).replace("đ", "d")
-            if _RE_VERBS.search(lower_text) and \
-               _RE_ACTIVITIES.search(lower_text) and \
-               _RE_COMPANIONS.search(lower_text):
-                raw_category = "Entertainment"
-        if raw_category is not None:
-            result["category"] = raw_category
-            if result["record_type"] == "Income" and raw_category:
-                key = normalize_text(str(raw_category))
+
+        # Resolve category: prefer mapped_category from NER slots, fallback to raw_category from full text
+        final_category = mapped_category if mapped_category else raw_category
+                
+        if final_category is not None:
+            result["category"] = final_category
+            if result["record_type"] == "Income" and final_category:
+                key = normalize_text(str(final_category))
                 if key in INCOME_TYPE_LABELS:
                     result["income_type"] = key
         else:
@@ -418,17 +318,20 @@ def run_nlu(
             result["action_type"] = None
         if str(result.get("action_type")) == "SYSTEM_SETTING":
             result["action_type"] = "Setting"
-        rg = report_general_action_type(user_text)
-        if rg and str(result.get("action_type")) != rg:
-            result["action_type"] = rg
+        sb = suggest_budget_action_type(user_text)
+        if sb:
+            result["action_type"] = sb
+        else:
+            rg = report_general_action_type(user_text)
+            if rg and str(result.get("action_type")) != rg:
+                result["action_type"] = rg
         result["action_type_backend"] = action_type_model.get("backend")
         result["action_param"] = amounts[0] if amounts else None
-        slots = None
+        
         if ner_model:
-            slots = extract_ner_slots(user_text, ner_model)
-            if slots:
-                result["slots"] = slots
-            result["action_details"] = build_action_details_from_slots(slots, user_text, map_category_to_label)
+            result["action_details"] = build_action_details_from_slots(
+                slots, user_text, lambda x: predict_category_from_text(x, category_model)
+            )
         else:
             result["action_details"] = None
         time_slots = (result.get("action_details") or {}).get("time")

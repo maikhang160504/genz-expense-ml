@@ -7665,3 +7665,33 @@
 {"text": "ship đồ ăn qua GrabFood 88k", "label": [[15, 23, "CATEGORY"], [24, 27, "AMOUNT"]]}
 {"text": "xe ôm grab 19k", "label": [[6, 10, "CATEGORY"], [11, 14, "AMOUNT"]]}
 {"text": "tiền grab bike sáng nay 25k", "label": [[5, 14, "CATEGORY"], [24, 27, "AMOUNT"]]}
+{"text": "báo cáo chi tiêu tháng", "label": [[0, 7, "ACTION_TYPE"], [17, 22, "TIME"]]}
+{"text": "báo cáo chi tiêu tuần", "label": [[0, 7, "ACTION_TYPE"], [17, 21, "TIME"]]}
+{"text": "báo cáo chi tiêu năm", "label": [[0, 7, "ACTION_TYPE"], [17, 20, "TIME"]]}
+{"text": "báo cáo chi tiêu ngày", "label": [[0, 7, "ACTION_TYPE"], [17, 21, "TIME"]]}
+{"text": "báo cáo chi tiêu cuối tuần", "label": [[0, 7, "ACTION_TYPE"], [17, 26, "TIME"]]}
+{"text": "báo cáo chi tiêu ngày thường", "label": [[0, 7, "ACTION_TYPE"], [17, 28, "TIME"]]}
+{"text": "báo cáo chi tiêu ngày lễ", "label": [[0, 7, "ACTION_TYPE"], [17, 24, "TIME"]]}
+{"text": "chi tiêu ngày thứ 2", "label": [[9, 19, "TIME"]]}
+{"text": "chi tiêu ngày thứ hai", "label": [[9, 21, "TIME"]]}
+{"text": "chi tiêu ngày thứ 3", "label": [[9, 19, "TIME"]]}
+{"text": "chi tiêu ngày thứ ba", "label": [[9, 20, "TIME"]]}
+{"text": "chi tiêu ngày thứ 4", "label": [[9, 19, "TIME"]]}
+{"text": "chi tiêu ngày thứ tư", "label": [[9, 20, "TIME"]]}
+{"text": "chi tiêu ngày thứ 5", "label": [[9, 19, "TIME"]]}
+{"text": "chi tiêu ngày thứ năm", "label": [[9, 21, "TIME"]]}
+{"text": "chi tiêu ngày thứ 6", "label": [[9, 19, "TIME"]]}
+{"text": "chi tiêu ngày thứ sáu", "label": [[9, 21, "TIME"]]}
+{"text": "chi tiêu ngày thứ 7", "label": [[9, 19, "TIME"]]}
+{"text": "chi tiêu ngày thứ bảy", "label": [[9, 21, "TIME"]]}
+{"text": "chi tiêu ngày chủ nhật", "label": [[9, 22, "TIME"]]}
+{"text": "chi tiêu cuối tuần", "label": [[9, 18, "TIME"]]}
+{"text": "chi tiêu ngày thường", "label": [[9, 20, "TIME"]]}
+{"text": "chi tiêu ngày lễ", "label": [[9, 16, "TIME"]]}
+{"text": "thống kê chi tiêu cuối tuần", "label": [[0, 8, "ACTION_TYPE"], [18, 27, "TIME"]]}
+{"text": "thống kê chi tiêu ngày thường", "label": [[0, 8, "ACTION_TYPE"], [18, 29, "TIME"]]}
+{"text": "gợi ý chi tiêu tháng này", "label": [[0, 14, "ACTION_TYPE"], [15, 24, "TIME"]]}
+{"text": "gợi ý chi tiêu tuần này", "label": [[0, 14, "ACTION_TYPE"], [15, 23, "TIME"]]}
+{"text": "đề xuất gợi ý chi tiêu hôm nay", "label": [[8, 22, "ACTION_TYPE"], [23, 30, "TIME"]]}
+{"text": "gợi ý tiết kiệm tháng này", "label": [[0, 15, "ACTION_TYPE"], [16, 25, "TIME"]]}
+{"text": "goi y chi tieu tuan nay", "label": [[0, 14, "ACTION_TYPE"], [15, 23, "TIME"]]}

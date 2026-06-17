@@ -1,0 +1,5 @@
+OK | me cho 1tr -> Income (expected Income)
+OK | mẹ ck 500k -> Income (expected Income)
+OK | hoàn tiền 50k -> Income (expected Income)
+OK | ăn phở 45k -> Expense (expected Expense)
+OK | mua sua 1113k -> Expense (expected Expense)

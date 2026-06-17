@@ -17,6 +17,13 @@ Báo cáo chi mỹ phẩm quý này,Action,Report
 Báo cáo chi quà tặng hôm nay,Action,Report
 Báo cáo chi quà tặng hôm qua,Action,Report
 Báo cáo chi sửa xe gần đây,Action,Report
+Báo cáo chi tiêu cuối tuần,Action,REPORT_GENERAL
+Báo cáo chi tiêu ngày,Action,REPORT_GENERAL
+Báo cáo chi tiêu ngày lễ,Action,REPORT_GENERAL
+Báo cáo chi tiêu ngày thường,Action,REPORT_GENERAL
+Báo cáo chi tiêu năm,Action,REPORT_GENERAL
+Báo cáo chi tiêu tháng,Action,REPORT_GENERAL
+Báo cáo chi tiêu tuần,Action,REPORT_GENERAL
 Báo cáo chi ăn uống hôm qua,Action,Report
 Báo cáo chi ăn uống tháng này,Action,Report
 Báo cáo chi đi chợ tháng trước,Action,Report
@@ -24,10 +31,10 @@ Báo cáo chi đi lại hôm qua,Action,Report
 Báo cáo chi đi lại tháng trước,Action,Report
 Báo cáo chi đầu tư gần đây,Action,Report
 Báo cáo chi đầu tư tuần này,Action,Report
-Báo cáo giải trí tuần trước,Action,REPORT_GENERAL
-Báo cáo học phí tuần trước,Action,REPORT_GENERAL
-Báo cáo mua sắm tuần trước,Action,REPORT_GENERAL
-Báo cáo nhà cửa tuần trước,Action,REPORT_GENERAL
+Báo cáo giải trí tuần trước,Action,Report
+Báo cáo học phí tuần trước,Action,Report
+Báo cáo mua sắm tuần trước,Action,Report
+Báo cáo nhà cửa tuần trước,Action,Report
 Báo cáo tổng chi bảo hiểm trong tuần này,Action,Report
 Báo cáo tổng chi cà phê trong tháng trước,Action,Report
 Báo cáo tổng chi cắt tóc trong đợt vừa rồi,Action,Report
@@ -63,10 +70,10 @@ Báo cáo tổng chi đi lại trong hôm qua,Action,Report
 Báo cáo tổng chi điện nước trong tháng này,Action,Report
 Báo cáo tổng chi điện thoại trong tháng này,Action,Report
 Báo cáo tổng chi đầu tư trong đợt vừa rồi,Action,Report
-Báo cáo y tế tuần trước,Action,REPORT_GENERAL
-Báo cáo ăn uống tuần trước,Action,REPORT_GENERAL
-Báo cáo đi lại tuần trước,Action,REPORT_GENERAL
-Báo cáo điện nước tuần trước,Action,REPORT_GENERAL
+Báo cáo y tế tuần trước,Action,Report
+Báo cáo ăn uống tuần trước,Action,Report
+Báo cáo đi lại tuần trước,Action,Report
+Báo cáo điện nước tuần trước,Action,Report
 Bật bảo mật,Action,Setting
 Bật chế độ tiết kiệm pin,Action,Setting
 Bật chế độ trả lời dận dữ,Action,SET_TONE
@@ -2423,19 +2430,31 @@ Tháng này tiêu bao nhiêu rồi ha,Action,REPORT_GENERAL
 Tháng này tiêu bao nhiêu rồi nha,Action,REPORT_GENERAL
 Thêm 1 trieu vào mục tiêu tiết kiệm,Action,ADD_GOAL
 Thêm 1 triệu vào mục tiêu tiết kiệm,Action,ADD_GOAL
+Thêm 1.5 triệu vào ăn uống,Action,SET_LIMIT
+Thêm 10 triệu vào ăn uống,Action,SET_LIMIT
+Thêm 10tr vào ăn uống,Action,SET_LIMIT
 Thêm 120k vào mục tiêu tiết kiệm,Action,ADD_GOAL
 Thêm 15k vào mục tiêu tiết kiệm,Action,ADD_GOAL
+Thêm 1tr vào ăn uống,Action,SET_LIMIT
 Thêm 2 triệu vào mục tiêu tiết kiệm,Action,ADD_GOAL
+Thêm 2 triệu vào ăn uống,Action,SET_LIMIT
 Thêm 200k vào mục tiêu tiết kiệm,Action,ADD_GOAL
+Thêm 200k vào ăn uống,Action,SET_LIMIT
 Thêm 20k vào mục tiêu tiết kiệm,Action,ADD_GOAL
+Thêm 2tr vào ăn uống,Action,SET_LIMIT
 Thêm 2tr400 vào mục tiêu tiết kiệm,Action,ADD_GOAL
 Thêm 3 trieu vào mục tiêu tiết kiệm,Action,ADD_GOAL
 Thêm 3 triệu vào mục tiêu tiết kiệm,Action,ADD_GOAL
+Thêm 3 triệu vào ăn uống,Action,SET_LIMIT
 Thêm 300k vào mục tiêu tiết kiệm,Action,ADD_GOAL
 Thêm 35k vào mục tiêu tiết kiệm,Action,ADD_GOAL
+Thêm 3tr vào ăn uống,Action,SET_LIMIT
 Thêm 5 triệu vào mục tiêu tiết kiệm,Action,ADD_GOAL
+Thêm 5 triệu vào ăn uống,Action,SET_LIMIT
 Thêm 500k vào mục tiêu tiết kiệm,Action,ADD_GOAL
+Thêm 500k vào ăn uống,Action,SET_LIMIT
 Thêm 50k vào mục tiêu tiết kiệm,Action,ADD_GOAL
+Thêm 5tr vào ăn uống,Action,SET_LIMIT
 Thêm 750k vào mục tiêu tiết kiệm,Action,ADD_GOAL
 Thêm 80k vào mục tiêu tiết kiệm,Action,ADD_GOAL
 Thống kê chi tiêu gần đây,Action,REPORT_GENERAL
@@ -3554,6 +3573,9 @@ Xóa khoản điện nước vừa thêm,Action,DELETE_RECORD
 Xóa khoản điện thoại vừa thêm,Action,DELETE_RECORD
 Xóa khoản đầu tư vừa thêm,Action,DELETE_RECORD
 Xóa khoản đồ gia dụng vừa thêm,Action,DELETE_RECORD
+bao cao chi tieu ngay,Action,REPORT_GENERAL
+bao cao chi tieu thang,Action,REPORT_GENERAL
+bao cao chi tieu tuan,Action,REPORT_GENERAL
 bao cao tong chi thang nay,Action,REPORT_GENERAL
 bao cao tong chi thang nay ?,Action,REPORT_GENERAL
 bao cao tong chi thang nay a,Action,REPORT_GENERAL
@@ -3565,15 +3587,111 @@ bao cao tong chi thang nay vậy,Action,REPORT_GENERAL
 bao cao tong chi thang nay đi,Action,REPORT_GENERAL
 bat che do toi,Action,Setting
 bat dark mode,Action,Setting
+bot goi y chi tieu tuan nay,Action,SUGGEST_BUDGET
+bot goi y chi tieu tuan nay ?,Action,SUGGEST_BUDGET
+bot goi y chi tieu tuan nay bot,Action,SUGGEST_BUDGET
+bot goi y chi tieu tuan nay ha,Action,SUGGEST_BUDGET
+bot goi y chi tieu tuan nay mimo,Action,SUGGEST_BUDGET
+bot goi y chi tieu tuan nay nha,Action,SUGGEST_BUDGET
+bot goi y chi tieu tuan nay nhé,Action,SUGGEST_BUDGET
+bot goi y chi tieu tuan nay đi,Action,SUGGEST_BUDGET
+bù vào mục tiêu tiết kiệm 1.5 triệu,Action,SET_LIMIT
+bù vào mục tiêu tiết kiệm 10 triệu,Action,SET_LIMIT
+bù vào mục tiêu tiết kiệm 10tr,Action,SET_LIMIT
+bù vào mục tiêu tiết kiệm 1tr,Action,SET_LIMIT
+bù vào mục tiêu tiết kiệm 2 triệu,Action,SET_LIMIT
+bù vào mục tiêu tiết kiệm 200k,Action,SET_LIMIT
+bù vào mục tiêu tiết kiệm 2tr,Action,SET_LIMIT
+bù vào mục tiêu tiết kiệm 3 triệu,Action,SET_LIMIT
+bù vào mục tiêu tiết kiệm 3tr,Action,SET_LIMIT
+bù vào mục tiêu tiết kiệm 5 triệu,Action,SET_LIMIT
+bù vào mục tiêu tiết kiệm 500k,Action,SET_LIMIT
+bù vào mục tiêu tiết kiệm 5tr,Action,SET_LIMIT
+bật chế độ cham choc coi,Action,SET_TONE
+bật chế độ cham choc nha Mimo,Action,SET_TONE
+bật chế độ cham choc nha bạn,Action,SET_TONE
+bật chế độ cham choc nhe,Action,SET_TONE
+bật chế độ châm chọc,Action,SET_TONE
+bật chế độ dong cam,Action,SET_TONE
+bật chế độ dong cam coi,Action,SET_TONE
+bật chế độ dong cam giùm mình,Action,SET_TONE
+bật chế độ dong cam nhé,Action,SET_TONE
+bật chế độ dịu dàng nhé,Action,SET_TONE
+bật chế độ dịu dàng đi,Action,SET_TONE
+bật chế độ hai huoc coi,Action,SET_TONE
+bật chế độ hai huoc giùm mình,Action,SET_TONE
+bật chế độ hài hước,Action,SET_TONE
+bật chế độ hài hước thử xem,Action,SET_TONE
+bật chế độ nghiem tuc,Action,SET_TONE
 bật chế độ tối,Action,Setting
 bật chế độ tối giúp mình,Action,Setting
 bật chế độ tối nhé,Action,Setting
+bật chế độ vui ve coi,Action,SET_TONE
+bật chế độ vui ve nha,Action,SET_TONE
+bật chế độ vui ve nha Mimo,Action,SET_TONE
+bật chế độ vui ve nha bạn,Action,SET_TONE
+bật chế độ đồng cảm,Action,SET_TONE
 bật dark mode,Action,Setting
 bật giao diện tối,Action,Setting
 bật giao diện tối đi,Action,Setting
 bật lại chế độ tối sau khi cập nhật,Action,Setting
 bật night mode,Action,Setting
 bật theme tối,Action,Setting
+bỏ giao dịch lúc nãy đi giùm cái,Action,DELETE_RECORD
+bỏ giao dịch lúc nãy đi nha,Action,DELETE_RECORD
+bỏ giao dịch lúc nãy đi nhe Mimo,Action,DELETE_RECORD
+bỏ giao dịch lúc nãy đi nhé Mimo,Action,DELETE_RECORD
+bỏ giao dịch vừa nhập,Action,DELETE_RECORD
+bỏ giao dịch vừa nhập nha,Action,DELETE_RECORD
+bỏ giao dịch vừa nhập nhe Mimo,Action,DELETE_RECORD
+bỏ giao dịch vừa nhập nhé,Action,DELETE_RECORD
+bỏ giao dịch vừa nhập nhé Mimo,Action,DELETE_RECORD
+bỏ khoản chi tiêu vừa ghi,Action,DELETE_RECORD
+bỏ khoản chi tiêu vừa ghi giùm cái,Action,DELETE_RECORD
+bỏ khoản chi tiêu vừa ghi nha Mimo,Action,DELETE_RECORD
+bỏ khoản chi tiêu vừa ghi nhe Mimo,Action,DELETE_RECORD
+bỏ khoản chi tiêu vừa ghi nhé Mimo,Action,DELETE_RECORD
+bỏ khoản chi tiêu vừa ghi đi,Action,DELETE_RECORD
+bổ sung 1.5 triệu vào hạn mức,Action,SET_LIMIT
+bổ sung 10 triệu vào hạn mức,Action,SET_LIMIT
+bổ sung 10tr vào hạn mức,Action,SET_LIMIT
+bổ sung 1tr vào hạn mức,Action,SET_LIMIT
+bổ sung 2 triệu vào hạn mức,Action,SET_LIMIT
+bổ sung 200k vào hạn mức,Action,SET_LIMIT
+bổ sung 2tr vào hạn mức,Action,SET_LIMIT
+bổ sung 3 triệu vào hạn mức,Action,SET_LIMIT
+bổ sung 3tr vào hạn mức,Action,SET_LIMIT
+bổ sung 5 triệu vào hạn mức,Action,SET_LIMIT
+bổ sung 500k vào hạn mức,Action,SET_LIMIT
+bổ sung 5tr vào hạn mức,Action,SET_LIMIT
+bớt 1.5 triệu từ giới hạn giải trí,Action,SET_LIMIT
+bớt 10 triệu từ giới hạn giải trí,Action,SET_LIMIT
+bớt 10tr từ giới hạn giải trí,Action,SET_LIMIT
+bớt 1tr từ giới hạn giải trí,Action,SET_LIMIT
+bớt 2 triệu từ giới hạn giải trí,Action,SET_LIMIT
+bớt 200k từ giới hạn giải trí,Action,SET_LIMIT
+bớt 2tr từ giới hạn giải trí,Action,SET_LIMIT
+bớt 3 triệu từ giới hạn giải trí,Action,SET_LIMIT
+bớt 3tr từ giới hạn giải trí,Action,SET_LIMIT
+bớt 5 triệu từ giới hạn giải trí,Action,SET_LIMIT
+bớt 500k từ giới hạn giải trí,Action,SET_LIMIT
+bớt 5tr từ giới hạn giải trí,Action,SET_LIMIT
+cai thu nhap 10 củ nhé,Action,SET_INCOME
+cai thu nhap 10 triệu nha,Action,SET_INCOME
+cai thu nhap 10 triệu nha Mimo,Action,SET_INCOME
+cai thu nhap 10 triệu đồng đi,Action,SET_INCOME
+cai thu nhap 12 triệu,Action,SET_INCOME
+cai thu nhap 15 củ,Action,SET_INCOME
+cai thu nhap 15 củ nha,Action,SET_INCOME
+cai thu nhap 15tr nha Mimo,Action,SET_INCOME
+cai thu nhap 20tr,Action,SET_INCOME
+cai thu nhap 20tr nhé,Action,SET_INCOME
+cai thu nhap 30tr nha,Action,SET_INCOME
+cai thu nhap 5000k,Action,SET_INCOME
+cai thu nhap 5000k nha,Action,SET_INCOME
+cai thu nhap 5tr nha,Action,SET_INCOME
+cai thu nhap 5tr nha Mimo,Action,SET_INCOME
+cai thu nhap 8tr nhé,Action,SET_INCOME
 chi hết bao nhiêu tháng này,Action,REPORT_GENERAL
 chi hết bao nhiêu tháng này ?,Action,REPORT_GENERAL
 chi hết bao nhiêu tháng này a,Action,REPORT_GENERAL
@@ -3583,15 +3701,524 @@ chi hết bao nhiêu tháng này hả,Action,REPORT_GENERAL
 chi hết bao nhiêu tháng này nha,Action,REPORT_GENERAL
 chi hết bao nhiêu tháng này vậy,Action,REPORT_GENERAL
 chi hết bao nhiêu tháng này đi,Action,REPORT_GENERAL
+chi tieu cuoi tuan,Action,REPORT_GENERAL
+chi tieu ngay thu 2,Action,REPORT_GENERAL
+chi tieu ngay thuong,Action,REPORT_GENERAL
+chi tiêu cuối tuần,Action,REPORT_GENERAL
+chi tiêu ngày chủ nhật,Action,REPORT_GENERAL
+chi tiêu ngày lễ,Action,REPORT_GENERAL
+chi tiêu ngày thường,Action,REPORT_GENERAL
+chi tiêu ngày thứ 2,Action,REPORT_GENERAL
+chi tiêu ngày thứ 3,Action,REPORT_GENERAL
+chi tiêu ngày thứ 4,Action,REPORT_GENERAL
+chi tiêu ngày thứ 5,Action,REPORT_GENERAL
+chi tiêu ngày thứ 6,Action,REPORT_GENERAL
+chi tiêu ngày thứ 7,Action,REPORT_GENERAL
+chi tiêu ngày thứ ba,Action,REPORT_GENERAL
+chi tiêu ngày thứ bảy,Action,REPORT_GENERAL
+chi tiêu ngày thứ hai,Action,REPORT_GENERAL
+chi tiêu ngày thứ năm,Action,REPORT_GENERAL
+chi tiêu ngày thứ sáu,Action,REPORT_GENERAL
+chi tiêu ngày thứ tư,Action,REPORT_GENERAL
+chi tiêu thứ 2,Action,REPORT_GENERAL
+cho mimo nói chuyện kiểu châm chọc giùm mình,Action,SET_TONE
+cho mimo nói chuyện kiểu dan di nhe,Action,SET_TONE
+cho mimo nói chuyện kiểu de thuong coi,Action,SET_TONE
+cho mimo nói chuyện kiểu dong cam nha,Action,SET_TONE
+cho mimo nói chuyện kiểu dong cam nha Mimo,Action,SET_TONE
+cho mimo nói chuyện kiểu dong cam thử xem,Action,SET_TONE
+cho mimo nói chuyện kiểu dịu dàng đi,Action,SET_TONE
+cho mimo nói chuyện kiểu mẹ chồng,Action,SET_TONE
+cho mimo nói chuyện kiểu mẹ chồng giùm mình,Action,SET_TONE
+cho mimo nói chuyện kiểu mẹ chồng đi,Action,SET_TONE
+cho mimo nói chuyện kiểu nghiêm khắc nhe,Action,SET_TONE
+cho mimo nói chuyện kiểu nghiêm túc nha bạn,Action,SET_TONE
+cho mimo nói chuyện kiểu vui ve đi,Action,SET_TONE
+cho mimo nói chuyện kiểu vui vẻ nha,Action,SET_TONE
+cho mimo nói chuyện kiểu vui vẻ đi,Action,SET_TONE
+cho mimo nói chuyện kiểu đanh đá nhe,Action,SET_TONE
+cho mimo nói chuyện kiểu đồng cảm nhé,Action,SET_TONE
 cho mình bật chế độ tối,Action,Setting
+cho mình gợi ý chi tiêu,Action,SUGGEST_BUDGET
+cho mình gợi ý chi tiêu ?,Action,SUGGEST_BUDGET
+cho mình gợi ý chi tiêu bot,Action,SUGGEST_BUDGET
+cho mình gợi ý chi tiêu ha,Action,SUGGEST_BUDGET
+cho mình gợi ý chi tiêu mimo,Action,SUGGEST_BUDGET
+cho mình gợi ý chi tiêu nha,Action,SUGGEST_BUDGET
+cho mình gợi ý chi tiêu nhé,Action,SUGGEST_BUDGET
+cho mình gợi ý chi tiêu đi,Action,SUGGEST_BUDGET
+cho xin goi y chi tieu,Action,SUGGEST_BUDGET
+cho xin goi y chi tieu ?,Action,SUGGEST_BUDGET
+cho xin goi y chi tieu bot,Action,SUGGEST_BUDGET
+cho xin goi y chi tieu ha,Action,SUGGEST_BUDGET
+cho xin goi y chi tieu mimo,Action,SUGGEST_BUDGET
+cho xin goi y chi tieu nha,Action,SUGGEST_BUDGET
+cho xin goi y chi tieu nhé,Action,SUGGEST_BUDGET
+cho xin goi y chi tieu đi,Action,SUGGEST_BUDGET
+chuyen sang giong châm chọc nhe,Action,SET_TONE
+chuyen sang giong dễ thương đi,Action,SET_TONE
+chuyen sang giong dịu dàng nha bạn,Action,SET_TONE
+chuyen sang giong hai huoc giùm mình,Action,SET_TONE
+chuyen sang giong hài hước nha bạn,Action,SET_TONE
+chuyen sang giong mẹ chồng nha Mimo,Action,SET_TONE
+chuyen sang giong mẹ chồng đi,Action,SET_TONE
+chuyen sang giong nghiêm túc đi,Action,SET_TONE
+chuyen sang giong vui ve giùm mình,Action,SET_TONE
+chuyen sang giong vui ve nha Mimo,Action,SET_TONE
+chuyen sang giong vui vẻ,Action,SET_TONE
+chuyen sang giong đanh đá thử xem,Action,SET_TONE
+chuyen sang giong đồng cảm giùm mình,Action,SET_TONE
 chuyển app sang chế độ tối,Action,Setting
+chuyển style sang cham choc nhe,Action,SET_TONE
+chuyển style sang châm chọc nhe,Action,SET_TONE
+chuyển style sang dan di nha,Action,SET_TONE
+chuyển style sang de thuong nha bạn,Action,SET_TONE
+chuyển style sang dạn dĩ giùm mình,Action,SET_TONE
+chuyển style sang dịu dàng thử xem,Action,SET_TONE
+chuyển style sang hài hước,Action,SET_TONE
+chuyển style sang mẹ chồng,Action,SET_TONE
+chuyển style sang nghiêm túc coi,Action,SET_TONE
+chuyển style sang người yêu,Action,SET_TONE
+chuyển style sang vui ve nha,Action,SET_TONE
+chuyển style sang vui ve nha bạn,Action,SET_TONE
+chuyển style sang vui vẻ,Action,SET_TONE
+chuyển style sang vui vẻ nhé,Action,SET_TONE
+chuyển style sang vui vẻ đi,Action,SET_TONE
+chuyển style sang đanh đá giùm mình,Action,SET_TONE
+chuyển style sang đồng cảm giùm mình,Action,SET_TONE
+chốt hạn mức chi tiêu 1.5 triệu,Action,SET_LIMIT
+chốt hạn mức chi tiêu 10 triệu,Action,SET_LIMIT
+chốt hạn mức chi tiêu 10tr,Action,SET_LIMIT
+chốt hạn mức chi tiêu 1tr,Action,SET_LIMIT
+chốt hạn mức chi tiêu 2 triệu,Action,SET_LIMIT
+chốt hạn mức chi tiêu 200k,Action,SET_LIMIT
+chốt hạn mức chi tiêu 2tr,Action,SET_LIMIT
+chốt hạn mức chi tiêu 3 triệu,Action,SET_LIMIT
+chốt hạn mức chi tiêu 3tr,Action,SET_LIMIT
+chốt hạn mức chi tiêu 5 triệu,Action,SET_LIMIT
+chốt hạn mức chi tiêu 500k,Action,SET_LIMIT
+chốt hạn mức chi tiêu 5tr,Action,SET_LIMIT
+cài giọng nói cham choc giùm mình,Action,SET_TONE
+cài giọng nói cham choc nhé,Action,SET_TONE
+cài giọng nói châm chọc giùm mình,Action,SET_TONE
+cài giọng nói dan di nha,Action,SET_TONE
+cài giọng nói dan di đi,Action,SET_TONE
+cài giọng nói de thuong nha bạn,Action,SET_TONE
+cài giọng nói dong cam nha,Action,SET_TONE
+cài giọng nói dễ thương nha Mimo,Action,SET_TONE
+cài giọng nói dịu dàng coi,Action,SET_TONE
+cài giọng nói hai huoc coi,Action,SET_TONE
+cài giọng nói hai huoc nhe,Action,SET_TONE
+cài giọng nói người yêu nhé,Action,SET_TONE
+cài giọng nói vui vẻ nha bạn,Action,SET_TONE
+cài giọng nói vui vẻ nhé,Action,SET_TONE
+cài giọng nói vui vẻ thử xem,Action,SET_TONE
+cài giọng nói đanh đá,Action,SET_TONE
+cài giọng nói đanh đá coi,Action,SET_TONE
+cài giọng nói đồng cảm nhé,Action,SET_TONE
+cài hạn mức ăn uống là 1.5 triệu,Action,SET_LIMIT
+cài hạn mức ăn uống là 10 triệu,Action,SET_LIMIT
+cài hạn mức ăn uống là 10tr,Action,SET_LIMIT
+cài hạn mức ăn uống là 1tr,Action,SET_LIMIT
+cài hạn mức ăn uống là 2 triệu,Action,SET_LIMIT
+cài hạn mức ăn uống là 200k,Action,SET_LIMIT
+cài hạn mức ăn uống là 2tr,Action,SET_LIMIT
+cài hạn mức ăn uống là 3 triệu,Action,SET_LIMIT
+cài hạn mức ăn uống là 3tr,Action,SET_LIMIT
+cài hạn mức ăn uống là 5 triệu,Action,SET_LIMIT
+cài hạn mức ăn uống là 500k,Action,SET_LIMIT
+cài hạn mức ăn uống là 5tr,Action,SET_LIMIT
+cài đặt hạn mức chi tiêu 1.5 triệu,Action,SET_LIMIT
+cài đặt hạn mức chi tiêu 10 triệu,Action,SET_LIMIT
+cài đặt hạn mức chi tiêu 10tr,Action,SET_LIMIT
+cài đặt hạn mức chi tiêu 1tr,Action,SET_LIMIT
+cài đặt hạn mức chi tiêu 2 triệu,Action,SET_LIMIT
+cài đặt hạn mức chi tiêu 200k,Action,SET_LIMIT
+cài đặt hạn mức chi tiêu 2tr,Action,SET_LIMIT
+cài đặt hạn mức chi tiêu 3 triệu,Action,SET_LIMIT
+cài đặt hạn mức chi tiêu 3tr,Action,SET_LIMIT
+cài đặt hạn mức chi tiêu 5 triệu,Action,SET_LIMIT
+cài đặt hạn mức chi tiêu 500k,Action,SET_LIMIT
+cài đặt hạn mức chi tiêu 5tr,Action,SET_LIMIT
+cài đặt thu nhập hàng tháng là 10 triệu nha,Action,SET_INCOME
+cài đặt thu nhập hàng tháng là 10 triệu đi,Action,SET_INCOME
+cài đặt thu nhập hàng tháng là 10 triệu đồng,Action,SET_INCOME
+cài đặt thu nhập hàng tháng là 12 triệu nha,Action,SET_INCOME
+cài đặt thu nhập hàng tháng là 15 củ nhé,Action,SET_INCOME
+cài đặt thu nhập hàng tháng là 15tr nha Mimo,Action,SET_INCOME
+cài đặt thu nhập hàng tháng là 20 triệu nha,Action,SET_INCOME
+cài đặt thu nhập hàng tháng là 20tr nhé,Action,SET_INCOME
+cài đặt thu nhập hàng tháng là 25 củ nha Mimo,Action,SET_INCOME
+cài đặt thu nhập hàng tháng là 5000k nha,Action,SET_INCOME
+cài đặt thu nhập hàng tháng là 5tr nhé,Action,SET_INCOME
+cài đặt thu nhập hàng tháng là 7 củ nha,Action,SET_INCOME
+cài đặt thu nhập hàng tháng là 7 củ đi,Action,SET_INCOME
+cài đặt thu nhập hàng tháng là 8tr nha Mimo,Action,SET_INCOME
+cập nhật thu nhập là 10 củ nha,Action,SET_INCOME
+cập nhật thu nhập là 10 củ nha Mimo,Action,SET_INCOME
+cập nhật thu nhập là 12 triệu nhé,Action,SET_INCOME
+cập nhật thu nhập là 20tr,Action,SET_INCOME
+cập nhật thu nhập là 30tr nhé,Action,SET_INCOME
+cập nhật thu nhập là 5000k nhé,Action,SET_INCOME
+cập nhật thu nhập là 5000k đi,Action,SET_INCOME
+cập nhật thu nhập là 5tr,Action,SET_INCOME
+cập nhật thu nhập là 5tr nha Mimo,Action,SET_INCOME
+cập nhật thu nhập là 5tr nhé,Action,SET_INCOME
+cập nhật thu nhập là 7 củ nhé,Action,SET_INCOME
+cập nhật thu nhập là 8.5tr nha Mimo,Action,SET_INCOME
+cộng thêm 1.5 triệu vào hạn mức đi lại,Action,SET_LIMIT
+cộng thêm 10 triệu vào hạn mức đi lại,Action,SET_LIMIT
+cộng thêm 10tr vào hạn mức đi lại,Action,SET_LIMIT
+cộng thêm 1tr vào hạn mức đi lại,Action,SET_LIMIT
+cộng thêm 2 triệu vào hạn mức đi lại,Action,SET_LIMIT
+cộng thêm 200k vào hạn mức đi lại,Action,SET_LIMIT
+cộng thêm 2tr vào hạn mức đi lại,Action,SET_LIMIT
+cộng thêm 3 triệu vào hạn mức đi lại,Action,SET_LIMIT
+cộng thêm 3tr vào hạn mức đi lại,Action,SET_LIMIT
+cộng thêm 5 triệu vào hạn mức đi lại,Action,SET_LIMIT
+cộng thêm 500k vào hạn mức đi lại,Action,SET_LIMIT
+cộng thêm 5tr vào hạn mức đi lại,Action,SET_LIMIT
+de xuat goi y chi tieu,Action,SUGGEST_BUDGET
+de xuat goi y chi tieu ?,Action,SUGGEST_BUDGET
+de xuat goi y chi tieu a,Action,SUGGEST_BUDGET
+de xuat goi y chi tieu bot,Action,SUGGEST_BUDGET
+de xuat goi y chi tieu ha,Action,SUGGEST_BUDGET
+de xuat goi y chi tieu hả,Action,SUGGEST_BUDGET
+de xuat goi y chi tieu mimo,Action,SUGGEST_BUDGET
+de xuat goi y chi tieu nha,Action,SUGGEST_BUDGET
+de xuat goi y chi tieu nhé,Action,SUGGEST_BUDGET
+de xuat goi y chi tieu vậy,Action,SUGGEST_BUDGET
+de xuat goi y chi tieu đi,Action,SUGGEST_BUDGET
+doi giong cham choc giùm mình,Action,SET_TONE
+doi giong cham choc nhe,Action,SET_TONE
+doi giong châm chọc nha bạn,Action,SET_TONE
+doi giong de thuong nha,Action,SET_TONE
+doi giong de thuong đi,Action,SET_TONE
+doi giong dong cam nha bạn,Action,SET_TONE
+doi giong dong cam nhe,Action,SET_TONE
+doi giong dong cam nhé,Action,SET_TONE
+doi giong mẹ chồng,Action,SET_TONE
+doi giong nghiêm túc coi,Action,SET_TONE
+doi giong nghiêm túc thử xem,Action,SET_TONE
+doi giong người yêu nha,Action,SET_TONE
+doi giong người yêu nhé,Action,SET_TONE
+doi giong vui vẻ giùm mình,Action,SET_TONE
+doi giong vui vẻ thử xem,Action,SET_TONE
+doi giong đanh đá,Action,SET_TONE
+doi giong đồng cảm coi,Action,SET_TONE
+doi giong đồng cảm giùm mình,Action,SET_TONE
+doi ten thanh An nhe,Action,SET_USERNAME
+doi ten thanh An nhé,Action,SET_USERNAME
+doi ten thanh Dũng,Action,SET_USERNAME
+doi ten thanh Dũng nha bạn,Action,SET_USERNAME
+doi ten thanh Dũng nhé Mimo,Action,SET_USERNAME
+doi ten thanh Hải nha Mimo,Action,SET_USERNAME
+doi ten thanh Khánh nhé Mimo,Action,SET_USERNAME
+doi ten thanh Linh,Action,SET_USERNAME
+doi ten thanh Linh nha,Action,SET_USERNAME
+doi ten thanh Linh đi,Action,SET_USERNAME
+doi ten thanh Lâm,Action,SET_USERNAME
+doi ten thanh Nam nhe,Action,SET_USERNAME
+doi ten thanh Phúc,Action,SET_USERNAME
+doi ten thanh Phương nhe,Action,SET_USERNAME
+doi ten thanh Thảo nhé,Action,SET_USERNAME
+doi ten thanh Thảo đi,Action,SET_USERNAME
+doi ten thanh Tùng,Action,SET_USERNAME
+doi ten thanh Tùng nha,Action,SET_USERNAME
+doi ten thanh Tùng nha Mimo,Action,SET_USERNAME
+doi ten thanh Vy nhé Mimo,Action,SET_USERNAME
 dạo này mình đã chi cho học phí bao nhiêu rồi,Action,Report
 dạo này mình đã chi cho linh tinh bao nhiêu rồi,Action,Report
 dạo này mình đã chi cho sửa xe bao nhiêu rồi,Action,Report
+export dữ liệu hôm qua để mình xem,Action,EXPORT_DATA
+export dữ liệu nam nay,Action,EXPORT_DATA
+export dữ liệu nam nay qua mail nhe,Action,EXPORT_DATA
+export dữ liệu quý này để mình xem,Action,EXPORT_DATA
+export dữ liệu thang nay,Action,EXPORT_DATA
+export dữ liệu tháng trước nhe,Action,EXPORT_DATA
+export dữ liệu tháng trước về email,Action,EXPORT_DATA
+export dữ liệu tuan nay vào hòm thư,Action,EXPORT_DATA
+export dữ liệu tuan nay về email,Action,EXPORT_DATA
+export dữ liệu tuan nay để mình xem,Action,EXPORT_DATA
+export dữ liệu tuan truoc nhe,Action,EXPORT_DATA
 giúp tôi bật chế độ tối,Action,Setting
+giảm 1.5 triệu hạn mức đi lại,Action,SET_LIMIT
+giảm 10 triệu hạn mức đi lại,Action,SET_LIMIT
+giảm 10tr hạn mức đi lại,Action,SET_LIMIT
+giảm 1tr hạn mức đi lại,Action,SET_LIMIT
+giảm 2 triệu hạn mức đi lại,Action,SET_LIMIT
+giảm 200k hạn mức đi lại,Action,SET_LIMIT
+giảm 2tr hạn mức đi lại,Action,SET_LIMIT
+giảm 3 triệu hạn mức đi lại,Action,SET_LIMIT
+giảm 3tr hạn mức đi lại,Action,SET_LIMIT
+giảm 5 triệu hạn mức đi lại,Action,SET_LIMIT
+giảm 500k hạn mức đi lại,Action,SET_LIMIT
+giảm 5tr hạn mức đi lại,Action,SET_LIMIT
+giảm giới hạn ăn uống xuống 1.5 triệu,Action,SET_LIMIT
+giảm giới hạn ăn uống xuống 10 triệu,Action,SET_LIMIT
+giảm giới hạn ăn uống xuống 10tr,Action,SET_LIMIT
+giảm giới hạn ăn uống xuống 1tr,Action,SET_LIMIT
+giảm giới hạn ăn uống xuống 2 triệu,Action,SET_LIMIT
+giảm giới hạn ăn uống xuống 200k,Action,SET_LIMIT
+giảm giới hạn ăn uống xuống 2tr,Action,SET_LIMIT
+giảm giới hạn ăn uống xuống 3 triệu,Action,SET_LIMIT
+giảm giới hạn ăn uống xuống 3tr,Action,SET_LIMIT
+giảm giới hạn ăn uống xuống 5 triệu,Action,SET_LIMIT
+giảm giới hạn ăn uống xuống 500k,Action,SET_LIMIT
+giảm giới hạn ăn uống xuống 5tr,Action,SET_LIMIT
+goi minh la Hà nha,Action,SET_USERNAME
+goi minh la Hải nhe,Action,SET_USERNAME
+goi minh la Lâm nha,Action,SET_USERNAME
+goi minh la Nam nha,Action,SET_USERNAME
+goi minh la Nam nha bạn,Action,SET_USERNAME
+goi minh la Nam nhé,Action,SET_USERNAME
+goi minh la Nam đi,Action,SET_USERNAME
+goi minh la Sơn nhé,Action,SET_USERNAME
+goi minh la Thảo nha,Action,SET_USERNAME
+goi minh la Tùng nhe,Action,SET_USERNAME
+goi minh la Tùng nhé,Action,SET_USERNAME
+goi minh la Vy nha,Action,SET_USERNAME
+goi toi la An,Action,SET_USERNAME
+goi toi la Dương đi,Action,SET_USERNAME
+goi toi la Hoàng nhé,Action,SET_USERNAME
+goi toi la Huy nhe,Action,SET_USERNAME
+goi toi la Hà nhé Mimo,Action,SET_USERNAME
+goi toi la Linh nhe,Action,SET_USERNAME
+goi toi la Linh nhé Mimo,Action,SET_USERNAME
+goi toi la Lâm nhé,Action,SET_USERNAME
+goi toi la Phúc đi,Action,SET_USERNAME
+goi toi la Phương,Action,SET_USERNAME
+goi toi la Phương nhe,Action,SET_USERNAME
+goi toi la Sơn nhe,Action,SET_USERNAME
+goi toi la Thảo nhé Mimo,Action,SET_USERNAME
+goi toi la Tùng đi,Action,SET_USERNAME
+goi toi la Vy nha Mimo,Action,SET_USERNAME
+goi y chi tieu hom nay,Action,SUGGEST_BUDGET
+goi y chi tieu hom nay ?,Action,SUGGEST_BUDGET
+goi y chi tieu hom nay bot,Action,SUGGEST_BUDGET
+goi y chi tieu hom nay ha,Action,SUGGEST_BUDGET
+goi y chi tieu hom nay mimo,Action,SUGGEST_BUDGET
+goi y chi tieu hom nay nha,Action,SUGGEST_BUDGET
+goi y chi tieu hom nay nhé,Action,SUGGEST_BUDGET
+goi y chi tieu hom nay đi,Action,SUGGEST_BUDGET
+goi y chi tieu thang nay,Action,SUGGEST_BUDGET
+goi y chi tieu thang nay ?,Action,SUGGEST_BUDGET
+goi y chi tieu thang nay a,Action,SUGGEST_BUDGET
+goi y chi tieu thang nay bot,Action,SUGGEST_BUDGET
+goi y chi tieu thang nay ha,Action,SUGGEST_BUDGET
+goi y chi tieu thang nay hả,Action,SUGGEST_BUDGET
+goi y chi tieu thang nay mimo,Action,SUGGEST_BUDGET
+goi y chi tieu thang nay nha,Action,SUGGEST_BUDGET
+goi y chi tieu thang nay nhé,Action,SUGGEST_BUDGET
+goi y chi tieu thang nay vậy,Action,SUGGEST_BUDGET
+goi y chi tieu thang nay đi,Action,SUGGEST_BUDGET
+goi y chi tieu tuan nay,Action,SUGGEST_BUDGET
+goi y chi tieu tuan nay ?,Action,SUGGEST_BUDGET
+goi y chi tieu tuan nay bot,Action,SUGGEST_BUDGET
+goi y chi tieu tuan nay ha,Action,SUGGEST_BUDGET
+goi y chi tieu tuan nay mimo,Action,SUGGEST_BUDGET
+goi y chi tieu tuan nay nha,Action,SUGGEST_BUDGET
+goi y chi tieu tuan nay nhé,Action,SUGGEST_BUDGET
+goi y chi tieu tuan nay đi,Action,SUGGEST_BUDGET
+goi y tiet kiem,Action,SUGGEST_BUDGET
+goi y tiet kiem ?,Action,SUGGEST_BUDGET
+goi y tiet kiem bot,Action,SUGGEST_BUDGET
+goi y tiet kiem ha,Action,SUGGEST_BUDGET
+goi y tiet kiem mimo,Action,SUGGEST_BUDGET
+goi y tiet kiem nha,Action,SUGGEST_BUDGET
+goi y tiet kiem nhé,Action,SUGGEST_BUDGET
+goi y tiet kiem đi,Action,SUGGEST_BUDGET
+gui file excel hom nay qua email cho tôi,Action,EXPORT_DATA
+gui file excel hom nay về email,Action,EXPORT_DATA
+gui file excel năm nay,Action,EXPORT_DATA
+gui file excel năm nay di,Action,EXPORT_DATA
+gui file excel năm nay nha,Action,EXPORT_DATA
+gui file excel năm nay nhe,Action,EXPORT_DATA
+gui file excel năm nay về email,Action,EXPORT_DATA
+gui file excel quý này nha,Action,EXPORT_DATA
+gui file excel thang truoc,Action,EXPORT_DATA
+gui file excel tháng này vào hòm thư,Action,EXPORT_DATA
+gui file excel tuan truoc,Action,EXPORT_DATA
+gui file excel tuần này nha,Action,EXPORT_DATA
+gui file excel tuần trước di,Action,EXPORT_DATA
 gần đây mình đã chi cho đi chợ bao nhiêu rồi,Action,Report
 gần đây mình đã chi cho điện thoại bao nhiêu rồi,Action,Report
 gần đây mình đã tiêu hết bao nhiêu,Action,REPORT_GENERAL
+gọi mình là An nhe,Action,SET_USERNAME
+gọi mình là Dũng,Action,SET_USERNAME
+gọi mình là Dương,Action,SET_USERNAME
+gọi mình là Huy nhe,Action,SET_USERNAME
+gọi mình là Hà nha bạn,Action,SET_USERNAME
+gọi mình là Hải nhe,Action,SET_USERNAME
+gọi mình là Kiệt,Action,SET_USERNAME
+gọi mình là Kiệt nhé,Action,SET_USERNAME
+gọi mình là Lâm nhé,Action,SET_USERNAME
+gọi mình là Minh nha Mimo,Action,SET_USERNAME
+gọi mình là Nam nha bạn,Action,SET_USERNAME
+gọi mình là Phúc nhe,Action,SET_USERNAME
+gọi mình là Phương nha,Action,SET_USERNAME
+gọi mình là Thảo đi,Action,SET_USERNAME
+gọi mình là Trang,Action,SET_USERNAME
+gọi mình là Trang nhé,Action,SET_USERNAME
+gọi mình là Tùng,Action,SET_USERNAME
+gọi mình là Vy nha bạn,Action,SET_USERNAME
+gọi tôi là An nha bạn,Action,SET_USERNAME
+gọi tôi là Dũng nha,Action,SET_USERNAME
+gọi tôi là Dương nha bạn,Action,SET_USERNAME
+gọi tôi là Dương nhe,Action,SET_USERNAME
+gọi tôi là Huy nhé Mimo,Action,SET_USERNAME
+gọi tôi là Khánh nha,Action,SET_USERNAME
+gọi tôi là Linh nha bạn,Action,SET_USERNAME
+gọi tôi là Linh nhé,Action,SET_USERNAME
+gọi tôi là Linh nhé Mimo,Action,SET_USERNAME
+gọi tôi là Minh nha Mimo,Action,SET_USERNAME
+gọi tôi là Minh nha bạn,Action,SET_USERNAME
+gọi tôi là Minh nhé,Action,SET_USERNAME
+gọi tôi là Nam nhe,Action,SET_USERNAME
+gọi tôi là Phúc nhé Mimo,Action,SET_USERNAME
+gọi tôi là Phương nha,Action,SET_USERNAME
+gọi tôi là Phương nha bạn,Action,SET_USERNAME
+gọi tôi là Sơn nha Mimo,Action,SET_USERNAME
+gọi tôi là Tùng nhé,Action,SET_USERNAME
+gọi tôi là Vy nhe,Action,SET_USERNAME
+gọi tớ là Dương đi,Action,SET_USERNAME
+gọi tớ là Khang nhé Mimo,Action,SET_USERNAME
+gọi tớ là Khánh nhé,Action,SET_USERNAME
+gọi tớ là Linh nhe,Action,SET_USERNAME
+gọi tớ là Phúc nha Mimo,Action,SET_USERNAME
+gọi tớ là Phương nhé Mimo,Action,SET_USERNAME
+gọi tớ là Thảo nha,Action,SET_USERNAME
+gọi tớ là Tùng đi,Action,SET_USERNAME
+gọi tớ là Vy,Action,SET_USERNAME
+gọi tớ là Vy nha,Action,SET_USERNAME
+gọi tớ là Vy nhe,Action,SET_USERNAME
+gợi ý chi tiêu,Action,SUGGEST_BUDGET
+gợi ý chi tiêu ?,Action,SUGGEST_BUDGET
+gợi ý chi tiêu bot,Action,SUGGEST_BUDGET
+gợi ý chi tiêu cho mình,Action,SUGGEST_BUDGET
+gợi ý chi tiêu cho mình ?,Action,SUGGEST_BUDGET
+gợi ý chi tiêu cho mình bot,Action,SUGGEST_BUDGET
+gợi ý chi tiêu cho mình ha,Action,SUGGEST_BUDGET
+gợi ý chi tiêu cho mình mimo,Action,SUGGEST_BUDGET
+gợi ý chi tiêu cho mình nha,Action,SUGGEST_BUDGET
+gợi ý chi tiêu cho mình nhé,Action,SUGGEST_BUDGET
+gợi ý chi tiêu cho mình đi,Action,SUGGEST_BUDGET
+gợi ý chi tiêu ha,Action,SUGGEST_BUDGET
+gợi ý chi tiêu mimo,Action,SUGGEST_BUDGET
+gợi ý chi tiêu nha,Action,SUGGEST_BUDGET
+gợi ý chi tiêu nhé,Action,SUGGEST_BUDGET
+gợi ý chi tiêu tháng này,Action,SUGGEST_BUDGET
+gợi ý chi tiêu tháng này ?,Action,SUGGEST_BUDGET
+gợi ý chi tiêu tháng này bot,Action,SUGGEST_BUDGET
+gợi ý chi tiêu tháng này ha,Action,SUGGEST_BUDGET
+gợi ý chi tiêu tháng này mimo,Action,SUGGEST_BUDGET
+gợi ý chi tiêu tháng này nha,Action,SUGGEST_BUDGET
+gợi ý chi tiêu tháng này nhé,Action,SUGGEST_BUDGET
+gợi ý chi tiêu tháng này đi,Action,SUGGEST_BUDGET
+gợi ý chi tiêu tuần này,Action,SUGGEST_BUDGET
+gợi ý chi tiêu tuần này ?,Action,SUGGEST_BUDGET
+gợi ý chi tiêu tuần này a,Action,SUGGEST_BUDGET
+gợi ý chi tiêu tuần này bot,Action,SUGGEST_BUDGET
+gợi ý chi tiêu tuần này ha,Action,SUGGEST_BUDGET
+gợi ý chi tiêu tuần này hả,Action,SUGGEST_BUDGET
+gợi ý chi tiêu tuần này mimo,Action,SUGGEST_BUDGET
+gợi ý chi tiêu tuần này nha,Action,SUGGEST_BUDGET
+gợi ý chi tiêu tuần này nhé,Action,SUGGEST_BUDGET
+gợi ý chi tiêu tuần này vậy,Action,SUGGEST_BUDGET
+gợi ý chi tiêu tuần này đi,Action,SUGGEST_BUDGET
+gợi ý chi tiêu đi,Action,SUGGEST_BUDGET
+gợi ý hạn mức chi tiêu,Action,SUGGEST_BUDGET
+gợi ý hạn mức chi tiêu ?,Action,SUGGEST_BUDGET
+gợi ý hạn mức chi tiêu bot,Action,SUGGEST_BUDGET
+gợi ý hạn mức chi tiêu ha,Action,SUGGEST_BUDGET
+gợi ý hạn mức chi tiêu mimo,Action,SUGGEST_BUDGET
+gợi ý hạn mức chi tiêu nha,Action,SUGGEST_BUDGET
+gợi ý hạn mức chi tiêu nhé,Action,SUGGEST_BUDGET
+gợi ý hạn mức chi tiêu đi,Action,SUGGEST_BUDGET
+gợi ý ngân sách tháng này,Action,SUGGEST_BUDGET
+gợi ý ngân sách tháng này ?,Action,SUGGEST_BUDGET
+gợi ý ngân sách tháng này a,Action,SUGGEST_BUDGET
+gợi ý ngân sách tháng này bot,Action,SUGGEST_BUDGET
+gợi ý ngân sách tháng này ha,Action,SUGGEST_BUDGET
+gợi ý ngân sách tháng này hả,Action,SUGGEST_BUDGET
+gợi ý ngân sách tháng này mimo,Action,SUGGEST_BUDGET
+gợi ý ngân sách tháng này nha,Action,SUGGEST_BUDGET
+gợi ý ngân sách tháng này nhé,Action,SUGGEST_BUDGET
+gợi ý ngân sách tháng này vậy,Action,SUGGEST_BUDGET
+gợi ý ngân sách tháng này đi,Action,SUGGEST_BUDGET
+gợi ý tiết kiệm,Action,SUGGEST_BUDGET
+gợi ý tiết kiệm ?,Action,SUGGEST_BUDGET
+gợi ý tiết kiệm a,Action,SUGGEST_BUDGET
+gợi ý tiết kiệm bot,Action,SUGGEST_BUDGET
+gợi ý tiết kiệm ha,Action,SUGGEST_BUDGET
+gợi ý tiết kiệm hả,Action,SUGGEST_BUDGET
+gợi ý tiết kiệm mimo,Action,SUGGEST_BUDGET
+gợi ý tiết kiệm nha,Action,SUGGEST_BUDGET
+gợi ý tiết kiệm nhé,Action,SUGGEST_BUDGET
+gợi ý tiết kiệm tháng này,Action,SUGGEST_BUDGET
+gợi ý tiết kiệm tháng này ?,Action,SUGGEST_BUDGET
+gợi ý tiết kiệm tháng này bot,Action,SUGGEST_BUDGET
+gợi ý tiết kiệm tháng này ha,Action,SUGGEST_BUDGET
+gợi ý tiết kiệm tháng này mimo,Action,SUGGEST_BUDGET
+gợi ý tiết kiệm tháng này nha,Action,SUGGEST_BUDGET
+gợi ý tiết kiệm tháng này nhé,Action,SUGGEST_BUDGET
+gợi ý tiết kiệm tháng này đi,Action,SUGGEST_BUDGET
+gợi ý tiết kiệm vậy,Action,SUGGEST_BUDGET
+gợi ý tiết kiệm đi,Action,SUGGEST_BUDGET
+gửi báo cáo 3 tháng qua để mình xem,Action,EXPORT_DATA
+gửi báo cáo hom qua qua mail nhe,Action,EXPORT_DATA
+gửi báo cáo hôm nay nha,Action,EXPORT_DATA
+gửi báo cáo hôm nay để mình xem,Action,EXPORT_DATA
+gửi báo cáo hôm qua nhe,Action,EXPORT_DATA
+gửi báo cáo hôm qua vào hòm thư,Action,EXPORT_DATA
+gửi báo cáo hôm qua để mình xem,Action,EXPORT_DATA
+gửi báo cáo nam nay qua gmail nhé Mimo,Action,EXPORT_DATA
+gửi báo cáo năm nay,Action,EXPORT_DATA
+gửi báo cáo năm nay qua gmail nhé Mimo,Action,EXPORT_DATA
+gửi báo cáo năm nay qua mail nhe,Action,EXPORT_DATA
+gửi báo cáo quý này nha,Action,EXPORT_DATA
+gửi báo cáo thang truoc nha,Action,EXPORT_DATA
+gửi báo cáo thang truoc qua mail nhe,Action,EXPORT_DATA
+gửi báo cáo thang truoc để mình xem,Action,EXPORT_DATA
+gửi báo cáo tháng này qua email cho tôi,Action,EXPORT_DATA
+gửi báo cáo tháng trước nhe,Action,EXPORT_DATA
+gửi báo cáo tuan nay vào hòm thư,Action,EXPORT_DATA
+gửi file excel hom nay,Action,EXPORT_DATA
+gửi file excel hôm nay,Action,EXPORT_DATA
+gửi file excel hôm nay nha,Action,EXPORT_DATA
+gửi file excel hôm nay để mình xem,Action,EXPORT_DATA
+gửi file excel nam nay,Action,EXPORT_DATA
+gửi file excel nam nay vào hòm thư,Action,EXPORT_DATA
+gửi file excel quý này qua email cho tôi,Action,EXPORT_DATA
+gửi file excel thang truoc di,Action,EXPORT_DATA
+gửi file excel thang truoc qua gmail nhé Mimo,Action,EXPORT_DATA
+gửi file excel tháng này nha,Action,EXPORT_DATA
+gửi file excel tháng trước về email,Action,EXPORT_DATA
+gửi file excel tháng trước để mình xem,Action,EXPORT_DATA
+gửi file excel tuan nay qua gmail nhé Mimo,Action,EXPORT_DATA
+gửi file excel tuan nay về email,Action,EXPORT_DATA
+gửi file excel tuan truoc nha,Action,EXPORT_DATA
+gửi file excel tuần trước qua gmail nhé Mimo,Action,EXPORT_DATA
+gửi file excel tuần trước vào hòm thư,Action,EXPORT_DATA
+gửi sao kê chi tiêu 3 tháng qua về email,Action,EXPORT_DATA
+gửi sao kê chi tiêu hom nay qua gmail nhé Mimo,Action,EXPORT_DATA
+gửi sao kê chi tiêu hom nay qua mail nhe,Action,EXPORT_DATA
+gửi sao kê chi tiêu hom qua nha,Action,EXPORT_DATA
+gửi sao kê chi tiêu hôm nay di,Action,EXPORT_DATA
+gửi sao kê chi tiêu hôm qua qua gmail nhé Mimo,Action,EXPORT_DATA
+gửi sao kê chi tiêu hôm qua qua mail nhe,Action,EXPORT_DATA
+gửi sao kê chi tiêu nam nay di,Action,EXPORT_DATA
+gửi sao kê chi tiêu năm nay qua mail nhe,Action,EXPORT_DATA
+gửi sao kê chi tiêu quý này qua mail nhe,Action,EXPORT_DATA
+gửi sao kê chi tiêu quý này vào hòm thư,Action,EXPORT_DATA
+gửi sao kê chi tiêu quý này để mình xem,Action,EXPORT_DATA
+gửi sao kê chi tiêu thang truoc qua mail nhe,Action,EXPORT_DATA
+gửi sao kê chi tiêu thang truoc vào hòm thư,Action,EXPORT_DATA
+gửi sao kê chi tiêu tháng này để mình xem,Action,EXPORT_DATA
+gửi sao kê chi tiêu tháng trước qua email cho tôi,Action,EXPORT_DATA
+gửi sao kê chi tiêu tuan nay nha,Action,EXPORT_DATA
+gửi sao kê chi tiêu tuan nay qua email cho tôi,Action,EXPORT_DATA
+gửi sao kê chi tiêu tuần này qua gmail nhé Mimo,Action,EXPORT_DATA
 hom nay da tieu may,Action,REPORT_GENERAL
 hom nay da tieu may bot,Action,REPORT_GENERAL
 hom nay da tieu may hả,Action,REPORT_GENERAL
@@ -3602,10 +4229,51 @@ hom nay tieu bao nhieu,Action,REPORT_GENERAL
 hom nay tieu bao nhieu bot,Action,REPORT_GENERAL
 hom nay tieu bao nhieu ha,Action,REPORT_GENERAL
 hom nay tieu bao nhieu nha,Action,REPORT_GENERAL
+huy cai vua ghi,Action,DELETE_RECORD
+huy cai vua ghi giùm cái,Action,DELETE_RECORD
+huy cai vua ghi nha,Action,DELETE_RECORD
+huy cai vua ghi nhé,Action,DELETE_RECORD
+huy khoan chi vua ghi nhé,Action,DELETE_RECORD
+huy khoan chi vua ghi nhé Mimo,Action,DELETE_RECORD
+huy khoan chi vua ghi đi,Action,DELETE_RECORD
+hãy gọi tớ là An,Action,SET_USERNAME
+hãy gọi tớ là An nha bạn,Action,SET_USERNAME
+hãy gọi tớ là An nhe,Action,SET_USERNAME
+hãy gọi tớ là Dũng nhé,Action,SET_USERNAME
+hãy gọi tớ là Dũng đi,Action,SET_USERNAME
+hãy gọi tớ là Hoàng nhe,Action,SET_USERNAME
+hãy gọi tớ là Hoàng nhé,Action,SET_USERNAME
+hãy gọi tớ là Hoàng đi,Action,SET_USERNAME
+hãy gọi tớ là Huy nha Mimo,Action,SET_USERNAME
+hãy gọi tớ là Hải nha,Action,SET_USERNAME
+hãy gọi tớ là Hải đi,Action,SET_USERNAME
+hãy gọi tớ là Khang nhé Mimo,Action,SET_USERNAME
+hãy gọi tớ là Khánh nhé,Action,SET_USERNAME
+hãy gọi tớ là Kiệt nha,Action,SET_USERNAME
+hãy gọi tớ là Kiệt nha bạn,Action,SET_USERNAME
+hãy gọi tớ là Kiệt đi,Action,SET_USERNAME
+hãy gọi tớ là Linh nhe,Action,SET_USERNAME
+hãy gọi tớ là Nam nha bạn,Action,SET_USERNAME
+hãy gọi tớ là Phương,Action,SET_USERNAME
+hãy gọi tớ là Thảo nha,Action,SET_USERNAME
+hãy gọi tớ là Vy nhé Mimo,Action,SET_USERNAME
+hãy gọi tớ là Vy đi,Action,SET_USERNAME
 hôm nay mình đã chi cho học phí bao nhiêu rồi,Action,Report
 hôm nay mình đã chi cho hội họp bao nhiêu rồi,Action,Report
 hôm nay mình đã chi cho mua sắm bao nhiêu rồi,Action,Report
 hôm nay mình đã tiêu hết bao nhiêu,Action,REPORT_GENERAL
+hôm nay tiêu hết 1.5 triệu,Action,REPORT_GENERAL
+hôm nay tiêu hết 10 triệu,Action,REPORT_GENERAL
+hôm nay tiêu hết 10tr,Action,REPORT_GENERAL
+hôm nay tiêu hết 1tr,Action,REPORT_GENERAL
+hôm nay tiêu hết 2 triệu,Action,REPORT_GENERAL
+hôm nay tiêu hết 200k,Action,REPORT_GENERAL
+hôm nay tiêu hết 2tr,Action,REPORT_GENERAL
+hôm nay tiêu hết 3 triệu,Action,REPORT_GENERAL
+hôm nay tiêu hết 3tr,Action,REPORT_GENERAL
+hôm nay tiêu hết 5 triệu,Action,REPORT_GENERAL
+hôm nay tiêu hết 500k,Action,REPORT_GENERAL
+hôm nay tiêu hết 5tr,Action,REPORT_GENERAL
 hôm nay đã tiêu mấy,Action,REPORT_GENERAL
 hôm nay đã tiêu mấy ?,Action,REPORT_GENERAL
 hôm nay đã tiêu mấy a,Action,REPORT_GENERAL
@@ -3617,8 +4285,108 @@ hôm nay đã tiêu mấy vậy,Action,REPORT_GENERAL
 hôm nay đã tiêu mấy đi,Action,REPORT_GENERAL
 hôm qua mình đã chi cho internet bao nhiêu rồi,Action,Report
 hôm qua mình đã tiêu hết bao nhiêu,Action,REPORT_GENERAL
+hủy cái vừa ghi,Action,DELETE_RECORD
+hủy cái vừa ghi nha,Action,DELETE_RECORD
+hủy cái vừa ghi nhé,Action,DELETE_RECORD
+hủy cái vừa ghi đi,Action,DELETE_RECORD
+hủy ghi chép vừa rồi,Action,DELETE_RECORD
+hủy ghi chép vừa rồi giùm cái,Action,DELETE_RECORD
+hủy ghi chép vừa rồi nha,Action,DELETE_RECORD
+hủy ghi chép vừa rồi nha Mimo,Action,DELETE_RECORD
+hủy ghi chép vừa rồi nhe Mimo,Action,DELETE_RECORD
+hủy ghi chép vừa rồi nhé,Action,DELETE_RECORD
+hủy giao dịch gần nhất,Action,DELETE_RECORD
+hủy giao dịch gần nhất nha,Action,DELETE_RECORD
+hủy giao dịch gần nhất nha Mimo,Action,DELETE_RECORD
+hủy giao dịch gần nhất nhé,Action,DELETE_RECORD
+hủy giao dịch gần nhất nhé Mimo,Action,DELETE_RECORD
+hủy giao dịch gần nhất đi,Action,DELETE_RECORD
+hủy giao dịch vừa lưu nha Mimo,Action,DELETE_RECORD
+hủy giao dịch vừa lưu nhe Mimo,Action,DELETE_RECORD
+hủy giao dịch vừa lưu nhé Mimo,Action,DELETE_RECORD
+hủy hóa đơn vừa ghi,Action,DELETE_RECORD
+hủy hóa đơn vừa ghi giùm cái,Action,DELETE_RECORD
+hủy hóa đơn vừa ghi nhe Mimo,Action,DELETE_RECORD
+hủy hóa đơn vừa ghi đi,Action,DELETE_RECORD
+hủy hóa đơn vừa rồi,Action,DELETE_RECORD
+hủy hóa đơn vừa rồi nha Mimo,Action,DELETE_RECORD
+hủy hóa đơn vừa rồi nhe Mimo,Action,DELETE_RECORD
+hủy hóa đơn vừa rồi nhé,Action,DELETE_RECORD
+hủy hóa đơn vừa rồi nhé Mimo,Action,DELETE_RECORD
+hủy hóa đơn vừa rồi đi,Action,DELETE_RECORD
+hủy khoản chi vừa ghi nha Mimo,Action,DELETE_RECORD
+hủy khoản chi vừa ghi nhe Mimo,Action,DELETE_RECORD
+hủy khoản chi vừa ghi nhé,Action,DELETE_RECORD
+hủy khoản chi vừa ghi nhé Mimo,Action,DELETE_RECORD
 kích hoạt dark mode,Action,Setting
 kích hoạt giao diện tối,Action,Setting
+luong thang la 10 củ nhé,Action,SET_INCOME
+luong thang la 10 triệu đồng nha,Action,SET_INCOME
+luong thang la 10 triệu đồng nhé,Action,SET_INCOME
+luong thang la 12 triệu,Action,SET_INCOME
+luong thang la 12 triệu nha Mimo,Action,SET_INCOME
+luong thang la 12 triệu nhé,Action,SET_INCOME
+luong thang la 15 củ nhé,Action,SET_INCOME
+luong thang la 15 củ đi,Action,SET_INCOME
+luong thang la 15tr nha,Action,SET_INCOME
+luong thang la 20 triệu nha Mimo,Action,SET_INCOME
+luong thang la 20tr,Action,SET_INCOME
+luong thang la 20tr nha Mimo,Action,SET_INCOME
+luong thang la 25 củ nhé,Action,SET_INCOME
+luong thang la 5000k,Action,SET_INCOME
+luong thang la 5000k nha,Action,SET_INCOME
+luong thang la 5000k nhé,Action,SET_INCOME
+luong thang la 5000k đi,Action,SET_INCOME
+luong thang la 5tr nha,Action,SET_INCOME
+luong thang la 5tr nhé,Action,SET_INCOME
+luong thang la 7 củ nha,Action,SET_INCOME
+luong thang la 8.5tr nhé,Action,SET_INCOME
+luong thang la 8tr nha,Action,SET_INCOME
+luong thang la 8tr nha Mimo,Action,SET_INCOME
+lương cứng mỗi tháng của tôi là 10 củ đi,Action,SET_INCOME
+lương cứng mỗi tháng của tôi là 10 triệu nhé,Action,SET_INCOME
+lương cứng mỗi tháng của tôi là 10 triệu đồng,Action,SET_INCOME
+lương cứng mỗi tháng của tôi là 10 triệu đồng nha Mimo,Action,SET_INCOME
+lương cứng mỗi tháng của tôi là 12 triệu nha,Action,SET_INCOME
+lương cứng mỗi tháng của tôi là 20tr nha,Action,SET_INCOME
+lương cứng mỗi tháng của tôi là 25 củ nhé,Action,SET_INCOME
+lương cứng mỗi tháng của tôi là 5000k,Action,SET_INCOME
+lương cứng mỗi tháng của tôi là 5000k đi,Action,SET_INCOME
+lương cứng mỗi tháng của tôi là 5tr,Action,SET_INCOME
+lương cứng mỗi tháng của tôi là 5tr nha Mimo,Action,SET_INCOME
+lương cứng mỗi tháng của tôi là 7 củ nhé,Action,SET_INCOME
+lương cứng mỗi tháng của tôi là 7 củ đi,Action,SET_INCOME
+lương cứng mỗi tháng của tôi là 8tr nhé,Action,SET_INCOME
+lương tháng của mình là 10 củ nha,Action,SET_INCOME
+lương tháng của mình là 10 triệu nha,Action,SET_INCOME
+lương tháng của mình là 10 triệu nha Mimo,Action,SET_INCOME
+lương tháng của mình là 10 triệu đi,Action,SET_INCOME
+lương tháng của mình là 10 triệu đồng nhé,Action,SET_INCOME
+lương tháng của mình là 12 triệu nha,Action,SET_INCOME
+lương tháng của mình là 12 triệu nhé,Action,SET_INCOME
+lương tháng của mình là 15 củ nhé,Action,SET_INCOME
+lương tháng của mình là 15tr nha,Action,SET_INCOME
+lương tháng của mình là 15tr nhé,Action,SET_INCOME
+lương tháng của mình là 20 triệu nhé,Action,SET_INCOME
+lương tháng của mình là 25 củ nha,Action,SET_INCOME
+lương tháng của mình là 25 củ nhé,Action,SET_INCOME
+lương tháng của mình là 30tr,Action,SET_INCOME
+lương tháng của mình là 30tr nha,Action,SET_INCOME
+lương tháng của mình là 30tr nha Mimo,Action,SET_INCOME
+lương tháng của mình là 5000k nhé,Action,SET_INCOME
+lương tháng của mình là 5tr nha Mimo,Action,SET_INCOME
+lương tháng của mình là 5tr nhé,Action,SET_INCOME
+lương tháng của mình là 7 củ đi,Action,SET_INCOME
+lương tháng của mình là 8tr nhé,Action,SET_INCOME
+lương tháng của mình là 8tr đi,Action,SET_INCOME
+mimo goi y chi tieu giup minh,Action,SUGGEST_BUDGET
+mimo goi y chi tieu giup minh ?,Action,SUGGEST_BUDGET
+mimo goi y chi tieu giup minh bot,Action,SUGGEST_BUDGET
+mimo goi y chi tieu giup minh ha,Action,SUGGEST_BUDGET
+mimo goi y chi tieu giup minh mimo,Action,SUGGEST_BUDGET
+mimo goi y chi tieu giup minh nha,Action,SUGGEST_BUDGET
+mimo goi y chi tieu giup minh nhé,Action,SUGGEST_BUDGET
+mimo goi y chi tieu giup minh đi,Action,SUGGEST_BUDGET
 minh da tieu bao nhieu thang nay,Action,REPORT_GENERAL
 minh da tieu bao nhieu thang nay ?,Action,REPORT_GENERAL
 minh da tieu bao nhieu thang nay a,Action,REPORT_GENERAL
@@ -3634,6 +4402,61 @@ mấy hôm nay mình đã chi cho mỹ phẩm bao nhiêu rồi,Action,Report
 mấy hôm nay mình đã chi cho sửa xe bao nhiêu rồi,Action,Report
 mấy hôm nay mình đã tiêu hết bao nhiêu,Action,REPORT_GENERAL
 mở chế độ ban đêm,Action,Setting
+noi chuyen kieu châm chọc,Action,SET_TONE
+noi chuyen kieu châm chọc nha,Action,SET_TONE
+noi chuyen kieu châm chọc nha bạn,Action,SET_TONE
+noi chuyen kieu dan di giùm mình,Action,SET_TONE
+noi chuyen kieu de thuong giùm mình,Action,SET_TONE
+noi chuyen kieu de thuong nha Mimo,Action,SET_TONE
+noi chuyen kieu de thuong nhe,Action,SET_TONE
+noi chuyen kieu dong cam nhe,Action,SET_TONE
+noi chuyen kieu dễ thương nhe,Action,SET_TONE
+noi chuyen kieu dễ thương nhé,Action,SET_TONE
+noi chuyen kieu dễ thương thử xem,Action,SET_TONE
+noi chuyen kieu hài hước nha,Action,SET_TONE
+noi chuyen kieu nghiêm khắc coi,Action,SET_TONE
+noi chuyen kieu nghiêm túc,Action,SET_TONE
+noi chuyen kieu nghiêm túc đi,Action,SET_TONE
+noi chuyen kieu người yêu coi,Action,SET_TONE
+noi chuyen kieu người yêu nha bạn,Action,SET_TONE
+noi chuyen kieu vui ve đi,Action,SET_TONE
+noi chuyen kieu vui vẻ nha Mimo,Action,SET_TONE
+noi chuyen kieu đanh đá nhe,Action,SET_TONE
+noi chuyen kieu đồng cảm,Action,SET_TONE
+nói chuyện kiểu cham choc,Action,SET_TONE
+nói chuyện kiểu dong cam đi,Action,SET_TONE
+nói chuyện kiểu dễ thương nha bạn,Action,SET_TONE
+nói chuyện kiểu dễ thương nhe,Action,SET_TONE
+nói chuyện kiểu dễ thương thử xem,Action,SET_TONE
+nói chuyện kiểu hai huoc giùm mình,Action,SET_TONE
+nói chuyện kiểu hài hước giùm mình,Action,SET_TONE
+nói chuyện kiểu mẹ chồng nhé,Action,SET_TONE
+nói chuyện kiểu nghiêm khắc,Action,SET_TONE
+nói chuyện kiểu nghiêm túc nha Mimo,Action,SET_TONE
+nói chuyện kiểu người yêu nhé,Action,SET_TONE
+nói chuyện kiểu vui ve đi,Action,SET_TONE
+nói chuyện kiểu vui vẻ nha,Action,SET_TONE
+nói chuyện kiểu vui vẻ nha Mimo,Action,SET_TONE
+nói chuyện kiểu vui vẻ thử xem,Action,SET_TONE
+nói chuyện kiểu đanh đá thử xem,Action,SET_TONE
+nói giọng dan di,Action,SET_TONE
+nói giọng dan di nha Mimo,Action,SET_TONE
+nói giọng dong cam giùm mình,Action,SET_TONE
+nói giọng dạn dĩ nhe,Action,SET_TONE
+nói giọng dễ thương nha,Action,SET_TONE
+nói giọng dịu dàng coi,Action,SET_TONE
+nói giọng dịu dàng nhé,Action,SET_TONE
+nói giọng mẹ chồng,Action,SET_TONE
+nói giọng nghiem tuc coi,Action,SET_TONE
+nói giọng nghiem tuc nhe,Action,SET_TONE
+nói giọng nghiêm khắc,Action,SET_TONE
+nói giọng nghiêm khắc coi,Action,SET_TONE
+nói giọng nghiêm khắc thử xem,Action,SET_TONE
+nói giọng nghiêm túc nha bạn,Action,SET_TONE
+nói giọng vui ve,Action,SET_TONE
+nói giọng vui ve coi,Action,SET_TONE
+nói giọng đanh đá nha bạn,Action,SET_TONE
+nói giọng đồng cảm thử xem,Action,SET_TONE
 quý này mình đã chi cho giải trí bao nhiêu rồi,Action,Report
 quý này mình đã chi cho internet bao nhiêu rồi,Action,Report
 quý này mình đã chi cho linh tinh bao nhiêu rồi,Action,Report
@@ -3703,12 +4526,122 @@ sua lai khoan điện nước thanh 300k,Action,UPDATE_RECORD
 sua lai khoan điện nước thanh 500k,Action,UPDATE_RECORD
 sua lai khoan điện nước thanh 50k,Action,UPDATE_RECORD
 switch sang dark mode,Action,Setting
+tai sao ke hom nay di,Action,EXPORT_DATA
+tai sao ke hom nay về email,Action,EXPORT_DATA
+tai sao ke hom qua nha,Action,EXPORT_DATA
+tai sao ke hom qua qua email cho tôi,Action,EXPORT_DATA
+tai sao ke hôm qua qua gmail nhé Mimo,Action,EXPORT_DATA
+tai sao ke hôm qua về email,Action,EXPORT_DATA
+tai sao ke thang truoc,Action,EXPORT_DATA
+tai sao ke tuan nay,Action,EXPORT_DATA
+tai sao ke tuan nay di,Action,EXPORT_DATA
+tai sao ke tuan nay qua gmail nhé Mimo,Action,EXPORT_DATA
+tai sao ke tuan truoc để mình xem,Action,EXPORT_DATA
+tai sao ke tuần này di,Action,EXPORT_DATA
+tai sao ke tuần trước di,Action,EXPORT_DATA
+ten minh la An nhe,Action,SET_USERNAME
+ten minh la An nhé Mimo,Action,SET_USERNAME
+ten minh la Dũng nhé Mimo,Action,SET_USERNAME
+ten minh la Dương nha,Action,SET_USERNAME
+ten minh la Dương đi,Action,SET_USERNAME
+ten minh la Huy nha Mimo,Action,SET_USERNAME
+ten minh la Hà,Action,SET_USERNAME
+ten minh la Khang,Action,SET_USERNAME
+ten minh la Khang nhe,Action,SET_USERNAME
+ten minh la Kiệt,Action,SET_USERNAME
+ten minh la Minh nhé,Action,SET_USERNAME
+ten minh la Sơn nhe,Action,SET_USERNAME
+ten minh la Thảo nhe,Action,SET_USERNAME
+ten minh la Trang nha,Action,SET_USERNAME
+ten minh la Trang nha bạn,Action,SET_USERNAME
+ten minh la Trang nhé Mimo,Action,SET_USERNAME
 thang nay tieu bao nhieu roi,Action,REPORT_GENERAL
 thang nay tieu bao nhieu roi bot,Action,REPORT_GENERAL
 thang nay tieu bao nhieu roi hả,Action,REPORT_GENERAL
 thang nay tieu bao nhieu roi nha,Action,REPORT_GENERAL
 thang nay tieu bao nhieu roi vậy,Action,REPORT_GENERAL
 thang nay tieu bao nhieu roi đi,Action,REPORT_GENERAL
+thay đổi hạn mức chi tiêu thành 1.5 triệu,Action,SET_LIMIT
+thay đổi hạn mức chi tiêu thành 10 triệu,Action,SET_LIMIT
+thay đổi hạn mức chi tiêu thành 10tr,Action,SET_LIMIT
+thay đổi hạn mức chi tiêu thành 1tr,Action,SET_LIMIT
+thay đổi hạn mức chi tiêu thành 2 triệu,Action,SET_LIMIT
+thay đổi hạn mức chi tiêu thành 200k,Action,SET_LIMIT
+thay đổi hạn mức chi tiêu thành 2tr,Action,SET_LIMIT
+thay đổi hạn mức chi tiêu thành 3 triệu,Action,SET_LIMIT
+thay đổi hạn mức chi tiêu thành 3tr,Action,SET_LIMIT
+thay đổi hạn mức chi tiêu thành 5 triệu,Action,SET_LIMIT
+thay đổi hạn mức chi tiêu thành 500k,Action,SET_LIMIT
+thay đổi hạn mức chi tiêu thành 5tr,Action,SET_LIMIT
+thiết lập giới hạn chi tiêu 1.5 triệu,Action,SET_LIMIT
+thiết lập giới hạn chi tiêu 10 triệu,Action,SET_LIMIT
+thiết lập giới hạn chi tiêu 10tr,Action,SET_LIMIT
+thiết lập giới hạn chi tiêu 1tr,Action,SET_LIMIT
+thiết lập giới hạn chi tiêu 2 triệu,Action,SET_LIMIT
+thiết lập giới hạn chi tiêu 200k,Action,SET_LIMIT
+thiết lập giới hạn chi tiêu 2tr,Action,SET_LIMIT
+thiết lập giới hạn chi tiêu 3 triệu,Action,SET_LIMIT
+thiết lập giới hạn chi tiêu 3tr,Action,SET_LIMIT
+thiết lập giới hạn chi tiêu 5 triệu,Action,SET_LIMIT
+thiết lập giới hạn chi tiêu 500k,Action,SET_LIMIT
+thiết lập giới hạn chi tiêu 5tr,Action,SET_LIMIT
+thiết lập hạn mức ăn uống thành 1.5 triệu,Action,SET_LIMIT
+thiết lập hạn mức ăn uống thành 10 triệu,Action,SET_LIMIT
+thiết lập hạn mức ăn uống thành 10tr,Action,SET_LIMIT
+thiết lập hạn mức ăn uống thành 1tr,Action,SET_LIMIT
+thiết lập hạn mức ăn uống thành 2 triệu,Action,SET_LIMIT
+thiết lập hạn mức ăn uống thành 200k,Action,SET_LIMIT
+thiết lập hạn mức ăn uống thành 2tr,Action,SET_LIMIT
+thiết lập hạn mức ăn uống thành 3 triệu,Action,SET_LIMIT
+thiết lập hạn mức ăn uống thành 3tr,Action,SET_LIMIT
+thiết lập hạn mức ăn uống thành 5 triệu,Action,SET_LIMIT
+thiết lập hạn mức ăn uống thành 500k,Action,SET_LIMIT
+thiết lập hạn mức ăn uống thành 5tr,Action,SET_LIMIT
+thu nhap cua minh la 10 triệu nhé,Action,SET_INCOME
+thu nhap cua minh la 10 triệu đồng nhé,Action,SET_INCOME
+thu nhap cua minh la 12 triệu nha Mimo,Action,SET_INCOME
+thu nhap cua minh la 15 củ,Action,SET_INCOME
+thu nhap cua minh la 20 triệu,Action,SET_INCOME
+thu nhap cua minh la 20 triệu nha Mimo,Action,SET_INCOME
+thu nhap cua minh la 20tr,Action,SET_INCOME
+thu nhap cua minh la 20tr nhé,Action,SET_INCOME
+thu nhap cua minh la 30tr nhé,Action,SET_INCOME
+thu nhap cua minh la 5000k,Action,SET_INCOME
+thu nhap cua minh la 5tr nha Mimo,Action,SET_INCOME
+thu nhap cua minh la 7 củ nha,Action,SET_INCOME
+thu nhap cua minh la 8tr nha Mimo,Action,SET_INCOME
+thu nhập của mình là 10 củ,Action,SET_INCOME
+thu nhập của mình là 10 củ nhé,Action,SET_INCOME
+thu nhập của mình là 10 củ đi,Action,SET_INCOME
+thu nhập của mình là 10 triệu,Action,SET_INCOME
+thu nhập của mình là 10 triệu đồng đi,Action,SET_INCOME
+thu nhập của mình là 12 triệu,Action,SET_INCOME
+thu nhập của mình là 15 củ nhé,Action,SET_INCOME
+thu nhập của mình là 20tr,Action,SET_INCOME
+thu nhập của mình là 20tr nhé,Action,SET_INCOME
+thu nhập của mình là 30tr nha,Action,SET_INCOME
+thu nhập của mình là 8tr nhé,Action,SET_INCOME
+thu nhập của mình là 8tr đi,Action,SET_INCOME
+thu nhập mỗi tháng 10 củ đi,Action,SET_INCOME
+thu nhập mỗi tháng 10 triệu nha Mimo,Action,SET_INCOME
+thu nhập mỗi tháng 10 triệu đi,Action,SET_INCOME
+thu nhập mỗi tháng 10 triệu đồng nha Mimo,Action,SET_INCOME
+thu nhập mỗi tháng 10 triệu đồng nhé,Action,SET_INCOME
+thu nhập mỗi tháng 15 củ nhé,Action,SET_INCOME
+thu nhập mỗi tháng 15tr nhé,Action,SET_INCOME
+thu nhập mỗi tháng 20tr nhé,Action,SET_INCOME
+thu nhập mỗi tháng 25 củ nha Mimo,Action,SET_INCOME
+thu nhập mỗi tháng 25 củ nhé,Action,SET_INCOME
+thu nhập mỗi tháng 30tr nhé,Action,SET_INCOME
+thu nhập mỗi tháng 5000k nha,Action,SET_INCOME
+thu nhập mỗi tháng 5tr,Action,SET_INCOME
+thu nhập mỗi tháng 5tr nha,Action,SET_INCOME
+thu nhập mỗi tháng 5tr nhé,Action,SET_INCOME
+thu nhập mỗi tháng 7 củ đi,Action,SET_INCOME
+thu nhập mỗi tháng 8.5tr nha,Action,SET_INCOME
+thu nhập mỗi tháng 8.5tr nhé,Action,SET_INCOME
+thu nhập mỗi tháng 8tr,Action,SET_INCOME
+thu nhập mỗi tháng 8tr đi,Action,SET_INCOME
 tháng này mình đã chi cho học phí bao nhiêu rồi,Action,Report
 tháng này mình đã chi cho internet bao nhiêu rồi,Action,Report
 tháng này mình đã chi cho linh tinh bao nhiêu rồi,Action,Report
@@ -3737,6 +4670,9 @@ tháng trước mình đã chi cho xăng xe bao nhiêu rồi,Action,Report
 tháng trước mình đã chi cho ăn uống bao nhiêu rồi,Action,Report
 tháng trước mình đã chi cho điện nước bao nhiêu rồi,Action,Report
 tháng trước mình đã tiêu hết bao nhiêu,Action,REPORT_GENERAL
+thống kê chi tiêu cuối tuần,Action,REPORT_GENERAL
+thống kê chi tiêu ngày thường,Action,REPORT_GENERAL
+thống kê chi tiêu ngày thứ 2,Action,REPORT_GENERAL
 thống kê chi tiêu tháng này,Action,REPORT_GENERAL
 thống kê chi tiêu tháng này ?,Action,REPORT_GENERAL
 thống kê chi tiêu tháng này a,Action,REPORT_GENERAL
@@ -3828,6 +4764,18 @@ tong chi thang nay hả,Action,REPORT_GENERAL
 tong chi thang nay nha,Action,REPORT_GENERAL
 tong chi thang nay vậy,Action,REPORT_GENERAL
 tong chi thang nay đi,Action,REPORT_GENERAL
+trừ đi 1.5 triệu hạn mức ăn uống,Action,SET_LIMIT
+trừ đi 10 triệu hạn mức ăn uống,Action,SET_LIMIT
+trừ đi 10tr hạn mức ăn uống,Action,SET_LIMIT
+trừ đi 1tr hạn mức ăn uống,Action,SET_LIMIT
+trừ đi 2 triệu hạn mức ăn uống,Action,SET_LIMIT
+trừ đi 200k hạn mức ăn uống,Action,SET_LIMIT
+trừ đi 2tr hạn mức ăn uống,Action,SET_LIMIT
+trừ đi 3 triệu hạn mức ăn uống,Action,SET_LIMIT
+trừ đi 3tr hạn mức ăn uống,Action,SET_LIMIT
+trừ đi 5 triệu hạn mức ăn uống,Action,SET_LIMIT
+trừ đi 500k hạn mức ăn uống,Action,SET_LIMIT
+trừ đi 5tr hạn mức ăn uống,Action,SET_LIMIT
 tuan nay chi het bao nhieu,Action,REPORT_GENERAL
 tuan nay chi het bao nhieu bot,Action,REPORT_GENERAL
 tuan nay chi het bao nhieu hả,Action,REPORT_GENERAL
@@ -3846,7 +4794,95 @@ tuần này chi hết bao nhiêu vậy,Action,REPORT_GENERAL
 tuần này chi hết bao nhiêu đi,Action,REPORT_GENERAL
 tuần này mình đã tiêu hết bao nhiêu,Action,REPORT_GENERAL
 tuần trước mình đã tiêu hết bao nhiêu,Action,REPORT_GENERAL
+tên mình là An,Action,SET_USERNAME
+tên mình là An nha,Action,SET_USERNAME
+tên mình là Dũng nhe,Action,SET_USERNAME
+tên mình là Dương nha bạn,Action,SET_USERNAME
+tên mình là Hoàng nha Mimo,Action,SET_USERNAME
+tên mình là Hải,Action,SET_USERNAME
+tên mình là Hải nhé Mimo,Action,SET_USERNAME
+tên mình là Khang nha bạn,Action,SET_USERNAME
+tên mình là Khang đi,Action,SET_USERNAME
+tên mình là Khánh nha,Action,SET_USERNAME
+tên mình là Khánh nha Mimo,Action,SET_USERNAME
+tên mình là Linh đi,Action,SET_USERNAME
+tên mình là Lâm nha Mimo,Action,SET_USERNAME
+tên mình là Lâm nha bạn,Action,SET_USERNAME
+tên mình là Nam nha,Action,SET_USERNAME
+tên mình là Nam nha Mimo,Action,SET_USERNAME
+tên mình là Nam nhe,Action,SET_USERNAME
+tên mình là Ngọc nha Mimo,Action,SET_USERNAME
+tên mình là Phúc nhé Mimo,Action,SET_USERNAME
+tên mình là Thảo nha Mimo,Action,SET_USERNAME
+tên mình là Trang nha,Action,SET_USERNAME
+tên mình là Tùng đi,Action,SET_USERNAME
+tên tôi là An nhé Mimo,Action,SET_USERNAME
+tên tôi là Dũng nha Mimo,Action,SET_USERNAME
+tên tôi là Dương nhé Mimo,Action,SET_USERNAME
+tên tôi là Hoàng nha Mimo,Action,SET_USERNAME
+tên tôi là Hoàng đi,Action,SET_USERNAME
+tên tôi là Huy đi,Action,SET_USERNAME
+tên tôi là Hà đi,Action,SET_USERNAME
+tên tôi là Khánh nhe,Action,SET_USERNAME
+tên tôi là Linh nhé Mimo,Action,SET_USERNAME
+tên tôi là Minh,Action,SET_USERNAME
+tên tôi là Phúc nha Mimo,Action,SET_USERNAME
+tên tôi là Phúc nhé Mimo,Action,SET_USERNAME
+tên tôi là Phương nha bạn,Action,SET_USERNAME
+tên tôi là Thảo đi,Action,SET_USERNAME
+tên tôi là Trang nha Mimo,Action,SET_USERNAME
+tên tôi là Trang nha bạn,Action,SET_USERNAME
+tên tôi là Trang nhé Mimo,Action,SET_USERNAME
+tên tôi là Tùng nhe,Action,SET_USERNAME
+tên tôi là Tùng đi,Action,SET_USERNAME
+tên tôi là Vy nhé Mimo,Action,SET_USERNAME
 tôi muốn bật chế độ tối,Action,Setting
+tăng hạn mức ăn uống lên 1.5 triệu,Action,SET_LIMIT
+tăng hạn mức ăn uống lên 10 triệu,Action,SET_LIMIT
+tăng hạn mức ăn uống lên 10tr,Action,SET_LIMIT
+tăng hạn mức ăn uống lên 1tr,Action,SET_LIMIT
+tăng hạn mức ăn uống lên 2 triệu,Action,SET_LIMIT
+tăng hạn mức ăn uống lên 200k,Action,SET_LIMIT
+tăng hạn mức ăn uống lên 2tr,Action,SET_LIMIT
+tăng hạn mức ăn uống lên 3 triệu,Action,SET_LIMIT
+tăng hạn mức ăn uống lên 3tr,Action,SET_LIMIT
+tăng hạn mức ăn uống lên 5 triệu,Action,SET_LIMIT
+tăng hạn mức ăn uống lên 500k,Action,SET_LIMIT
+tăng hạn mức ăn uống lên 5tr,Action,SET_LIMIT
+tăng thêm 1.5 triệu cho mua sắm,Action,SET_LIMIT
+tăng thêm 10 triệu cho mua sắm,Action,SET_LIMIT
+tăng thêm 10tr cho mua sắm,Action,SET_LIMIT
+tăng thêm 1tr cho mua sắm,Action,SET_LIMIT
+tăng thêm 2 triệu cho mua sắm,Action,SET_LIMIT
+tăng thêm 200k cho mua sắm,Action,SET_LIMIT
+tăng thêm 2tr cho mua sắm,Action,SET_LIMIT
+tăng thêm 3 triệu cho mua sắm,Action,SET_LIMIT
+tăng thêm 3tr cho mua sắm,Action,SET_LIMIT
+tăng thêm 5 triệu cho mua sắm,Action,SET_LIMIT
+tăng thêm 500k cho mua sắm,Action,SET_LIMIT
+tăng thêm 5tr cho mua sắm,Action,SET_LIMIT
+tải sao kê 3 tháng qua nha,Action,EXPORT_DATA
+tải sao kê 3 tháng qua nhe,Action,EXPORT_DATA
+tải sao kê 3 tháng qua qua gmail nhé Mimo,Action,EXPORT_DATA
+tải sao kê 3 tháng qua để mình xem,Action,EXPORT_DATA
+tải sao kê hom qua qua gmail nhé Mimo,Action,EXPORT_DATA
+tải sao kê hom qua vào hòm thư,Action,EXPORT_DATA
+tải sao kê hôm qua di,Action,EXPORT_DATA
+tải sao kê hôm qua nha,Action,EXPORT_DATA
+tải sao kê hôm qua vào hòm thư,Action,EXPORT_DATA
+tải sao kê quý này,Action,EXPORT_DATA
+tải sao kê quý này nha,Action,EXPORT_DATA
+tải sao kê quý này qua mail nhe,Action,EXPORT_DATA
+tải sao kê tháng này về email,Action,EXPORT_DATA
+tải sao kê tháng trước di,Action,EXPORT_DATA
+tải sao kê tháng trước vào hòm thư,Action,EXPORT_DATA
+tải sao kê tuan nay,Action,EXPORT_DATA
+tải sao kê tuan nay qua gmail nhé Mimo,Action,EXPORT_DATA
+tải sao kê tuan truoc di,Action,EXPORT_DATA
+tải sao kê tuan truoc nhe,Action,EXPORT_DATA
+tải sao kê tuan truoc để mình xem,Action,EXPORT_DATA
+tải sao kê tuần này nhe,Action,EXPORT_DATA
+tải sao kê tuần này qua mail nhe,Action,EXPORT_DATA
 tắt chế độ tối đi,Action,Setting
 tắt dark mode giúp mình,Action,Setting
 tắt night mode,Action,Setting
@@ -3902,7 +4938,191 @@ xem tổng chi tuần này hả,Action,REPORT_GENERAL
 xem tổng chi tuần này nha,Action,REPORT_GENERAL
 xem tổng chi tuần này vậy,Action,REPORT_GENERAL
 xem tổng chi tuần này đi,Action,REPORT_GENERAL
+xin goi y chi tieu,Action,SUGGEST_BUDGET
+xin goi y chi tieu ?,Action,SUGGEST_BUDGET
+xin goi y chi tieu a,Action,SUGGEST_BUDGET
+xin goi y chi tieu bot,Action,SUGGEST_BUDGET
+xin goi y chi tieu ha,Action,SUGGEST_BUDGET
+xin goi y chi tieu hả,Action,SUGGEST_BUDGET
+xin goi y chi tieu nha,Action,SUGGEST_BUDGET
+xin goi y chi tieu vậy,Action,SUGGEST_BUDGET
+xin goi y chi tieu đi,Action,SUGGEST_BUDGET
+xin goi y han muc chi tieu,Action,SUGGEST_BUDGET
+xin goi y han muc chi tieu ?,Action,SUGGEST_BUDGET
+xin goi y han muc chi tieu bot,Action,SUGGEST_BUDGET
+xin goi y han muc chi tieu ha,Action,SUGGEST_BUDGET
+xin goi y han muc chi tieu mimo,Action,SUGGEST_BUDGET
+xin goi y han muc chi tieu nha,Action,SUGGEST_BUDGET
+xin goi y han muc chi tieu nhé,Action,SUGGEST_BUDGET
+xin goi y han muc chi tieu đi,Action,SUGGEST_BUDGET
 xoa ban ghi gan nhat,Action,DELETE_RECORD
+xoa cai vua nhap,Action,DELETE_RECORD
+xoa cai vua nhap giùm cái,Action,DELETE_RECORD
+xoa cai vua nhap nha Mimo,Action,DELETE_RECORD
+xoa cai vua nhap nhe Mimo,Action,DELETE_RECORD
+xoa cai vua nhap đi,Action,DELETE_RECORD
+xoa giao dich vua roi giùm cái,Action,DELETE_RECORD
+xoa giao dich vua roi nhe Mimo,Action,DELETE_RECORD
+xoa giao dich vua roi nhé Mimo,Action,DELETE_RECORD
+xoa giao dich vua roi đi,Action,DELETE_RECORD
+xoa ho minh giao dich gan nhat giùm cái,Action,DELETE_RECORD
+xoa ho minh giao dich gan nhat nha Mimo,Action,DELETE_RECORD
+xoa ho minh giao dich gan nhat nhe Mimo,Action,DELETE_RECORD
+xoa ho minh giao dich gan nhat nhé Mimo,Action,DELETE_RECORD
+xuat bao cao hôm nay nha,Action,EXPORT_DATA
+xuat bao cao hôm qua,Action,EXPORT_DATA
+xuat bao cao nam nay nha,Action,EXPORT_DATA
+xuat bao cao nam nay qua gmail nhé Mimo,Action,EXPORT_DATA
+xuat bao cao nam nay để mình xem,Action,EXPORT_DATA
+xuat bao cao năm nay,Action,EXPORT_DATA
+xuat bao cao năm nay qua gmail nhé Mimo,Action,EXPORT_DATA
+xuat bao cao năm nay về email,Action,EXPORT_DATA
+xuat bao cao quý này qua gmail nhé Mimo,Action,EXPORT_DATA
+xuat bao cao quý này về email,Action,EXPORT_DATA
+xuat bao cao thang nay di,Action,EXPORT_DATA
+xuat bao cao thang truoc nha,Action,EXPORT_DATA
+xuat bao cao tháng này qua mail nhe,Action,EXPORT_DATA
+xuat bao cao tháng này về email,Action,EXPORT_DATA
+xuat bao cao tuan nay,Action,EXPORT_DATA
+xuat bao cao tuan truoc để mình xem,Action,EXPORT_DATA
+xuat file csv hom nay,Action,EXPORT_DATA
+xuat file csv hom nay nha,Action,EXPORT_DATA
+xuat file csv hôm nay nhe,Action,EXPORT_DATA
+xuat file csv hôm nay qua mail nhe,Action,EXPORT_DATA
+xuat file csv hôm qua về email,Action,EXPORT_DATA
+xuat file csv hôm qua để mình xem,Action,EXPORT_DATA
+xuat file csv nam nay qua mail nhe,Action,EXPORT_DATA
+xuat file csv nam nay về email,Action,EXPORT_DATA
+xuat file csv nam nay để mình xem,Action,EXPORT_DATA
+xuat file csv thang truoc qua email cho tôi,Action,EXPORT_DATA
+xuat file csv tháng này di,Action,EXPORT_DATA
+xuat file csv tháng này qua email cho tôi,Action,EXPORT_DATA
+xuat file csv tuan truoc di,Action,EXPORT_DATA
+xuat file csv tuần này qua mail nhe,Action,EXPORT_DATA
+xuat file csv tuần trước nha,Action,EXPORT_DATA
+xuat file csv tuần trước qua gmail nhé Mimo,Action,EXPORT_DATA
+xuất báo cáo 3 tháng qua,Action,EXPORT_DATA
+xuất báo cáo 3 tháng qua nhe,Action,EXPORT_DATA
+xuất báo cáo 3 tháng qua qua email cho tôi,Action,EXPORT_DATA
+xuất báo cáo 3 tháng qua qua gmail nhé Mimo,Action,EXPORT_DATA
+xuất báo cáo hom nay nha,Action,EXPORT_DATA
+xuất báo cáo hom qua di,Action,EXPORT_DATA
+xuất báo cáo hom qua về email,Action,EXPORT_DATA
+xuất báo cáo hom qua để mình xem,Action,EXPORT_DATA
+xuất báo cáo hôm nay,Action,EXPORT_DATA
+xuất báo cáo hôm nay qua email cho tôi,Action,EXPORT_DATA
+xuất báo cáo hôm qua nha,Action,EXPORT_DATA
+xuất báo cáo hôm qua về email,Action,EXPORT_DATA
+xuất báo cáo hôm qua để mình xem,Action,EXPORT_DATA
+xuất báo cáo nam nay nhe,Action,EXPORT_DATA
+xuất báo cáo nam nay qua gmail nhé Mimo,Action,EXPORT_DATA
+xuất báo cáo năm nay qua mail nhe,Action,EXPORT_DATA
+xuất báo cáo năm nay vào hòm thư,Action,EXPORT_DATA
+xuất báo cáo quý này vào hòm thư,Action,EXPORT_DATA
+xuất báo cáo quý này về email,Action,EXPORT_DATA
+xuất báo cáo thang nay,Action,EXPORT_DATA
+xuất báo cáo thang truoc,Action,EXPORT_DATA
+xuất báo cáo thang truoc để mình xem,Action,EXPORT_DATA
+xuất báo cáo tháng này,Action,EXPORT_DATA
+xuất báo cáo tháng này di,Action,EXPORT_DATA
+xuất báo cáo tháng này để mình xem,Action,EXPORT_DATA
+xuất báo cáo tháng trước,Action,EXPORT_DATA
+xuất báo cáo tháng trước vào hòm thư,Action,EXPORT_DATA
+xuất báo cáo tuan nay qua email cho tôi,Action,EXPORT_DATA
+xuất báo cáo tuan truoc di,Action,EXPORT_DATA
+xuất báo cáo tuan truoc qua mail nhe,Action,EXPORT_DATA
+xuất báo cáo tuần trước nhe,Action,EXPORT_DATA
+xuất dữ liệu 3 tháng qua,Action,EXPORT_DATA
+xuất dữ liệu 3 tháng qua di,Action,EXPORT_DATA
+xuất dữ liệu 3 tháng qua nhe,Action,EXPORT_DATA
+xuất dữ liệu 3 tháng qua qua gmail nhé Mimo,Action,EXPORT_DATA
+xuất dữ liệu hom qua qua email cho tôi,Action,EXPORT_DATA
+xuất dữ liệu hom qua về email,Action,EXPORT_DATA
+xuất dữ liệu nam nay qua gmail nhé Mimo,Action,EXPORT_DATA
+xuất dữ liệu năm nay vào hòm thư,Action,EXPORT_DATA
+xuất dữ liệu quý này nha,Action,EXPORT_DATA
+xuất dữ liệu quý này qua mail nhe,Action,EXPORT_DATA
+xuất dữ liệu thang truoc di,Action,EXPORT_DATA
+xuất dữ liệu tháng này qua gmail nhé Mimo,Action,EXPORT_DATA
+xuất dữ liệu tuan nay qua mail nhe,Action,EXPORT_DATA
+xuất dữ liệu tuần này qua gmail nhé Mimo,Action,EXPORT_DATA
+xuất excel 3 tháng qua di,Action,EXPORT_DATA
+xuất excel 3 tháng qua để mình xem,Action,EXPORT_DATA
+xuất excel hom nay,Action,EXPORT_DATA
+xuất excel hom nay di,Action,EXPORT_DATA
+xuất excel hom qua nhe,Action,EXPORT_DATA
+xuất excel hom qua để mình xem,Action,EXPORT_DATA
+xuất excel hôm qua qua gmail nhé Mimo,Action,EXPORT_DATA
+xuất excel nam nay vào hòm thư,Action,EXPORT_DATA
+xuất excel quý này nhe,Action,EXPORT_DATA
+xuất excel tháng này qua mail nhe,Action,EXPORT_DATA
+xuất excel tháng trước qua mail nhe,Action,EXPORT_DATA
+xuất excel tuan nay di,Action,EXPORT_DATA
+xuất excel tuan nay qua gmail nhé Mimo,Action,EXPORT_DATA
+xuất excel tuan truoc về email,Action,EXPORT_DATA
+xuất excel tuần này qua gmail nhé Mimo,Action,EXPORT_DATA
+xuất excel tuần trước qua mail nhe,Action,EXPORT_DATA
+xuất file csv 3 tháng qua qua mail nhe,Action,EXPORT_DATA
+xuất file csv 3 tháng qua về email,Action,EXPORT_DATA
+xuất file csv hôm nay về email,Action,EXPORT_DATA
+xuất file csv hôm nay để mình xem,Action,EXPORT_DATA
+xuất file csv nam nay,Action,EXPORT_DATA
+xuất file csv năm nay di,Action,EXPORT_DATA
+xuất file csv năm nay qua mail nhe,Action,EXPORT_DATA
+xuất file csv quý này vào hòm thư,Action,EXPORT_DATA
+xuất file csv quý này để mình xem,Action,EXPORT_DATA
+xuất file csv thang nay qua gmail nhé Mimo,Action,EXPORT_DATA
+xuất file csv tháng này để mình xem,Action,EXPORT_DATA
+xuất file csv tháng trước nhe,Action,EXPORT_DATA
+xóa bill vừa rồi nha Mimo,Action,DELETE_RECORD
+xóa bill vừa rồi nhe Mimo,Action,DELETE_RECORD
+xóa bill vừa rồi nhé,Action,DELETE_RECORD
+xóa bill vừa rồi nhé Mimo,Action,DELETE_RECORD
+xóa bill vừa rồi đi,Action,DELETE_RECORD
+xóa cái bill vừa nhập nha Mimo,Action,DELETE_RECORD
+xóa cái bill vừa nhập nhé,Action,DELETE_RECORD
+xóa cái bill vừa nhập đi,Action,DELETE_RECORD
+xóa cái vừa nhập,Action,DELETE_RECORD
+xóa cái vừa nhập giùm cái,Action,DELETE_RECORD
+xóa cái vừa nhập nha,Action,DELETE_RECORD
+xóa cái vừa nhập nha Mimo,Action,DELETE_RECORD
+xóa cái vừa nhập nhe Mimo,Action,DELETE_RECORD
+xóa cái vừa nhập nhé,Action,DELETE_RECORD
+xóa cái vừa nhập nhé Mimo,Action,DELETE_RECORD
+xóa cái vừa nhập đi,Action,DELETE_RECORD
+xóa giao dịch lúc nãy nhé Mimo,Action,DELETE_RECORD
+xóa giao dịch lúc nãy đi,Action,DELETE_RECORD
+xóa giao dịch vừa lưu,Action,DELETE_RECORD
+xóa giao dịch vừa lưu giùm cái,Action,DELETE_RECORD
+xóa giao dịch vừa lưu nha,Action,DELETE_RECORD
+xóa giao dịch vừa lưu nhe Mimo,Action,DELETE_RECORD
+xóa giao dịch vừa lưu nhé Mimo,Action,DELETE_RECORD
+xóa giao dịch vừa lưu đi,Action,DELETE_RECORD
+xóa giao dịch vừa rồi giùm cái,Action,DELETE_RECORD
+xóa giao dịch vừa rồi nha,Action,DELETE_RECORD
+xóa giao dịch vừa rồi nhe Mimo,Action,DELETE_RECORD
+xóa giao dịch vừa rồi đi,Action,DELETE_RECORD
+xóa hóa đơn gần nhất,Action,DELETE_RECORD
+xóa hóa đơn gần nhất giùm cái,Action,DELETE_RECORD
+xóa hóa đơn gần nhất nha,Action,DELETE_RECORD
+xóa hóa đơn gần nhất nhé,Action,DELETE_RECORD
+xóa hóa đơn gần nhất nhé Mimo,Action,DELETE_RECORD
+xóa hộ mình giao dịch gần nhất,Action,DELETE_RECORD
+xóa hộ mình giao dịch gần nhất nhe Mimo,Action,DELETE_RECORD
+xóa hộ mình giao dịch gần nhất nhé,Action,DELETE_RECORD
+xóa khoản chi vừa rồi giùm cái,Action,DELETE_RECORD
+xóa khoản chi vừa rồi nha,Action,DELETE_RECORD
+xóa khoản chi vừa rồi nha Mimo,Action,DELETE_RECORD
+xóa khoản chi vừa rồi nhé,Action,DELETE_RECORD
+xóa khoản chi vừa rồi nhé Mimo,Action,DELETE_RECORD
+xóa khoản chi vừa rồi đi,Action,DELETE_RECORD
+xóa lịch sử chi tiêu vừa rồi giùm cái,Action,DELETE_RECORD
+xóa lịch sử chi tiêu vừa rồi nha Mimo,Action,DELETE_RECORD
+xóa lịch sử chi tiêu vừa rồi nhe Mimo,Action,DELETE_RECORD
+xóa lịch sử chi tiêu vừa rồi nhé,Action,DELETE_RECORD
+xóa lịch sử chi tiêu vừa rồi nhé Mimo,Action,DELETE_RECORD
+xóa lịch sử vừa rồi đi nhé,Action,DELETE_RECORD
+xóa lịch sử vừa rồi đi đi,Action,DELETE_RECORD
 Đóng dark mode,Action,Setting
 Đóng hiển thị số dư,Action,Setting
 Đóng khóa ứng dụng,Action,Setting
@@ -3986,6 +5206,18 @@ xoa ban ghi gan nhat,Action,DELETE_RECORD
 Đặt giới hạn bảo hiểm 50k,Action,SET_LIMIT
 Đặt giới hạn bảo hiểm 80k,Action,SET_LIMIT
 Đặt giới hạn ca phe 500k,Action,SET_LIMIT
+Đặt giới hạn chi tiêu thành 1.5 triệu,Action,SET_LIMIT
+Đặt giới hạn chi tiêu thành 10 triệu,Action,SET_LIMIT
+Đặt giới hạn chi tiêu thành 10tr,Action,SET_LIMIT
+Đặt giới hạn chi tiêu thành 1tr,Action,SET_LIMIT
+Đặt giới hạn chi tiêu thành 2 triệu,Action,SET_LIMIT
+Đặt giới hạn chi tiêu thành 200k,Action,SET_LIMIT
+Đặt giới hạn chi tiêu thành 2tr,Action,SET_LIMIT
+Đặt giới hạn chi tiêu thành 3 triệu,Action,SET_LIMIT
+Đặt giới hạn chi tiêu thành 3tr,Action,SET_LIMIT
+Đặt giới hạn chi tiêu thành 5 triệu,Action,SET_LIMIT
+Đặt giới hạn chi tiêu thành 500k,Action,SET_LIMIT
+Đặt giới hạn chi tiêu thành 5tr,Action,SET_LIMIT
 Đặt giới hạn cà phê 200k,Action,SET_LIMIT
 Đặt giới hạn cà phê 20k,Action,SET_LIMIT
 Đặt giới hạn cà phê 50k,Action,SET_LIMIT
@@ -4695,1186 +5927,193 @@ xoa ban ghi gan nhat,Action,DELETE_RECORD
 đã tiêu bao nhiêu tháng này vậy,Action,REPORT_GENERAL
 đã tiêu bao nhiêu tháng này đi,Action,REPORT_GENERAL
 đóng chế độ tối,Action,Setting
-đợt vừa rồi mình đã tiêu hết bao nhiêu,Action,REPORT_GENERAL
-Đặt giới hạn chi tiêu thành 200k,Action,SET_LIMIT
-Đặt giới hạn chi tiêu thành 500k,Action,SET_LIMIT
-Đặt giới hạn chi tiêu thành 1tr,Action,SET_LIMIT
-Đặt giới hạn chi tiêu thành 2tr,Action,SET_LIMIT
-Đặt giới hạn chi tiêu thành 3tr,Action,SET_LIMIT
-Đặt giới hạn chi tiêu thành 5tr,Action,SET_LIMIT
-Đặt giới hạn chi tiêu thành 10tr,Action,SET_LIMIT
-Đặt giới hạn chi tiêu thành 1.5 triệu,Action,SET_LIMIT
-Đặt giới hạn chi tiêu thành 2 triệu,Action,SET_LIMIT
-Đặt giới hạn chi tiêu thành 3 triệu,Action,SET_LIMIT
-Đặt giới hạn chi tiêu thành 5 triệu,Action,SET_LIMIT
-Đặt giới hạn chi tiêu thành 10 triệu,Action,SET_LIMIT
-cài đặt hạn mức chi tiêu 200k,Action,SET_LIMIT
-cài đặt hạn mức chi tiêu 500k,Action,SET_LIMIT
-cài đặt hạn mức chi tiêu 1tr,Action,SET_LIMIT
-cài đặt hạn mức chi tiêu 2tr,Action,SET_LIMIT
-cài đặt hạn mức chi tiêu 3tr,Action,SET_LIMIT
-cài đặt hạn mức chi tiêu 5tr,Action,SET_LIMIT
-cài đặt hạn mức chi tiêu 10tr,Action,SET_LIMIT
-cài đặt hạn mức chi tiêu 1.5 triệu,Action,SET_LIMIT
-cài đặt hạn mức chi tiêu 2 triệu,Action,SET_LIMIT
-cài đặt hạn mức chi tiêu 3 triệu,Action,SET_LIMIT
-cài đặt hạn mức chi tiêu 5 triệu,Action,SET_LIMIT
-cài đặt hạn mức chi tiêu 10 triệu,Action,SET_LIMIT
-đặt giới hạn ăn uống 200k,Action,SET_LIMIT
-đặt giới hạn ăn uống 500k,Action,SET_LIMIT
-đặt giới hạn ăn uống 1tr,Action,SET_LIMIT
-đặt giới hạn ăn uống 2tr,Action,SET_LIMIT
-đặt giới hạn ăn uống 3tr,Action,SET_LIMIT
-đặt giới hạn ăn uống 5tr,Action,SET_LIMIT
-đặt giới hạn ăn uống 10tr,Action,SET_LIMIT
-đặt giới hạn ăn uống 1.5 triệu,Action,SET_LIMIT
-đặt giới hạn ăn uống 2 triệu,Action,SET_LIMIT
-đặt giới hạn ăn uống 3 triệu,Action,SET_LIMIT
-đặt giới hạn ăn uống 5 triệu,Action,SET_LIMIT
-đặt giới hạn ăn uống 10 triệu,Action,SET_LIMIT
-thay đổi hạn mức chi tiêu thành 200k,Action,SET_LIMIT
-thay đổi hạn mức chi tiêu thành 500k,Action,SET_LIMIT
-thay đổi hạn mức chi tiêu thành 1tr,Action,SET_LIMIT
-thay đổi hạn mức chi tiêu thành 2tr,Action,SET_LIMIT
-thay đổi hạn mức chi tiêu thành 3tr,Action,SET_LIMIT
-thay đổi hạn mức chi tiêu thành 5tr,Action,SET_LIMIT
-thay đổi hạn mức chi tiêu thành 10tr,Action,SET_LIMIT
-thay đổi hạn mức chi tiêu thành 1.5 triệu,Action,SET_LIMIT
-thay đổi hạn mức chi tiêu thành 2 triệu,Action,SET_LIMIT
-thay đổi hạn mức chi tiêu thành 3 triệu,Action,SET_LIMIT
-thay đổi hạn mức chi tiêu thành 5 triệu,Action,SET_LIMIT
-thay đổi hạn mức chi tiêu thành 10 triệu,Action,SET_LIMIT
-cài hạn mức ăn uống là 200k,Action,SET_LIMIT
-cài hạn mức ăn uống là 500k,Action,SET_LIMIT
-cài hạn mức ăn uống là 1tr,Action,SET_LIMIT
-cài hạn mức ăn uống là 2tr,Action,SET_LIMIT
-cài hạn mức ăn uống là 3tr,Action,SET_LIMIT
-cài hạn mức ăn uống là 5tr,Action,SET_LIMIT
-cài hạn mức ăn uống là 10tr,Action,SET_LIMIT
-cài hạn mức ăn uống là 1.5 triệu,Action,SET_LIMIT
-cài hạn mức ăn uống là 2 triệu,Action,SET_LIMIT
-cài hạn mức ăn uống là 3 triệu,Action,SET_LIMIT
-cài hạn mức ăn uống là 5 triệu,Action,SET_LIMIT
-cài hạn mức ăn uống là 10 triệu,Action,SET_LIMIT
-đặt hạn mức chi tiêu thành 200k,Action,SET_LIMIT
-đặt hạn mức chi tiêu thành 500k,Action,SET_LIMIT
-đặt hạn mức chi tiêu thành 1tr,Action,SET_LIMIT
-đặt hạn mức chi tiêu thành 2tr,Action,SET_LIMIT
-đặt hạn mức chi tiêu thành 3tr,Action,SET_LIMIT
-đặt hạn mức chi tiêu thành 5tr,Action,SET_LIMIT
-đặt hạn mức chi tiêu thành 10tr,Action,SET_LIMIT
-đặt hạn mức chi tiêu thành 1.5 triệu,Action,SET_LIMIT
-đặt hạn mức chi tiêu thành 2 triệu,Action,SET_LIMIT
-đặt hạn mức chi tiêu thành 3 triệu,Action,SET_LIMIT
-đặt hạn mức chi tiêu thành 5 triệu,Action,SET_LIMIT
-đặt hạn mức chi tiêu thành 10 triệu,Action,SET_LIMIT
-đặt giới hạn chi tiêu là 200k,Action,SET_LIMIT
-đặt giới hạn chi tiêu là 500k,Action,SET_LIMIT
-đặt giới hạn chi tiêu là 1tr,Action,SET_LIMIT
-đặt giới hạn chi tiêu là 2tr,Action,SET_LIMIT
-đặt giới hạn chi tiêu là 3tr,Action,SET_LIMIT
-đặt giới hạn chi tiêu là 5tr,Action,SET_LIMIT
-đặt giới hạn chi tiêu là 10tr,Action,SET_LIMIT
 đặt giới hạn chi tiêu là 1.5 triệu,Action,SET_LIMIT
-đặt giới hạn chi tiêu là 2 triệu,Action,SET_LIMIT
-đặt giới hạn chi tiêu là 3 triệu,Action,SET_LIMIT
-đặt giới hạn chi tiêu là 5 triệu,Action,SET_LIMIT
 đặt giới hạn chi tiêu là 10 triệu,Action,SET_LIMIT
-thiết lập hạn mức ăn uống thành 200k,Action,SET_LIMIT
-thiết lập hạn mức ăn uống thành 500k,Action,SET_LIMIT
-thiết lập hạn mức ăn uống thành 1tr,Action,SET_LIMIT
-thiết lập hạn mức ăn uống thành 2tr,Action,SET_LIMIT
-thiết lập hạn mức ăn uống thành 3tr,Action,SET_LIMIT
-thiết lập hạn mức ăn uống thành 5tr,Action,SET_LIMIT
-thiết lập hạn mức ăn uống thành 10tr,Action,SET_LIMIT
-thiết lập hạn mức ăn uống thành 1.5 triệu,Action,SET_LIMIT
-thiết lập hạn mức ăn uống thành 2 triệu,Action,SET_LIMIT
-thiết lập hạn mức ăn uống thành 3 triệu,Action,SET_LIMIT
-thiết lập hạn mức ăn uống thành 5 triệu,Action,SET_LIMIT
-thiết lập hạn mức ăn uống thành 10 triệu,Action,SET_LIMIT
-thiết lập giới hạn chi tiêu 200k,Action,SET_LIMIT
-thiết lập giới hạn chi tiêu 500k,Action,SET_LIMIT
-thiết lập giới hạn chi tiêu 1tr,Action,SET_LIMIT
-thiết lập giới hạn chi tiêu 2tr,Action,SET_LIMIT
-thiết lập giới hạn chi tiêu 3tr,Action,SET_LIMIT
-thiết lập giới hạn chi tiêu 5tr,Action,SET_LIMIT
-thiết lập giới hạn chi tiêu 10tr,Action,SET_LIMIT
-thiết lập giới hạn chi tiêu 1.5 triệu,Action,SET_LIMIT
-thiết lập giới hạn chi tiêu 2 triệu,Action,SET_LIMIT
-thiết lập giới hạn chi tiêu 3 triệu,Action,SET_LIMIT
-thiết lập giới hạn chi tiêu 5 triệu,Action,SET_LIMIT
-thiết lập giới hạn chi tiêu 10 triệu,Action,SET_LIMIT
-chốt hạn mức chi tiêu 200k,Action,SET_LIMIT
-chốt hạn mức chi tiêu 500k,Action,SET_LIMIT
-chốt hạn mức chi tiêu 1tr,Action,SET_LIMIT
-chốt hạn mức chi tiêu 2tr,Action,SET_LIMIT
-chốt hạn mức chi tiêu 3tr,Action,SET_LIMIT
-chốt hạn mức chi tiêu 5tr,Action,SET_LIMIT
-chốt hạn mức chi tiêu 10tr,Action,SET_LIMIT
-chốt hạn mức chi tiêu 1.5 triệu,Action,SET_LIMIT
-chốt hạn mức chi tiêu 2 triệu,Action,SET_LIMIT
-chốt hạn mức chi tiêu 3 triệu,Action,SET_LIMIT
-chốt hạn mức chi tiêu 5 triệu,Action,SET_LIMIT
-chốt hạn mức chi tiêu 10 triệu,Action,SET_LIMIT
-đặt lại giới hạn thành 200k,Action,SET_LIMIT
-đặt lại giới hạn thành 500k,Action,SET_LIMIT
-đặt lại giới hạn thành 1tr,Action,SET_LIMIT
-đặt lại giới hạn thành 2tr,Action,SET_LIMIT
-đặt lại giới hạn thành 3tr,Action,SET_LIMIT
-đặt lại giới hạn thành 5tr,Action,SET_LIMIT
-đặt lại giới hạn thành 10tr,Action,SET_LIMIT
+đặt giới hạn chi tiêu là 10tr,Action,SET_LIMIT
+đặt giới hạn chi tiêu là 1tr,Action,SET_LIMIT
+đặt giới hạn chi tiêu là 2 triệu,Action,SET_LIMIT
+đặt giới hạn chi tiêu là 200k,Action,SET_LIMIT
+đặt giới hạn chi tiêu là 2tr,Action,SET_LIMIT
+đặt giới hạn chi tiêu là 3 triệu,Action,SET_LIMIT
+đặt giới hạn chi tiêu là 3tr,Action,SET_LIMIT
+đặt giới hạn chi tiêu là 5 triệu,Action,SET_LIMIT
+đặt giới hạn chi tiêu là 500k,Action,SET_LIMIT
+đặt giới hạn chi tiêu là 5tr,Action,SET_LIMIT
+đặt giới hạn ăn uống 1.5 triệu,Action,SET_LIMIT
+đặt giới hạn ăn uống 10 triệu,Action,SET_LIMIT
+đặt giới hạn ăn uống 10tr,Action,SET_LIMIT
+đặt giới hạn ăn uống 1tr,Action,SET_LIMIT
+đặt giới hạn ăn uống 2 triệu,Action,SET_LIMIT
+đặt giới hạn ăn uống 200k,Action,SET_LIMIT
+đặt giới hạn ăn uống 2tr,Action,SET_LIMIT
+đặt giới hạn ăn uống 3 triệu,Action,SET_LIMIT
+đặt giới hạn ăn uống 3tr,Action,SET_LIMIT
+đặt giới hạn ăn uống 5 triệu,Action,SET_LIMIT
+đặt giới hạn ăn uống 500k,Action,SET_LIMIT
+đặt giới hạn ăn uống 5tr,Action,SET_LIMIT
+đặt hạn mức chi tiêu thành 1.5 triệu,Action,SET_LIMIT
+đặt hạn mức chi tiêu thành 10 triệu,Action,SET_LIMIT
+đặt hạn mức chi tiêu thành 10tr,Action,SET_LIMIT
+đặt hạn mức chi tiêu thành 1tr,Action,SET_LIMIT
+đặt hạn mức chi tiêu thành 2 triệu,Action,SET_LIMIT
+đặt hạn mức chi tiêu thành 200k,Action,SET_LIMIT
+đặt hạn mức chi tiêu thành 2tr,Action,SET_LIMIT
+đặt hạn mức chi tiêu thành 3 triệu,Action,SET_LIMIT
+đặt hạn mức chi tiêu thành 3tr,Action,SET_LIMIT
+đặt hạn mức chi tiêu thành 5 triệu,Action,SET_LIMIT
+đặt hạn mức chi tiêu thành 500k,Action,SET_LIMIT
+đặt hạn mức chi tiêu thành 5tr,Action,SET_LIMIT
 đặt lại giới hạn thành 1.5 triệu,Action,SET_LIMIT
-đặt lại giới hạn thành 2 triệu,Action,SET_LIMIT
-đặt lại giới hạn thành 3 triệu,Action,SET_LIMIT
-đặt lại giới hạn thành 5 triệu,Action,SET_LIMIT
 đặt lại giới hạn thành 10 triệu,Action,SET_LIMIT
-Thêm 200k vào ăn uống,Action,SET_LIMIT
-Thêm 500k vào ăn uống,Action,SET_LIMIT
-Thêm 1tr vào ăn uống,Action,SET_LIMIT
-Thêm 2tr vào ăn uống,Action,SET_LIMIT
-Thêm 3tr vào ăn uống,Action,SET_LIMIT
-Thêm 5tr vào ăn uống,Action,SET_LIMIT
-Thêm 10tr vào ăn uống,Action,SET_LIMIT
-Thêm 1.5 triệu vào ăn uống,Action,SET_LIMIT
-Thêm 2 triệu vào ăn uống,Action,SET_LIMIT
-Thêm 3 triệu vào ăn uống,Action,SET_LIMIT
-Thêm 5 triệu vào ăn uống,Action,SET_LIMIT
-Thêm 10 triệu vào ăn uống,Action,SET_LIMIT
-cộng thêm 200k vào hạn mức đi lại,Action,SET_LIMIT
-cộng thêm 500k vào hạn mức đi lại,Action,SET_LIMIT
-cộng thêm 1tr vào hạn mức đi lại,Action,SET_LIMIT
-cộng thêm 2tr vào hạn mức đi lại,Action,SET_LIMIT
-cộng thêm 3tr vào hạn mức đi lại,Action,SET_LIMIT
-cộng thêm 5tr vào hạn mức đi lại,Action,SET_LIMIT
-cộng thêm 10tr vào hạn mức đi lại,Action,SET_LIMIT
-cộng thêm 1.5 triệu vào hạn mức đi lại,Action,SET_LIMIT
-cộng thêm 2 triệu vào hạn mức đi lại,Action,SET_LIMIT
-cộng thêm 3 triệu vào hạn mức đi lại,Action,SET_LIMIT
-cộng thêm 5 triệu vào hạn mức đi lại,Action,SET_LIMIT
-cộng thêm 10 triệu vào hạn mức đi lại,Action,SET_LIMIT
-tăng thêm 200k cho mua sắm,Action,SET_LIMIT
-tăng thêm 500k cho mua sắm,Action,SET_LIMIT
-tăng thêm 1tr cho mua sắm,Action,SET_LIMIT
-tăng thêm 2tr cho mua sắm,Action,SET_LIMIT
-tăng thêm 3tr cho mua sắm,Action,SET_LIMIT
-tăng thêm 5tr cho mua sắm,Action,SET_LIMIT
-tăng thêm 10tr cho mua sắm,Action,SET_LIMIT
-tăng thêm 1.5 triệu cho mua sắm,Action,SET_LIMIT
-tăng thêm 2 triệu cho mua sắm,Action,SET_LIMIT
-tăng thêm 3 triệu cho mua sắm,Action,SET_LIMIT
-tăng thêm 5 triệu cho mua sắm,Action,SET_LIMIT
-tăng thêm 10 triệu cho mua sắm,Action,SET_LIMIT
-bù vào mục tiêu tiết kiệm 200k,Action,SET_LIMIT
-bù vào mục tiêu tiết kiệm 500k,Action,SET_LIMIT
-bù vào mục tiêu tiết kiệm 1tr,Action,SET_LIMIT
-bù vào mục tiêu tiết kiệm 2tr,Action,SET_LIMIT
-bù vào mục tiêu tiết kiệm 3tr,Action,SET_LIMIT
-bù vào mục tiêu tiết kiệm 5tr,Action,SET_LIMIT
-bù vào mục tiêu tiết kiệm 10tr,Action,SET_LIMIT
-bù vào mục tiêu tiết kiệm 1.5 triệu,Action,SET_LIMIT
-bù vào mục tiêu tiết kiệm 2 triệu,Action,SET_LIMIT
-bù vào mục tiêu tiết kiệm 3 triệu,Action,SET_LIMIT
-bù vào mục tiêu tiết kiệm 5 triệu,Action,SET_LIMIT
-bù vào mục tiêu tiết kiệm 10 triệu,Action,SET_LIMIT
-bổ sung 200k vào hạn mức,Action,SET_LIMIT
-bổ sung 500k vào hạn mức,Action,SET_LIMIT
-bổ sung 1tr vào hạn mức,Action,SET_LIMIT
-bổ sung 2tr vào hạn mức,Action,SET_LIMIT
-bổ sung 3tr vào hạn mức,Action,SET_LIMIT
-bổ sung 5tr vào hạn mức,Action,SET_LIMIT
-bổ sung 10tr vào hạn mức,Action,SET_LIMIT
-bổ sung 1.5 triệu vào hạn mức,Action,SET_LIMIT
-bổ sung 2 triệu vào hạn mức,Action,SET_LIMIT
-bổ sung 3 triệu vào hạn mức,Action,SET_LIMIT
-bổ sung 5 triệu vào hạn mức,Action,SET_LIMIT
-bổ sung 10 triệu vào hạn mức,Action,SET_LIMIT
-tăng hạn mức ăn uống lên 200k,Action,SET_LIMIT
-tăng hạn mức ăn uống lên 500k,Action,SET_LIMIT
-tăng hạn mức ăn uống lên 1tr,Action,SET_LIMIT
-tăng hạn mức ăn uống lên 2tr,Action,SET_LIMIT
-tăng hạn mức ăn uống lên 3tr,Action,SET_LIMIT
-tăng hạn mức ăn uống lên 5tr,Action,SET_LIMIT
-tăng hạn mức ăn uống lên 10tr,Action,SET_LIMIT
-tăng hạn mức ăn uống lên 1.5 triệu,Action,SET_LIMIT
-tăng hạn mức ăn uống lên 2 triệu,Action,SET_LIMIT
-tăng hạn mức ăn uống lên 3 triệu,Action,SET_LIMIT
-tăng hạn mức ăn uống lên 5 triệu,Action,SET_LIMIT
-tăng hạn mức ăn uống lên 10 triệu,Action,SET_LIMIT
-bớt 200k từ giới hạn giải trí,Action,SET_LIMIT
-bớt 500k từ giới hạn giải trí,Action,SET_LIMIT
-bớt 1tr từ giới hạn giải trí,Action,SET_LIMIT
-bớt 2tr từ giới hạn giải trí,Action,SET_LIMIT
-bớt 3tr từ giới hạn giải trí,Action,SET_LIMIT
-bớt 5tr từ giới hạn giải trí,Action,SET_LIMIT
-bớt 10tr từ giới hạn giải trí,Action,SET_LIMIT
-bớt 1.5 triệu từ giới hạn giải trí,Action,SET_LIMIT
-bớt 2 triệu từ giới hạn giải trí,Action,SET_LIMIT
-bớt 3 triệu từ giới hạn giải trí,Action,SET_LIMIT
-bớt 5 triệu từ giới hạn giải trí,Action,SET_LIMIT
-bớt 10 triệu từ giới hạn giải trí,Action,SET_LIMIT
-giảm 200k hạn mức đi lại,Action,SET_LIMIT
-giảm 500k hạn mức đi lại,Action,SET_LIMIT
-giảm 1tr hạn mức đi lại,Action,SET_LIMIT
-giảm 2tr hạn mức đi lại,Action,SET_LIMIT
-giảm 3tr hạn mức đi lại,Action,SET_LIMIT
-giảm 5tr hạn mức đi lại,Action,SET_LIMIT
-giảm 10tr hạn mức đi lại,Action,SET_LIMIT
-giảm 1.5 triệu hạn mức đi lại,Action,SET_LIMIT
-giảm 2 triệu hạn mức đi lại,Action,SET_LIMIT
-giảm 3 triệu hạn mức đi lại,Action,SET_LIMIT
-giảm 5 triệu hạn mức đi lại,Action,SET_LIMIT
-giảm 10 triệu hạn mức đi lại,Action,SET_LIMIT
-trừ đi 200k hạn mức ăn uống,Action,SET_LIMIT
-trừ đi 500k hạn mức ăn uống,Action,SET_LIMIT
-trừ đi 1tr hạn mức ăn uống,Action,SET_LIMIT
-trừ đi 2tr hạn mức ăn uống,Action,SET_LIMIT
-trừ đi 3tr hạn mức ăn uống,Action,SET_LIMIT
-trừ đi 5tr hạn mức ăn uống,Action,SET_LIMIT
-trừ đi 10tr hạn mức ăn uống,Action,SET_LIMIT
-trừ đi 1.5 triệu hạn mức ăn uống,Action,SET_LIMIT
-trừ đi 2 triệu hạn mức ăn uống,Action,SET_LIMIT
-trừ đi 3 triệu hạn mức ăn uống,Action,SET_LIMIT
-trừ đi 5 triệu hạn mức ăn uống,Action,SET_LIMIT
-trừ đi 10 triệu hạn mức ăn uống,Action,SET_LIMIT
-giảm giới hạn ăn uống xuống 200k,Action,SET_LIMIT
-giảm giới hạn ăn uống xuống 500k,Action,SET_LIMIT
-giảm giới hạn ăn uống xuống 1tr,Action,SET_LIMIT
-giảm giới hạn ăn uống xuống 2tr,Action,SET_LIMIT
-giảm giới hạn ăn uống xuống 3tr,Action,SET_LIMIT
-giảm giới hạn ăn uống xuống 5tr,Action,SET_LIMIT
-giảm giới hạn ăn uống xuống 10tr,Action,SET_LIMIT
-giảm giới hạn ăn uống xuống 1.5 triệu,Action,SET_LIMIT
-giảm giới hạn ăn uống xuống 2 triệu,Action,SET_LIMIT
-giảm giới hạn ăn uống xuống 3 triệu,Action,SET_LIMIT
-giảm giới hạn ăn uống xuống 5 triệu,Action,SET_LIMIT
-giảm giới hạn ăn uống xuống 10 triệu,Action,SET_LIMIT
-nói giọng dan di nha Mimo,Action,SET_TONE
-đổi phong cách nói chuyện thành hai huoc đi,Action,SET_TONE
-đổi giọng nói thành nghiêm túc giùm mình,Action,SET_TONE
-bật chế độ cham choc nhe,Action,SET_TONE
-noi chuyen kieu dễ thương nhé,Action,SET_TONE
-chuyen sang giong mẹ chồng nha Mimo,Action,SET_TONE
-doi giong nghiêm túc thử xem,Action,SET_TONE
-nói chuyện kiểu dong cam đi,Action,SET_TONE
-bật chế độ dong cam nhé,Action,SET_TONE
-đổi giọng nói thành dan di thử xem,Action,SET_TONE
-nói chuyện kiểu dễ thương thử xem,Action,SET_TONE
-đổi giọng nói thành dạn dĩ nha bạn,Action,SET_TONE
-cài giọng nói dan di đi,Action,SET_TONE
-nói chuyện kiểu người yêu nhé,Action,SET_TONE
-nói chuyện kiểu hài hước giùm mình,Action,SET_TONE
-đổi sang giọng de thuong nha bạn,Action,SET_TONE
-cho mimo nói chuyện kiểu dịu dàng đi,Action,SET_TONE
-doi giong châm chọc nha bạn,Action,SET_TONE
-noi chuyen kieu vui vẻ nha Mimo,Action,SET_TONE
-đổi phong cách nói chuyện thành nghiêm túc,Action,SET_TONE
-chuyen sang giong vui ve giùm mình,Action,SET_TONE
-chuyển style sang châm chọc nhe,Action,SET_TONE
-đổi giọng người yêu nhé,Action,SET_TONE
-cho mimo nói chuyện kiểu châm chọc giùm mình,Action,SET_TONE
-đổi phong cách nói chuyện thành de thuong coi,Action,SET_TONE
-doi giong de thuong đi,Action,SET_TONE
-noi chuyen kieu người yêu coi,Action,SET_TONE
-nói chuyện kiểu đanh đá thử xem,Action,SET_TONE
-nói giọng dan di,Action,SET_TONE
-noi chuyen kieu nghiêm khắc coi,Action,SET_TONE
-đổi giọng nói thành đanh đá đi,Action,SET_TONE
-đổi phong cách nói chuyện thành dan di coi,Action,SET_TONE
-bật chế độ hai huoc giùm mình,Action,SET_TONE
-đổi giọng nói thành cham choc nhé,Action,SET_TONE
-doi giong đồng cảm coi,Action,SET_TONE
-bật chế độ châm chọc,Action,SET_TONE
-đổi giọng nói thành nghiêm khắc nhé,Action,SET_TONE
-noi chuyen kieu nghiêm túc đi,Action,SET_TONE
-noi chuyen kieu dong cam nhe,Action,SET_TONE
-cho mimo nói chuyện kiểu đồng cảm nhé,Action,SET_TONE
-noi chuyen kieu nghiêm túc,Action,SET_TONE
-chuyen sang giong dễ thương đi,Action,SET_TONE
-đổi giọng đồng cảm nha bạn,Action,SET_TONE
-noi chuyen kieu de thuong nhe,Action,SET_TONE
-đổi sang giọng vui ve coi,Action,SET_TONE
-doi giong vui vẻ thử xem,Action,SET_TONE
-cài giọng nói châm chọc giùm mình,Action,SET_TONE
-cho mimo nói chuyện kiểu mẹ chồng,Action,SET_TONE
-đổi giọng nói thành hai huoc nha,Action,SET_TONE
-nói giọng mẹ chồng,Action,SET_TONE
-đổi giọng mẹ chồng thử xem,Action,SET_TONE
-chuyển style sang hài hước,Action,SET_TONE
-cài giọng nói cham choc giùm mình,Action,SET_TONE
-bật chế độ vui ve coi,Action,SET_TONE
-đổi sang giọng cham choc coi,Action,SET_TONE
-chuyển style sang dạn dĩ giùm mình,Action,SET_TONE
-nói giọng đanh đá nha bạn,Action,SET_TONE
-nói chuyện kiểu dễ thương nha bạn,Action,SET_TONE
-đổi sang giọng nghiêm túc nha bạn,Action,SET_TONE
-đổi phong cách nói chuyện thành đanh đá nhé,Action,SET_TONE
-doi giong dong cam nhe,Action,SET_TONE
-noi chuyen kieu hài hước nha,Action,SET_TONE
-bật chế độ cham choc nha Mimo,Action,SET_TONE
-bật chế độ vui ve nha,Action,SET_TONE
-chuyển style sang vui vẻ nhé,Action,SET_TONE
-cài giọng nói vui vẻ nha bạn,Action,SET_TONE
-đổi sang giọng nghiem tuc,Action,SET_TONE
-doi giong người yêu nhé,Action,SET_TONE
-nói chuyện kiểu cham choc,Action,SET_TONE
-nói giọng nghiêm túc nha bạn,Action,SET_TONE
-bật chế độ dịu dàng nhé,Action,SET_TONE
-nói giọng dịu dàng nhé,Action,SET_TONE
-đổi sang giọng mẹ chồng thử xem,Action,SET_TONE
-chuyen sang giong đồng cảm giùm mình,Action,SET_TONE
-noi chuyen kieu dễ thương thử xem,Action,SET_TONE
-đổi phong cách nói chuyện thành nghiêm khắc đi,Action,SET_TONE
-noi chuyen kieu đồng cảm,Action,SET_TONE
-nói chuyện kiểu dễ thương nhe,Action,SET_TONE
-nói giọng nghiêm khắc coi,Action,SET_TONE
-đổi giọng nghiêm khắc đi,Action,SET_TONE
-cài giọng nói đồng cảm nhé,Action,SET_TONE
-cài giọng nói dễ thương nha Mimo,Action,SET_TONE
-cho mimo nói chuyện kiểu mẹ chồng giùm mình,Action,SET_TONE
-đổi giọng nói thành hai huoc coi,Action,SET_TONE
-bật chế độ cham choc nha bạn,Action,SET_TONE
-bật chế độ nghiem tuc,Action,SET_TONE
-bật chế độ dong cam,Action,SET_TONE
-noi chuyen kieu vui ve đi,Action,SET_TONE
-đổi giọng nghiêm túc giùm mình,Action,SET_TONE
-đổi giọng nói thành dễ thương nha,Action,SET_TONE
-cài giọng nói hai huoc nhe,Action,SET_TONE
-đổi giọng người yêu,Action,SET_TONE
-doi giong vui vẻ giùm mình,Action,SET_TONE
-đổi giọng hai huoc đi,Action,SET_TONE
-bật chế độ dịu dàng đi,Action,SET_TONE
-đổi phong cách nói chuyện thành dễ thương thử xem,Action,SET_TONE
-nói chuyện kiểu nghiêm khắc,Action,SET_TONE
-nói giọng dạn dĩ nhe,Action,SET_TONE
-doi giong dong cam nhé,Action,SET_TONE
-chuyển style sang vui ve nha,Action,SET_TONE
-bật chế độ cham choc coi,Action,SET_TONE
-đổi giọng nói thành châm chọc nhe,Action,SET_TONE
-bật chế độ dong cam giùm mình,Action,SET_TONE
-đổi giọng nói thành dong cam coi,Action,SET_TONE
-doi giong cham choc giùm mình,Action,SET_TONE
-bật chế độ đồng cảm,Action,SET_TONE
-chuyển style sang đanh đá giùm mình,Action,SET_TONE
-đổi phong cách nói chuyện thành hài hước thử xem,Action,SET_TONE
-nói giọng dịu dàng coi,Action,SET_TONE
-đổi giọng vui ve coi,Action,SET_TONE
-chuyển style sang nghiêm túc coi,Action,SET_TONE
-đổi giọng dạn dĩ đi,Action,SET_TONE
-đổi giọng nói thành hài hước coi,Action,SET_TONE
-cài giọng nói dong cam nha,Action,SET_TONE
-nói giọng dong cam giùm mình,Action,SET_TONE
-nói chuyện kiểu mẹ chồng nhé,Action,SET_TONE
-đổi giọng cham choc nhé,Action,SET_TONE
-đổi phong cách nói chuyện thành đồng cảm coi,Action,SET_TONE
-nói giọng đồng cảm thử xem,Action,SET_TONE
-chuyen sang giong hai huoc giùm mình,Action,SET_TONE
+đặt lại giới hạn thành 10tr,Action,SET_LIMIT
+đặt lại giới hạn thành 1tr,Action,SET_LIMIT
+đặt lại giới hạn thành 2 triệu,Action,SET_LIMIT
+đặt lại giới hạn thành 200k,Action,SET_LIMIT
+đặt lại giới hạn thành 2tr,Action,SET_LIMIT
+đặt lại giới hạn thành 3 triệu,Action,SET_LIMIT
+đặt lại giới hạn thành 3tr,Action,SET_LIMIT
+đặt lại giới hạn thành 5 triệu,Action,SET_LIMIT
+đặt lại giới hạn thành 500k,Action,SET_LIMIT
+đặt lại giới hạn thành 5tr,Action,SET_LIMIT
+đề xuất gợi ý chi tiêu,Action,SUGGEST_BUDGET
+đề xuất gợi ý chi tiêu ?,Action,SUGGEST_BUDGET
+đề xuất gợi ý chi tiêu bot,Action,SUGGEST_BUDGET
+đề xuất gợi ý chi tiêu ha,Action,SUGGEST_BUDGET
+đề xuất gợi ý chi tiêu mimo,Action,SUGGEST_BUDGET
+đề xuất gợi ý chi tiêu nha,Action,SUGGEST_BUDGET
+đề xuất gợi ý chi tiêu nhé,Action,SUGGEST_BUDGET
+đề xuất gợi ý chi tiêu đi,Action,SUGGEST_BUDGET
+đề xuất ngân sách tuần này,Action,SUGGEST_BUDGET
+đề xuất ngân sách tuần này ?,Action,SUGGEST_BUDGET
+đề xuất ngân sách tuần này bot,Action,SUGGEST_BUDGET
+đề xuất ngân sách tuần này ha,Action,SUGGEST_BUDGET
+đề xuất ngân sách tuần này mimo,Action,SUGGEST_BUDGET
+đề xuất ngân sách tuần này nha,Action,SUGGEST_BUDGET
+đề xuất ngân sách tuần này nhé,Action,SUGGEST_BUDGET
+đề xuất ngân sách tuần này đi,Action,SUGGEST_BUDGET
 đổi giọng cham choc nha bạn,Action,SET_TONE
-cài giọng nói vui vẻ nhé,Action,SET_TONE
-chuyen sang giong hài hước nha bạn,Action,SET_TONE
-nói chuyện kiểu hai huoc giùm mình,Action,SET_TONE
-đổi sang giọng dan di nhe,Action,SET_TONE
-doi giong dong cam nha bạn,Action,SET_TONE
-nói giọng nghiem tuc nhe,Action,SET_TONE
-đổi giọng vui vẻ nha,Action,SET_TONE
-đổi sang giọng de thuong,Action,SET_TONE
+đổi giọng cham choc nhé,Action,SET_TONE
 đổi giọng châm chọc thử xem,Action,SET_TONE
-bật chế độ vui ve nha bạn,Action,SET_TONE
-noi chuyen kieu de thuong giùm mình,Action,SET_TONE
-đổi sang giọng dịu dàng nha bạn,Action,SET_TONE
-đổi phong cách nói chuyện thành dạn dĩ nha bạn,Action,SET_TONE
-bật chế độ vui ve nha Mimo,Action,SET_TONE
-chuyển style sang vui ve nha bạn,Action,SET_TONE
-đổi sang giọng nghiêm túc thử xem,Action,SET_TONE
-chuyển style sang dịu dàng thử xem,Action,SET_TONE
-đổi giọng nói thành vui ve nha bạn,Action,SET_TONE
-noi chuyen kieu dễ thương nhe,Action,SET_TONE
-đổi phong cách nói chuyện thành người yêu nha Mimo,Action,SET_TONE
-cài giọng nói dan di nha,Action,SET_TONE
-đổi giọng mẹ chồng nhé,Action,SET_TONE
-đổi giọng mẹ chồng đi,Action,SET_TONE
-noi chuyen kieu châm chọc nha,Action,SET_TONE
-cho mimo nói chuyện kiểu vui ve đi,Action,SET_TONE
-bật chế độ hài hước thử xem,Action,SET_TONE
-nói giọng nghiem tuc coi,Action,SET_TONE
-nói chuyện kiểu vui vẻ nha,Action,SET_TONE
-chuyển style sang cham choc nhe,Action,SET_TONE
-đổi giọng vui ve thử xem,Action,SET_TONE
-doi giong mẹ chồng,Action,SET_TONE
-cài giọng nói cham choc nhé,Action,SET_TONE
-đổi giọng nghiêm khắc thử xem,Action,SET_TONE
-cho mimo nói chuyện kiểu nghiêm túc nha bạn,Action,SET_TONE
-đổi giọng vui vẻ,Action,SET_TONE
-nói chuyện kiểu vui vẻ nha Mimo,Action,SET_TONE
-cho mimo nói chuyện kiểu vui vẻ nha,Action,SET_TONE
-chuyen sang giong châm chọc nhe,Action,SET_TONE
-nói giọng vui ve,Action,SET_TONE
-noi chuyen kieu đanh đá nhe,Action,SET_TONE
-đổi sang giọng đồng cảm coi,Action,SET_TONE
-noi chuyen kieu người yêu nha bạn,Action,SET_TONE
-chuyển style sang dan di nha,Action,SET_TONE
-chuyen sang giong dịu dàng nha bạn,Action,SET_TONE
-chuyển style sang mẹ chồng,Action,SET_TONE
-chuyen sang giong vui ve nha Mimo,Action,SET_TONE
-cài giọng nói đanh đá,Action,SET_TONE
-chuyen sang giong đanh đá thử xem,Action,SET_TONE
-bật chế độ hai huoc coi,Action,SET_TONE
-cài giọng nói người yêu nhé,Action,SET_TONE
-chuyển style sang vui vẻ,Action,SET_TONE
-doi giong đồng cảm giùm mình,Action,SET_TONE
-doi giong cham choc nhe,Action,SET_TONE
-chuyển style sang người yêu,Action,SET_TONE
-doi giong đanh đá,Action,SET_TONE
-bật chế độ hài hước,Action,SET_TONE
-cho mimo nói chuyện kiểu dong cam thử xem,Action,SET_TONE
-cài giọng nói de thuong nha bạn,Action,SET_TONE
-cài giọng nói đanh đá coi,Action,SET_TONE
-bật chế độ dong cam coi,Action,SET_TONE
-đổi giọng vui ve nha Mimo,Action,SET_TONE
-cho mimo nói chuyện kiểu dong cam nha,Action,SET_TONE
-nói giọng nghiêm khắc,Action,SET_TONE
-đổi phong cách nói chuyện thành dạn dĩ nha,Action,SET_TONE
-đổi giọng đồng cảm thử xem,Action,SET_TONE
-chuyen sang giong nghiêm túc đi,Action,SET_TONE
-nói giọng nghiêm khắc thử xem,Action,SET_TONE
-noi chuyen kieu de thuong nha Mimo,Action,SET_TONE
-cài giọng nói hai huoc coi,Action,SET_TONE
-cho mimo nói chuyện kiểu dan di nhe,Action,SET_TONE
-đổi giọng nói thành hài hước,Action,SET_TONE
+đổi giọng dạn dĩ đi,Action,SET_TONE
+đổi giọng hai huoc đi,Action,SET_TONE
 đổi giọng mẹ chồng nha,Action,SET_TONE
-đổi sang giọng dong cam thử xem,Action,SET_TONE
-doi giong nghiêm túc coi,Action,SET_TONE
-đổi giọng vui ve nhe,Action,SET_TONE
-cài giọng nói vui vẻ thử xem,Action,SET_TONE
-nói chuyện kiểu vui ve đi,Action,SET_TONE
-đổi sang giọng hài hước đi,Action,SET_TONE
+đổi giọng mẹ chồng nhé,Action,SET_TONE
+đổi giọng mẹ chồng thử xem,Action,SET_TONE
+đổi giọng mẹ chồng đi,Action,SET_TONE
+đổi giọng nghiêm khắc thử xem,Action,SET_TONE
+đổi giọng nghiêm khắc đi,Action,SET_TONE
+đổi giọng nghiêm túc giùm mình,Action,SET_TONE
+đổi giọng người yêu,Action,SET_TONE
+đổi giọng người yêu nhé,Action,SET_TONE
+đổi giọng nói thành cham choc nhé,Action,SET_TONE
 đổi giọng nói thành châm chọc nha,Action,SET_TONE
-cho mimo nói chuyện kiểu dong cam nha Mimo,Action,SET_TONE
-noi chuyen kieu châm chọc,Action,SET_TONE
-nói chuyện kiểu vui vẻ thử xem,Action,SET_TONE
-noi chuyen kieu châm chọc nha bạn,Action,SET_TONE
-đổi sang giọng cham choc nha Mimo,Action,SET_TONE
-noi chuyen kieu dan di giùm mình,Action,SET_TONE
-đổi sang giọng dịu dàng nha,Action,SET_TONE
+đổi giọng nói thành châm chọc nhe,Action,SET_TONE
+đổi giọng nói thành dan di thử xem,Action,SET_TONE
+đổi giọng nói thành dong cam coi,Action,SET_TONE
+đổi giọng nói thành dạn dĩ nha bạn,Action,SET_TONE
+đổi giọng nói thành dễ thương nha,Action,SET_TONE
+đổi giọng nói thành hai huoc coi,Action,SET_TONE
+đổi giọng nói thành hai huoc nha,Action,SET_TONE
+đổi giọng nói thành hài hước,Action,SET_TONE
+đổi giọng nói thành hài hước coi,Action,SET_TONE
 đổi giọng nói thành nghiem tuc đi,Action,SET_TONE
-nói giọng vui ve coi,Action,SET_TONE
-đổi phong cách nói chuyện thành nghiem tuc giùm mình,Action,SET_TONE
-chuyen sang giong mẹ chồng đi,Action,SET_TONE
-doi giong người yêu nha,Action,SET_TONE
-doi giong de thuong nha,Action,SET_TONE
-nói chuyện kiểu nghiêm túc nha Mimo,Action,SET_TONE
-chuyển style sang de thuong nha bạn,Action,SET_TONE
-chuyen sang giong vui vẻ,Action,SET_TONE
-cho mimo nói chuyện kiểu mẹ chồng đi,Action,SET_TONE
-nói giọng dễ thương nha,Action,SET_TONE
-cho mimo nói chuyện kiểu nghiêm khắc nhe,Action,SET_TONE
-cài giọng nói dịu dàng coi,Action,SET_TONE
-chuyển style sang vui vẻ đi,Action,SET_TONE
-đổi phong cách nói chuyện thành đanh đá đi,Action,SET_TONE
-cho mimo nói chuyện kiểu vui vẻ đi,Action,SET_TONE
-cho mimo nói chuyện kiểu de thuong coi,Action,SET_TONE
-cho mimo nói chuyện kiểu đanh đá nhe,Action,SET_TONE
-chuyển style sang đồng cảm giùm mình,Action,SET_TONE
+đổi giọng nói thành nghiêm khắc nhé,Action,SET_TONE
+đổi giọng nói thành nghiêm túc giùm mình,Action,SET_TONE
+đổi giọng nói thành vui ve nha bạn,Action,SET_TONE
 đổi giọng nói thành vui vẻ đi,Action,SET_TONE
-xuất báo cáo quý này về email,Action,EXPORT_DATA
-xuất dữ liệu tuan nay qua mail nhe,Action,EXPORT_DATA
-export dữ liệu nam nay,Action,EXPORT_DATA
-tải sao kê quý này,Action,EXPORT_DATA
-export dữ liệu nam nay qua mail nhe,Action,EXPORT_DATA
-xuất file csv năm nay qua mail nhe,Action,EXPORT_DATA
-xuất excel hom qua nhe,Action,EXPORT_DATA
-gửi sao kê chi tiêu tuần này qua gmail nhé Mimo,Action,EXPORT_DATA
-xuất excel 3 tháng qua để mình xem,Action,EXPORT_DATA
-gui file excel tháng này vào hòm thư,Action,EXPORT_DATA
-xuất file csv thang nay qua gmail nhé Mimo,Action,EXPORT_DATA
-gửi báo cáo tuan nay vào hòm thư,Action,EXPORT_DATA
-xuat bao cao hôm qua,Action,EXPORT_DATA
-tải sao kê tuan truoc nhe,Action,EXPORT_DATA
-gửi file excel tuan truoc nha,Action,EXPORT_DATA
-xuất excel tuan nay qua gmail nhé Mimo,Action,EXPORT_DATA
-xuất file csv 3 tháng qua về email,Action,EXPORT_DATA
-gửi file excel tuần trước vào hòm thư,Action,EXPORT_DATA
-tải sao kê tuan nay qua gmail nhé Mimo,Action,EXPORT_DATA
-gửi sao kê chi tiêu hom nay qua gmail nhé Mimo,Action,EXPORT_DATA
-gửi sao kê chi tiêu nam nay di,Action,EXPORT_DATA
-tai sao ke hom qua nha,Action,EXPORT_DATA
-gửi sao kê chi tiêu hôm nay di,Action,EXPORT_DATA
-gửi báo cáo hôm nay nha,Action,EXPORT_DATA
-gửi báo cáo hôm qua để mình xem,Action,EXPORT_DATA
-gửi báo cáo thang truoc qua mail nhe,Action,EXPORT_DATA
-xuat file csv tuan truoc di,Action,EXPORT_DATA
-xuất báo cáo 3 tháng qua qua gmail nhé Mimo,Action,EXPORT_DATA
-xuất báo cáo thang nay,Action,EXPORT_DATA
-xuất dữ liệu hom qua về email,Action,EXPORT_DATA
-gửi báo cáo tháng trước nhe,Action,EXPORT_DATA
-xuất báo cáo tuan truoc di,Action,EXPORT_DATA
-xuất dữ liệu năm nay vào hòm thư,Action,EXPORT_DATA
-xuất báo cáo tuan nay qua email cho tôi,Action,EXPORT_DATA
-xuat file csv tuần trước qua gmail nhé Mimo,Action,EXPORT_DATA
-tải sao kê 3 tháng qua qua gmail nhé Mimo,Action,EXPORT_DATA
-gui file excel năm nay nha,Action,EXPORT_DATA
-xuat file csv tháng này qua email cho tôi,Action,EXPORT_DATA
-xuat bao cao tháng này qua mail nhe,Action,EXPORT_DATA
-xuất báo cáo 3 tháng qua,Action,EXPORT_DATA
-gửi sao kê chi tiêu tuan nay qua email cho tôi,Action,EXPORT_DATA
-xuất dữ liệu hom qua qua email cho tôi,Action,EXPORT_DATA
-xuất báo cáo hom qua về email,Action,EXPORT_DATA
-xuất báo cáo nam nay qua gmail nhé Mimo,Action,EXPORT_DATA
-tải sao kê tuan truoc để mình xem,Action,EXPORT_DATA
-gửi báo cáo thang truoc nha,Action,EXPORT_DATA
-xuất excel tuần trước qua mail nhe,Action,EXPORT_DATA
-xuat file csv tuần này qua mail nhe,Action,EXPORT_DATA
-gửi báo cáo năm nay,Action,EXPORT_DATA
-gui file excel năm nay di,Action,EXPORT_DATA
-xuất excel quý này nhe,Action,EXPORT_DATA
-xuat file csv hôm qua về email,Action,EXPORT_DATA
-xuất dữ liệu 3 tháng qua di,Action,EXPORT_DATA
-xuất báo cáo năm nay qua mail nhe,Action,EXPORT_DATA
-export dữ liệu hôm qua để mình xem,Action,EXPORT_DATA
-xuất excel hom qua để mình xem,Action,EXPORT_DATA
-gửi sao kê chi tiêu quý này để mình xem,Action,EXPORT_DATA
-xuất file csv quý này để mình xem,Action,EXPORT_DATA
-gửi báo cáo hôm nay để mình xem,Action,EXPORT_DATA
-xuất báo cáo hôm qua về email,Action,EXPORT_DATA
-export dữ liệu tháng trước về email,Action,EXPORT_DATA
-xuất dữ liệu quý này nha,Action,EXPORT_DATA
-xuat file csv tuần trước nha,Action,EXPORT_DATA
-xuat bao cao tháng này về email,Action,EXPORT_DATA
-export dữ liệu tuan nay để mình xem,Action,EXPORT_DATA
-gửi file excel hôm nay,Action,EXPORT_DATA
-tai sao ke tuan nay qua gmail nhé Mimo,Action,EXPORT_DATA
-xuất file csv năm nay di,Action,EXPORT_DATA
-xuat bao cao nam nay nha,Action,EXPORT_DATA
-xuất file csv 3 tháng qua qua mail nhe,Action,EXPORT_DATA
-tai sao ke tuan truoc để mình xem,Action,EXPORT_DATA
-xuất báo cáo hôm qua để mình xem,Action,EXPORT_DATA
-xuất báo cáo hôm qua nha,Action,EXPORT_DATA
-xuat file csv hom nay,Action,EXPORT_DATA
-tai sao ke hôm qua qua gmail nhé Mimo,Action,EXPORT_DATA
-xuat file csv tháng này di,Action,EXPORT_DATA
-xuất báo cáo tháng trước vào hòm thư,Action,EXPORT_DATA
-gui file excel quý này nha,Action,EXPORT_DATA
-xuat file csv nam nay qua mail nhe,Action,EXPORT_DATA
-xuat bao cao năm nay qua gmail nhé Mimo,Action,EXPORT_DATA
-xuất excel 3 tháng qua di,Action,EXPORT_DATA
-tai sao ke hom nay di,Action,EXPORT_DATA
-gửi sao kê chi tiêu thang truoc vào hòm thư,Action,EXPORT_DATA
-gửi sao kê chi tiêu tuan nay nha,Action,EXPORT_DATA
-export dữ liệu tuan nay vào hòm thư,Action,EXPORT_DATA
-gửi báo cáo năm nay qua mail nhe,Action,EXPORT_DATA
-gửi sao kê chi tiêu hom qua nha,Action,EXPORT_DATA
-tải sao kê hôm qua di,Action,EXPORT_DATA
-xuất file csv tháng này để mình xem,Action,EXPORT_DATA
-export dữ liệu quý này để mình xem,Action,EXPORT_DATA
-xuat file csv hôm qua để mình xem,Action,EXPORT_DATA
-xuat bao cao năm nay,Action,EXPORT_DATA
-xuat bao cao quý này về email,Action,EXPORT_DATA
-gửi báo cáo tháng này qua email cho tôi,Action,EXPORT_DATA
-xuất báo cáo hôm nay,Action,EXPORT_DATA
-gửi sao kê chi tiêu 3 tháng qua về email,Action,EXPORT_DATA
-gửi file excel tháng trước để mình xem,Action,EXPORT_DATA
-xuất báo cáo hom qua di,Action,EXPORT_DATA
-xuất dữ liệu thang truoc di,Action,EXPORT_DATA
-tải sao kê 3 tháng qua để mình xem,Action,EXPORT_DATA
-xuat bao cao nam nay qua gmail nhé Mimo,Action,EXPORT_DATA
-tải sao kê tuần này qua mail nhe,Action,EXPORT_DATA
-gửi sao kê chi tiêu hôm qua qua mail nhe,Action,EXPORT_DATA
-tải sao kê hom qua vào hòm thư,Action,EXPORT_DATA
-gửi sao kê chi tiêu quý này vào hòm thư,Action,EXPORT_DATA
-gui file excel tuan truoc,Action,EXPORT_DATA
-tai sao ke hôm qua về email,Action,EXPORT_DATA
-xuat file csv nam nay để mình xem,Action,EXPORT_DATA
-tải sao kê tuan nay,Action,EXPORT_DATA
-xuat bao cao thang nay di,Action,EXPORT_DATA
-xuất dữ liệu 3 tháng qua nhe,Action,EXPORT_DATA
-xuất báo cáo 3 tháng qua nhe,Action,EXPORT_DATA
-tai sao ke tuan nay,Action,EXPORT_DATA
-xuất báo cáo nam nay nhe,Action,EXPORT_DATA
-xuất dữ liệu 3 tháng qua qua gmail nhé Mimo,Action,EXPORT_DATA
-tải sao kê tháng trước vào hòm thư,Action,EXPORT_DATA
-tai sao ke tuần này di,Action,EXPORT_DATA
-gửi file excel thang truoc di,Action,EXPORT_DATA
-tải sao kê quý này qua mail nhe,Action,EXPORT_DATA
-tải sao kê 3 tháng qua nhe,Action,EXPORT_DATA
-tải sao kê tuần này nhe,Action,EXPORT_DATA
-xuất excel tuan truoc về email,Action,EXPORT_DATA
-xuất báo cáo năm nay vào hòm thư,Action,EXPORT_DATA
-xuất dữ liệu 3 tháng qua,Action,EXPORT_DATA
-xuất báo cáo hom nay nha,Action,EXPORT_DATA
-tải sao kê quý này nha,Action,EXPORT_DATA
-tải sao kê hôm qua nha,Action,EXPORT_DATA
-xuat file csv hom nay nha,Action,EXPORT_DATA
-gửi file excel tuan nay về email,Action,EXPORT_DATA
-tai sao ke hom nay về email,Action,EXPORT_DATA
-xuat bao cao hôm nay nha,Action,EXPORT_DATA
-xuat bao cao nam nay để mình xem,Action,EXPORT_DATA
-export dữ liệu tháng trước nhe,Action,EXPORT_DATA
-gui file excel năm nay về email,Action,EXPORT_DATA
-xuat file csv thang truoc qua email cho tôi,Action,EXPORT_DATA
-export dữ liệu tuan truoc nhe,Action,EXPORT_DATA
-gửi file excel hôm nay để mình xem,Action,EXPORT_DATA
-xuất báo cáo tuan truoc qua mail nhe,Action,EXPORT_DATA
-gửi sao kê chi tiêu thang truoc qua mail nhe,Action,EXPORT_DATA
-xuất file csv hôm nay để mình xem,Action,EXPORT_DATA
-gửi báo cáo hom qua qua mail nhe,Action,EXPORT_DATA
-xuất excel hom nay,Action,EXPORT_DATA
-gửi file excel hom nay,Action,EXPORT_DATA
-xuất báo cáo tháng này,Action,EXPORT_DATA
-gửi file excel thang truoc qua gmail nhé Mimo,Action,EXPORT_DATA
-xuất báo cáo 3 tháng qua qua email cho tôi,Action,EXPORT_DATA
-gửi file excel nam nay vào hòm thư,Action,EXPORT_DATA
-xuất báo cáo hom qua để mình xem,Action,EXPORT_DATA
-gửi file excel tháng này nha,Action,EXPORT_DATA
-gửi báo cáo hôm qua nhe,Action,EXPORT_DATA
-tải sao kê hom qua qua gmail nhé Mimo,Action,EXPORT_DATA
-gửi file excel quý này qua email cho tôi,Action,EXPORT_DATA
-xuất excel nam nay vào hòm thư,Action,EXPORT_DATA
-gui file excel năm nay nhe,Action,EXPORT_DATA
-xuất excel tháng trước qua mail nhe,Action,EXPORT_DATA
-xuat bao cao tuan nay,Action,EXPORT_DATA
-xuất file csv tháng trước nhe,Action,EXPORT_DATA
-gửi file excel tuan nay qua gmail nhé Mimo,Action,EXPORT_DATA
-tai sao ke thang truoc,Action,EXPORT_DATA
-gui file excel thang truoc,Action,EXPORT_DATA
-export dữ liệu thang nay,Action,EXPORT_DATA
-xuất báo cáo tháng trước,Action,EXPORT_DATA
-gui file excel tuần này nha,Action,EXPORT_DATA
-gửi file excel hôm nay nha,Action,EXPORT_DATA
-gửi báo cáo nam nay qua gmail nhé Mimo,Action,EXPORT_DATA
-xuất dữ liệu tuần này qua gmail nhé Mimo,Action,EXPORT_DATA
-gui file excel tuần trước di,Action,EXPORT_DATA
-xuất báo cáo thang truoc để mình xem,Action,EXPORT_DATA
-xuat file csv nam nay về email,Action,EXPORT_DATA
-xuất excel hom nay di,Action,EXPORT_DATA
-xuất báo cáo tháng này để mình xem,Action,EXPORT_DATA
-gửi báo cáo thang truoc để mình xem,Action,EXPORT_DATA
-xuất báo cáo quý này vào hòm thư,Action,EXPORT_DATA
-tải sao kê 3 tháng qua nha,Action,EXPORT_DATA
-xuat file csv hôm nay qua mail nhe,Action,EXPORT_DATA
-xuất excel hôm qua qua gmail nhé Mimo,Action,EXPORT_DATA
-gửi sao kê chi tiêu năm nay qua mail nhe,Action,EXPORT_DATA
-gui file excel hom nay về email,Action,EXPORT_DATA
-xuất báo cáo tháng này di,Action,EXPORT_DATA
-tải sao kê tuan truoc di,Action,EXPORT_DATA
-gửi báo cáo năm nay qua gmail nhé Mimo,Action,EXPORT_DATA
-xuat bao cao quý này qua gmail nhé Mimo,Action,EXPORT_DATA
-xuat bao cao tuan truoc để mình xem,Action,EXPORT_DATA
-gửi sao kê chi tiêu quý này qua mail nhe,Action,EXPORT_DATA
-xuất file csv nam nay,Action,EXPORT_DATA
-gửi sao kê chi tiêu tháng trước qua email cho tôi,Action,EXPORT_DATA
-xuất báo cáo thang truoc,Action,EXPORT_DATA
-xuat bao cao thang truoc nha,Action,EXPORT_DATA
-gửi sao kê chi tiêu hom nay qua mail nhe,Action,EXPORT_DATA
-gửi file excel tháng trước về email,Action,EXPORT_DATA
-gửi báo cáo quý này nha,Action,EXPORT_DATA
-tải sao kê tháng trước di,Action,EXPORT_DATA
-xuất excel tháng này qua mail nhe,Action,EXPORT_DATA
-xuat file csv hôm nay nhe,Action,EXPORT_DATA
-tai sao ke tuan nay di,Action,EXPORT_DATA
-gui file excel hom nay qua email cho tôi,Action,EXPORT_DATA
-gửi sao kê chi tiêu hôm qua qua gmail nhé Mimo,Action,EXPORT_DATA
-xuất báo cáo tuần trước nhe,Action,EXPORT_DATA
-xuất excel tuan nay di,Action,EXPORT_DATA
-tai sao ke hom qua qua email cho tôi,Action,EXPORT_DATA
-tai sao ke tuần trước di,Action,EXPORT_DATA
-gửi file excel tuần trước qua gmail nhé Mimo,Action,EXPORT_DATA
-tải sao kê tháng này về email,Action,EXPORT_DATA
-xuất dữ liệu quý này qua mail nhe,Action,EXPORT_DATA
-tải sao kê hôm qua vào hòm thư,Action,EXPORT_DATA
-xuất file csv hôm nay về email,Action,EXPORT_DATA
-gửi file excel nam nay,Action,EXPORT_DATA
-xuất file csv quý này vào hòm thư,Action,EXPORT_DATA
-xuat bao cao năm nay về email,Action,EXPORT_DATA
-gửi báo cáo hôm qua vào hòm thư,Action,EXPORT_DATA
-gui file excel năm nay,Action,EXPORT_DATA
-xuất dữ liệu tháng này qua gmail nhé Mimo,Action,EXPORT_DATA
-xuất dữ liệu nam nay qua gmail nhé Mimo,Action,EXPORT_DATA
-xuất báo cáo hôm nay qua email cho tôi,Action,EXPORT_DATA
-export dữ liệu tuan nay về email,Action,EXPORT_DATA
-xuất excel tuần này qua gmail nhé Mimo,Action,EXPORT_DATA
-gửi báo cáo 3 tháng qua để mình xem,Action,EXPORT_DATA
-gửi sao kê chi tiêu tháng này để mình xem,Action,EXPORT_DATA
-ten minh la Trang nhé Mimo,Action,SET_USERNAME
-tên tôi là Thảo đi,Action,SET_USERNAME
-doi ten thanh Dũng,Action,SET_USERNAME
-hãy gọi tớ là Dũng đi,Action,SET_USERNAME
-gọi mình là Hà nha bạn,Action,SET_USERNAME
-đổi tên mình thành Dũng nha,Action,SET_USERNAME
-gọi tôi là Vy nhe,Action,SET_USERNAME
-gọi tôi là Tùng nhé,Action,SET_USERNAME
-tên mình là Dũng nhe,Action,SET_USERNAME
-gọi mình là Nam nha bạn,Action,SET_USERNAME
-goi minh la Hà nha,Action,SET_USERNAME
-đổi tên mình thành Trang nha,Action,SET_USERNAME
-tên mình là An nha,Action,SET_USERNAME
-gọi mình là Trang nhé,Action,SET_USERNAME
-gọi mình là Thảo đi,Action,SET_USERNAME
-tên tôi là Huy đi,Action,SET_USERNAME
-tên mình là Hoàng nha Mimo,Action,SET_USERNAME
-đổi tên hiển thị thành Phúc nha bạn,Action,SET_USERNAME
-tên mình là Linh đi,Action,SET_USERNAME
-doi ten thanh Dũng nhé Mimo,Action,SET_USERNAME
-gọi mình là Lâm nhé,Action,SET_USERNAME
-tên tôi là Vy nhé Mimo,Action,SET_USERNAME
-hãy gọi tớ là Linh nhe,Action,SET_USERNAME
-goi toi la Phương,Action,SET_USERNAME
-goi toi la Phúc đi,Action,SET_USERNAME
-đổi tên hiển thị thành Ngọc nhe,Action,SET_USERNAME
-gọi tôi là Dương nhe,Action,SET_USERNAME
-đổi tên mình thành Khánh nha,Action,SET_USERNAME
-ten minh la An nhé Mimo,Action,SET_USERNAME
-doi ten thanh Thảo đi,Action,SET_USERNAME
-đổi tên mình thành Huy đi,Action,SET_USERNAME
-gọi mình là An nhe,Action,SET_USERNAME
-goi toi la Linh nhe,Action,SET_USERNAME
-hãy gọi tớ là Thảo nha,Action,SET_USERNAME
-đổi tên hiển thị thành An nha bạn,Action,SET_USERNAME
-gọi tớ là Phúc nha Mimo,Action,SET_USERNAME
-hãy gọi tớ là Huy nha Mimo,Action,SET_USERNAME
-goi toi la Linh nhé Mimo,Action,SET_USERNAME
-gọi tớ là Phương nhé Mimo,Action,SET_USERNAME
-doi ten thanh Nam nhe,Action,SET_USERNAME
-tên mình là Nam nha,Action,SET_USERNAME
-tên tôi là Linh nhé Mimo,Action,SET_USERNAME
-đổi tên mình thành Minh đi,Action,SET_USERNAME
-gọi tôi là Linh nha bạn,Action,SET_USERNAME
-gọi tớ là Khánh nhé,Action,SET_USERNAME
-tên mình là Khánh nha,Action,SET_USERNAME
-ten minh la Sơn nhe,Action,SET_USERNAME
-tên mình là Lâm nha Mimo,Action,SET_USERNAME
-hãy gọi tớ là An nha bạn,Action,SET_USERNAME
-hãy gọi tớ là Khang nhé Mimo,Action,SET_USERNAME
-đổi tên mình thành Nam,Action,SET_USERNAME
-doi ten thanh Vy nhé Mimo,Action,SET_USERNAME
-gọi tớ là Tùng đi,Action,SET_USERNAME
-goi toi la Phương nhe,Action,SET_USERNAME
-gọi mình là Tùng,Action,SET_USERNAME
-đổi tên mình thành Dương nhe,Action,SET_USERNAME
-tên mình là Hải nhé Mimo,Action,SET_USERNAME
-ten minh la Hà,Action,SET_USERNAME
-goi minh la Lâm nha,Action,SET_USERNAME
-hãy gọi tớ là Vy nhé Mimo,Action,SET_USERNAME
-gọi mình là Vy nha bạn,Action,SET_USERNAME
-ten minh la An nhe,Action,SET_USERNAME
-doi ten thanh Tùng,Action,SET_USERNAME
-gọi mình là Minh nha Mimo,Action,SET_USERNAME
-tên tôi là Phúc nha Mimo,Action,SET_USERNAME
-gọi tôi là Minh nha bạn,Action,SET_USERNAME
-gọi tôi là Phúc nhé Mimo,Action,SET_USERNAME
-goi minh la Tùng nhe,Action,SET_USERNAME
-hãy gọi tớ là Kiệt đi,Action,SET_USERNAME
-hãy gọi tớ là Hải nha,Action,SET_USERNAME
-tên mình là Khang nha bạn,Action,SET_USERNAME
-doi ten thanh Lâm,Action,SET_USERNAME
-goi minh la Nam nha bạn,Action,SET_USERNAME
-gọi tớ là Vy,Action,SET_USERNAME
-tên tôi là Minh,Action,SET_USERNAME
-tên mình là Khánh nha Mimo,Action,SET_USERNAME
-ten minh la Dương đi,Action,SET_USERNAME
-gọi tôi là Phương nha,Action,SET_USERNAME
-hãy gọi tớ là Nam nha bạn,Action,SET_USERNAME
-đổi tên mình thành Thảo nhé,Action,SET_USERNAME
-tên tôi là An nhé Mimo,Action,SET_USERNAME
-đổi tên hiển thị thành Phương,Action,SET_USERNAME
-hãy gọi tớ là Hoàng nhé,Action,SET_USERNAME
-doi ten thanh Tùng nha,Action,SET_USERNAME
-tên tôi là Hoàng đi,Action,SET_USERNAME
-gọi mình là Trang,Action,SET_USERNAME
-tên tôi là Trang nha Mimo,Action,SET_USERNAME
-tên mình là Thảo nha Mimo,Action,SET_USERNAME
-gọi tớ là Dương đi,Action,SET_USERNAME
-doi ten thanh Linh,Action,SET_USERNAME
-tên mình là Hải,Action,SET_USERNAME
-hãy gọi tớ là Hoàng nhe,Action,SET_USERNAME
-tên tôi là Tùng đi,Action,SET_USERNAME
-đổi tên mình thành Phúc đi,Action,SET_USERNAME
-hãy gọi tớ là Kiệt nha bạn,Action,SET_USERNAME
-tên mình là Lâm nha bạn,Action,SET_USERNAME
-ten minh la Khang nhe,Action,SET_USERNAME
-goi toi la Hà nhé Mimo,Action,SET_USERNAME
-ten minh la Huy nha Mimo,Action,SET_USERNAME
-ten minh la Khang,Action,SET_USERNAME
-doi ten thanh Phúc,Action,SET_USERNAME
-goi minh la Hải nhe,Action,SET_USERNAME
-gọi tớ là Khang nhé Mimo,Action,SET_USERNAME
-goi minh la Vy nha,Action,SET_USERNAME
-ten minh la Trang nha bạn,Action,SET_USERNAME
-ten minh la Dũng nhé Mimo,Action,SET_USERNAME
-đổi tên mình thành Hà,Action,SET_USERNAME
-đổi tên hiển thị thành Minh đi,Action,SET_USERNAME
-tên tôi là Tùng nhe,Action,SET_USERNAME
-tên tôi là Dũng nha Mimo,Action,SET_USERNAME
-tên tôi là Khánh nhe,Action,SET_USERNAME
-đổi tên mình thành Vy nhé,Action,SET_USERNAME
-gọi tôi là Linh nhé Mimo,Action,SET_USERNAME
-tên tôi là Hà đi,Action,SET_USERNAME
-gọi mình là Hải nhe,Action,SET_USERNAME
-doi ten thanh An nhé,Action,SET_USERNAME
-doi ten thanh Khánh nhé Mimo,Action,SET_USERNAME
-tên mình là Nam nha Mimo,Action,SET_USERNAME
-tên mình là An,Action,SET_USERNAME
-goi minh la Nam nhé,Action,SET_USERNAME
-goi toi la An,Action,SET_USERNAME
-hãy gọi tớ là Dũng nhé,Action,SET_USERNAME
-gọi mình là Kiệt,Action,SET_USERNAME
-gọi tôi là Minh nha Mimo,Action,SET_USERNAME
-goi minh la Nam nha,Action,SET_USERNAME
-goi minh la Sơn nhé,Action,SET_USERNAME
-goi toi la Sơn nhe,Action,SET_USERNAME
-gọi tôi là An nha bạn,Action,SET_USERNAME
-gọi tớ là Thảo nha,Action,SET_USERNAME
-gọi tôi là Huy nhé Mimo,Action,SET_USERNAME
-gọi tôi là Minh nhé,Action,SET_USERNAME
-hãy gọi tớ là Hải đi,Action,SET_USERNAME
-gọi tớ là Vy nhe,Action,SET_USERNAME
-goi minh la Nam đi,Action,SET_USERNAME
-ten minh la Minh nhé,Action,SET_USERNAME
-gọi tớ là Vy nha,Action,SET_USERNAME
-tên mình là Nam nhe,Action,SET_USERNAME
-gọi tôi là Sơn nha Mimo,Action,SET_USERNAME
-đổi tên hiển thị thành Khánh,Action,SET_USERNAME
-doi ten thanh Phương nhe,Action,SET_USERNAME
-ten minh la Dương nha,Action,SET_USERNAME
-gọi mình là Dũng,Action,SET_USERNAME
-đổi tên hiển thị thành Sơn nhé,Action,SET_USERNAME
-đổi tên hiển thị thành Vy,Action,SET_USERNAME
-đổi tên mình thành Ngọc nha bạn,Action,SET_USERNAME
-tên tôi là Trang nhé Mimo,Action,SET_USERNAME
-goi minh la Thảo nha,Action,SET_USERNAME
-goi toi la Thảo nhé Mimo,Action,SET_USERNAME
-goi toi la Hoàng nhé,Action,SET_USERNAME
-đổi tên mình thành Kiệt nhé,Action,SET_USERNAME
-tên mình là Dương nha bạn,Action,SET_USERNAME
-doi ten thanh Linh đi,Action,SET_USERNAME
-tên tôi là Hoàng nha Mimo,Action,SET_USERNAME
-tên mình là Khang đi,Action,SET_USERNAME
-đổi tên hiển thị thành Minh,Action,SET_USERNAME
-hãy gọi tớ là Kiệt nha,Action,SET_USERNAME
-gọi tôi là Khánh nha,Action,SET_USERNAME
-gọi tôi là Nam nhe,Action,SET_USERNAME
-gọi tôi là Linh nhé,Action,SET_USERNAME
-hãy gọi tớ là An nhe,Action,SET_USERNAME
-gọi mình là Huy nhe,Action,SET_USERNAME
-gọi mình là Dương,Action,SET_USERNAME
-gọi tôi là Dương nha bạn,Action,SET_USERNAME
-doi ten thanh Hải nha Mimo,Action,SET_USERNAME
-đổi tên mình thành Lâm nhe,Action,SET_USERNAME
-ten minh la Trang nha,Action,SET_USERNAME
-goi toi la Lâm nhé,Action,SET_USERNAME
-đổi tên mình thành An nhé,Action,SET_USERNAME
-tên tôi là Phúc nhé Mimo,Action,SET_USERNAME
-ten minh la Kiệt,Action,SET_USERNAME
-đổi tên mình thành Dũng,Action,SET_USERNAME
-gọi mình là Phúc nhe,Action,SET_USERNAME
-tên tôi là Trang nha bạn,Action,SET_USERNAME
-tên mình là Phúc nhé Mimo,Action,SET_USERNAME
-tên mình là Tùng đi,Action,SET_USERNAME
-goi toi la Tùng đi,Action,SET_USERNAME
-doi ten thanh An nhe,Action,SET_USERNAME
-doi ten thanh Linh nha,Action,SET_USERNAME
-tên tôi là Dương nhé Mimo,Action,SET_USERNAME
-đổi tên hiển thị thành Trang nha bạn,Action,SET_USERNAME
-goi toi la Huy nhe,Action,SET_USERNAME
-gọi tôi là Phương nha bạn,Action,SET_USERNAME
-đổi tên hiển thị thành Vy nhé Mimo,Action,SET_USERNAME
-goi toi la Vy nha Mimo,Action,SET_USERNAME
-goi toi la Dương đi,Action,SET_USERNAME
-doi ten thanh Tùng nha Mimo,Action,SET_USERNAME
-doi ten thanh Thảo nhé,Action,SET_USERNAME
-đổi tên hiển thị thành Huy,Action,SET_USERNAME
-hãy gọi tớ là Khánh nhé,Action,SET_USERNAME
-gọi mình là Kiệt nhé,Action,SET_USERNAME
-gọi tớ là Linh nhe,Action,SET_USERNAME
-hãy gọi tớ là Hoàng đi,Action,SET_USERNAME
-goi minh la Tùng nhé,Action,SET_USERNAME
-tên tôi là Phương nha bạn,Action,SET_USERNAME
-ten minh la Thảo nhe,Action,SET_USERNAME
-đổi tên mình thành Kiệt,Action,SET_USERNAME
-hãy gọi tớ là Phương,Action,SET_USERNAME
-hãy gọi tớ là Vy đi,Action,SET_USERNAME
-gọi mình là Phương nha,Action,SET_USERNAME
-tên mình là Ngọc nha Mimo,Action,SET_USERNAME
-tên mình là Trang nha,Action,SET_USERNAME
-gọi tôi là Dũng nha,Action,SET_USERNAME
-hãy gọi tớ là An,Action,SET_USERNAME
-doi ten thanh Dũng nha bạn,Action,SET_USERNAME
-luong thang la 8tr nha Mimo,Action,SET_INCOME
-thu nhap cua minh la 20 triệu nha Mimo,Action,SET_INCOME
-đổi thu nhập tháng thành 10 triệu đồng nhé,Action,SET_INCOME
-thu nhập của mình là 20tr nhé,Action,SET_INCOME
-lương cứng mỗi tháng của tôi là 10 triệu nhé,Action,SET_INCOME
-cài đặt thu nhập hàng tháng là 7 củ nha,Action,SET_INCOME
-đổi thu nhập tháng thành 15 củ,Action,SET_INCOME
-lương tháng của mình là 15tr nhé,Action,SET_INCOME
-luong thang la 15tr nha,Action,SET_INCOME
-lương tháng của mình là 12 triệu nha,Action,SET_INCOME
-thu nhập của mình là 10 củ,Action,SET_INCOME
-luong thang la 12 triệu nhé,Action,SET_INCOME
-lương cứng mỗi tháng của tôi là 12 triệu nha,Action,SET_INCOME
-cập nhật thu nhập là 30tr nhé,Action,SET_INCOME
-lương tháng của mình là 25 củ nha,Action,SET_INCOME
-thu nhap cua minh la 20 triệu,Action,SET_INCOME
-lương tháng của mình là 30tr,Action,SET_INCOME
-cập nhật thu nhập là 7 củ nhé,Action,SET_INCOME
-luong thang la 10 triệu đồng nhé,Action,SET_INCOME
-cài đặt thu nhập hàng tháng là 15 củ nhé,Action,SET_INCOME
-lương tháng của mình là 12 triệu nhé,Action,SET_INCOME
-thu nhập mỗi tháng 10 triệu đồng nha Mimo,Action,SET_INCOME
-thu nhập mỗi tháng 7 củ đi,Action,SET_INCOME
-luong thang la 5000k nha,Action,SET_INCOME
-đổi thu nhập tháng thành 30tr nha Mimo,Action,SET_INCOME
-thu nhập mỗi tháng 20tr nhé,Action,SET_INCOME
-thu nhập của mình là 10 triệu,Action,SET_INCOME
-thu nhập mỗi tháng 30tr nhé,Action,SET_INCOME
-đổi thu nhập tháng thành 10 triệu,Action,SET_INCOME
-thu nhap cua minh la 10 triệu nhé,Action,SET_INCOME
-lương cứng mỗi tháng của tôi là 10 củ đi,Action,SET_INCOME
-lương tháng của mình là 25 củ nhé,Action,SET_INCOME
-cập nhật thu nhập là 5tr,Action,SET_INCOME
-thu nhập mỗi tháng 8tr,Action,SET_INCOME
-cai thu nhap 12 triệu,Action,SET_INCOME
-cập nhật thu nhập là 5000k đi,Action,SET_INCOME
-cập nhật thu nhập là 5tr nha Mimo,Action,SET_INCOME
-luong thang la 5000k nhé,Action,SET_INCOME
-luong thang la 7 củ nha,Action,SET_INCOME
-lương cứng mỗi tháng của tôi là 5000k đi,Action,SET_INCOME
-luong thang la 5tr nhé,Action,SET_INCOME
-thu nhập mỗi tháng 10 triệu đi,Action,SET_INCOME
-luong thang la 5tr nha,Action,SET_INCOME
-đổi thu nhập tháng thành 20tr nha,Action,SET_INCOME
-cài đặt thu nhập hàng tháng là 20tr nhé,Action,SET_INCOME
-thu nhập mỗi tháng 5tr nha,Action,SET_INCOME
-thu nhap cua minh la 5tr nha Mimo,Action,SET_INCOME
-luong thang la 8.5tr nhé,Action,SET_INCOME
-lương cứng mỗi tháng của tôi là 5tr,Action,SET_INCOME
-cài đặt thu nhập hàng tháng là 15tr nha Mimo,Action,SET_INCOME
-lương tháng của mình là 8tr nhé,Action,SET_INCOME
-đổi thu nhập tháng thành 10 triệu nha Mimo,Action,SET_INCOME
-thu nhập mỗi tháng 5000k nha,Action,SET_INCOME
-thu nhập mỗi tháng 25 củ nhé,Action,SET_INCOME
+đổi giọng nói thành đanh đá đi,Action,SET_TONE
+đổi giọng vui ve coi,Action,SET_TONE
+đổi giọng vui ve nha Mimo,Action,SET_TONE
+đổi giọng vui ve nhe,Action,SET_TONE
+đổi giọng vui ve thử xem,Action,SET_TONE
+đổi giọng vui vẻ,Action,SET_TONE
+đổi giọng vui vẻ nha,Action,SET_TONE
+đổi giọng đồng cảm nha bạn,Action,SET_TONE
+đổi giọng đồng cảm thử xem,Action,SET_TONE
+đổi phong cách nói chuyện thành dan di coi,Action,SET_TONE
+đổi phong cách nói chuyện thành de thuong coi,Action,SET_TONE
+đổi phong cách nói chuyện thành dạn dĩ nha,Action,SET_TONE
+đổi phong cách nói chuyện thành dạn dĩ nha bạn,Action,SET_TONE
+đổi phong cách nói chuyện thành dễ thương thử xem,Action,SET_TONE
+đổi phong cách nói chuyện thành hai huoc đi,Action,SET_TONE
+đổi phong cách nói chuyện thành hài hước thử xem,Action,SET_TONE
+đổi phong cách nói chuyện thành nghiem tuc giùm mình,Action,SET_TONE
+đổi phong cách nói chuyện thành nghiêm khắc đi,Action,SET_TONE
+đổi phong cách nói chuyện thành nghiêm túc,Action,SET_TONE
+đổi phong cách nói chuyện thành người yêu nha Mimo,Action,SET_TONE
+đổi phong cách nói chuyện thành đanh đá nhé,Action,SET_TONE
+đổi phong cách nói chuyện thành đanh đá đi,Action,SET_TONE
+đổi phong cách nói chuyện thành đồng cảm coi,Action,SET_TONE
+đổi sang giọng cham choc coi,Action,SET_TONE
+đổi sang giọng cham choc nha Mimo,Action,SET_TONE
+đổi sang giọng dan di nhe,Action,SET_TONE
+đổi sang giọng de thuong,Action,SET_TONE
+đổi sang giọng de thuong nha bạn,Action,SET_TONE
+đổi sang giọng dong cam thử xem,Action,SET_TONE
+đổi sang giọng dịu dàng nha,Action,SET_TONE
+đổi sang giọng dịu dàng nha bạn,Action,SET_TONE
+đổi sang giọng hài hước đi,Action,SET_TONE
+đổi sang giọng mẹ chồng thử xem,Action,SET_TONE
+đổi sang giọng nghiem tuc,Action,SET_TONE
+đổi sang giọng nghiêm túc nha bạn,Action,SET_TONE
+đổi sang giọng nghiêm túc thử xem,Action,SET_TONE
+đổi sang giọng vui ve coi,Action,SET_TONE
+đổi sang giọng đồng cảm coi,Action,SET_TONE
 đổi thu nhập tháng thành 10 củ nha Mimo,Action,SET_INCOME
-lương tháng của mình là 30tr nha Mimo,Action,SET_INCOME
-thu nhập mỗi tháng 8.5tr nhé,Action,SET_INCOME
-luong thang la 15 củ đi,Action,SET_INCOME
-thu nhập của mình là 10 củ nhé,Action,SET_INCOME
-thu nhập mỗi tháng 10 triệu đồng nhé,Action,SET_INCOME
-thu nhap cua minh la 15 củ,Action,SET_INCOME
-thu nhap cua minh la 20tr,Action,SET_INCOME
-cai thu nhap 5000k nha,Action,SET_INCOME
-thu nhap cua minh la 5000k,Action,SET_INCOME
-thu nhập mỗi tháng 10 triệu nha Mimo,Action,SET_INCOME
-lương tháng của mình là 5tr nha Mimo,Action,SET_INCOME
-thu nhập mỗi tháng 8tr đi,Action,SET_INCOME
-lương tháng của mình là 10 triệu nha Mimo,Action,SET_INCOME
-luong thang la 5000k đi,Action,SET_INCOME
-lương cứng mỗi tháng của tôi là 10 triệu đồng,Action,SET_INCOME
-lương cứng mỗi tháng của tôi là 20tr nha,Action,SET_INCOME
-thu nhập của mình là 8tr đi,Action,SET_INCOME
-luong thang la 12 triệu nha Mimo,Action,SET_INCOME
-cai thu nhap 20tr nhé,Action,SET_INCOME
-lương cứng mỗi tháng của tôi là 5000k,Action,SET_INCOME
-cài đặt thu nhập hàng tháng là 8tr nha Mimo,Action,SET_INCOME
-đổi thu nhập tháng thành 20 triệu nhé,Action,SET_INCOME
-lương tháng của mình là 5tr nhé,Action,SET_INCOME
-thu nhap cua minh la 10 triệu đồng nhé,Action,SET_INCOME
-cai thu nhap 5tr nha Mimo,Action,SET_INCOME
-luong thang la 20tr nha Mimo,Action,SET_INCOME
-đổi thu nhập tháng thành 8.5tr đi,Action,SET_INCOME
-luong thang la 15 củ nhé,Action,SET_INCOME
-thu nhập của mình là 8tr nhé,Action,SET_INCOME
-cài đặt thu nhập hàng tháng là 5000k nha,Action,SET_INCOME
-lương tháng của mình là 10 củ nha,Action,SET_INCOME
-cài đặt thu nhập hàng tháng là 10 triệu đi,Action,SET_INCOME
-lương tháng của mình là 30tr nha,Action,SET_INCOME
-cài đặt thu nhập hàng tháng là 20 triệu nha,Action,SET_INCOME
-thu nhập của mình là 10 triệu đồng đi,Action,SET_INCOME
-cập nhật thu nhập là 8.5tr nha Mimo,Action,SET_INCOME
-lương cứng mỗi tháng của tôi là 7 củ nhé,Action,SET_INCOME
-cai thu nhap 10 củ nhé,Action,SET_INCOME
-cai thu nhap 15tr nha Mimo,Action,SET_INCOME
-cập nhật thu nhập là 10 củ nha,Action,SET_INCOME
-thu nhập của mình là 30tr nha,Action,SET_INCOME
-thu nhập của mình là 12 triệu,Action,SET_INCOME
-thu nhập mỗi tháng 8.5tr nha,Action,SET_INCOME
-đổi thu nhập tháng thành 30tr nhé,Action,SET_INCOME
-thu nhap cua minh la 30tr nhé,Action,SET_INCOME
-lương tháng của mình là 10 triệu đi,Action,SET_INCOME
-đổi thu nhập tháng thành 12 triệu,Action,SET_INCOME
-đổi thu nhập tháng thành 8tr đi,Action,SET_INCOME
-luong thang la 10 củ nhé,Action,SET_INCOME
-luong thang la 8tr nha,Action,SET_INCOME
-thu nhập mỗi tháng 15tr nhé,Action,SET_INCOME
-lương cứng mỗi tháng của tôi là 25 củ nhé,Action,SET_INCOME
-thu nhap cua minh la 7 củ nha,Action,SET_INCOME
-lương tháng của mình là 8tr đi,Action,SET_INCOME
-cập nhật thu nhập là 20tr,Action,SET_INCOME
-luong thang la 5000k,Action,SET_INCOME
-thu nhap cua minh la 12 triệu nha Mimo,Action,SET_INCOME
-cai thu nhap 20tr,Action,SET_INCOME
-cai thu nhap 15 củ,Action,SET_INCOME
-cai thu nhap 15 củ nha,Action,SET_INCOME
-cài đặt thu nhập hàng tháng là 10 triệu đồng,Action,SET_INCOME
-cập nhật thu nhập là 10 củ nha Mimo,Action,SET_INCOME
-cai thu nhap 30tr nha,Action,SET_INCOME
-lương tháng của mình là 10 triệu đồng nhé,Action,SET_INCOME
-cai thu nhap 10 triệu đồng đi,Action,SET_INCOME
-thu nhập mỗi tháng 15 củ nhé,Action,SET_INCOME
-thu nhập của mình là 20tr,Action,SET_INCOME
-thu nhập mỗi tháng 5tr,Action,SET_INCOME
-lương tháng của mình là 5000k nhé,Action,SET_INCOME
-lương cứng mỗi tháng của tôi là 10 triệu đồng nha Mimo,Action,SET_INCOME
-thu nhap cua minh la 8tr nha Mimo,Action,SET_INCOME
-đổi thu nhập tháng thành 20tr nhé,Action,SET_INCOME
-lương tháng của mình là 15 củ nhé,Action,SET_INCOME
-cai thu nhap 10 triệu nha Mimo,Action,SET_INCOME
-luong thang la 25 củ nhé,Action,SET_INCOME
-thu nhập của mình là 10 củ đi,Action,SET_INCOME
-cập nhật thu nhập là 12 triệu nhé,Action,SET_INCOME
-lương cứng mỗi tháng của tôi là 5tr nha Mimo,Action,SET_INCOME
-cập nhật thu nhập là 5000k nhé,Action,SET_INCOME
-cập nhật thu nhập là 5tr nhé,Action,SET_INCOME
-đổi thu nhập tháng thành 5000k đi,Action,SET_INCOME
-lương tháng của mình là 15tr nha,Action,SET_INCOME
-thu nhập mỗi tháng 10 củ đi,Action,SET_INCOME
-đổi thu nhập tháng thành 8.5tr nha,Action,SET_INCOME
-cài đặt thu nhập hàng tháng là 5tr nhé,Action,SET_INCOME
-đổi thu nhập tháng thành 20tr đi,Action,SET_INCOME
-thu nhập mỗi tháng 25 củ nha Mimo,Action,SET_INCOME
-cai thu nhap 8tr nhé,Action,SET_INCOME
-cài đặt thu nhập hàng tháng là 10 triệu nha,Action,SET_INCOME
-cai thu nhap 5000k,Action,SET_INCOME
-đổi thu nhập tháng thành 30tr đi,Action,SET_INCOME
-cai thu nhap 5tr nha,Action,SET_INCOME
-thu nhập mỗi tháng 5tr nhé,Action,SET_INCOME
-luong thang la 12 triệu,Action,SET_INCOME
-luong thang la 10 triệu đồng nha,Action,SET_INCOME
-lương tháng của mình là 20 triệu nhé,Action,SET_INCOME
-lương tháng của mình là 7 củ đi,Action,SET_INCOME
-luong thang la 20 triệu nha Mimo,Action,SET_INCOME
-luong thang la 20tr,Action,SET_INCOME
-lương cứng mỗi tháng của tôi là 7 củ đi,Action,SET_INCOME
-lương cứng mỗi tháng của tôi là 8tr nhé,Action,SET_INCOME
-cai thu nhap 10 triệu nha,Action,SET_INCOME
-cài đặt thu nhập hàng tháng là 7 củ đi,Action,SET_INCOME
-cài đặt thu nhập hàng tháng là 25 củ nha Mimo,Action,SET_INCOME
-cài đặt thu nhập hàng tháng là 12 triệu nha,Action,SET_INCOME
-thu nhập của mình là 15 củ nhé,Action,SET_INCOME
+đổi thu nhập tháng thành 10 triệu,Action,SET_INCOME
 đổi thu nhập tháng thành 10 triệu nha,Action,SET_INCOME
-lương tháng của mình là 10 triệu nha,Action,SET_INCOME
-thu nhap cua minh la 20tr nhé,Action,SET_INCOME
-xóa hộ mình giao dịch gần nhất nhé,Action,DELETE_RECORD
-xóa cái vừa nhập nha Mimo,Action,DELETE_RECORD
-bỏ giao dịch vừa nhập nhé,Action,DELETE_RECORD
-xoa giao dich vua roi nhé Mimo,Action,DELETE_RECORD
-xóa hộ mình giao dịch gần nhất nhe Mimo,Action,DELETE_RECORD
-bỏ khoản chi tiêu vừa ghi giùm cái,Action,DELETE_RECORD
-xoa ho minh giao dich gan nhat nha Mimo,Action,DELETE_RECORD
-xóa cái vừa nhập nhe Mimo,Action,DELETE_RECORD
-xóa lịch sử vừa rồi đi đi,Action,DELETE_RECORD
-bỏ giao dịch lúc nãy đi nhe Mimo,Action,DELETE_RECORD
-hủy cái vừa ghi nha,Action,DELETE_RECORD
-hủy giao dịch gần nhất nha Mimo,Action,DELETE_RECORD
-xoa ho minh giao dich gan nhat giùm cái,Action,DELETE_RECORD
-xóa lịch sử chi tiêu vừa rồi nhe Mimo,Action,DELETE_RECORD
-bỏ khoản chi tiêu vừa ghi nhé Mimo,Action,DELETE_RECORD
-xóa giao dịch vừa rồi giùm cái,Action,DELETE_RECORD
-xoa cai vua nhap giùm cái,Action,DELETE_RECORD
-hủy khoản chi vừa ghi nhé Mimo,Action,DELETE_RECORD
-xóa giao dịch vừa lưu nha,Action,DELETE_RECORD
-xóa khoản chi vừa rồi nha Mimo,Action,DELETE_RECORD
-xóa lịch sử chi tiêu vừa rồi nha Mimo,Action,DELETE_RECORD
-hủy ghi chép vừa rồi nhé,Action,DELETE_RECORD
-xóa bill vừa rồi nhe Mimo,Action,DELETE_RECORD
-hủy hóa đơn vừa ghi,Action,DELETE_RECORD
-xóa khoản chi vừa rồi nhé,Action,DELETE_RECORD
-bỏ giao dịch lúc nãy đi giùm cái,Action,DELETE_RECORD
-xóa cái bill vừa nhập nha Mimo,Action,DELETE_RECORD
-hủy hóa đơn vừa rồi đi,Action,DELETE_RECORD
-xóa cái vừa nhập nha,Action,DELETE_RECORD
-xóa cái vừa nhập giùm cái,Action,DELETE_RECORD
-bỏ giao dịch vừa nhập nhe Mimo,Action,DELETE_RECORD
-bỏ khoản chi tiêu vừa ghi đi,Action,DELETE_RECORD
-huy cai vua ghi nha,Action,DELETE_RECORD
-hủy ghi chép vừa rồi giùm cái,Action,DELETE_RECORD
-huy khoan chi vua ghi nhé Mimo,Action,DELETE_RECORD
-huy cai vua ghi,Action,DELETE_RECORD
-xóa giao dịch vừa lưu,Action,DELETE_RECORD
-xóa cái bill vừa nhập đi,Action,DELETE_RECORD
-xóa hóa đơn gần nhất nhé Mimo,Action,DELETE_RECORD
-xóa khoản chi vừa rồi đi,Action,DELETE_RECORD
-hủy giao dịch gần nhất nha,Action,DELETE_RECORD
-xóa giao dịch vừa lưu giùm cái,Action,DELETE_RECORD
-xóa bill vừa rồi nhé,Action,DELETE_RECORD
-xóa giao dịch vừa lưu đi,Action,DELETE_RECORD
-xóa cái vừa nhập,Action,DELETE_RECORD
-xóa giao dịch vừa rồi đi,Action,DELETE_RECORD
-hủy khoản chi vừa ghi nha Mimo,Action,DELETE_RECORD
-xóa giao dịch vừa rồi nha,Action,DELETE_RECORD
-hủy hóa đơn vừa rồi nhé Mimo,Action,DELETE_RECORD
-bỏ giao dịch lúc nãy đi nha,Action,DELETE_RECORD
-xóa cái vừa nhập nhé Mimo,Action,DELETE_RECORD
-hủy giao dịch vừa lưu nha Mimo,Action,DELETE_RECORD
-hủy khoản chi vừa ghi nhé,Action,DELETE_RECORD
-xóa hóa đơn gần nhất giùm cái,Action,DELETE_RECORD
-hủy hóa đơn vừa ghi nhe Mimo,Action,DELETE_RECORD
-hủy ghi chép vừa rồi nha Mimo,Action,DELETE_RECORD
-hủy giao dịch gần nhất đi,Action,DELETE_RECORD
-hủy hóa đơn vừa ghi giùm cái,Action,DELETE_RECORD
-xóa khoản chi vừa rồi nhé Mimo,Action,DELETE_RECORD
-hủy cái vừa ghi nhé,Action,DELETE_RECORD
-xoa cai vua nhap đi,Action,DELETE_RECORD
-xóa giao dịch lúc nãy đi,Action,DELETE_RECORD
-bỏ giao dịch vừa nhập nhé Mimo,Action,DELETE_RECORD
-hủy giao dịch gần nhất,Action,DELETE_RECORD
-xóa cái bill vừa nhập nhé,Action,DELETE_RECORD
-hủy giao dịch vừa lưu nhé Mimo,Action,DELETE_RECORD
-huy khoan chi vua ghi đi,Action,DELETE_RECORD
-xóa hóa đơn gần nhất nhé,Action,DELETE_RECORD
-xóa lịch sử chi tiêu vừa rồi nhé Mimo,Action,DELETE_RECORD
-huy khoan chi vua ghi nhé,Action,DELETE_RECORD
-xóa bill vừa rồi nha Mimo,Action,DELETE_RECORD
-xóa hộ mình giao dịch gần nhất,Action,DELETE_RECORD
-bỏ giao dịch vừa nhập nha,Action,DELETE_RECORD
-xoa giao dich vua roi đi,Action,DELETE_RECORD
-hủy cái vừa ghi,Action,DELETE_RECORD
-bỏ giao dịch vừa nhập,Action,DELETE_RECORD
-hủy hóa đơn vừa rồi nhé,Action,DELETE_RECORD
-xóa giao dịch vừa lưu nhé Mimo,Action,DELETE_RECORD
-hủy giao dịch gần nhất nhé Mimo,Action,DELETE_RECORD
-xoa ho minh giao dich gan nhat nhé Mimo,Action,DELETE_RECORD
-bỏ khoản chi tiêu vừa ghi,Action,DELETE_RECORD
-bỏ giao dịch lúc nãy đi nhé Mimo,Action,DELETE_RECORD
-hủy hóa đơn vừa rồi nhe Mimo,Action,DELETE_RECORD
-xóa lịch sử chi tiêu vừa rồi giùm cái,Action,DELETE_RECORD
-xóa bill vừa rồi nhé Mimo,Action,DELETE_RECORD
-hủy hóa đơn vừa rồi nha Mimo,Action,DELETE_RECORD
-xoa cai vua nhap nhe Mimo,Action,DELETE_RECORD
-bỏ khoản chi tiêu vừa ghi nha Mimo,Action,DELETE_RECORD
-xoa giao dich vua roi giùm cái,Action,DELETE_RECORD
-xóa hóa đơn gần nhất,Action,DELETE_RECORD
-hủy hóa đơn vừa rồi,Action,DELETE_RECORD
-xóa giao dịch vừa rồi nhe Mimo,Action,DELETE_RECORD
-xóa khoản chi vừa rồi giùm cái,Action,DELETE_RECORD
-xoa ho minh giao dich gan nhat nhe Mimo,Action,DELETE_RECORD
-hủy khoản chi vừa ghi nhe Mimo,Action,DELETE_RECORD
-xóa lịch sử chi tiêu vừa rồi nhé,Action,DELETE_RECORD
-xóa khoản chi vừa rồi nha,Action,DELETE_RECORD
-xóa giao dịch vừa lưu nhe Mimo,Action,DELETE_RECORD
-huy cai vua ghi nhé,Action,DELETE_RECORD
-xóa cái vừa nhập nhé,Action,DELETE_RECORD
-hủy ghi chép vừa rồi,Action,DELETE_RECORD
-hủy giao dịch gần nhất nhé,Action,DELETE_RECORD
-hủy ghi chép vừa rồi nhe Mimo,Action,DELETE_RECORD
-xoa cai vua nhap,Action,DELETE_RECORD
-xoa cai vua nhap nha Mimo,Action,DELETE_RECORD
-xóa bill vừa rồi đi,Action,DELETE_RECORD
-hủy hóa đơn vừa ghi đi,Action,DELETE_RECORD
-bỏ khoản chi tiêu vừa ghi nhe Mimo,Action,DELETE_RECORD
-xóa cái vừa nhập đi,Action,DELETE_RECORD
-huy cai vua ghi giùm cái,Action,DELETE_RECORD
-xóa giao dịch lúc nãy nhé Mimo,Action,DELETE_RECORD
-hủy cái vừa ghi đi,Action,DELETE_RECORD
-hủy ghi chép vừa rồi nha,Action,DELETE_RECORD
-xóa lịch sử vừa rồi đi nhé,Action,DELETE_RECORD
-xóa hóa đơn gần nhất nha,Action,DELETE_RECORD
-xoa giao dich vua roi nhe Mimo,Action,DELETE_RECORD
-hủy giao dịch vừa lưu nhe Mimo,Action,DELETE_RECORD
+đổi thu nhập tháng thành 10 triệu nha Mimo,Action,SET_INCOME
+đổi thu nhập tháng thành 10 triệu đồng nhé,Action,SET_INCOME
+đổi thu nhập tháng thành 12 triệu,Action,SET_INCOME
+đổi thu nhập tháng thành 15 củ,Action,SET_INCOME
+đổi thu nhập tháng thành 20 triệu nhé,Action,SET_INCOME
+đổi thu nhập tháng thành 20tr nha,Action,SET_INCOME
+đổi thu nhập tháng thành 20tr nhé,Action,SET_INCOME
+đổi thu nhập tháng thành 20tr đi,Action,SET_INCOME
+đổi thu nhập tháng thành 30tr nha Mimo,Action,SET_INCOME
+đổi thu nhập tháng thành 30tr nhé,Action,SET_INCOME
+đổi thu nhập tháng thành 30tr đi,Action,SET_INCOME
+đổi thu nhập tháng thành 5000k đi,Action,SET_INCOME
+đổi thu nhập tháng thành 8.5tr nha,Action,SET_INCOME
+đổi thu nhập tháng thành 8.5tr đi,Action,SET_INCOME
+đổi thu nhập tháng thành 8tr đi,Action,SET_INCOME
+đổi tên hiển thị thành An nha bạn,Action,SET_USERNAME
+đổi tên hiển thị thành Huy,Action,SET_USERNAME
+đổi tên hiển thị thành Khánh,Action,SET_USERNAME
+đổi tên hiển thị thành Minh,Action,SET_USERNAME
+đổi tên hiển thị thành Minh đi,Action,SET_USERNAME
+đổi tên hiển thị thành Ngọc nhe,Action,SET_USERNAME
+đổi tên hiển thị thành Phúc nha bạn,Action,SET_USERNAME
+đổi tên hiển thị thành Phương,Action,SET_USERNAME
+đổi tên hiển thị thành Sơn nhé,Action,SET_USERNAME
+đổi tên hiển thị thành Trang nha bạn,Action,SET_USERNAME
+đổi tên hiển thị thành Vy,Action,SET_USERNAME
+đổi tên hiển thị thành Vy nhé Mimo,Action,SET_USERNAME
+đổi tên mình thành An nhé,Action,SET_USERNAME
+đổi tên mình thành Dũng,Action,SET_USERNAME
+đổi tên mình thành Dũng nha,Action,SET_USERNAME
+đổi tên mình thành Dương nhe,Action,SET_USERNAME
+đổi tên mình thành Huy đi,Action,SET_USERNAME
+đổi tên mình thành Hà,Action,SET_USERNAME
+đổi tên mình thành Khánh nha,Action,SET_USERNAME
+đổi tên mình thành Kiệt,Action,SET_USERNAME
+đổi tên mình thành Kiệt nhé,Action,SET_USERNAME
+đổi tên mình thành Lâm nhe,Action,SET_USERNAME
+đổi tên mình thành Minh đi,Action,SET_USERNAME
+đổi tên mình thành Nam,Action,SET_USERNAME
+đổi tên mình thành Ngọc nha bạn,Action,SET_USERNAME
+đổi tên mình thành Phúc đi,Action,SET_USERNAME
+đổi tên mình thành Thảo nhé,Action,SET_USERNAME
+đổi tên mình thành Trang nha,Action,SET_USERNAME
+đổi tên mình thành Vy nhé,Action,SET_USERNAME
+đợt vừa rồi mình đã tiêu hết bao nhiêu,Action,REPORT_GENERAL
+Báo cáo ăn uống tháng này,Action,Report
+Báo cáo ăn uống tuần này,Action,Report
+Báo cáo ăn uống hôm nay,Action,Report
+Báo cáo giải trí tháng này,Action,Report
+Báo cáo mua sắm tháng này,Action,Report
+Báo cáo đi lại tháng này,Action,Report
+Báo cáo y tế tháng này,Action,Report
+Báo cáo nhà cửa tháng này,Action,Report
+bao cao an uong thang nay,Action,Report
+bao cao giai tri thang nay,Action,Report

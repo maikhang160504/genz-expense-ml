@@ -13,6 +13,15 @@ ROOT = Path(__file__).resolve().parent
 ACTION_CSV = ROOT / "intent_action.csv"
 RECORD_CSV = ROOT / "intent_record.csv"
 
+SUGGEST_CORE = [
+    "gợi ý chi tiêu tuần này",
+    "goi y chi tieu thang nay",
+    "gợi ý tiết kiệm",
+    "xin goi y chi tieu",
+    "de xuat goi y chi tieu",
+    "gợi ý ngân sách tháng này",
+]
+
 REPORT_CORE = [
     "tổng chi tháng này",
     "tong chi thang nay",
@@ -57,6 +66,13 @@ def main() -> int:
             if t not in ex_a:
                 ex_a.add(t)
                 add_a.append({"text": t, "intent": "Action", "action_type": "REPORT_GENERAL"})
+
+    for core in SUGGEST_CORE:
+        for suf in SUFFIXES:
+            t = (core + suf).strip()
+            if t not in ex_a:
+                ex_a.add(t)
+                add_a.append({"text": t, "intent": "Action", "action_type": "SUGGEST_BUDGET"})
 
     add_r = []
     for text, lab in INCOME_CORE:

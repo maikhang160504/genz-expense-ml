@@ -96,13 +96,7 @@ def train_model(df: pd.DataFrame) -> tuple[TfidfVectorizer, LogisticRegression, 
 def predict_intent(input_text: str, vectorizer: TfidfVectorizer, model: LogisticRegression) -> str:
     text = str(input_text)
     vec = vectorizer.transform([text])
-    pred = model.predict(vec)[0]
-
-    # If input looks like a money amount but model predicts Chitchat, override to Record
-    if MONEY_RE.search(text) and pred == "Chitchat":
-        return "Record"
-
-    return pred
+    return model.predict(vec)[0]
 
 
 def save_model(vectorizer: TfidfVectorizer, model: LogisticRegression) -> None:

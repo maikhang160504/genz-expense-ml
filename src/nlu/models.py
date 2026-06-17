@@ -76,3 +76,18 @@ def load_chitchat_sentiment_model():
     Giữ hàm để signature run_nlu() không đổi.
     """
     return {"backend": "llm"}
+
+
+def predict_category_from_text(text: str | None, category_model: dict) -> str | None:
+    """Dự đoán danh mục của một đoạn văn bản ngắn (ví dụ: item từ NER) bằng category_model."""
+    if not text or not text.strip():
+        return None
+    if category_model.get("backend") == "encoder" and category_model.get("bundle"):
+        from src.nlu.encoder_runtime import predict_category_encoder
+        return predict_category_encoder(category_model["bundle"], text)
+    elif category_model.get("backend") == "tfidf" and category_model.get("vectorizer"):
+        from pipeline.text_preprocessing import clean_category_text
+        cat_input = clean_category_text(text)
+        cat_vec = category_model["vectorizer"].transform([cat_input])
+        return str(category_model["model"].predict(cat_vec)[0])
+    return None

@@ -114,6 +114,40 @@ GENERATION_THEMES: list[dict[str, str]] = [
     },
 ]
 
+# Cân bằng income (Salary/Bonus/Business) + expense labels yếu — dùng prepare_nlu_datasets.py
+BALANCE_INCOME_THEMES: list[dict[str, str]] = [
+    {
+        "id": "income_salary_short",
+        "hint": "Thu lương: lg ve, luong thang, ck luong, nhan luong; câu 2-6 từ+giá; income Salary ONLY",
+        "labels": "Salary",
+        "type": "income",
+    },
+    {
+        "id": "income_bonus_short",
+        "hint": "Thưởng/lì xì/mẹ cho/ba chuyển/hoàn tiền; income Bonus ONLY; KHÔNG mua/chi",
+        "labels": "Bonus",
+        "type": "income",
+    },
+    {
+        "id": "income_business_short",
+        "hint": "Bán hàng online, thu tiền bán, nhận tiền dịch vụ, freelance; income Business ONLY",
+        "labels": "Business",
+        "type": "income",
+    },
+    {
+        "id": "expense_weak_labels",
+        "hint": "Bổ sung Health,Debt,Charity,Beauty,Social — câu ngắn expense",
+        "labels": "Health,Debt,Charity,Beauty,Social",
+        "type": "expense",
+    },
+    {
+        "id": "expense_housing_edu",
+        "hint": "Tiền nhà, học phí, photocopy — Housing/Education expense ngắn",
+        "labels": "Housing,Education",
+        "type": "expense",
+    },
+]
+
 # Biên mua/bán, đi cafe vs mua cafe — dùng generate_dataset_15k.py
 DISAMBIGUATION_GEMINI_THEMES: list[dict[str, str]] = [
     {
@@ -202,9 +236,14 @@ def get_gemini_client():
     sys.path.insert(0, str(ROOT / "text_nlu"))
     from pipeline.llm_module import call_gemini  # noqa: E402
 
-    api_key = os.environ.get("gemini_API") or os.environ.get("GEMINI_API")
+    api_key = (
+        os.environ.get("gemini_API_v1")
+        or os.environ.get("gemini_API_v2")
+        or os.environ.get("gemini_API")
+        or os.environ.get("GEMINI_API")
+    )
     if not api_key:
-        raise RuntimeError("Thiếu gemini_API trong .env")
+        raise RuntimeError("Thiếu gemini_API_v1/v2 hoặc gemini_API trong .env")
     model = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash")
     return call_gemini, api_key, model
 
@@ -305,7 +344,22 @@ def run_audit(df) -> dict:
     return audit
 
 
-def parse_pipe_lines(raw: str, existing: set[str]) -> list[dict]:
+def parse_pipe_lines(raw: str, existing: set[str], norm_existing: set[str] | None = None) -> list[dict]:
+    import re as _re
+
+    money_norm = _re.compile(
+        r"(\d+(?:[\.,]\d+)?\s?(k|đ|d|vnđ|vnd|ngan|nghin|tr|triệu|trieu|củ|cu))",
+        _re.I,
+    )
+
+    def _norm_amt(t: str) -> str:
+        t = t.lower().strip()
+        t = money_norm.sub(" <AMOUNT> ", t)
+        return " ".join(t.split())
+
+    if norm_existing is None:
+        norm_existing = {_norm_amt(x) for x in existing}
+
     rows: list[dict] = []
     for line in raw.splitlines():
         line = line.strip()
@@ -330,9 +384,13 @@ def parse_pipe_lines(raw: str, existing: set[str]) -> list[dict]:
         t = re.sub(r"\s+", " ", text).strip()
         if not t or len(t) > 120 or t in existing:
             continue
+        norm_t = _norm_amt(t)
+        if norm_t in norm_existing:
+            continue
         if typ == "income" and re.match(r"^(mua|chi|order|thanh toán|trả|đóng)\b", t, re.I):
             continue
         existing.add(t)
+        norm_existing.add(norm_t)
         rows.append({"text": t, "label": label, "type": typ, "is_money": is_money})
     return rows
 
@@ -343,15 +401,30 @@ def run_generate(
     batches: int,
     rows_per_batch: int,
     sleep_s: float,
+    themes_override: list[dict[str, str]] | None = None,
+    ignore_done: bool = False,
 ) -> int:
     call_fn, api_key, model = get_gemini_client()
     existing = set(df["text"].astype(str).str.strip())
+    import re as _re
+
+    _money_norm = _re.compile(
+        r"(\d+(?:[\.,]\d+)?\s?(k|đ|d|vnđ|vnd|ngan|nghin|tr|triệu|trieu|củ|cu))",
+        _re.I,
+    )
+
+    def _norm_amt(t: str) -> str:
+        t = t.lower().strip()
+        t = _money_norm.sub(" <AMOUNT> ", t)
+        return " ".join(t.split())
+
+    norm_existing = {_norm_amt(x) for x in existing}
     state = {}
     if STATE_PATH.is_file():
         state = json.loads(STATE_PATH.read_text(encoding="utf-8"))
     done_ids = set(state.get("done_theme_ids") or [])
 
-    themes = GENERATION_THEMES[:]
+    themes = (themes_override or GENERATION_THEMES)[:]
     random.seed(42)
     random.shuffle(themes)
     added_total = 0
@@ -364,7 +437,7 @@ def run_generate(
             if ran >= batches:
                 break
             tid = theme["id"]
-            if tid in done_ids:
+            if not ignore_done and tid in done_ids:
                 continue
             user = (
                 f"Tạo đúng {rows_per_batch} dòng pipe-format.\n"
@@ -381,7 +454,7 @@ def run_generate(
                 print(f"    API error: {exc}", file=sys.stderr)
                 time.sleep(sleep_s * 2)
                 continue
-            new_rows = parse_pipe_lines(raw, existing)
+            new_rows = parse_pipe_lines(raw, existing, norm_existing)
             for r in new_rows:
                 writer.writerow(r)
             added_total += len(new_rows)

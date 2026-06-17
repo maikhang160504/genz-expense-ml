@@ -9,26 +9,6 @@ import os
 import re
 import unicodedata
 
-_EXPENSE_RECORD = re.compile(
-    r"^(mua|order|thanh\s+toán|thanh\s+toan|đóng|dong|nạp|nap|book)\b",
-    re.I,
-)
-_CHI_WITH_MONEY = re.compile(r"^chi\s+.+\d", re.I)
-_ACTION_QUERY = re.compile(
-    r"(?:"
-    r"tổng\s+chi|tong\s+chi|"
-    r"(?:tháng|thang|tuần|tuan|hôm|hom|quý|quy)\s+nay\b.+(?:tiêu|tieu|chi\b).*(?:bao\s+nhiêu|bao\s+nhieu|hết|het|mấy|may|roi|rồi)|"
-    r"(?:tiêu|tieu)\s+bao\s+nhiêu|"
-    r"(?:đã|da)\s+(?:tiêu|tieu)|"
-    r"thống\s+kê\s+chi|thong\s+ke\s+chi|"
-    r"xem\s+(?:tổng\s+chi|tong\s+chi|báo\s+cáo\s+tổng|bao\s+cao\s+tong)|"
-    r"chi\s+tiêu\s+(?:tháng|thang|tuần|tuan)|"
-    r"mình\s+đã\s+tiêu|minh\s+da\s+tieu|"
-    r"tiêu\s+hết\s+bao\s+nhiêu|tieu\s+het\s+bao\s+nhiêu"
-    r")",
-    re.I | re.UNICODE,
-)
-
 def _norm(s: str) -> str:
     nfd = unicodedata.normalize("NFD", s.lower().strip())
     return "".join(c for c in nfd if unicodedata.category(c) != "Mn")
@@ -40,21 +20,27 @@ _MONEY_PATTERN = re.compile(
 )
 
 
+_SUGGEST_KW = (
+    "goi y chi tieu", "gợi ý chi tiêu", "goi y tiet kiem", "gợi ý tiết kiệm",
+    "goi y ngan sach", "gợi ý ngân sách", "goi y han muc", "gợi ý hạn mức",
+    "de xuat goi y", "đề xuất gợi ý", "xin goi y chi", "suggest budget",
+)
+_REPORT_KW = (
+    "bao cao", "báo cáo", "thong ke", "thống kê", "tong chi", "tổng chi",
+    "tieu bao nhieu", "tiêu bao nhieu", "da tieu bao nhieu", "đã tiêu bao nhiêu",
+    "chi het bao nhieu", "chi hết bao nhiêu", "xem tong chi", "xem tổng chi",
+)
+
+
 def is_action_query(text: str) -> bool:
-    if os.environ.get("USE_ACTION_QUERY_GUARD", "1") != "1":
-        return False
-    t = _norm(text)
-    if not t:
-        return False
-    if _MONEY_PATTERN.search(t):
-        return False
-    if _EXPENSE_RECORD.search(t):
-        return False
-    if _CHI_WITH_MONEY.search(t):
-        return False
-    if re.search(r"\b(me|mẹ|ma|bo|bố)\s+cho\b", t):
-        return False
-    return bool(_ACTION_QUERY.search(t))
+    t = _norm(text).replace("đ", "d")
+    if any(k in t for k in _SUGGEST_KW):
+        return True
+    if any(k in t for k in _REPORT_KW):
+        return True
+    if re.search(r"\b(so sanh|so sánh)\b", t) and any(w in t for w in ["chi tieu", "chi tiêu", "tuan", "tuần", "thang", "tháng"]):
+        return True
+    return False
 
 
 def is_limit_or_goal_action(text: str) -> bool:
@@ -78,14 +64,23 @@ def is_limit_or_goal_action(text: str) -> bool:
     return False
 
 
+def suggest_budget_action_type(text: str) -> str | None:
+    t = _norm(text).replace("đ", "d")
+    if any(k in t for k in _SUGGEST_KW):
+        return "SUGGEST_BUDGET"
+    return None
+
+
 def report_general_action_type(text: str) -> str | None:
+    if suggest_budget_action_type(text):
+        return None
     if not is_action_query(text):
         return None
-    t = _norm(text)
+    t = _norm(text).replace("đ", "d")
     if re.search(
-        r"báo\s+cáo\s+(?:ăn\s+uống|an\s+uong|đi\s+lại|di\s+lai|mua\s+sắm|mua\s+sam|"
-        r"giải\s+trí|giai\s+tri|điện\s+nước|dien\s+nuoc|học\s+phí|hoc\s+phi|y\s+tế|y\s+te|"
-        r"nhà\s+cửa|nha\s+cua)\b",
+        r"bao\s+cao\s+(?:an\s+uong|di\s+lai|mua\s+sam|"
+        r"giai\s+tri|dien\s+nuoc|hoc\s+phi|y\s+te|"
+        r"nha\s+cua)\b",
         t,
     ):
         return "Report"

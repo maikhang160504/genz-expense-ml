@@ -1,6 +1,7 @@
 """Trích xuất danh mục (NLU Record) + số tiền từ dòng OCR hóa đơn."""
 from __future__ import annotations
 
+import math
 import re
 import sys
 import unicodedata
@@ -221,18 +222,24 @@ def to_nlu_record_category(label: str | None) -> str:
     if not label:
         return NLU_DEFAULT_CATEGORY
     cmap = _nlu_category_map()
-    valid = set(cmap.values())
+    valid = {
+        "Food", "Essentials", "Social", "Transport", "Shopping", "Housing", 
+        "Health", "Beauty", "Education", "Entertainment", "Investment", "Others"
+    }
     if label in valid:
         return label
     _ensure_train_on_path()
     try:
-        from src.nlu.ner import map_category_to_label, normalize_text
+        from src.nlu.ner import normalize_text
 
         key = normalize_text(str(label))
-        mapped = map_category_to_label(key) or cmap.get(key)
+        pred = _predict_category_model([key])
+        if pred in valid:
+            return pred
+        mapped = cmap.get(key)
         if mapped:
             return mapped
-    except ImportError:
+    except Exception:
         pass
     key = _normalize(str(label))
     for vi, en in cmap.items():
@@ -479,7 +486,265 @@ def classify_category(lines: list[str]) -> str:
     return model_cat or NLU_DEFAULT_CATEGORY
 
 
-def extract_receipt_summary(df_lines: pd.DataFrame) -> dict[str, Any]:
+def merge_horizontal_fragmented_boxes(df_boxes: pd.DataFrame, font_height_scale: float = 1.8) -> pd.DataFrame:
+    """
+    Hợp nhất các bounding box bị phân mảnh theo chiều ngang trên cùng một dòng Y.
+    """
+    if df_boxes is None or df_boxes.empty:
+        return pd.DataFrame(columns=["x1", "y1", "x2", "y2", "text", "conf_paddle"])
+
+    required_cols = ["x1", "y1", "x2", "y2", "text"]
+    for col in required_cols:
+        if col not in df_boxes.columns:
+            return df_boxes
+
+    boxes = df_boxes.to_dict(orient="records")
+    boxes.sort(key=lambda b: b["y1"])
+    
+    grouped_rows: list[list[dict]] = []
+    
+    for box in boxes:
+        y1, y2 = box["y1"], box["y2"]
+        h = y2 - y1
+        if h <= 0:
+            continue
+        y_center = (y1 + y2) / 2.0
+        
+        placed = False
+        for row in grouped_rows:
+            ref_box = row[0]
+            ref_y1, ref_y2 = ref_box["y1"], ref_box["y2"]
+            ref_h = ref_y2 - ref_y1
+            ref_y_center = (ref_y1 + ref_y2) / 2.0
+            
+            overlap = max(0, min(y2, ref_y2) - max(y1, ref_y1))
+            min_h = min(h, ref_h)
+            
+            if min_h > 0 and (overlap / min_h >= 0.5 or abs(y_center - ref_y_center) < (min_h * 0.4)):
+                row.append(box)
+                placed = True
+                break
+        if not placed:
+            grouped_rows.append([box])
+            
+    merged_boxes = []
+    
+    for row in grouped_rows:
+        row.sort(key=lambda b: b["x1"])
+        
+        current_merged = row[0]
+        for next_box in row[1:]:
+            curr_x1, curr_y1, curr_x2, curr_y2 = current_merged["x1"], current_merged["y1"], current_merged["x2"], current_merged["y2"]
+            next_x1, next_y1, next_x2, next_y2 = next_box["x1"], next_box["y1"], next_box["x2"], next_box["y2"]
+            
+            curr_h = curr_y2 - curr_y1
+            x_distance = next_x1 - curr_x2
+            
+            if x_distance <= (curr_h * font_height_scale):
+                current_merged["text"] = str(current_merged["text"]) + " " + str(next_box["text"])
+                current_merged["x1"] = min(curr_x1, next_x1)
+                current_merged["y1"] = min(curr_y1, next_y1)
+                current_merged["x2"] = max(curr_x2, next_x2)
+                current_merged["y2"] = max(curr_y2, next_y2)
+                if "conf_paddle" in current_merged and "conf_paddle" in next_box:
+                    current_merged["conf_paddle"] = (current_merged["conf_paddle"] + next_box["conf_paddle"]) / 2.0
+            else:
+                merged_boxes.append(current_merged)
+                current_merged = next_box
+        merged_boxes.append(current_merged)
+        
+    return pd.DataFrame(merged_boxes)
+
+
+def align_skewed_items_and_prices(
+    df_boxes: pd.DataFrame,
+    img_width: int | None = None,
+    skew_angle_rad: float = 0.0
+) -> list[tuple[str, int]]:
+    """
+    Ghép cặp tên mặt hàng và giá tiền tương ứng dựa trên Baseline hình học, có hỗ trợ góc nghiêng.
+    """
+    if df_boxes is None or df_boxes.empty:
+        return []
+        
+    required_cols = ["x1", "y1", "x2", "y2", "text"]
+    for col in required_cols:
+        if col not in df_boxes.columns:
+            return []
+            
+    if img_width is None:
+        img_width = int(df_boxes["x2"].max())
+        
+    boundary_x = img_width * 0.55
+    names = []
+    prices = []
+    
+    amount_pattern = re.compile(r"\b\d{1,3}(?:[.,]\d{3})+\b|\b\d{4,9}\b")
+    
+    for _, row in df_boxes.iterrows():
+        text = str(row["text"]).strip()
+        x1, y1, x2, y2 = row["x1"], row["y1"], row["x2"], row["y2"]
+        
+        amounts = amount_pattern.findall(text)
+        if amounts and x1 >= boundary_x:
+            val = _parse_vn_amount(amounts[-1])
+            if val is not None and val >= 1000:
+                prices.append({"amount": val, "bbox": [x1, y1, x2, y2]})
+        else:
+            cleaned_text = re.sub(r"^\s*\d+[\s.-]+", "", text)
+            if len(cleaned_text) > 1:
+                names.append({"text": cleaned_text, "bbox": [x1, y1, x2, y2]})
+                
+    names.sort(key=lambda x: x["bbox"][1])
+    
+    matched_results = []
+    used_price_indices = set()
+    
+    for name_box in names:
+        n_bbox = name_box["bbox"]
+        name_x = (n_bbox[0] + n_bbox[2]) / 2.0
+        name_y = (n_bbox[1] + n_bbox[3]) / 2.0
+        font_h = n_bbox[3] - n_bbox[1]
+        
+        best_price_idx = -1
+        min_distance = float("inf")
+        
+        for idx, price_box in enumerate(prices):
+            if idx in used_price_indices:
+                continue
+                
+            p_bbox = price_box["bbox"]
+            price_x = (p_bbox[0] + p_bbox[2]) / 2.0
+            price_y = (p_bbox[1] + p_bbox[3]) / 2.0
+            
+            dx = price_x - name_x
+            if dx <= 0:
+                continue
+                
+            expected_price_y = name_y + dx * math.tan(skew_angle_rad)
+            vertical_deviation = abs(price_y - expected_price_y)
+            
+            if vertical_deviation < (font_h * 1.5):
+                dist = math.sqrt(dx**2 + (price_y - name_y)**2)
+                if dist < min_distance:
+                    min_distance = dist
+                    best_price_idx = idx
+                    
+        if best_price_idx != -1:
+            matched_results.append((name_box["text"], prices[best_price_idx]["amount"]))
+            used_price_indices.add(best_price_idx)
+        else:
+            matched_results.append((name_box["text"], 0))
+            
+    return matched_results
+
+
+def validate_and_correct_total_amount(
+    ocr_total: int | None,
+    items: list[tuple[str, int]],
+    tolerance_ratio: float = 0.05
+) -> tuple[int | None, list[str]]:
+    """
+    Kiểm chéo số tiền tổng cộng với tổng các mặt hàng để phát hiện lỗi mất nét số 0 (Digit Drop).
+    """
+    warnings = []
+    if not items:
+        return ocr_total, warnings
+        
+    sum_items = sum(price for _, price in items if price)
+    if sum_items == 0:
+        return ocr_total, warnings
+        
+    if ocr_total is None:
+        return sum_items, ["AMOUNT_SUMMED_FROM_ITEMS"]
+        
+    if abs(sum_items - ocr_total * 10) / sum_items <= tolerance_ratio:
+        warnings.append("AMOUNT_CORRECTED_SCALE_10X")
+        return sum_items, warnings
+        
+    if abs(sum_items - ocr_total * 100) / sum_items <= tolerance_ratio:
+        warnings.append("AMOUNT_CORRECTED_SCALE_100X")
+        return sum_items, warnings
+        
+    if abs(sum_items - ocr_total) / sum_items <= tolerance_ratio:
+        return sum_items, warnings
+        
+    if abs(sum_items - ocr_total * 1000) / sum_items <= tolerance_ratio:
+        warnings.append("AMOUNT_CORRECTED_SCALE_1000X")
+        return sum_items, warnings
+        
+    return ocr_total, warnings
+
+
+def predict_item_category(item_name: str) -> tuple[str, float]:
+    """Dự đoán danh mục cho một tên sản phẩm riêng lẻ."""
+    model_cat = _predict_category_model([item_name])
+    if model_cat:
+        return model_cat, 0.9
+    scores = _score_categories_from_lines([item_name])
+    best = max(scores, key=lambda k: scores[k])
+    if scores[best] > 0:
+        return best, 0.8
+    return NLU_DEFAULT_CATEGORY, 0.5
+
+
+def resolve_mixed_receipt_categories(
+    items: list[tuple[str, int]],
+    split_mode: bool = True,
+    entropy_threshold: float = 0.65
+) -> list[dict[str, Any]]:
+    """
+    Phân loại và phân bổ danh mục cho hóa đơn hỗn hợp.
+    """
+    if not items:
+        return [{"category": NLU_DEFAULT_CATEGORY, "amount": 0}]
+        
+    category_totals = {}
+    
+    for name, price in items:
+        if not price:
+            price = 0
+        category, confidence = predict_item_category(name)
+        cat_label = category if confidence >= 0.60 else NLU_DEFAULT_CATEGORY
+        
+        if cat_label not in category_totals:
+            category_totals[cat_label] = 0
+        category_totals[cat_label] += price
+        
+    total_bill_amount = sum(price for _, price in items if price)
+    if total_bill_amount == 0:
+        first_cat = predict_item_category(items[0][0])[0] if items else NLU_DEFAULT_CATEGORY
+        return [{"category": first_cat, "amount": 0}]
+        
+    if split_mode:
+        transactions = []
+        for cat, amt in category_totals.items():
+            transactions.append({
+                "category": cat,
+                "amount": amt,
+                "is_split": True
+            })
+        return transactions
+    else:
+        primary_category = max(category_totals, key=category_totals.get)
+        primary_amount = category_totals[primary_category]
+        
+        dominance_ratio = primary_amount / total_bill_amount
+        if dominance_ratio >= entropy_threshold:
+            return [{"category": primary_category, "amount": total_bill_amount}]
+        else:
+            return [{
+                "category": "Essentials", 
+                "amount": total_bill_amount, 
+                "note": "Hóa đơn siêu thị hỗn hợp nhiều mặt hàng"
+            }]
+
+
+def extract_receipt_summary(
+    df_lines: pd.DataFrame,
+    df_boxes: pd.DataFrame | None = None,
+    split_mode: bool = True
+) -> dict[str, Any]:
     """Kết quả demo: category (NLU Record) + amount."""
     if df_lines is None or df_lines.empty:
         return {
@@ -489,6 +754,25 @@ def extract_receipt_summary(df_lines: pd.DataFrame) -> dict[str, Any]:
         }
 
     lines = [str(x).strip() for x in df_lines["line_text"].tolist() if str(x).strip()]
+    
+    if df_boxes is not None and not df_boxes.empty:
+        df_boxes_merged = merge_horizontal_fragmented_boxes(df_boxes)
+        matched_items = align_skewed_items_and_prices(df_boxes_merged)
+        raw_amount = extract_total_amount(lines)
+        final_amount, math_warnings = validate_and_correct_total_amount(raw_amount, matched_items)
+        transactions = resolve_mixed_receipt_categories(matched_items, split_mode=split_mode)
+        
+        primary_tx = transactions[0] if transactions else {"category": NLU_DEFAULT_CATEGORY, "amount": final_amount}
+        
+        return {
+            "category": primary_tx.get("category", NLU_DEFAULT_CATEGORY),
+            "amount": final_amount,
+            "currency": "VND",
+            "transactions": transactions,
+            "warnings": math_warnings,
+            "items_count": len(matched_items)
+        }
+
     return {
         "category": classify_category(lines),
         "amount": extract_total_amount(lines),

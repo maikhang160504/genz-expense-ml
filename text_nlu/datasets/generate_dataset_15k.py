@@ -122,17 +122,15 @@ def generate_local_rows(target: int, seed: int = 42) -> list[dict]:
         n += 1
         return len(rows) < target
 
-    # 1) mua vs bán cùng sản phẩm (từ md)
+    # 1) mua vs bán cùng sản phẩm (từ md) — mỗi item chỉ 1-2 biến thể amount
     for item in topics:
         lab = label_for_topic(item)
-        for i, amt in enumerate(AMOUNTS):
+        for amt in random.sample(AMOUNTS, min(2, len(AMOUNTS))):
             if not add(f"mua {item} {amt}", lab, "expense"):
                 return rows
             if not add(f"bán {item} {amt}", "Business", "income"):
                 return rows
-            if not add(f"{random.choice(BUY_VERBS)} {item} {money_vn(n + i)}", lab, "expense"):
-                return rows
-            n += 1
+        n += 1
 
     # 2) đi cafe vs mua cafe
     for place, lab in GO_PLACES:
@@ -185,13 +183,37 @@ def generate_local_rows(target: int, seed: int = 42) -> list[dict]:
 def append_rows(new_rows: list[dict]) -> int:
     if not new_rows:
         return 0
-    existing: set[str] = set()
-    if CSV_PATH.is_file():
-        import pandas as pd
+    import re as _re
+    import pandas as pd
 
+    money_norm = _re.compile(
+        r"(\d+(?:[\.,]\d+)?\s?(k|đ|d|vnđ|vnd|ngan|nghin|tr|triệu|trieu|củ|cu))",
+        _re.I,
+    )
+
+    def _norm_amt(t: str) -> str:
+        t = t.lower().strip()
+        t = money_norm.sub(" <AMOUNT> ", t)
+        return " ".join(t.split())
+
+    existing: set[str] = set()
+    norm_existing: set[str] = set()
+    if CSV_PATH.is_file():
         df = pd.read_csv(CSV_PATH, encoding="utf-8-sig")
-        existing = set(df["text"].astype(str).str.strip())
-    to_write = [r for r in new_rows if r["text"] not in existing]
+        for t in df["text"].astype(str).str.strip():
+            existing.add(t)
+            norm_existing.add(_norm_amt(t))
+    to_write = []
+    for r in new_rows:
+        t = r["text"]
+        if t in existing:
+            continue
+        n = _norm_amt(t)
+        if n in norm_existing:
+            continue
+        existing.add(t)
+        norm_existing.add(n)
+        to_write.append(r)
     if not to_write:
         return 0
     write_header = not CSV_PATH.is_file() or CSV_PATH.stat().st_size == 0

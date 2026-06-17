@@ -1,0 +1,92 @@
+{
+  "generated_at": "2026-06-17T14:20:02.987733+00:00",
+  "source": "D:\\Luan-Van\\Project\\expense-ocr-nlu\\text_nlu\\datasets\\intent_record.csv",
+  "total_rows": 93619,
+  "type_distribution": {
+    "expense": 80111,
+    "income": 13508
+  },
+  "label_distribution": {
+    "Essentials": 14591,
+    "Food": 13353,
+    "Entertainment": 8845,
+    "Business": 5058,
+    "Transport": 4896,
+    "Shopping": 4808,
+    "Bonus": 4463,
+    "Housing": 4254,
+    "Beauty": 4052,
+    "Education": 3850,
+    "Health": 3748,
+    "Social": 3738,
+    "Investment": 3735,
+    "Salary": 3707,
+    "Debt": 3366,
+    "Charity": 3295,
+    "Savings": 3188,
+    "Others": 672
+  },
+  "expense_label_distribution": {
+    "Essentials": 14591,
+    "Food": 13353,
+    "Entertainment": 8845,
+    "Transport": 4896,
+    "Shopping": 4808,
+    "Housing": 4254,
+    "Beauty": 4052,
+    "Education": 3850,
+    "Health": 3748,
+    "Social": 3738,
+    "Investment": 3511,
+    "Debt": 3339,
+    "Charity": 3295,
+    "Savings": 3076,
+    "Others": 672,
+    "Business": 72,
+    "Salary": 9,
+    "Bonus": 2
+  },
+  "income_label_distribution": {
+    "Business": 4986,
+    "Bonus": 4461,
+    "Salary": 3698,
+    "Investment": 224,
+    "Savings": 112,
+    "Debt": 27
+  },
+  "stats": {
+    "median_label_count": 3951.0,
+    "target_per_label": 3358,
+    "expense_income_ratio": 5.93,
+    "income_target": 14419,
+    "income_gap": 911
+  },
+  "weak_labels": [
+    {
+      "label": "Others",
+      "count": 672,
+      "target": 3358,
+      "gap": 2686,
+      "type": "expense"
+    },
+    {
+      "label": "Savings",
+      "count": 3188,
+      "target": 3358,
+      "gap": 170,
+      "type": "income"
+    },
+    {
+      "label": "Charity",
+      "count": 3295,
+      "target": 3358,
+      "gap": 63,
+      "type": "expense"
+    }
+  ],
+  "recommendations": [
+    "Bổ sung ~911 mẫu income (hiện 13508, mục tiêu ~14419)",
+    "Ưu tiên nhãn: Others, Savings, Charity"
+  ],
+  "supplement_applied": true
+}

@@ -282,7 +282,7 @@ class ReceiptOCRPipeline:
 
 
 
-    def process_image(self, image_path: str | Path) -> dict[str, Any]:
+    def process_image(self, image_path: str | Path, split_mode: bool = True) -> dict[str, Any]:
 
         image_rgb = self._read_rgb(image_path)
 
@@ -290,6 +290,6 @@ class ReceiptOCRPipeline:
 
         df_lines = self.group_lines(df_boxes)
 
-        return extract_receipt_summary(df_lines)
+        return extract_receipt_summary(df_lines, df_boxes=df_boxes, split_mode=split_mode)
 
 
