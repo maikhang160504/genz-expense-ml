@@ -28,3 +28,6 @@ archive/
 
 # Environment files
 .env
+
+OCR/vendor/pick/
+OCR/verified_ocr_labels

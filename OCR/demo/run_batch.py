@@ -19,15 +19,18 @@ from receipt_ocr.paddle_compat import setup_paddle_env  # noqa: E402
 
 setup_paddle_env()
 
+from receipt_ocr.model_paths import resolve_vietocr_weights_path  # noqa: E402
 from receipt_ocr.pipeline import ReceiptOCRPipeline  # noqa: E402
 
 IMAGES_DIR = DEMO_DIR / "images"
-DEFAULT_WEIGHTS = OCR_ROOT / "models" / "vietocr_receipt.pth"
+DEFAULT_WEIGHTS = OCR_ROOT / "models" / "vietocr" / "vgg_transformer.pth"
 OUT_DIR = DEMO_DIR / "output"
 
 
 def main() -> None:
-    weights = Path(os.environ.get("RECEIPT_OCR_WEIGHTS", str(DEFAULT_WEIGHTS)))
+    weights = resolve_vietocr_weights_path(
+        os.environ.get("RECEIPT_OCR_WEIGHTS") or DEFAULT_WEIGHTS
+    )
     if not weights.is_file():
         raise FileNotFoundError(f"Thiếu weights: {weights}")
 

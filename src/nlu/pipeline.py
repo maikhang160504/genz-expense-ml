@@ -17,6 +17,7 @@ from src.nlu.action_query import (
     report_general_action_type,
     suggest_budget_action_type,
     is_limit_or_goal_action,
+    is_system_or_delete_action,
 )
 from src.nlu.time_parser import parse_time_range
 from src.nlu.income_phrase import is_clear_income_phrase
@@ -186,6 +187,16 @@ def find_matching_correction(
     return None
 
 
+def is_entertainment_cafe(text: str) -> bool:
+    norm = _no_accent(text.lower()).replace("đ", "d")
+    # Matches "di/hen/tu tap ca phe/cafe/cf" or "ca phe/cafe/cf ... voi/ban/be/bo/ny/crush/nguoi yeu"
+    pattern = re.compile(
+        r"\b(di|hen|tu\s+tap)\s+(ca\s+phe|cafe|cf)\b|\b(ca\s+phe|cafe|cf)\b.*\b(voi|ban|be|bo|ny|crush|nguoi\s+yeu)\b",
+        re.IGNORECASE
+    )
+    return bool(pattern.search(norm))
+
+
 def run_nlu(
     user_text: str,
     intent_model,
@@ -203,6 +214,8 @@ def run_nlu(
     if is_action_query(user_text) and intent != "Action":
         intent = "Action"
     if is_limit_or_goal_action(user_text) and intent != "Action":
+        intent = "Action"
+    if is_system_or_delete_action(user_text) and intent != "Action":
         intent = "Action"
 
     # Personalization Hybrid Layer: exact match or semantic similarity match
@@ -286,6 +299,8 @@ def run_nlu(
 
         # Resolve category: prefer mapped_category from NER slots, fallback to raw_category from full text
         final_category = mapped_category if mapped_category else raw_category
+        if is_entertainment_cafe(user_text):
+            final_category = "Entertainment"
                 
         if final_category is not None:
             result["category"] = final_category

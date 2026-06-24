@@ -1,0 +1,17 @@
+{
+  "id": "mainhatkhangb2205881/train-pick-kie",
+  "title": "train-pick-kie",
+  "code_file": "vietnamese-receipts-train-pick-kie.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": "true",
+  "enable_gpu": "true",
+  "enable_internet": "true",
+  "dataset_sources": [
+    "domixi1989/vietnamese-receipts-mc-ocr-2021",
+    "mainhatkhangb2205881/pick-train-code"
+  ],
+  "competition_sources": [],
+  "kernel_sources": [],
+  "model_sources": []
+}

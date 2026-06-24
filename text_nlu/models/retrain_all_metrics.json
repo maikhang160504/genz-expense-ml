@@ -1,0 +1,48 @@
+{
+  "intent": {
+    "accuracy": 0.99,
+    "test_set": 14478,
+    "macro_precision": 0.99,
+    "macro_recall": 0.99,
+    "macro_f1": 0.99,
+    "weighted_precision": 0.99,
+    "weighted_recall": 0.99,
+    "weighted_f1": 0.99
+  },
+  "record_type": {
+    "accuracy": 0.98,
+    "test_set": 8712,
+    "macro_precision": 0.93,
+    "macro_recall": 0.98,
+    "macro_f1": 0.95,
+    "weighted_precision": 0.99,
+    "weighted_recall": 0.98,
+    "weighted_f1": 0.98
+  },
+  "category": {
+    "accuracy": 0.95,
+    "test_set": 8712,
+    "macro_precision": 0.9,
+    "macro_recall": 0.93,
+    "macro_f1": 0.91,
+    "weighted_precision": 0.95,
+    "weighted_recall": 0.95,
+    "weighted_f1": 0.95
+  },
+  "action_type": {
+    "accuracy": 1.0,
+    "test_set": 4012,
+    "macro_precision": 1.0,
+    "macro_recall": 1.0,
+    "macro_f1": 1.0,
+    "weighted_precision": 1.0,
+    "weighted_recall": 1.0,
+    "weighted_f1": 1.0
+  },
+  "ner": {
+    "ents_f": 96.1,
+    "ents_p": 95.92,
+    "ents_r": 96.29,
+    "score": 0.96
+  }
+}

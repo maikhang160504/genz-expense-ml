@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <title>Bill demo — pipeline comparison</title>
+  <style>
+    body { font-family: system-ui, sans-serif; background: #0b0f19; color: #e2e8f0; margin: 0; padding: 24px; }
+    h1 { margin-top: 0; }
+    .meta { color: #94a3b8; margin-bottom: 24px; }
+    .legend { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 24px; }
+    .legend span { padding: 4px 10px; border-radius: 999px; font-size: 12px; }
+    .card { background: #141b2c; border: 1px solid #1e293b; border-radius: 12px; padding: 16px; margin-bottom: 24px; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    figure { margin: 0; }
+    figcaption { font-weight: 600; margin-bottom: 8px; color: #a7f3d0; }
+    img { max-width: 100%; border-radius: 8px; border: 1px solid #334155; }
+    pre { background: #070a13; padding: 12px; border-radius: 8px; font-size: 12px; overflow: auto; }
+    @media (max-width: 1100px) { .grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <h1>Bill demo — 2 pipeline comparison</h1>
+  <p class="meta">Generated 2026-06-19T17:27:39.144579+00:00 · PICK weights: {'model_path': 'D:\\Luan-Van\\Project\\expense-ocr-nlu\\OCR\\models\\pick_kie\\model_best.pth', 'weights_found': True, 'weight_files': ['model_best.pth'], 'ready': True}</p>
+  <div class="legend">
+    <span style="background:#3b82f633;color:#93c5fd">SELLER</span>
+    <span style="background:#94a3b833;color:#cbd5e1">ADDRESS</span>
+    <span style="background:#f9731633;color:#fdba74">TIMESTAMP</span>
+    <span style="background:#10b98133;color:#6ee7b7">TOTAL_COST</span>
+    <span style="background:#eab30833;color:#fde047">OTHER</span>
+  </div>
+  
+        <section class="card">
+          <h2>z7951385189267_f9318c2c939f914d5fe83dbf6834d8b6.jpg</h2>
+          <div class="grid">
+            <figure>
+              <figcaption>Pipeline A — KIE only (OCR → PICK/heuristic)</figcaption>
+              <img src="z7951385189267_f9318c2c939f914d5fe83dbf6834d8b6_pipeline_a_kie.jpg" alt="z7951385189267_f9318c2c939f914d5fe83dbf6834d8b6.jpg kie" />
+              <pre>{
+  "kie_backend": "pick",
+  "kie_fields": {
+    "SELLER": "BÁCH HOÀ XANH",
+    "ADDRESS": "13 Đường số 9, Khu phố 7, Phường An Lạc A Quận Bình Tân, Thành phố Hồ Đông Minh . Việt",
+    "TIMESTAMP": "16/07/2021 07:36",
+    "TOTAL_COST": "Tổng tiền: 187,500",
+    "TOTAL_COST_VALUE": 187500
+  },
+  "box_count": 53
+}</pre>
+            </figure>
+            <figure>
+              <figcaption>Pipeline B — Production (KIE + fusion)</figcaption>
+              <img src="z7951385189267_f9318c2c939f914d5fe83dbf6834d8b6_pipeline_b_hybrid.jpg" alt="z7951385189267_f9318c2c939f914d5fe83dbf6834d8b6.jpg hybrid" />
+              <pre>{
+  "kie_backend": "pick",
+  "category": "Essentials",
+  "amount": 50000,
+  "kie_fields": {
+    "SELLER": "BÁCH HOÀ XANH",
+    "ADDRESS": "13 Đường số 9, Khu phố 7, Phường An Lạc A Quận Bình Tân, Thành phố Hồ Đông Minh . Việt",
+    "TIMESTAMP": "16/07/2021 07:36",
+    "TOTAL_COST": "Tổng tiền: 187,500",
+    "TOTAL_COST_VALUE": 187500
+  },
+  "items_count": 31,
+  "warnings": []
+}</pre>
+            </figure>
+          </div>
+        </section>
+        <section class="card">
+          <h2>z7951385195487_130462302e59ee0d4ece324bdb4a4506.jpg</h2>
+          <div class="grid">
+            <figure>
+              <figcaption>Pipeline A — KIE only (OCR → PICK/heuristic)</figcaption>
+              <img src="z7951385195487_130462302e59ee0d4ece324bdb4a4506_pipeline_a_kie.jpg" alt="z7951385195487_130462302e59ee0d4ece324bdb4a4506.jpg kie" />
+              <pre>{
+  "kie_backend": "pick",
+  "kie_fields": {
+    "SELLER": "BÁCH HOÀ XANH",
+    "ADDRESS": "Phường Tân Phú, Quận 7, phả T. Khu phố 5Chỉ Quận khách vuống xem chỉ tiết chính sách",
+    "TIMESTAMP": "23/04/2020 10:09",
+    "TOTAL_COST": "Tổng tiền:",
+    "TOTAL_COST_VALUE": null
+  },
+  "box_count": 33
+}</pre>
+            </figure>
+            <figure>
+              <figcaption>Pipeline B — Production (KIE + fusion)</figcaption>
+              <img src="z7951385195487_130462302e59ee0d4ece324bdb4a4506_pipeline_b_hybrid.jpg" alt="z7951385195487_130462302e59ee0d4ece324bdb4a4506.jpg hybrid" />
+              <pre>{
+  "kie_backend": "pick",
+  "category": "Essentials",
+  "amount": 42336,
+  "kie_fields": {
+    "SELLER": "BÁCH HOÀ XANH",
+    "ADDRESS": "Phường Tân Phú, Quận 7, phả T. Khu phố 5Chỉ Quận khách vuống xem chỉ tiết chính sách",
+    "TIMESTAMP": "23/04/2020 10:09",
+    "TOTAL_COST": "Tổng tiền:",
+    "TOTAL_COST_VALUE": null
+  },
+  "items_count": 25,
+  "warnings": []
+}</pre>
+            </figure>
+          </div>
+        </section>
+        <section class="card">
+          <h2>z7951385205422_25c9282de208fcbb9c8127fd41fbabdd.jpg</h2>
+          <div class="grid">
+            <figure>
+              <figcaption>Pipeline A — KIE only (OCR → PICK/heuristic)</figcaption>
+              <img src="z7951385205422_25c9282de208fcbb9c8127fd41fbabdd_pipeline_a_kie.jpg" alt="z7951385205422_25c9282de208fcbb9c8127fd41fbabdd.jpg kie" />
+              <pre>{
+  "kie_backend": "pick",
+  "kie_fields": {
+    "SELLER": "BÁCH HOÀ XANH",
+    "ADDRESS": "13 Đường số 9, Khu phố 7, Phường An Lạc A Quận Bình Tân, Thành Phố Phường An - Việt",
+    "TIMESTAMP": "16/07/2021 07:36",
+    "TOTAL_COST": "Tổng tiền: 187,500",
+    "TOTAL_COST_VALUE": 187500
+  },
+  "box_count": 53
+}</pre>
+            </figure>
+            <figure>
+              <figcaption>Pipeline B — Production (KIE + fusion)</figcaption>
+              <img src="z7951385205422_25c9282de208fcbb9c8127fd41fbabdd_pipeline_b_hybrid.jpg" alt="z7951385205422_25c9282de208fcbb9c8127fd41fbabdd.jpg hybrid" />
+              <pre>{
+  "kie_backend": "pick",
+  "category": "Essentials",
+  "amount": 187954,
+  "kie_fields": {
+    "SELLER": "BÁCH HOÀ XANH",
+    "ADDRESS": "13 Đường số 9, Khu phố 7, Phường An Lạc A Quận Bình Tân, Thành Phố Phường An - Việt",
+    "TIMESTAMP": "16/07/2021 07:36",
+    "TOTAL_COST": "Tổng tiền: 187,500",
+    "TOTAL_COST_VALUE": 187500
+  },
+  "items_count": 31,
+  "warnings": []
+}</pre>
+            </figure>
+          </div>
+        </section>
+</body>
+</html>

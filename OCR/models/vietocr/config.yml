@@ -1,0 +1,38 @@
+# VietOCR vgg_transformer — inference reference (pretrained, not fine-tuned).
+# Loaded at runtime via Cfg.load_config_from_name("vgg_transformer") in pipeline.py.
+
+backbone: vgg19_bn
+seq_modeling: transformer
+weights: vgg_transformer.pth
+
+pretrain:
+  id_or_url: https://vocr.vn/data/vietocr/vgg_transformer.pth
+
+cnn:
+  hidden: 256
+  pretrained: false
+  ks:
+    - [2, 2]
+    - [2, 2]
+    - [2, 1]
+    - [2, 1]
+    - [1, 1]
+  ss:
+    - [2, 2]
+    - [2, 2]
+    - [2, 1]
+    - [2, 1]
+    - [1, 1]
+
+transformer:
+  d_model: 256
+  dim_feedforward: 2048
+  max_seq_length: 1024
+  nhead: 8
+  num_decoder_layers: 6
+  num_encoder_layers: 6
+  pos_dropout: 0.1
+  trans_dropout: 0.1
+
+predictor:
+  beamsearch: false

@@ -33,17 +33,44 @@ def _ensure_pickled_tokenizer() -> None:
 
 def load_intent_model():
     """Trả dict: ``{backend: encoder|tfidf, ...}`` để pipeline phân nhánh."""
-    if settings.INTENT_ENCODER_PATH.exists():
+    encoder_exists = settings.INTENT_ENCODER_PATH.exists()
+    tfidf_exists = settings.MODEL_PATH.exists()
+
+    if encoder_exists and tfidf_exists:
+        enc_mtime = settings.INTENT_ENCODER_PATH.stat().st_mtime
+        tfidf_mtime = settings.MODEL_PATH.stat().st_mtime
+        if enc_mtime >= tfidf_mtime:
+            return {"backend": "encoder", "bundle": joblib.load(settings.INTENT_ENCODER_PATH)}
+        else:
+            _ensure_pickled_tokenizer()
+            payload = joblib.load(settings.MODEL_PATH)
+            return {"backend": "tfidf", "vectorizer": payload["vectorizer"], "model": payload["model"]}
+    elif encoder_exists:
         return {"backend": "encoder", "bundle": joblib.load(settings.INTENT_ENCODER_PATH)}
-    _ensure_pickled_tokenizer()
-    payload = joblib.load(settings.MODEL_PATH)
-    return {"backend": "tfidf", "vectorizer": payload["vectorizer"], "model": payload["model"]}
+    elif tfidf_exists:
+        _ensure_pickled_tokenizer()
+        payload = joblib.load(settings.MODEL_PATH)
+        return {"backend": "tfidf", "vectorizer": payload["vectorizer"], "model": payload["model"]}
+    else:
+        raise FileNotFoundError(f"Neither intent encoder model ({settings.INTENT_ENCODER_PATH}) nor TF-IDF model ({settings.MODEL_PATH}) exists.")
 
 
 def load_category_model():
-    if settings.CATEGORY_ENCODER_PATH.exists():
+    encoder_exists = settings.CATEGORY_ENCODER_PATH.exists()
+    tfidf_exists = settings.CATEGORY_MODEL_PATH.exists()
+
+    if encoder_exists and tfidf_exists:
+        enc_mtime = settings.CATEGORY_ENCODER_PATH.stat().st_mtime
+        tfidf_mtime = settings.CATEGORY_MODEL_PATH.stat().st_mtime
+        if enc_mtime >= tfidf_mtime:
+            return {"backend": "encoder", "bundle": joblib.load(settings.CATEGORY_ENCODER_PATH)}
+        else:
+            _ensure_pickled_tokenizer()
+            payload = joblib.load(settings.CATEGORY_MODEL_PATH)
+            return {"backend": "tfidf", "vectorizer": payload["vectorizer"], "model": payload["model"]}
+    elif encoder_exists:
         return {"backend": "encoder", "bundle": joblib.load(settings.CATEGORY_ENCODER_PATH)}
-    if settings.CATEGORY_MODEL_PATH.exists():
+    elif tfidf_exists:
         _ensure_pickled_tokenizer()
         payload = joblib.load(settings.CATEGORY_MODEL_PATH)
         return {"backend": "tfidf", "vectorizer": payload["vectorizer"], "model": payload["model"]}
@@ -51,9 +78,21 @@ def load_category_model():
 
 
 def load_action_type_model():
-    if settings.ACTION_TYPE_ENCODER_PATH.exists():
+    encoder_exists = settings.ACTION_TYPE_ENCODER_PATH.exists()
+    tfidf_exists = settings.ACTION_TYPE_MODEL_PATH.exists()
+
+    if encoder_exists and tfidf_exists:
+        enc_mtime = settings.ACTION_TYPE_ENCODER_PATH.stat().st_mtime
+        tfidf_mtime = settings.ACTION_TYPE_MODEL_PATH.stat().st_mtime
+        if enc_mtime >= tfidf_mtime:
+            return {"backend": "encoder", "bundle": joblib.load(settings.ACTION_TYPE_ENCODER_PATH)}
+        else:
+            _ensure_pickled_tokenizer()
+            payload = joblib.load(settings.ACTION_TYPE_MODEL_PATH)
+            return {"backend": "tfidf", "vectorizer": payload["vectorizer"], "model": payload["model"]}
+    elif encoder_exists:
         return {"backend": "encoder", "bundle": joblib.load(settings.ACTION_TYPE_ENCODER_PATH)}
-    if settings.ACTION_TYPE_MODEL_PATH.exists():
+    elif tfidf_exists:
         _ensure_pickled_tokenizer()
         payload = joblib.load(settings.ACTION_TYPE_MODEL_PATH)
         return {"backend": "tfidf", "vectorizer": payload["vectorizer"], "model": payload["model"]}
@@ -61,9 +100,21 @@ def load_action_type_model():
 
 
 def load_record_type_model():
-    if settings.RECORD_TYPE_ENCODER_PATH.exists():
+    encoder_exists = settings.RECORD_TYPE_ENCODER_PATH.exists()
+    tfidf_exists = settings.RECORD_TYPE_MODEL_PATH.exists()
+
+    if encoder_exists and tfidf_exists:
+        enc_mtime = settings.RECORD_TYPE_ENCODER_PATH.stat().st_mtime
+        tfidf_mtime = settings.RECORD_TYPE_MODEL_PATH.stat().st_mtime
+        if enc_mtime >= tfidf_mtime:
+            return {"backend": "encoder", "bundle": joblib.load(settings.RECORD_TYPE_ENCODER_PATH)}
+        else:
+            _ensure_pickled_tokenizer()
+            payload = joblib.load(settings.RECORD_TYPE_MODEL_PATH)
+            return {"backend": "tfidf", "vectorizer": payload["vectorizer"], "model": payload["model"]}
+    elif encoder_exists:
         return {"backend": "encoder", "bundle": joblib.load(settings.RECORD_TYPE_ENCODER_PATH)}
-    if settings.RECORD_TYPE_MODEL_PATH.exists():
+    elif tfidf_exists:
         _ensure_pickled_tokenizer()
         payload = joblib.load(settings.RECORD_TYPE_MODEL_PATH)
         return {"backend": "tfidf", "vectorizer": payload["vectorizer"], "model": payload["model"]}

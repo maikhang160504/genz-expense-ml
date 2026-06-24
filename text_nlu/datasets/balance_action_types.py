@@ -76,7 +76,6 @@ def main():
     # Generate new rows
     new_rows = []
     new_rows.extend(generate_set_tone())
-    new_rows.extend(generate_export_data())
     new_rows.extend(generate_set_username())
     new_rows.extend(generate_set_income())
     new_rows.extend(generate_delete_record())

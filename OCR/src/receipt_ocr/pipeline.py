@@ -34,7 +34,7 @@ setup_paddle_env()
 
 class ReceiptOCRPipeline:
 
-    """PaddleOCR (detect) + VietOCR (recognize) + rule-based field extraction."""
+    """PaddleOCR + VietOCR + rule extraction. Use McOcrReceiptPipeline for PICK KIE."""
 
 
 
@@ -149,6 +149,21 @@ class ReceiptOCRPipeline:
             return ""
 
 
+
+    def detect_polys(self, image_rgb: np.ndarray) -> list[list[Any]]:
+        """Paddle detection only — quads for rotation corrector (no VietOCR)."""
+        self._init_paddle()
+        try:
+            result = run_paddle_ocr(self._paddle, image_rgb)
+        except (OSError, NotImplementedError) as exc:
+            err = str(exc).upper()
+            if "CUDNN" not in err and "CUDA" not in err and "PIR" not in err:
+                if "ONEDNN" not in err and "MKLDNN" not in err:
+                    raise
+            self._paddle = None
+            self._init_paddle(use_gpu=False)
+            result = run_paddle_ocr(self._paddle, image_rgb)
+        return [line[0] for line in paddle_lines(result)]
 
     def ocr_boxes(self, image_rgb: np.ndarray) -> pd.DataFrame:
 
@@ -282,7 +297,7 @@ class ReceiptOCRPipeline:
 
 
 
-    def process_image(self, image_path: str | Path, split_mode: bool = True) -> dict[str, Any]:
+    def process_image(self, image_path: str | Path, split_mode: bool = False) -> dict[str, Any]:
 
         image_rgb = self._read_rgb(image_path)
 

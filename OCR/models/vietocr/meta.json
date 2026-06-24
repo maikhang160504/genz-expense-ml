@@ -1,0 +1,9 @@
+{
+  "model": "vgg_transformer",
+  "source": "https://github.com/pbcquoc/vietocr",
+  "pretrain_url": "https://vocr.vn/data/vietocr/vgg_transformer.pth",
+  "vietocr_weights": "vgg_transformer.pth",
+  "config": "config.yml",
+  "fine_tuned": false,
+  "notes": "Official VietOCR pretrained weights (MC_OCR step 4)."
+}

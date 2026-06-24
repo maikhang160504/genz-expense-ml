@@ -11,6 +11,8 @@ from typing import Any
 
 import pandas as pd
 
+from .brand_routing import route_brand_category
+
 # Nhãn danh mục chuẩn NLU Record (src/nlu/ner.py → CATEGORY_MAP values)
 NLU_DEFAULT_CATEGORY = "Others"
 
@@ -690,62 +692,82 @@ def predict_item_category(item_name: str) -> tuple[str, float]:
 
 def resolve_mixed_receipt_categories(
     items: list[tuple[str, int]],
-    split_mode: bool = True,
-    entropy_threshold: float = 0.65
+    split_mode: bool = False,
+    entropy_threshold: float = 0.65,
+    confidence_threshold: float = 0.60,
 ) -> list[dict[str, Any]]:
     """
-    Phân loại và phân bổ danh mục cho hóa đơn hỗn hợp.
+    Phân loại hóa đơn hỗn hợp.
+
+    - ``split_mode=False`` (mặc định, bill-only app): Weighted Voting by Value
+      Score(C) = sum(Price_i * Confidence_i) → một danh mục đại diện.
+    - ``split_mode=True``: gom tiền thực theo danh mục → nhiều giao dịch con.
     """
     if not items:
         return [{"category": NLU_DEFAULT_CATEGORY, "amount": 0}]
-        
-    category_totals = {}
-    
+
+    category_scores: dict[str, float] = {}
+    category_amounts: dict[str, int] = {}
+
     for name, price in items:
-        if not price:
-            price = 0
+        price = price or 0
         category, confidence = predict_item_category(name)
-        cat_label = category if confidence >= 0.60 else NLU_DEFAULT_CATEGORY
-        
-        if cat_label not in category_totals:
-            category_totals[cat_label] = 0
-        category_totals[cat_label] += price
-        
+        cat_label = category if confidence >= confidence_threshold else NLU_DEFAULT_CATEGORY
+        vote_weight = price * confidence
+
+        category_scores[cat_label] = category_scores.get(cat_label, 0.0) + vote_weight
+        category_amounts[cat_label] = category_amounts.get(cat_label, 0) + price
+
     total_bill_amount = sum(price for _, price in items if price)
     if total_bill_amount == 0:
         first_cat = predict_item_category(items[0][0])[0] if items else NLU_DEFAULT_CATEGORY
         return [{"category": first_cat, "amount": 0}]
-        
+
+    total_weighted = sum(category_scores.values()) or 1.0
+
     if split_mode:
-        transactions = []
-        for cat, amt in category_totals.items():
-            transactions.append({
+        transactions = [
+            {
                 "category": cat,
                 "amount": amt,
-                "is_split": True
-            })
+                "is_split": True,
+                "vote_score": category_scores.get(cat, 0.0),
+            }
+            for cat, amt in category_amounts.items()
+        ]
+        transactions.sort(key=lambda x: (-x.get("vote_score", 0.0), -x["amount"]))
         return transactions
-    else:
-        primary_category = max(category_totals, key=category_totals.get)
-        primary_amount = category_totals[primary_category]
-        
-        dominance_ratio = primary_amount / total_bill_amount
-        if dominance_ratio >= entropy_threshold:
-            return [{"category": primary_category, "amount": total_bill_amount}]
-        else:
-            return [{
-                "category": "Essentials", 
-                "amount": total_bill_amount, 
-                "note": "Hóa đơn siêu thị hỗn hợp nhiều mặt hàng"
-            }]
+
+    primary_category = max(category_scores, key=category_scores.get)
+    primary_score = category_scores[primary_category]
+    dominance_ratio = primary_score / total_weighted
+
+    if dominance_ratio >= entropy_threshold:
+        return [{
+            "category": primary_category,
+            "amount": total_bill_amount,
+            "vote_score": primary_score,
+        }]
+
+    return [{
+        "category": "Essentials",
+        "amount": total_bill_amount,
+        "note": "Hóa đơn siêu thị hỗn hợp nhiều mặt hàng",
+    }]
 
 
 def extract_receipt_summary(
     df_lines: pd.DataFrame,
     df_boxes: pd.DataFrame | None = None,
-    split_mode: bool = True
+    split_mode: bool = False,
+    kie_fields: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
-    """Kết quả demo: category (NLU Record) + amount."""
+    """Fuse OCR lines/boxes with KIE fields → category, amount, transactions.
+
+    Responsibility split (logical, not parallel):
+    - **Category**: item alignment + NLU category model + brand routing (SELLER from KIE when set)
+    - **Amount**: PICK ``TOTAL_COST_VALUE`` when set, else heuristic OCR + item-sum validation
+    """
     if df_lines is None or df_lines.empty:
         return {
             "category": NLU_DEFAULT_CATEGORY,
@@ -754,27 +776,55 @@ def extract_receipt_summary(
         }
 
     lines = [str(x).strip() for x in df_lines["line_text"].tolist() if str(x).strip()]
-    
+    seller_text = (kie_fields or {}).get("SELLER") or " ".join(lines[:2])
+    brand_category = route_brand_category(seller_text)
+
     if df_boxes is not None and not df_boxes.empty:
         df_boxes_merged = merge_horizontal_fragmented_boxes(df_boxes)
         matched_items = align_skewed_items_and_prices(df_boxes_merged)
-        raw_amount = extract_total_amount(lines)
+        ocr_total = extract_total_amount(lines)
+        kie_total = (kie_fields or {}).get("TOTAL_COST_VALUE")
+        if kie_total:
+            raw_amount = int(kie_total)
+            if ocr_total is not None and ocr_total != raw_amount:
+                math_preface = [f"AMOUNT_FROM_KIE ({raw_amount}); OCR heuristic had {ocr_total}"]
+            else:
+                math_preface = []
+        else:
+            raw_amount = ocr_total
+            math_preface = []
         final_amount, math_warnings = validate_and_correct_total_amount(raw_amount, matched_items)
-        transactions = resolve_mixed_receipt_categories(matched_items, split_mode=split_mode)
-        
-        primary_tx = transactions[0] if transactions else {"category": NLU_DEFAULT_CATEGORY, "amount": final_amount}
-        
+        math_warnings = math_preface + math_warnings
+
+        if brand_category:
+            transactions = [{"category": brand_category, "amount": final_amount, "brand_routed": True}]
+            category = brand_category
+        else:
+            transactions = resolve_mixed_receipt_categories(matched_items, split_mode=split_mode)
+            primary_tx = transactions[0] if transactions else {"category": NLU_DEFAULT_CATEGORY}
+            category = primary_tx.get("category", NLU_DEFAULT_CATEGORY)
+
         return {
-            "category": primary_tx.get("category", NLU_DEFAULT_CATEGORY),
+            "category": category,
             "amount": final_amount,
             "currency": "VND",
             "transactions": transactions,
             "warnings": math_warnings,
-            "items_count": len(matched_items)
+            "items_count": len(matched_items),
+            "seller": seller_text,
+            "kie_fields": kie_fields or {},
+            "brand_routed": bool(brand_category),
         }
 
+    category = brand_category or classify_category(lines)
+    amount = extract_total_amount(lines)
+    if kie_fields and kie_fields.get("TOTAL_COST_VALUE"):
+        amount = kie_fields["TOTAL_COST_VALUE"] or amount
     return {
-        "category": classify_category(lines),
-        "amount": extract_total_amount(lines),
+        "category": category,
+        "amount": amount,
         "currency": "VND",
+        "seller": seller_text,
+        "kie_fields": kie_fields or {},
+        "brand_routed": bool(brand_category),
     }

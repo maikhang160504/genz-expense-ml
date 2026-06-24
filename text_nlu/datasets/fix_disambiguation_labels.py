@@ -44,43 +44,50 @@ _ACTION_IN_RECORD = re.compile(
     re.I,
 )
 
-_SELL_INCOME = re.compile(r"^(bán|ban|thu\s+tiền\s+từ\s+bán|nhận\s+tiền\s+bán|nhan\s+tien\s+ban)\b", re.I)
-_BUY_EXPENSE = re.compile(r"^(mua|order|chi|thanh\s+toán|thanh\s+toan|trả|tra|đóng|dong)\b", re.I)
-_GO_ENTERTAIN = re.compile(
-    r"\bđi\s+(?:cà\s+phê|cafe|cf|bar|pub|club|spa|salon|massage|"
-    r"karaoke|kaoke|bida|phim|cinema|rạp|rap|du\s+lịch|du\s+lich|restaurant|nhậu|nhau)\b",
+_SELL_INCOME = re.compile(r"^(ban|thu\s+tien\s+tu\s+ban|nhan\s+tien\s+ban)\b", re.I)
+_BUY_EXPENSE = re.compile(r"^(mua|order|chi|thanh\s+toan|tra|dong)\b", re.I)
+_GO_ENTERTAIN_CAFE = re.compile(
+    r"\b(?:di|hen|tu\s+tap|gap|uong|di\s+uong)\s+(?:ca\s+phe|cafe|cf)\b|\b(?:ca\s+phe|cafe|cf)\b.*\b(?:voi|ban|be|bo|ny|crush|nguoi\s+yeu)\b",
     re.I,
 )
-_BUY_COFFEE_PRODUCT = re.compile(
-    r"\bmua\s+(?:cà\s+phê|cafe|cf|hạt\s+cà\s+phê|hat\s+ca\s+phe|bột\s+cà\s+phê|bot\s+ca\s+phe)\b",
+_GO_ENTERTAIN_OTHER = re.compile(
+    r"\b(?:bar|pub|club|spa|salon|massage|karaoke|kaoke|bida|phim|cinema|rap|du\s+lich|restaurant|nhau)\b",
+    re.I,
+)
+_COFFEE_ANY = re.compile(
+    r"\b(?:ca\s+phe|cafe|cf|hat\s+ca\s+phe|bot\s+ca\s+phe)\b",
     re.I,
 )
 _SHOPPING_GADGET = re.compile(
-    r"\bmua\s+(?:sạc|sac|cáp|cap|tai\s+nghe|airpods|case|ốp|op|"
-    r"chuột|chuot|bàn\s+phím|ban\s+phim|webcam|hub|ổ\s+cứng|o\s+cung|"
-    r"áo|ao|quần|quan|giày|giay|dép|dep|balo|hoodie|sneaker)\b",
+    r"\bmua\s+(?:sac|cap|tai\s+nghe|airpods|case|op|"
+    r"chuot|ban\s+phim|webcam|hub|o\s+cung|ao|quan|giay|dep|balo|hoodie|sneaker)\b",
     re.I,
 )
 _ESSENTIALS_GROCERY = re.compile(
-    r"(?:^|\b)(gạo|gao|mì\s+gói|mi\s+goi|giấy\s+vệ\s+sinh|giay\s+ve\s+sinh|"
-    r"nước\s+rửa|nuoc\s+rua|bột\s+giặt|bot\s+giat)(?:\s|$|\d)",
+    r"(?:^|\b)(gao|mi\s+goi|giay\s+ve\s+sinh|nuoc\s+rua|bot\s+giat)(?:\s|$|\d)",
     re.I,
 )
-_GIFT_ESSENTIALS = re.compile(r"\bmua\s+quà\s+cho\b|\bmua\s+qua\s+cho\b", re.I)
-_MEAT = re.compile(r"\bthịt\s+(?:heo|lợn|lon|bò|bo|gà|ga|cá|ca|tôm|tom)\b", re.I)
+_GIFT_ESSENTIALS = re.compile(r"\bmua\s+qua\s+cho\b", re.I)
+_MEAT = re.compile(r"\bthit\s+(?:heo|lon|bo|ga|ca|tom)\b", re.I)
+
+
+_MONEY_PATTERN = re.compile(
+    r"\d+(?:[\.,]\d+)?\s?(k|đ|d|vnđ|vnd|ngan|nghin|tr|triệu|trieu|củ|cu)\b",
+    re.I,
+)
 
 
 def _category_for_item(text: str) -> str | None:
-    t = _norm(text)
+    t = _norm(text).replace("đ", "d")
     if _GIFT_ESSENTIALS.search(t):
         return "Essentials"
     if _SHOPPING_GADGET.search(t):
         return "Shopping"
     if _ESSENTIALS_GROCERY.search(t):
         return "Essentials"
-    if _GO_ENTERTAIN.search(t):
+    if _GO_ENTERTAIN_CAFE.search(t) or _GO_ENTERTAIN_OTHER.search(t):
         return "Entertainment"
-    if _BUY_COFFEE_PRODUCT.search(t):
+    if _COFFEE_ANY.search(t):
         return "Food"
     if _MEAT.search(t) and not _SELL_INCOME.search(t):
         return "Food"
@@ -90,14 +97,21 @@ def _category_for_item(text: str) -> str | None:
 def fix_record_df(df: pd.DataFrame) -> tuple[pd.DataFrame, dict[str, int]]:
     stats = {"type": 0, "label": 0, "removed_action_like": 0}
     out = df.copy()
-    mask_action = out["text"].astype(str).map(lambda t: bool(_ACTION_IN_RECORD.search(_norm(t))))
+    
+    def is_action_like(text_val: str) -> bool:
+        t = _norm(text_val)
+        if _MONEY_PATTERN.search(t):
+            return False
+        return bool(_ACTION_IN_RECORD.search(t))
+        
+    mask_action = out["text"].astype(str).map(is_action_like)
     removed = out[mask_action]
     out = out[~mask_action].reset_index(drop=True)
     stats["removed_action_like"] = len(removed)
 
     for idx, row in out.iterrows():
         text = str(row["text"])
-        t = _norm(text)
+        t = _norm(text).replace("đ", "d")
         typ = str(row["type"]).lower()
         label = str(row["label"])
         changed = False

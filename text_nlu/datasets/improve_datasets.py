@@ -76,7 +76,7 @@ def dedupe_chitchat(df: pd.DataFrame) -> pd.DataFrame:
 def normalize_action_types_column(df: pd.DataFrame) -> pd.DataFrame:
     """Gộp nhãn hiếm / trùng nghĩa để encoder action_type ổn định."""
     out = df.copy()
-    out["action_type"] = out["action_type"].replace({"SYSTEM_SETTING": "Setting"})
+    out["action_type"] = out["action_type"].replace({"Setting": "SYSTEM_SETTING"})
     return out
 
 
@@ -196,9 +196,9 @@ def augment_chitchat(existing: set[str]) -> list[dict]:
 def augment_action(existing: set[str]) -> list[dict]:
     """Mẫu Action đa dạng; ``action_type`` khớp nhãn đang dùng trong CSV."""
     specs: list[tuple[str, str]] = [
-        ("Thống kê {cat} tháng này", "Report"),
+        ("Thống kê {cat} tháng này", "REPORT_GENERAL"),
         ("Báo cáo {cat} tuần trước", "REPORT_GENERAL"),
-        ("So sánh {cat} tuần này với tuần trước", "REPORT_COMPARE"),
+        ("So sánh {cat} tuần này với tuần trước", "REPORT_GENERAL"),
         ("Tìm khoản {cat} trên {amt}", "SEARCH_RECORD"),
         ("Xóa giao dịch {cat} vừa nhập", "DELETE_RECORD"),
         ("Đặt hạn mức {cat} {amt}", "SET_LIMIT"),
@@ -206,14 +206,13 @@ def augment_action(existing: set[str]) -> list[dict]:
         ("Tăng mục tiêu {cat} lên {amt}", "ADD_GOAL"),
         ("Đặt mục tiêu tiết kiệm {amt}", "SET_GOAL"),
         ("Lọc giao dịch {cat} trong tháng", "SEARCH_RECORD"),
-        ("Cho xem biểu đồ {cat}", "Report"),
-        ("Xuất dữ liệu {cat} ra Excel", "EXPORT_DATA"),
+        ("Cho xem biểu đồ {cat}", "REPORT_GENERAL"),
         ("Đổi giọng bot sang hài hước", "SET_TONE"),
         ("Đặt cảnh báo khi chi {cat} quá {amt}", "SET_ALERT"),
         ("Cập nhật khoản {cat} thành {amt}", "UPDATE_RECORD"),
         ("Đặt thu nhập cố định {amt}", "SET_INCOME"),
         ("Đổi tên hiển thị thành Minh Anh", "SET_USERNAME"),
-        ("Tắt đồng bộ dữ liệu đám mây", "Setting"),
+        ("Tắt đồng bộ dữ liệu đám mây", "SYSTEM_SETTING"),
         ("tim kiem khoan {cat} lon hon {amt}", "SEARCH_RECORD"),
         ("bao cao tong chi thang nay", "REPORT_GENERAL"),
         ("xoa ban ghi gan nhat", "DELETE_RECORD"),
@@ -532,7 +531,7 @@ def augment_action_dark_mode_edges(existing: set[str]) -> list[dict]:
         if t in existing:
             continue
         existing.add(t)
-        rows.append({"text": t, "intent": "Action", "action_type": "Setting"})
+        rows.append({"text": t, "intent": "Action", "action_type": "SYSTEM_SETTING"})
     return rows
 
 
@@ -708,7 +707,9 @@ def augment_record_cafe_and_record_vs_action_edges(existing: set[str]) -> list[d
     ]
     ent_cafe = [
         "đi cà phê với bạn bè hết {a}",
+        "đi cà phê với bạn {a}",
         "đi cafe với bạn {a}",
+        "đi cf với bạn {a}",
         "đi cf với người yêu {a}",
         "tối đi uống cà phê với bạn {a}",
         "đi cafe sữa đá với nhóm bạn {a}",

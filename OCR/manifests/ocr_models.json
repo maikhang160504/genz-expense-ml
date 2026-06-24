@@ -1,0 +1,8 @@
+{
+  "vietocr_weights": "models/vietocr/vgg_transformer.pth",
+  "pick_kie": "models/pick_kie/model_best.pth",
+  "kie_backend": "pick",
+  "bill_category_strategy": "weighted_voting_v1",
+  "trained_on_batch": "baseline",
+  "updated_at": null
+}

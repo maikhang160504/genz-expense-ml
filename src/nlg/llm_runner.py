@@ -219,7 +219,53 @@ def attach_nlg_and_llm(
             result["llama_error"] = str(exc)
 
     gemini = result.get("gemini_json")
-    if isinstance(gemini, dict):
+    if not gemini or not isinstance(gemini, dict) or not gemini.get("response"):
+        fallback_emotion = intent_mimo_fallback(intent, nlu_result.get("record_type"))
+        category = nlu_result.get("category") or "Others"
+        amount = nlu_result.get("amount")
+        
+        viet_category_map = {
+            "Food": "Ăn uống",
+            "Transport": "Di chuyển",
+            "Housing": "Nhà ở",
+            "Shopping": "Mua sắm",
+            "Entertainment": "Giải trí",
+            "Health": "Sức khỏe",
+            "Education": "Giáo dục",
+            "Others": "Tiêu dùng khác",
+            "Other": "Tiêu dùng khác",
+            "Essentials": "Thiết yếu",
+            "Beauty": "Làm đẹp",
+            "Social": "Xã hội",
+            "Salary": "Lương",
+            "Bonus": "Thưởng",
+            "Business": "Kinh doanh"
+        }
+        viet_cat = viet_category_map.get(category, category)
+        
+        if intent == "Record":
+            amt_str = f"{int(amount):,}".replace(",", ".") if amount is not None else ""
+            if nlu_result.get("record_type") == "Income":
+                fallback_text = f"Tuyệt vời! Mimo đã ghi nhận khoản thu nhập {amt_str}đ vào danh mục {viet_cat}. Tích tiểu thành đại, cố gắng phát huy nhé! 🎉"
+            else:
+                fallback_text = f"Mimo đã ghi nhận khoản chi {amt_str}đ cho {viet_cat} vào ví của bạn. Hãy cân đối chi tiêu hợp lý nhé!"
+        elif intent == "Action":
+            action_type = nlu_result.get("action_type") or "Thao tác"
+            fallback_text = f"Mimo đã thực hiện thành công thao tác: {action_type}."
+        else:
+            fallback_text = "Chào bạn! Tôi là Mimo. Hôm nay bạn thế nào? Cần tôi hỗ trợ gì về quản lý chi tiêu không?"
+
+        gemini_fallback = {
+            "response": fallback_text,
+            "story": fallback_text,
+            "mimo_emotion": fallback_emotion,
+            "emotion": fallback_emotion
+        }
+        result["gemini_json"] = gemini_fallback
+        result["mimo_emotion"] = fallback_emotion
+        result["llm_emotion"] = fallback_emotion
+        result["mascot_mood"] = fallback_emotion
+    else:
         top = extract_mimo_emotion_from_llm_block(gemini) or intent_mimo_fallback(
             intent, nlu_result.get("record_type")
         )

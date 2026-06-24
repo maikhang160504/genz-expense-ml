@@ -3,7 +3,7 @@ Demo local: FastAPI nhận ảnh hóa đơn → OCR → danh mục + số tiền
 
 Chạy (từ thư mục Train):
   pip install -r OCR/requirements.txt
-  set RECEIPT_OCR_WEIGHTS=OCR/models/vietocr_receipt.pth
+  set RECEIPT_OCR_WEIGHTS=OCR/models/vietocr/vgg_transformer.pth
   uvicorn OCR.demo.server:app --reload --host 127.0.0.1 --port 8010
 """
 
@@ -25,8 +25,12 @@ from receipt_ocr.pipeline import ReceiptOCRPipeline  # noqa: E402
 
 app = FastAPI(title="Vietnamese Receipt OCR Demo", version="2.0.0")
 
-DEFAULT_WEIGHTS = OCR_ROOT / "models" / "vietocr_receipt.pth"
+DEFAULT_WEIGHTS = OCR_ROOT / "models" / "vietocr" / "vgg_transformer.pth"
 WEIGHTS_PATH = Path(os.environ.get("RECEIPT_OCR_WEIGHTS", str(DEFAULT_WEIGHTS)))
+if not WEIGHTS_PATH.is_file():
+    from receipt_ocr.model_paths import resolve_vietocr_weights_path  # noqa: E402
+
+    WEIGHTS_PATH = resolve_vietocr_weights_path(WEIGHTS_PATH)
 
 _pipeline: ReceiptOCRPipeline | None = None
 

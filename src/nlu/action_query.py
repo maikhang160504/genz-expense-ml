@@ -85,3 +85,27 @@ def report_general_action_type(text: str) -> str | None:
     ):
         return "Report"
     return "REPORT_GENERAL"
+
+
+def is_system_or_delete_action(text: str) -> bool:
+    t = _norm(text).replace("đ", "d")
+    
+    # 1. Delete last transaction patterns
+    if any(w in t for w in ["xoa giao dich", "huy giao dich", "xoa bill", "huy bill", "xoa gd"]):
+        return True
+    if t.startswith("xoa ") and any(w in t for w in ["gan nhat", "cuoi cung", "vua nhap", "vua ghi", "vua tao"]):
+        return True
+        
+    # 2. Tone change patterns
+    if any(w in t for w in ["doi giong", "doi vibe", "chuyen giong", "vibe moi", "giong noi mimo"]):
+        return True
+        
+    # 3. Settings / Theme patterns
+    if any(w in t for w in ["mo cai dat", "vao cai dat", "giao dien toi", "giao dien sang", "dark mode", "light mode", "bat che do toi", "tat che do toi"]):
+        return True
+        
+    # 4. Export patterns
+    if any(w in t for w in ["xuat du lieu", "export du lieu", "gui file csv", "xuat file excel", "xuat csv"]):
+        return True
+        
+    return False

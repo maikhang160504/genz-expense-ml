@@ -67,7 +67,7 @@ FIXTURE_LINES: dict[str, list[str]] = {
 
 EXPECTED = {
     "mcocr_public_145013aukcu": (63000, "Food"),
-    "mcocr_public_145013cnknh": (34000, "Food"),
+    "mcocr_public_145013cnknh": (34000, "Essentials"),
     "mcocr_public_145013tvyce": (32000, "Food"),
     "mcocr_public_145014irkqn": (198000, "Essentials"),
     "mcocr_public_145014klyxi": (50000, "Food"),
@@ -148,12 +148,15 @@ def test_amount_math_validation():
 def test_resolve_mixed_categories():
     from receipt_ocr.receipt_nlu import resolve_mixed_receipt_categories
     items = [("Trà Sữa Matcha", 35000), ("Cà phê sữa", 29000), ("Khẩu trang y tế", 50000)]
-    
+
     txs_split = resolve_mixed_receipt_categories(items, split_mode=True)
     assert len(txs_split) >= 2
-    
-    txs_single = resolve_mixed_receipt_categories(items, split_mode=False)
+    assert txs_split[0].get("vote_score", 0) >= txs_split[-1].get("vote_score", 0)
+
+    txs_single = resolve_mixed_receipt_categories(items, split_mode=False, entropy_threshold=0.50)
     assert len(txs_single) == 1
+    assert txs_single[0]["category"] == "Food"
+    assert txs_single[0].get("vote_score", 0) > 0
 
 
 if __name__ == "__main__":
