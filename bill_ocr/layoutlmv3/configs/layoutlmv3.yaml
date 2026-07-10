@@ -1,0 +1,24 @@
+epochs: 15
+learning_rate: 2e-5
+seed: 42
+batch_size: 4
+early_stop_patience: 3
+max_seq_length: 512
+num_workers: 2
+train:
+  images_dir: /storage/layoutlmv3_train_imgs
+  csv_path: /storage/layoutlmv3_train_df.csv
+  output_dir: /workspace/data/train
+val:
+  images_dir: /storage/layoutlmv3_train_imgs
+  csv_path: /storage/layoutlmv3_train_df.csv
+  output_dir: /workspace/data/val
+test:
+  images_dir: /storage/mc_ocr_test/test_images
+  csv_path: /storage/mcocr_test_df.csv
+  output_dir: /workspace/data/test
+paths:
+  checkpoint_dir: /workspace/bill_ocr/models/layoutlmv3
+  volume_checkpoint: /storage/layoutlmv3/model_best.pth
+  evaluation_metrics: /storage/evaluation_metrics_layoutlmv3.txt
+  test_result_csv: /storage/result.csv

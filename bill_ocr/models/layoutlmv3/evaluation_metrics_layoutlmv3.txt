@@ -1,0 +1,6 @@
+{
+  "precision": 0.8800959232613909,
+  "recall": 0.9362244897959183,
+  "f1": 0.9072929542645242,
+  "classification_report": "              precision    recall  f1-score   support\n\n     ADDRESS       0.91      0.98      0.94       489\n      SELLER       0.93      0.98      0.95       333\n   TIMESTAMP       0.82      0.94      0.88       355\n  TOTAL_COST       0.87      0.89      0.88       783\n\n   micro avg       0.88      0.94      0.91      1960\n   macro avg       0.88      0.95      0.91      1960\nweighted avg       0.88      0.94      0.91      1960\n"
+}
