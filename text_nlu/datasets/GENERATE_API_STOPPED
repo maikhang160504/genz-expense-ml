@@ -1,0 +1,3 @@
+API dataset generation stopped manually.
+Do not run generate_action_dataset_api.py until this file is removed.
+Merged sources via merge_intent_action_sources.py instead.

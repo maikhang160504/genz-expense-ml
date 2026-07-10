@@ -6,25 +6,37 @@ Thứ tự:
 2) train_record_type_model
 3) train_category_model
 4) train_action_type_model
-5) ner_prepare (jsonl -> .spacy)
-7) spacy train -> ghi đè models/ner_model/model-best
+5) train_action_slots  (+ action_slots_metrics.json)
+6) ner_prepare (jsonl -> .spacy)
+7) train_ner_only -> ghi đè models/ner_model/model-best
 
+Dataset intent_action.csv: gộp / label thủ công trước khi train (không tự merge trong pipeline).
+c
 Biến môi trường:
 - NER_MAX_STEPS: mặc định 6000 (giảm nếu cần train nhanh).
 """
 from __future__ import annotations
 
+import sys
+import io
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+
 import json
 import os
 import re
 import subprocess
-import sys
 import time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 TRAIN_DIR = Path(__file__).resolve().parent
+PROJECT = ROOT.parent
+if str(PROJECT) not in sys.path:
+    sys.path.insert(0, str(PROJECT))
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 METRICS_PATH = ROOT / "models" / "retrain_all_metrics.json"
+SLOTS_METRICS_PATH = ROOT / "models" / "action_slots_metrics.json"
 
 # ---------------------------------------------------------------------------
 # Helpers – parse sklearn / spaCy metrics from stdout
@@ -86,21 +98,75 @@ def _parse_ner_metrics(stdout: str) -> dict | None:
 
 def _run(script: str) -> str:
     """Run a training script and return its captured stdout."""
-    path = TRAIN_DIR / script
-    print(f"\n>>> python {path.name}")
+    path = (TRAIN_DIR / script).resolve()
+    if not path.is_file():
+        path = (ROOT / script).resolve()
+    if not path.is_file():
+        raise FileNotFoundError(f"Training script not found: {script}")
+    print(f"\n>>> python {path}")
+    env = os.environ.copy()
+    env["PYTHONIOENCODING"] = "utf-8"
     result = subprocess.run(
         [sys.executable, str(path)],
-        cwd=str(TRAIN_DIR),
-        check=True,
+        cwd=str(path.parent),
+        check=False,
         capture_output=True,
         text=True,
+        encoding="utf-8",
+        env=env,
     )
-    # Still print stdout/stderr so log file has it
     if result.stdout:
         print(result.stdout, end="")
     if result.stderr:
         print(result.stderr, end="", file=sys.stderr)
+    if result.returncode != 0:
+        raise subprocess.CalledProcessError(
+            result.returncode,
+            result.args,
+            output=result.stdout,
+            stderr=result.stderr,
+        )
     return result.stdout or ""
+
+
+def _ensure_action_slot_labels() -> None:
+    """Auto-label intent_action.csv when slot columns are missing (Kaggle / fresh CSV)."""
+    import pandas as pd
+
+    from load_slot_schema import import_slot_schema
+
+    SLOT_COLUMNS = import_slot_schema().SLOT_COLUMNS
+
+    csv_path = ROOT / "datasets" / "intent_action.csv"
+    label_script = ROOT / "datasets" / "label_action_slots.py"
+    if not csv_path.is_file():
+        return
+    if not label_script.is_file():
+        print("[WARN] label_action_slots.py missing — skip auto-label (CSV must have slot columns)")
+        return
+
+    header = pd.read_csv(csv_path, nrows=0, encoding="utf-8-sig").columns.tolist()
+    missing_cols = [c for c in SLOT_COLUMNS if c not in header]
+    if not missing_cols:
+        usecols = [c for c in SLOT_COLUMNS if c in header]
+        sample = pd.read_csv(csv_path, encoding="utf-8-sig", usecols=usecols)
+        if sample.apply(
+            lambda r: any(str(v).strip().lower() not in ("", "nan") for v in r),
+            axis=1,
+        ).any():
+            return
+
+    print("\n>>> Slot columns missing or empty — running label_action_slots.py")
+    _run("../datasets/label_action_slots.py")
+
+
+def _load_action_slots_metrics() -> dict | None:
+    if not SLOTS_METRICS_PATH.is_file():
+        return None
+    try:
+        return json.loads(SLOTS_METRICS_PATH.read_text(encoding="utf-8"))
+    except Exception:
+        return None
 
 
 # ---------------------------------------------------------------------------
@@ -110,8 +176,6 @@ def _run(script: str) -> str:
 def main() -> None:
     os.chdir(TRAIN_DIR)
     metrics: dict = {}
-
-    # 1) Intent model
     out = _run("train_intent_model.py")
     parsed = _parse_sklearn_report(out)
     if parsed:
@@ -135,10 +199,17 @@ def main() -> None:
     if parsed:
         metrics["action_type"] = parsed
 
-    # 5) NER prepare
+    # 5) Action slot models
+    _ensure_action_slot_labels()
+    _run("train_action_slots.py")
+    slots_metrics = _load_action_slots_metrics()
+    if slots_metrics:
+        metrics["action_slots"] = slots_metrics
+
+    # 6) NER prepare
     _run("ner_prepare.py")
 
-    # 6) NER train
+    # 7) NER train
     out = _run("train_ner_only.py")
     parsed = _parse_ner_metrics(out)
     if parsed:

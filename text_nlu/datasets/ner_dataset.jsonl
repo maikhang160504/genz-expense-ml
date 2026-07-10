@@ -20000,3 +20000,350 @@
 {"text": "giúp mình loc giao dịch xem phim cháy phố", "label": [[10, 13, "ACTION_TYPE"], [24, 32, "CATEGORY"]]}
 {"text": "đề xuất gợi ý chi tiêu hôm nay", "label": [[8, 22, "ACTION_TYPE"], [23, 30, "TIME"]]}
 {"text": "goi y chi tieu tuan nay", "label": [[0, 14, "ACTION_TYPE"], [15, 23, "TIME"]]}
+{"text": "thêm 1tr vào giới hạn di chuyển", "label": [[0, 4, "VERB"], [5, 8, "AMOUNT"], [13, 21, "TARGET"], [22, 31, "CATEGORY"]]}
+{"text": "thêm vào ngân sách di chuyển 1 tr", "label": [[0, 8, "VERB"], [9, 18, "TARGET"], [19, 28, "CATEGORY"], [29, 33, "AMOUNT"]]}
+{"text": "thêm vào ăn uống 1tr", "label": [[0, 8, "VERB"], [9, 16, "CATEGORY"], [17, 20, "AMOUNT"]]}
+{"text": "thêm vào giới hạn ăn uống 1tr", "label": [[0, 8, "VERB"], [9, 17, "TARGET"], [18, 25, "CATEGORY"], [26, 29, "AMOUNT"]]}
+{"text": "tăng hạn mức đi lại thêm 1tr", "label": [[0, 4, "VERB"], [5, 12, "TARGET"], [13, 19, "CATEGORY"], [20, 28, "AMOUNT"]]}
+{"text": "thêm vào hạn mức đồ dùng cần thiết 2tr", "label": [[0, 8, "VERB"], [9, 16, "TARGET"], [17, 34, "CATEGORY"], [35, 38, "AMOUNT"]]}
+{"text": "bù 2tr vào mục tiêu mua nhà", "label": [[0, 2, "VERB"], [3, 6, "AMOUNT"], [11, 19, "TARGET"], [20, 27, "CATEGORY"]]}
+{"text": "giảm hạn mức ăn uống 200k", "label": [[0, 4, "VERB"], [5, 12, "TARGET"], [13, 20, "CATEGORY"], [21, 25, "AMOUNT"]]}
+{"text": "đặt hạn mức ăn uống 2 triệu", "label": [[0, 3, "VERB"], [4, 11, "TARGET"], [12, 19, "CATEGORY"], [20, 28, "AMOUNT"]]}
+{"text": "bật cảnh báo vượt hạn mức cho ăn uống", "label": [[0, 3, "VERB"], [4, 11, "ACTION_TYPE"], [31, 38, "CATEGORY"]]}
+{"text": "tắt thông báo chi tiêu", "label": [[0, 3, "VERB"]]}
+{"text": "tạo mục tiêu mua laptop mới 15 triệu", "label": [[0, 3, "VERB"], [4, 12, "TARGET"], [13, 29, "CATEGORY"], [30, 38, "AMOUNT"]]}
+{"text": "thu nhập hàng tháng của mình là 10 triệu", "label": [[34, 42, "AMOUNT"]]}
+{"text": "tìm các giao dịch mua sắm", "label": [[19, 27, "CATEGORY"]]}
+{"text": "thống kê chi tiêu ăn uống tháng này", "label": [[0, 8, "ACTION_TYPE"], [18, 25, "CATEGORY"], [26, 35, "TIME"]]}
+{"text": "gợi ý ngân sách chi tiêu cho tháng sau", "label": [[28, 37, "TIME"]]}
+{"text": "sửa số tiền giao dịch vừa rồi thành 50k", "label": [[32, 35, "AMOUNT"]]}
+{"text": "Đặt giới hạn chi tiêu thành 2tr", "label": [[0, 3, "VERB"], [4, 12, "TARGET"], [22, 25, "AMOUNT"]]}
+{"text": "Bật nhắc nhở chi tiêu cho mục giải trí đi bro", "label": [[0, 3, "VERB"], [4, 11, "ACTION_TYPE"], [26, 34, "CATEGORY"]]}
+{"text": "Đừng cho tui xài quá 500k cho đồ ăn mỗi tháng nha Mimo", "label": [[19, 23, "AMOUNT"], [28, 34, "CATEGORY"]]}
+{"text": "đừng cho tui chi quá 1tr tiền ăn mỗi tháng", "label": [[22, 25, "AMOUNT"], [26, 29, "CATEGORY"]]}
+{"text": "hạn chế chi tiêu giải trí còn 300k thôi", "label": [[0, 8, "VERB"], [18, 25, "CATEGORY"], [30, 34, "AMOUNT"]]}
+{"text": "Tui muốn tích cóp 10 củ để sắm con lap mới á Mimo", "label": [[0, 18, "VERB"], [19, 22, "AMOUNT"], [27, 44, "CATEGORY"]]}
+{"text": "Tui mún tích cóp 5 củ để mua con laptop mới", "label": [[0, 16, "VERB"], [17, 20, "AMOUNT"], [25, 44, "CATEGORY"]]}
+{"text": "đặt hạn mức chi tiêu 5tr", "label": [[0, 3, "VERB"], [4, 12, "TARGET"], [22, 25, "AMOUNT"]]}
+{"text": "Đi cà phê với bạn 19k", "label": [[3, 8, "CATEGORY"], [9, 16, "COMPANION"], [17, 20, "AMOUNT"]]}
+{"text": "đi cf với bạn bè hết 50k", "label": [[3, 5, "CATEGORY"], [6, 16, "COMPANION"], [21, 24, "AMOUNT"]]}
+{"text": "hẹn đi cafe sữa đá với bồ 45k", "label": [[7, 19, "CATEGORY"], [20, 27, "COMPANION"], [28, 31, "AMOUNT"]]}
+{"text": "đi cafe hẹn hò với người yêu 80k", "label": [[3, 7, "CATEGORY"], [8, 27, "COMPANION"], [28, 31, "AMOUNT"]]}
+{"text": "cf với bạn thân 35k", "label": [[0, 2, "CATEGORY"], [3, 15, "COMPANION"], [16, 19, "AMOUNT"]]}
+{"text": "xuất excel dữ liệu hôm nay", "label": [[0, 10, "ACTION_TYPE"], [19, 26, "TIME"]]}
+{"text": "xuất file dữ liệu tuần trước", "label": [[0, 9, "ACTION_TYPE"], [18, 28, "TIME"]]}
+{"text": "xuất csv dữ liệu quý này", "label": [[0, 8, "ACTION_TYPE"], [17, 24, "TIME"]]}
+{"text": "xuất csv nội thất hôm nay", "label": [[0, 8, "ACTION_TYPE"], [9, 17, "CATEGORY"], [18, 25, "TIME"]]}
+{"text": "xuất excel dữ liệu tháng trước", "label": [[0, 10, "ACTION_TYPE"], [19, 30, "TIME"]]}
+{"text": "xuất file dữ liệu mấy hôm nay", "label": [[0, 9, "ACTION_TYPE"], [18, 29, "TIME"]]}
+{"text": "xuất excel điện nước hôm qua", "label": [[0, 10, "ACTION_TYPE"], [11, 20, "CATEGORY"], [21, 28, "TIME"]]}
+{"text": "xuất file du lịch tuần này", "label": [[0, 9, "ACTION_TYPE"], [10, 17, "CATEGORY"], [18, 26, "TIME"]]}
+{"text": "xuất file dữ liệu quý này", "label": [[0, 9, "ACTION_TYPE"], [18, 25, "TIME"]]}
+{"text": "xuất csv dữ liệu tháng 5", "label": [[0, 8, "ACTION_TYPE"], [17, 24, "TIME"]]}
+{"text": "xuất excel điện nước tháng 5", "label": [[0, 10, "ACTION_TYPE"], [11, 20, "CATEGORY"], [21, 28, "TIME"]]}
+{"text": "xuất file điện nước tuần trước", "label": [[0, 9, "ACTION_TYPE"], [10, 19, "CATEGORY"], [20, 30, "TIME"]]}
+{"text": "xuất file điện nước quý này", "label": [[0, 9, "ACTION_TYPE"], [10, 19, "CATEGORY"], [20, 27, "TIME"]]}
+{"text": "xuất file sửa xe hôm qua", "label": [[0, 9, "ACTION_TYPE"], [10, 16, "CATEGORY"], [17, 24, "TIME"]]}
+{"text": "xuất excel dữ liệu tháng 5", "label": [[0, 10, "ACTION_TYPE"], [19, 26, "TIME"]]}
+{"text": "xuất file xăng xe mấy hôm nay", "label": [[0, 9, "ACTION_TYPE"], [10, 17, "CATEGORY"], [18, 29, "TIME"]]}
+{"text": "xuất file xăng xe tháng 5", "label": [[0, 9, "ACTION_TYPE"], [10, 17, "CATEGORY"], [18, 25, "TIME"]]}
+{"text": "xuất csv giải trí tháng này", "label": [[0, 8, "ACTION_TYPE"], [9, 17, "CATEGORY"], [18, 27, "TIME"]]}
+{"text": "xuất file dữ liệu tháng trước", "label": [[0, 9, "ACTION_TYPE"], [18, 29, "TIME"]]}
+{"text": "xuất excel dữ liệu quý này", "label": [[0, 10, "ACTION_TYPE"], [19, 26, "TIME"]]}
+{"text": "xuất csv giải trí tháng 5", "label": [[0, 8, "ACTION_TYPE"], [9, 17, "CATEGORY"], [18, 25, "TIME"]]}
+{"text": "xuất file dữ liệu tuần này", "label": [[0, 9, "ACTION_TYPE"], [18, 26, "TIME"]]}
+{"text": "xuất file dữ liệu hôm nay", "label": [[0, 9, "ACTION_TYPE"], [18, 25, "TIME"]]}
+{"text": "xuất csv dữ liệu gần đây", "label": [[0, 8, "ACTION_TYPE"], [17, 24, "TIME"]]}
+{"text": "xuất excel điện thoại quý này", "label": [[0, 10, "ACTION_TYPE"], [11, 21, "CATEGORY"], [22, 29, "TIME"]]}
+{"text": "xuất excel ăn uống gần đây", "label": [[0, 10, "ACTION_TYPE"], [11, 18, "CATEGORY"], [19, 26, "TIME"]]}
+{"text": "xuất excel điện thoại tháng trước", "label": [[0, 10, "ACTION_TYPE"], [11, 21, "CATEGORY"], [22, 33, "TIME"]]}
+{"text": "xuất excel du lịch tháng 5", "label": [[0, 10, "ACTION_TYPE"], [11, 18, "CATEGORY"], [19, 26, "TIME"]]}
+{"text": "xuất file dữ liệu tháng 5", "label": [[0, 9, "ACTION_TYPE"], [18, 25, "TIME"]]}
+{"text": "xuất csv dữ liệu mấy hôm nay", "label": [[0, 8, "ACTION_TYPE"], [17, 28, "TIME"]]}
+{"text": "xuất file dữ liệu hôm qua", "label": [[0, 9, "ACTION_TYPE"], [18, 25, "TIME"]]}
+{"text": "xuất csv dữ liệu tuần trước", "label": [[0, 8, "ACTION_TYPE"], [17, 27, "TIME"]]}
+{"text": "xuất csv cà phê gần đây", "label": [[0, 8, "ACTION_TYPE"], [9, 15, "CATEGORY"], [16, 23, "TIME"]]}
+{"text": "xuất csv dữ liệu tháng này", "label": [[0, 8, "ACTION_TYPE"], [17, 26, "TIME"]]}
+{"text": "xuất csv internet tuần trước", "label": [[0, 8, "ACTION_TYPE"], [9, 17, "CATEGORY"], [18, 28, "TIME"]]}
+{"text": "xuất file cà phê quý này", "label": [[0, 9, "ACTION_TYPE"], [10, 16, "CATEGORY"], [17, 24, "TIME"]]}
+{"text": "xuất excel dữ liệu gần đây", "label": [[0, 10, "ACTION_TYPE"], [19, 26, "TIME"]]}
+{"text": "xuất file internet quý này", "label": [[0, 9, "ACTION_TYPE"], [10, 18, "CATEGORY"], [19, 26, "TIME"]]}
+{"text": "xuất file điện thoại tháng này", "label": [[0, 9, "ACTION_TYPE"], [10, 20, "CATEGORY"], [21, 30, "TIME"]]}
+{"text": "xuất file học phí hôm nay", "label": [[0, 9, "ACTION_TYPE"], [10, 17, "CATEGORY"], [18, 25, "TIME"]]}
+{"text": "xuất csv điện thoại tuần trước", "label": [[0, 8, "ACTION_TYPE"], [9, 19, "CATEGORY"], [20, 30, "TIME"]]}
+{"text": "xuất excel mỹ phẩm tháng 5", "label": [[0, 10, "ACTION_TYPE"], [11, 18, "CATEGORY"], [19, 26, "TIME"]]}
+{"text": "xuất csv linh tinh tháng 5", "label": [[0, 8, "ACTION_TYPE"], [9, 18, "CATEGORY"], [19, 26, "TIME"]]}
+{"text": "xuất excel đi chợ hôm qua", "label": [[0, 10, "ACTION_TYPE"], [11, 17, "CATEGORY"], [18, 25, "TIME"]]}
+{"text": "xuất file cắt tóc quý này", "label": [[0, 9, "ACTION_TYPE"], [10, 17, "CATEGORY"], [18, 25, "TIME"]]}
+{"text": "xuất excel sửa xe quý này", "label": [[0, 10, "ACTION_TYPE"], [11, 17, "CATEGORY"], [18, 25, "TIME"]]}
+{"text": "xuất file hội họp mấy hôm nay", "label": [[0, 9, "ACTION_TYPE"], [10, 17, "CATEGORY"], [18, 29, "TIME"]]}
+{"text": "xuất file sửa xe tuần này", "label": [[0, 9, "ACTION_TYPE"], [10, 16, "CATEGORY"], [17, 25, "TIME"]]}
+{"text": "xuất excel cà phê quý này", "label": [[0, 10, "ACTION_TYPE"], [11, 17, "CATEGORY"], [18, 25, "TIME"]]}
+{"text": "xuất excel điện thoại tuần trước", "label": [[0, 10, "ACTION_TYPE"], [11, 21, "CATEGORY"], [22, 32, "TIME"]]}
+{"text": "xuất excel cà phê tuần này", "label": [[0, 10, "ACTION_TYPE"], [11, 17, "CATEGORY"], [18, 26, "TIME"]]}
+{"text": "xuất excel dữ liệu mấy hôm nay", "label": [[0, 10, "ACTION_TYPE"], [19, 30, "TIME"]]}
+{"text": "xuất csv dữ liệu hôm nay", "label": [[0, 8, "ACTION_TYPE"], [17, 24, "TIME"]]}
+{"text": "xuất excel giải trí tháng trước", "label": [[0, 10, "ACTION_TYPE"], [11, 19, "CATEGORY"], [20, 31, "TIME"]]}
+{"text": "xuất csv dữ liệu hôm qua", "label": [[0, 8, "ACTION_TYPE"], [17, 24, "TIME"]]}
+{"text": "xuất excel dữ liệu tháng này", "label": [[0, 10, "ACTION_TYPE"], [19, 28, "TIME"]]}
+{"text": "xuất excel dữ liệu tuần trước", "label": [[0, 10, "ACTION_TYPE"], [19, 29, "TIME"]]}
+{"text": "xuất file dữ liệu gần đây", "label": [[0, 9, "ACTION_TYPE"], [18, 25, "TIME"]]}
+{"text": "xuất excel y tế hôm qua", "label": [[0, 10, "ACTION_TYPE"], [11, 15, "CATEGORY"], [16, 23, "TIME"]]}
+{"text": "xuất csv gia đình tháng trước", "label": [[0, 8, "ACTION_TYPE"], [9, 17, "CATEGORY"], [18, 29, "TIME"]]}
+{"text": "xuất file mỹ phẩm mấy hôm nay", "label": [[0, 9, "ACTION_TYPE"], [10, 17, "CATEGORY"], [18, 29, "TIME"]]}
+{"text": "xuất excel mỹ phẩm quý này", "label": [[0, 10, "ACTION_TYPE"], [11, 18, "CATEGORY"], [19, 26, "TIME"]]}
+{"text": "xuất file quà tặng tháng trước", "label": [[0, 9, "ACTION_TYPE"], [10, 18, "CATEGORY"], [19, 30, "TIME"]]}
+{"text": "xuất excel giải trí tháng 5", "label": [[0, 10, "ACTION_TYPE"], [11, 19, "CATEGORY"], [20, 27, "TIME"]]}
+{"text": "xuất file nội thất mấy hôm nay", "label": [[0, 9, "ACTION_TYPE"], [10, 18, "CATEGORY"], [19, 30, "TIME"]]}
+{"text": "xuất csv dữ liệu tuần này", "label": [[0, 8, "ACTION_TYPE"], [17, 25, "TIME"]]}
+{"text": "xuất excel dữ liệu tuần này", "label": [[0, 10, "ACTION_TYPE"], [19, 27, "TIME"]]}
+{"text": "xuất file quà tặng mấy hôm nay", "label": [[0, 9, "ACTION_TYPE"], [10, 18, "CATEGORY"], [19, 30, "TIME"]]}
+{"text": "xuất csv mua sắm tuần này", "label": [[0, 8, "ACTION_TYPE"], [9, 16, "CATEGORY"], [17, 25, "TIME"]]}
+{"text": "xuất excel cà phê tháng 5", "label": [[0, 10, "ACTION_TYPE"], [11, 17, "CATEGORY"], [18, 25, "TIME"]]}
+{"text": "xuất file dữ liệu tháng này", "label": [[0, 9, "ACTION_TYPE"], [18, 27, "TIME"]]}
+{"text": "xuất file ăn uống tháng 5", "label": [[0, 9, "ACTION_TYPE"], [10, 17, "CATEGORY"], [18, 25, "TIME"]]}
+{"text": "xuất excel du lịch hôm nay", "label": [[0, 10, "ACTION_TYPE"], [11, 18, "CATEGORY"], [19, 26, "TIME"]]}
+{"text": "xuất excel dữ liệu hôm qua", "label": [[0, 10, "ACTION_TYPE"], [19, 26, "TIME"]]}
+{"text": "xuất file internet tháng 5", "label": [[0, 9, "ACTION_TYPE"], [10, 18, "CATEGORY"], [19, 26, "TIME"]]}
+{"text": "xuất file cà phê tuần này", "label": [[0, 9, "ACTION_TYPE"], [10, 16, "CATEGORY"], [17, 25, "TIME"]]}
+{"text": "xuất excel học phí hôm nay", "label": [[0, 10, "ACTION_TYPE"], [11, 18, "CATEGORY"], [19, 26, "TIME"]]}
+{"text": "xuất file cắt tóc mấy hôm nay", "label": [[0, 9, "ACTION_TYPE"], [10, 17, "CATEGORY"], [18, 29, "TIME"]]}
+{"text": "xuất file đầu tư tháng này", "label": [[0, 9, "ACTION_TYPE"], [10, 16, "CATEGORY"], [17, 26, "TIME"]]}
+{"text": "xuất csv học phí tháng 5", "label": [[0, 8, "ACTION_TYPE"], [9, 16, "CATEGORY"], [17, 24, "TIME"]]}
+{"text": "xuất file linh tinh gần đây", "label": [[0, 9, "ACTION_TYPE"], [10, 19, "CATEGORY"], [20, 27, "TIME"]]}
+{"text": "xuất csv bảo hiểm hôm nay", "label": [[0, 8, "ACTION_TYPE"], [9, 17, "CATEGORY"], [18, 25, "TIME"]]}
+{"text": "xuất csv y tế tuần này", "label": [[0, 8, "ACTION_TYPE"], [9, 13, "CATEGORY"], [14, 22, "TIME"]]}
+{"text": "xuất excel xăng xe hôm nay", "label": [[0, 10, "ACTION_TYPE"], [11, 18, "CATEGORY"], [19, 26, "TIME"]]}
+{"text": "xuất file mỹ phẩm tuần này", "label": [[0, 9, "ACTION_TYPE"], [10, 17, "CATEGORY"], [18, 26, "TIME"]]}
+{"text": "xuất file bảo hiểm hôm qua", "label": [[0, 9, "ACTION_TYPE"], [10, 18, "CATEGORY"], [19, 26, "TIME"]]}
+{"text": "xuất csv điện thoại quý này", "label": [[0, 8, "ACTION_TYPE"], [9, 19, "CATEGORY"], [20, 27, "TIME"]]}
+{"text": "xuất file bảo hiểm tuần này", "label": [[0, 9, "ACTION_TYPE"], [10, 18, "CATEGORY"], [19, 27, "TIME"]]}
+{"text": "xuất csv sửa xe tuần trước", "label": [[0, 8, "ACTION_TYPE"], [9, 15, "CATEGORY"], [16, 26, "TIME"]]}
+{"text": "xuất file linh tinh hôm nay", "label": [[0, 9, "ACTION_TYPE"], [10, 19, "CATEGORY"], [20, 27, "TIME"]]}
+{"text": "xuất file linh tinh mấy hôm nay", "label": [[0, 9, "ACTION_TYPE"], [10, 19, "CATEGORY"], [20, 31, "TIME"]]}
+{"text": "xuất file mua sắm quý này", "label": [[0, 9, "ACTION_TYPE"], [10, 17, "CATEGORY"], [18, 25, "TIME"]]}
+{"text": "xuất file y tế tuần trước", "label": [[0, 9, "ACTION_TYPE"], [10, 14, "CATEGORY"], [15, 25, "TIME"]]}
+{"text": "xuất excel đi chợ mấy hôm nay", "label": [[0, 10, "ACTION_TYPE"], [11, 17, "CATEGORY"], [18, 29, "TIME"]]}
+{"text": "xuất excel ăn uống quý này", "label": [[0, 10, "ACTION_TYPE"], [11, 18, "CATEGORY"], [19, 26, "TIME"]]}
+{"text": "xuất csv ăn uống mấy hôm nay", "label": [[0, 8, "ACTION_TYPE"], [9, 16, "CATEGORY"], [17, 28, "TIME"]]}
+{"text": "xuất excel bảo hiểm tháng này", "label": [[0, 10, "ACTION_TYPE"], [11, 19, "CATEGORY"], [20, 29, "TIME"]]}
+{"text": "xuất file điện thoại mấy hôm nay", "label": [[0, 9, "ACTION_TYPE"], [10, 20, "CATEGORY"], [21, 32, "TIME"]]}
+{"text": "xuất file quà tặng gần đây", "label": [[0, 9, "ACTION_TYPE"], [10, 18, "CATEGORY"], [19, 26, "TIME"]]}
+{"text": "xuất file mua sắm hôm qua", "label": [[0, 9, "ACTION_TYPE"], [10, 17, "CATEGORY"], [18, 25, "TIME"]]}
+{"text": "xuất csv sửa xe tháng 5", "label": [[0, 8, "ACTION_TYPE"], [9, 15, "CATEGORY"], [16, 23, "TIME"]]}
+{"text": "xuất excel bảo hiểm tháng trước", "label": [[0, 10, "ACTION_TYPE"], [11, 19, "CATEGORY"], [20, 31, "TIME"]]}
+{"text": "xuất excel gia đình tháng 5", "label": [[0, 10, "ACTION_TYPE"], [11, 19, "CATEGORY"], [20, 27, "TIME"]]}
+{"text": "xuất file đi lại tuần trước", "label": [[0, 9, "ACTION_TYPE"], [10, 16, "CATEGORY"], [17, 27, "TIME"]]}
+{"text": "xuất excel học phí tháng trước", "label": [[0, 10, "ACTION_TYPE"], [11, 18, "CATEGORY"], [19, 30, "TIME"]]}
+{"text": "xuất excel mua sắm tháng 5", "label": [[0, 10, "ACTION_TYPE"], [11, 18, "CATEGORY"], [19, 26, "TIME"]]}
+{"text": "xuất csv sửa xe hôm qua", "label": [[0, 8, "ACTION_TYPE"], [9, 15, "CATEGORY"], [16, 23, "TIME"]]}
+{"text": "xuất csv ăn uống gần đây", "label": [[0, 8, "ACTION_TYPE"], [9, 16, "CATEGORY"], [17, 24, "TIME"]]}
+{"text": "xuất csv hội họp quý này", "label": [[0, 8, "ACTION_TYPE"], [9, 16, "CATEGORY"], [17, 24, "TIME"]]}
+{"text": "xuất excel mỹ phẩm mấy hôm nay", "label": [[0, 10, "ACTION_TYPE"], [11, 18, "CATEGORY"], [19, 30, "TIME"]]}
+{"text": "xuất csv linh tinh hôm nay", "label": [[0, 8, "ACTION_TYPE"], [9, 18, "CATEGORY"], [19, 26, "TIME"]]}
+{"text": "xuất file giải trí hôm nay", "label": [[0, 9, "ACTION_TYPE"], [10, 18, "CATEGORY"], [19, 26, "TIME"]]}
+{"text": "xuất csv du lịch quý này", "label": [[0, 8, "ACTION_TYPE"], [9, 16, "CATEGORY"], [17, 24, "TIME"]]}
+{"text": "xuất file linh tinh hôm qua", "label": [[0, 9, "ACTION_TYPE"], [10, 19, "CATEGORY"], [20, 27, "TIME"]]}
+{"text": "xuất file bảo hiểm hôm nay", "label": [[0, 9, "ACTION_TYPE"], [10, 18, "CATEGORY"], [19, 26, "TIME"]]}
+{"text": "xuất csv mua sắm tuần trước", "label": [[0, 8, "ACTION_TYPE"], [9, 16, "CATEGORY"], [17, 27, "TIME"]]}
+{"text": "xuất file mỹ phẩm hôm qua", "label": [[0, 9, "ACTION_TYPE"], [10, 17, "CATEGORY"], [18, 25, "TIME"]]}
+{"text": "xuất file du lịch tháng này", "label": [[0, 9, "ACTION_TYPE"], [10, 17, "CATEGORY"], [18, 27, "TIME"]]}
+{"text": "xuất excel nội thất tuần này", "label": [[0, 10, "ACTION_TYPE"], [11, 19, "CATEGORY"], [20, 28, "TIME"]]}
+{"text": "xuất excel mỹ phẩm gần đây", "label": [[0, 10, "ACTION_TYPE"], [11, 18, "CATEGORY"], [19, 26, "TIME"]]}
+{"text": "xuất csv cắt tóc tháng trước", "label": [[0, 8, "ACTION_TYPE"], [9, 16, "CATEGORY"], [17, 28, "TIME"]]}
+{"text": "xuất excel đầu tư tháng 5", "label": [[0, 10, "ACTION_TYPE"], [11, 17, "CATEGORY"], [18, 25, "TIME"]]}
+{"text": "xuất file nội thất quý này", "label": [[0, 9, "ACTION_TYPE"], [10, 18, "CATEGORY"], [19, 26, "TIME"]]}
+{"text": "xuất file y tế hôm nay", "label": [[0, 9, "ACTION_TYPE"], [10, 14, "CATEGORY"], [15, 22, "TIME"]]}
+{"text": "xuất csv quà tặng tuần này", "label": [[0, 8, "ACTION_TYPE"], [9, 17, "CATEGORY"], [18, 26, "TIME"]]}
+{"text": "xuất excel linh tinh tháng trước", "label": [[0, 10, "ACTION_TYPE"], [11, 20, "CATEGORY"], [21, 32, "TIME"]]}
+{"text": "xuất file học phí tuần trước", "label": [[0, 9, "ACTION_TYPE"], [10, 17, "CATEGORY"], [18, 28, "TIME"]]}
+{"text": "xuất excel điện nước tuần này", "label": [[0, 10, "ACTION_TYPE"], [11, 20, "CATEGORY"], [21, 29, "TIME"]]}
+{"text": "xuất excel cắt tóc tháng trước", "label": [[0, 10, "ACTION_TYPE"], [11, 18, "CATEGORY"], [19, 30, "TIME"]]}
+{"text": "xuất csv học phí tuần trước", "label": [[0, 8, "ACTION_TYPE"], [9, 16, "CATEGORY"], [17, 27, "TIME"]]}
+{"text": "xuất file giải trí quý này", "label": [[0, 9, "ACTION_TYPE"], [10, 18, "CATEGORY"], [19, 26, "TIME"]]}
+{"text": "xuất excel internet tuần này", "label": [[0, 10, "ACTION_TYPE"], [11, 19, "CATEGORY"], [20, 28, "TIME"]]}
+{"text": "xuất csv cắt tóc tháng này", "label": [[0, 8, "ACTION_TYPE"], [9, 16, "CATEGORY"], [17, 26, "TIME"]]}
+{"text": "xuất excel quà tặng tháng này", "label": [[0, 10, "ACTION_TYPE"], [11, 19, "CATEGORY"], [20, 29, "TIME"]]}
+{"text": "xuất file sửa xe tháng 5", "label": [[0, 9, "ACTION_TYPE"], [10, 16, "CATEGORY"], [17, 24, "TIME"]]}
+{"text": "xuất excel đi lại tháng này", "label": [[0, 10, "ACTION_TYPE"], [11, 17, "CATEGORY"], [18, 27, "TIME"]]}
+{"text": "xuất file internet hôm qua", "label": [[0, 9, "ACTION_TYPE"], [10, 18, "CATEGORY"], [19, 26, "TIME"]]}
+{"text": "xuất csv cắt tóc hôm nay", "label": [[0, 8, "ACTION_TYPE"], [9, 16, "CATEGORY"], [17, 24, "TIME"]]}
+{"text": "xuất excel giải trí mấy hôm nay", "label": [[0, 10, "ACTION_TYPE"], [11, 19, "CATEGORY"], [20, 31, "TIME"]]}
+{"text": "xuất file đầu tư gần đây", "label": [[0, 9, "ACTION_TYPE"], [10, 16, "CATEGORY"], [17, 24, "TIME"]]}
+{"text": "xuất excel gia đình tuần này", "label": [[0, 10, "ACTION_TYPE"], [11, 19, "CATEGORY"], [20, 28, "TIME"]]}
+{"text": "xuất csv thuê nhà tuần này", "label": [[0, 8, "ACTION_TYPE"], [9, 17, "CATEGORY"], [18, 26, "TIME"]]}
+{"text": "xuất csv bảo hiểm tháng trước", "label": [[0, 8, "ACTION_TYPE"], [9, 17, "CATEGORY"], [18, 29, "TIME"]]}
+{"text": "xuất csv thuê nhà mấy hôm nay", "label": [[0, 8, "ACTION_TYPE"], [9, 17, "CATEGORY"], [18, 29, "TIME"]]}
+{"text": "xuất excel đi lại hôm qua", "label": [[0, 10, "ACTION_TYPE"], [11, 17, "CATEGORY"], [18, 25, "TIME"]]}
+{"text": "xuất file nội thất tháng 5", "label": [[0, 9, "ACTION_TYPE"], [10, 18, "CATEGORY"], [19, 26, "TIME"]]}
+{"text": "xuất csv du lịch tuần này", "label": [[0, 8, "ACTION_TYPE"], [9, 16, "CATEGORY"], [17, 25, "TIME"]]}
+{"text": "xuất csv ăn uống tháng 5", "label": [[0, 8, "ACTION_TYPE"], [9, 16, "CATEGORY"], [17, 24, "TIME"]]}
+{"text": "xuất csv hội họp hôm qua", "label": [[0, 8, "ACTION_TYPE"], [9, 16, "CATEGORY"], [17, 24, "TIME"]]}
+{"text": "xuất excel đi chợ tuần này", "label": [[0, 10, "ACTION_TYPE"], [11, 17, "CATEGORY"], [18, 26, "TIME"]]}
+{"text": "xuất csv đi chợ tháng này", "label": [[0, 8, "ACTION_TYPE"], [9, 15, "CATEGORY"], [16, 25, "TIME"]]}
+{"text": "xuất csv thuê nhà tháng trước", "label": [[0, 8, "ACTION_TYPE"], [9, 17, "CATEGORY"], [18, 29, "TIME"]]}
+{"text": "xuất csv cà phê tháng 5", "label": [[0, 8, "ACTION_TYPE"], [9, 15, "CATEGORY"], [16, 23, "TIME"]]}
+{"text": "xuất file mỹ phẩm gần đây", "label": [[0, 9, "ACTION_TYPE"], [10, 17, "CATEGORY"], [18, 25, "TIME"]]}
+{"text": "xuất csv gia đình tuần trước", "label": [[0, 8, "ACTION_TYPE"], [9, 17, "CATEGORY"], [18, 28, "TIME"]]}
+{"text": "xuất excel giải trí hôm qua", "label": [[0, 10, "ACTION_TYPE"], [11, 19, "CATEGORY"], [20, 27, "TIME"]]}
+{"text": "xuất csv quà tặng tuần trước", "label": [[0, 8, "ACTION_TYPE"], [9, 17, "CATEGORY"], [18, 28, "TIME"]]}
+{"text": "xuất file xăng xe hôm qua", "label": [[0, 9, "ACTION_TYPE"], [10, 17, "CATEGORY"], [18, 25, "TIME"]]}
+{"text": "xuất excel giải trí tuần trước", "label": [[0, 10, "ACTION_TYPE"], [11, 19, "CATEGORY"], [20, 30, "TIME"]]}
+{"text": "xuất file gia đình tuần trước", "label": [[0, 9, "ACTION_TYPE"], [10, 18, "CATEGORY"], [19, 29, "TIME"]]}
+{"text": "xuất file đi lại gần đây", "label": [[0, 9, "ACTION_TYPE"], [10, 16, "CATEGORY"], [17, 24, "TIME"]]}
+{"text": "xuất file đi chợ mấy hôm nay", "label": [[0, 9, "ACTION_TYPE"], [10, 16, "CATEGORY"], [17, 28, "TIME"]]}
+{"text": "xuất csv y tế mấy hôm nay", "label": [[0, 8, "ACTION_TYPE"], [9, 13, "CATEGORY"], [14, 25, "TIME"]]}
+{"text": "xuất csv ăn uống tháng này", "label": [[0, 8, "ACTION_TYPE"], [9, 16, "CATEGORY"], [17, 26, "TIME"]]}
+{"text": "xuất csv gia đình hôm qua", "label": [[0, 8, "ACTION_TYPE"], [9, 17, "CATEGORY"], [18, 25, "TIME"]]}
+{"text": "xuất file mỹ phẩm tháng này", "label": [[0, 9, "ACTION_TYPE"], [10, 17, "CATEGORY"], [18, 27, "TIME"]]}
+{"text": "xuất file quà tặng tuần này", "label": [[0, 9, "ACTION_TYPE"], [10, 18, "CATEGORY"], [19, 27, "TIME"]]}
+{"text": "xuất file đi lại tháng này", "label": [[0, 9, "ACTION_TYPE"], [10, 16, "CATEGORY"], [17, 26, "TIME"]]}
+{"text": "xuất csv đầu tư mấy hôm nay", "label": [[0, 8, "ACTION_TYPE"], [9, 15, "CATEGORY"], [16, 27, "TIME"]]}
+{"text": "xuất csv cà phê tháng này", "label": [[0, 8, "ACTION_TYPE"], [9, 15, "CATEGORY"], [16, 25, "TIME"]]}
+{"text": "xuất excel đầu tư tháng này", "label": [[0, 10, "ACTION_TYPE"], [11, 17, "CATEGORY"], [18, 27, "TIME"]]}
+{"text": "xuất excel quà tặng gần đây", "label": [[0, 10, "ACTION_TYPE"], [11, 19, "CATEGORY"], [20, 27, "TIME"]]}
+{"text": "xuất csv đi lại tháng 5", "label": [[0, 8, "ACTION_TYPE"], [9, 15, "CATEGORY"], [16, 23, "TIME"]]}
+{"text": "xuất file y tế tháng này", "label": [[0, 9, "ACTION_TYPE"], [10, 14, "CATEGORY"], [15, 24, "TIME"]]}
+{"text": "xuất file điện nước mấy hôm nay", "label": [[0, 9, "ACTION_TYPE"], [10, 19, "CATEGORY"], [20, 31, "TIME"]]}
+{"text": "xuất file ăn uống tuần này", "label": [[0, 9, "ACTION_TYPE"], [10, 17, "CATEGORY"], [18, 26, "TIME"]]}
+{"text": "xuất excel nội thất mấy hôm nay", "label": [[0, 10, "ACTION_TYPE"], [11, 19, "CATEGORY"], [20, 31, "TIME"]]}
+{"text": "xuất file cắt tóc tháng 5", "label": [[0, 9, "ACTION_TYPE"], [10, 17, "CATEGORY"], [18, 25, "TIME"]]}
+{"text": "xuất excel ăn uống tháng này", "label": [[0, 10, "ACTION_TYPE"], [11, 18, "CATEGORY"], [19, 28, "TIME"]]}
+{"text": "xuất excel du lịch mấy hôm nay", "label": [[0, 10, "ACTION_TYPE"], [11, 18, "CATEGORY"], [19, 30, "TIME"]]}
+{"text": "xuất csv quà tặng hôm nay", "label": [[0, 8, "ACTION_TYPE"], [9, 17, "CATEGORY"], [18, 25, "TIME"]]}
+{"text": "xuất excel đi lại hôm nay", "label": [[0, 10, "ACTION_TYPE"], [11, 17, "CATEGORY"], [18, 25, "TIME"]]}
+{"text": "xuất excel internet tháng trước", "label": [[0, 10, "ACTION_TYPE"], [11, 19, "CATEGORY"], [20, 31, "TIME"]]}
+{"text": "xuất file cắt tóc gần đây", "label": [[0, 9, "ACTION_TYPE"], [10, 17, "CATEGORY"], [18, 25, "TIME"]]}
+{"text": "xuất file thuê nhà hôm nay", "label": [[0, 9, "ACTION_TYPE"], [10, 18, "CATEGORY"], [19, 26, "TIME"]]}
+{"text": "xuất file gia đình tháng 5", "label": [[0, 9, "ACTION_TYPE"], [10, 18, "CATEGORY"], [19, 26, "TIME"]]}
+{"text": "xuất csv đi lại tháng trước", "label": [[0, 8, "ACTION_TYPE"], [9, 15, "CATEGORY"], [16, 27, "TIME"]]}
+{"text": "xuất excel điện nước tháng trước", "label": [[0, 10, "ACTION_TYPE"], [11, 20, "CATEGORY"], [21, 32, "TIME"]]}
+{"text": "xuất excel quà tặng tuần này", "label": [[0, 10, "ACTION_TYPE"], [11, 19, "CATEGORY"], [20, 28, "TIME"]]}
+{"text": "xuất file thuê nhà hôm qua", "label": [[0, 9, "ACTION_TYPE"], [10, 18, "CATEGORY"], [19, 26, "TIME"]]}
+{"text": "xuất excel hội họp mấy hôm nay", "label": [[0, 10, "ACTION_TYPE"], [11, 18, "CATEGORY"], [19, 30, "TIME"]]}
+{"text": "xuất csv mỹ phẩm hôm qua", "label": [[0, 8, "ACTION_TYPE"], [9, 16, "CATEGORY"], [17, 24, "TIME"]]}
+{"text": "xuất excel y tế tháng này", "label": [[0, 10, "ACTION_TYPE"], [11, 15, "CATEGORY"], [16, 25, "TIME"]]}
+{"text": "xuất file đầu tư quý này", "label": [[0, 9, "ACTION_TYPE"], [10, 16, "CATEGORY"], [17, 24, "TIME"]]}
+{"text": "xuất file mua sắm tuần này", "label": [[0, 9, "ACTION_TYPE"], [10, 17, "CATEGORY"], [18, 26, "TIME"]]}
+{"text": "xuất csv du lịch tuần trước", "label": [[0, 8, "ACTION_TYPE"], [9, 16, "CATEGORY"], [17, 27, "TIME"]]}
+{"text": "xuất csv đầu tư quý này", "label": [[0, 8, "ACTION_TYPE"], [9, 15, "CATEGORY"], [16, 23, "TIME"]]}
+{"text": "xuất csv đi chợ mấy hôm nay", "label": [[0, 8, "ACTION_TYPE"], [9, 15, "CATEGORY"], [16, 27, "TIME"]]}
+{"text": "xuất csv quà tặng tháng 5", "label": [[0, 8, "ACTION_TYPE"], [9, 17, "CATEGORY"], [18, 25, "TIME"]]}
+{"text": "xuất excel điện thoại tuần này", "label": [[0, 10, "ACTION_TYPE"], [11, 21, "CATEGORY"], [22, 30, "TIME"]]}
+{"text": "xuất file linh tinh quý này", "label": [[0, 9, "ACTION_TYPE"], [10, 19, "CATEGORY"], [20, 27, "TIME"]]}
+{"text": "xuất file xăng xe tháng trước", "label": [[0, 9, "ACTION_TYPE"], [10, 17, "CATEGORY"], [18, 29, "TIME"]]}
+{"text": "xuất csv xăng xe mấy hôm nay", "label": [[0, 8, "ACTION_TYPE"], [9, 16, "CATEGORY"], [17, 28, "TIME"]]}
+{"text": "xuất excel nội thất gần đây", "label": [[0, 10, "ACTION_TYPE"], [11, 19, "CATEGORY"], [20, 27, "TIME"]]}
+{"text": "xuất excel thuê nhà mấy hôm nay", "label": [[0, 10, "ACTION_TYPE"], [11, 19, "CATEGORY"], [20, 31, "TIME"]]}
+{"text": "xuất file du lịch hôm nay", "label": [[0, 9, "ACTION_TYPE"], [10, 17, "CATEGORY"], [18, 25, "TIME"]]}
+{"text": "xuất excel ăn uống tuần trước", "label": [[0, 10, "ACTION_TYPE"], [11, 18, "CATEGORY"], [19, 29, "TIME"]]}
+{"text": "xuất csv y tế tháng trước", "label": [[0, 8, "ACTION_TYPE"], [9, 13, "CATEGORY"], [14, 25, "TIME"]]}
+{"text": "xuất csv gia đình tuần này", "label": [[0, 8, "ACTION_TYPE"], [9, 17, "CATEGORY"], [18, 26, "TIME"]]}
+{"text": "xuất file điện thoại quý này", "label": [[0, 9, "ACTION_TYPE"], [10, 20, "CATEGORY"], [21, 28, "TIME"]]}
+{"text": "xuất file đi lại tháng trước", "label": [[0, 9, "ACTION_TYPE"], [10, 16, "CATEGORY"], [17, 28, "TIME"]]}
+{"text": "xuất file bảo hiểm tuần trước", "label": [[0, 9, "ACTION_TYPE"], [10, 18, "CATEGORY"], [19, 29, "TIME"]]}
+{"text": "xuất csv gia đình mấy hôm nay", "label": [[0, 8, "ACTION_TYPE"], [9, 17, "CATEGORY"], [18, 29, "TIME"]]}
+{"text": "xuất file xăng xe hôm nay", "label": [[0, 9, "ACTION_TYPE"], [10, 17, "CATEGORY"], [18, 25, "TIME"]]}
+{"text": "xuất excel gia đình mấy hôm nay", "label": [[0, 10, "ACTION_TYPE"], [11, 19, "CATEGORY"], [20, 31, "TIME"]]}
+{"text": "xuất csv mỹ phẩm tháng trước", "label": [[0, 8, "ACTION_TYPE"], [9, 16, "CATEGORY"], [17, 28, "TIME"]]}
+{"text": "xuất file điện thoại tuần trước", "label": [[0, 9, "ACTION_TYPE"], [10, 20, "CATEGORY"], [21, 31, "TIME"]]}
+{"text": "xuất csv đi chợ tuần trước", "label": [[0, 8, "ACTION_TYPE"], [9, 15, "CATEGORY"], [16, 26, "TIME"]]}
+{"text": "xuất file du lịch tuần trước", "label": [[0, 9, "ACTION_TYPE"], [10, 17, "CATEGORY"], [18, 28, "TIME"]]}
+{"text": "xuất file đi chợ tháng này", "label": [[0, 9, "ACTION_TYPE"], [10, 16, "CATEGORY"], [17, 26, "TIME"]]}
+{"text": "xuất excel mỹ phẩm hôm qua", "label": [[0, 10, "ACTION_TYPE"], [11, 18, "CATEGORY"], [19, 26, "TIME"]]}
+{"text": "xuất file du lịch gần đây", "label": [[0, 9, "ACTION_TYPE"], [10, 17, "CATEGORY"], [18, 25, "TIME"]]}
+{"text": "xuất csv gia đình tháng này", "label": [[0, 8, "ACTION_TYPE"], [9, 17, "CATEGORY"], [18, 27, "TIME"]]}
+{"text": "xuất csv giải trí tháng trước", "label": [[0, 8, "ACTION_TYPE"], [9, 17, "CATEGORY"], [18, 29, "TIME"]]}
+{"text": "xuất excel học phí gần đây", "label": [[0, 10, "ACTION_TYPE"], [11, 18, "CATEGORY"], [19, 26, "TIME"]]}
+{"text": "xuất file hội họp tháng trước", "label": [[0, 9, "ACTION_TYPE"], [10, 17, "CATEGORY"], [18, 29, "TIME"]]}
+{"text": "xuất file mỹ phẩm quý này", "label": [[0, 9, "ACTION_TYPE"], [10, 17, "CATEGORY"], [18, 25, "TIME"]]}
+{"text": "xuất excel điện thoại hôm qua", "label": [[0, 10, "ACTION_TYPE"], [11, 21, "CATEGORY"], [22, 29, "TIME"]]}
+{"text": "xuất file quà tặng tuần trước", "label": [[0, 9, "ACTION_TYPE"], [10, 18, "CATEGORY"], [19, 29, "TIME"]]}
+{"text": "xuất csv linh tinh tháng trước", "label": [[0, 8, "ACTION_TYPE"], [9, 18, "CATEGORY"], [19, 30, "TIME"]]}
+{"text": "xuất excel điện thoại tháng này", "label": [[0, 10, "ACTION_TYPE"], [11, 21, "CATEGORY"], [22, 31, "TIME"]]}
+{"text": "xuất file giải trí tháng trước", "label": [[0, 9, "ACTION_TYPE"], [10, 18, "CATEGORY"], [19, 30, "TIME"]]}
+{"text": "xuất excel bảo hiểm hôm nay", "label": [[0, 10, "ACTION_TYPE"], [11, 19, "CATEGORY"], [20, 27, "TIME"]]}
+{"text": "xuất csv nội thất mấy hôm nay", "label": [[0, 8, "ACTION_TYPE"], [9, 17, "CATEGORY"], [18, 29, "TIME"]]}
+{"text": "xuất file sửa xe hôm nay", "label": [[0, 9, "ACTION_TYPE"], [10, 16, "CATEGORY"], [17, 24, "TIME"]]}
+{"text": "xuất excel gia đình tháng này", "label": [[0, 10, "ACTION_TYPE"], [11, 19, "CATEGORY"], [20, 29, "TIME"]]}
+{"text": "xuất csv xăng xe tháng trước", "label": [[0, 8, "ACTION_TYPE"], [9, 16, "CATEGORY"], [17, 28, "TIME"]]}
+{"text": "xuất excel hội họp tháng 5", "label": [[0, 10, "ACTION_TYPE"], [11, 18, "CATEGORY"], [19, 26, "TIME"]]}
+{"text": "xuất csv xăng xe tháng 5", "label": [[0, 8, "ACTION_TYPE"], [9, 16, "CATEGORY"], [17, 24, "TIME"]]}
+{"text": "xuất file gia đình tháng này", "label": [[0, 9, "ACTION_TYPE"], [10, 18, "CATEGORY"], [19, 28, "TIME"]]}
+{"text": "xuất csv bảo hiểm tháng 5", "label": [[0, 8, "ACTION_TYPE"], [9, 17, "CATEGORY"], [18, 25, "TIME"]]}
+{"text": "xuất file đầu tư tháng trước", "label": [[0, 9, "ACTION_TYPE"], [10, 16, "CATEGORY"], [17, 28, "TIME"]]}
+{"text": "xuất csv học phí mấy hôm nay", "label": [[0, 8, "ACTION_TYPE"], [9, 16, "CATEGORY"], [17, 28, "TIME"]]}
+{"text": "xuất csv mua sắm mấy hôm nay", "label": [[0, 8, "ACTION_TYPE"], [9, 16, "CATEGORY"], [17, 28, "TIME"]]}
+{"text": "xuất csv dữ liệu tháng trước", "label": [[0, 8, "ACTION_TYPE"], [17, 28, "TIME"]]}
+{"text": "xuất file gia đình quý này", "label": [[0, 9, "ACTION_TYPE"], [10, 18, "CATEGORY"], [19, 26, "TIME"]]}
+{"text": "xuất file đầu tư tuần này", "label": [[0, 9, "ACTION_TYPE"], [10, 16, "CATEGORY"], [17, 25, "TIME"]]}
+{"text": "xuất csv internet tuần này", "label": [[0, 8, "ACTION_TYPE"], [9, 17, "CATEGORY"], [18, 26, "TIME"]]}
+{"text": "xuất excel mua sắm tháng trước", "label": [[0, 10, "ACTION_TYPE"], [11, 18, "CATEGORY"], [19, 30, "TIME"]]}
+{"text": "xuất excel cắt tóc hôm nay", "label": [[0, 10, "ACTION_TYPE"], [11, 18, "CATEGORY"], [19, 26, "TIME"]]}
+{"text": "xuất excel gia đình gần đây", "label": [[0, 10, "ACTION_TYPE"], [11, 19, "CATEGORY"], [20, 27, "TIME"]]}
+{"text": "xuất file bảo hiểm tháng 5", "label": [[0, 9, "ACTION_TYPE"], [10, 18, "CATEGORY"], [19, 26, "TIME"]]}
+{"text": "xuất file đi lại hôm qua", "label": [[0, 9, "ACTION_TYPE"], [10, 16, "CATEGORY"], [17, 24, "TIME"]]}
+{"text": "xuất file đi chợ tháng 5", "label": [[0, 9, "ACTION_TYPE"], [10, 16, "CATEGORY"], [17, 24, "TIME"]]}
+{"text": "xuất file thuê nhà tháng này", "label": [[0, 9, "ACTION_TYPE"], [10, 18, "CATEGORY"], [19, 28, "TIME"]]}
+{"text": "xuất file ăn uống gần đây", "label": [[0, 9, "ACTION_TYPE"], [10, 17, "CATEGORY"], [18, 25, "TIME"]]}
+{"text": "xuất file linh tinh tuần trước", "label": [[0, 9, "ACTION_TYPE"], [10, 19, "CATEGORY"], [20, 30, "TIME"]]}
+{"text": "xuất excel xăng xe gần đây", "label": [[0, 10, "ACTION_TYPE"], [11, 18, "CATEGORY"], [19, 26, "TIME"]]}
+{"text": "xuất csv giải trí hôm nay", "label": [[0, 8, "ACTION_TYPE"], [9, 17, "CATEGORY"], [18, 25, "TIME"]]}
+{"text": "xuất file nội thất tuần trước", "label": [[0, 9, "ACTION_TYPE"], [10, 18, "CATEGORY"], [19, 29, "TIME"]]}
+{"text": "xuất excel hội họp hôm qua", "label": [[0, 10, "ACTION_TYPE"], [11, 18, "CATEGORY"], [19, 26, "TIME"]]}
+{"text": "xuất file internet tháng trước", "label": [[0, 9, "ACTION_TYPE"], [10, 18, "CATEGORY"], [19, 30, "TIME"]]}
+{"text": "xuất csv cà phê hôm nay", "label": [[0, 8, "ACTION_TYPE"], [9, 15, "CATEGORY"], [16, 23, "TIME"]]}
+{"text": "xuất file điện nước tháng trước", "label": [[0, 9, "ACTION_TYPE"], [10, 19, "CATEGORY"], [20, 31, "TIME"]]}
+{"text": "xuất file ăn uống hôm qua", "label": [[0, 9, "ACTION_TYPE"], [10, 17, "CATEGORY"], [18, 25, "TIME"]]}
+{"text": "xuất excel điện nước hôm nay", "label": [[0, 10, "ACTION_TYPE"], [11, 20, "CATEGORY"], [21, 28, "TIME"]]}
+{"text": "xuất csv linh tinh quý này", "label": [[0, 8, "ACTION_TYPE"], [9, 18, "CATEGORY"], [19, 26, "TIME"]]}
+{"text": "xuất csv đi lại hôm qua", "label": [[0, 8, "ACTION_TYPE"], [9, 15, "CATEGORY"], [16, 23, "TIME"]]}
+{"text": "xuất csv quà tặng hôm qua", "label": [[0, 8, "ACTION_TYPE"], [9, 17, "CATEGORY"], [18, 25, "TIME"]]}
+{"text": "xuất file gia đình tháng trước", "label": [[0, 9, "ACTION_TYPE"], [10, 18, "CATEGORY"], [19, 30, "TIME"]]}
+{"text": "xuất csv quà tặng gần đây", "label": [[0, 8, "ACTION_TYPE"], [9, 17, "CATEGORY"], [18, 25, "TIME"]]}
+{"text": "xuất excel sửa xe hôm nay", "label": [[0, 10, "ACTION_TYPE"], [11, 17, "CATEGORY"], [18, 25, "TIME"]]}
+{"text": "xuất csv đi chợ tháng 5", "label": [[0, 8, "ACTION_TYPE"], [9, 15, "CATEGORY"], [16, 23, "TIME"]]}
+{"text": "xuất excel du lịch hôm qua", "label": [[0, 10, "ACTION_TYPE"], [11, 18, "CATEGORY"], [19, 26, "TIME"]]}
+{"text": "xuất csv sửa xe tháng này", "label": [[0, 8, "ACTION_TYPE"], [9, 15, "CATEGORY"], [16, 25, "TIME"]]}
+{"text": "xuất file nội thất hôm nay", "label": [[0, 9, "ACTION_TYPE"], [10, 18, "CATEGORY"], [19, 26, "TIME"]]}
+{"text": "xuất excel mua sắm quý này", "label": [[0, 10, "ACTION_TYPE"], [11, 18, "CATEGORY"], [19, 26, "TIME"]]}
+{"text": "xuất csv sửa xe hôm nay", "label": [[0, 8, "ACTION_TYPE"], [9, 15, "CATEGORY"], [16, 23, "TIME"]]}
+{"text": "xuất file hội họp gần đây", "label": [[0, 9, "ACTION_TYPE"], [10, 17, "CATEGORY"], [18, 25, "TIME"]]}
+{"text": "xuất csv điện nước mấy hôm nay", "label": [[0, 8, "ACTION_TYPE"], [9, 18, "CATEGORY"], [19, 30, "TIME"]]}
+{"text": "xuất excel mỹ phẩm tháng này", "label": [[0, 10, "ACTION_TYPE"], [11, 18, "CATEGORY"], [19, 28, "TIME"]]}
+{"text": "xuất csv nội thất gần đây", "label": [[0, 8, "ACTION_TYPE"], [9, 17, "CATEGORY"], [18, 25, "TIME"]]}
+{"text": "xuất csv hội họp tháng 5", "label": [[0, 8, "ACTION_TYPE"], [9, 16, "CATEGORY"], [17, 24, "TIME"]]}
+{"text": "xuất file điện nước hôm qua", "label": [[0, 9, "ACTION_TYPE"], [10, 19, "CATEGORY"], [20, 27, "TIME"]]}
+{"text": "xuất excel cà phê hôm nay", "label": [[0, 10, "ACTION_TYPE"], [11, 17, "CATEGORY"], [18, 25, "TIME"]]}
+{"text": "xuất file mua sắm hôm nay", "label": [[0, 9, "ACTION_TYPE"], [10, 17, "CATEGORY"], [18, 25, "TIME"]]}
+{"text": "xuất csv đầu tư tháng này", "label": [[0, 8, "ACTION_TYPE"], [9, 15, "CATEGORY"], [16, 25, "TIME"]]}
+{"text": "xuất csv giải trí quý này", "label": [[0, 8, "ACTION_TYPE"], [9, 17, "CATEGORY"], [18, 25, "TIME"]]}
+{"text": "xuất file giải trí gần đây", "label": [[0, 9, "ACTION_TYPE"], [10, 18, "CATEGORY"], [19, 26, "TIME"]]}
+{"text": "xuất file nội thất tuần này", "label": [[0, 9, "ACTION_TYPE"], [10, 18, "CATEGORY"], [19, 27, "TIME"]]}
+{"text": "xuất excel điện nước quý này", "label": [[0, 10, "ACTION_TYPE"], [11, 20, "CATEGORY"], [21, 28, "TIME"]]}
+{"text": "xuất excel điện nước tháng này", "label": [[0, 10, "ACTION_TYPE"], [11, 20, "CATEGORY"], [21, 30, "TIME"]]}
+{"text": "xuất file xăng xe tuần này", "label": [[0, 9, "ACTION_TYPE"], [10, 17, "CATEGORY"], [18, 26, "TIME"]]}
+{"text": "xuất csv hội họp tháng này", "label": [[0, 8, "ACTION_TYPE"], [9, 16, "CATEGORY"], [17, 26, "TIME"]]}
+{"text": "xuất file hội họp quý này", "label": [[0, 9, "ACTION_TYPE"], [10, 17, "CATEGORY"], [18, 25, "TIME"]]}
+{"text": "xuất excel ăn uống mấy hôm nay", "label": [[0, 10, "ACTION_TYPE"], [11, 18, "CATEGORY"], [19, 30, "TIME"]]}
+{"text": "xuất file điện nước tuần này", "label": [[0, 9, "ACTION_TYPE"], [10, 19, "CATEGORY"], [20, 28, "TIME"]]}
+{"text": "xuất file xăng xe tuần trước", "label": [[0, 9, "ACTION_TYPE"], [10, 17, "CATEGORY"], [18, 28, "TIME"]]}
+{"text": "xuất file điện nước tháng này", "label": [[0, 9, "ACTION_TYPE"], [10, 19, "CATEGORY"], [20, 29, "TIME"]]}
+{"text": "xuất excel đi chợ quý này", "label": [[0, 10, "ACTION_TYPE"], [11, 17, "CATEGORY"], [18, 25, "TIME"]]}
+{"text": "xuất csv du lịch tháng trước", "label": [[0, 8, "ACTION_TYPE"], [9, 16, "CATEGORY"], [17, 28, "TIME"]]}
+{"text": "xuất file linh tinh tháng trước", "label": [[0, 9, "ACTION_TYPE"], [10, 19, "CATEGORY"], [20, 31, "TIME"]]}
+{"text": "xuất csv cà phê mấy hôm nay", "label": [[0, 8, "ACTION_TYPE"], [9, 15, "CATEGORY"], [16, 27, "TIME"]]}
+{"text": "xuất excel y tế tuần này", "label": [[0, 10, "ACTION_TYPE"], [11, 15, "CATEGORY"], [16, 24, "TIME"]]}
+{"text": "xuất file cà phê hôm qua", "label": [[0, 9, "ACTION_TYPE"], [10, 16, "CATEGORY"], [17, 24, "TIME"]]}
+{"text": "xuất excel internet quý này", "label": [[0, 10, "ACTION_TYPE"], [11, 19, "CATEGORY"], [20, 27, "TIME"]]}
+{"text": "xuất excel mua sắm hôm nay", "label": [[0, 10, "ACTION_TYPE"], [11, 18, "CATEGORY"], [19, 26, "TIME"]]}
+{"text": "xuất excel cắt tóc tháng 5", "label": [[0, 10, "ACTION_TYPE"], [11, 18, "CATEGORY"], [19, 26, "TIME"]]}
+{"text": "xuất file cà phê tuần trước", "label": [[0, 9, "ACTION_TYPE"], [10, 16, "CATEGORY"], [17, 27, "TIME"]]}
+{"text": "xuất file đi lại tuần này", "label": [[0, 9, "ACTION_TYPE"], [10, 16, "CATEGORY"], [17, 25, "TIME"]]}
+{"text": "xuất file điện thoại hôm nay", "label": [[0, 9, "ACTION_TYPE"], [10, 20, "CATEGORY"], [21, 28, "TIME"]]}
+{"text": "xuất csv y tế tháng này", "label": [[0, 8, "ACTION_TYPE"], [9, 13, "CATEGORY"], [14, 23, "TIME"]]}
+{"text": "xuất excel cà phê tháng trước", "label": [[0, 10, "ACTION_TYPE"], [11, 17, "CATEGORY"], [18, 29, "TIME"]]}
+{"text": "xuất csv y tế quý này", "label": [[0, 8, "ACTION_TYPE"], [9, 13, "CATEGORY"], [14, 21, "TIME"]]}
+{"text": "xuất csv sửa xe gần đây", "label": [[0, 8, "ACTION_TYPE"], [9, 15, "CATEGORY"], [16, 23, "TIME"]]}
+{"text": "xuất csv sửa xe tuần này", "label": [[0, 8, "ACTION_TYPE"], [9, 15, "CATEGORY"], [16, 24, "TIME"]]}
+{"text": "xuất csv đi lại tuần này", "label": [[0, 8, "ACTION_TYPE"], [9, 15, "CATEGORY"], [16, 24, "TIME"]]}

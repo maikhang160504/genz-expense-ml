@@ -10,8 +10,10 @@ Bước:
 Chạy: python improve_datasets.py
 
 Sau đó (nếu thêm nhiều mẫu intent / action / chitchat):
-  python text_nlu/train/retrain_encoders.py
-  python text_nlu/train/train_category_model.py
+  python text_nlu/datasets/label_action_slots.py
+  python text_nlu/train/train_action_slots.py
+  python text_nlu/train/retrain_all.py
+  # (tuỳ chọn, so sánh A/B) python text_nlu/train/retrain_encoders.py
 """
 from __future__ import annotations
 
@@ -58,11 +60,16 @@ def dedupe_record(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def dedupe_action(df: pd.DataFrame) -> pd.DataFrame:
-    return (
-        df.groupby("text", as_index=False)
-        .agg(intent=("intent", "first"), action_type=("action_type", _mode))
-        .reset_index(drop=True)
-    )
+    try:
+        from action_slot_columns import SLOT_COLUMNS
+    except ImportError:
+        from datasets.action_slot_columns import SLOT_COLUMNS
+
+    agg_cols = {"intent": ("intent", "first"), "action_type": ("action_type", _mode)}
+    for col in SLOT_COLUMNS:
+        if col in df.columns:
+            agg_cols[col] = (col, _mode)
+    return df.groupby("text", as_index=False).agg(**agg_cols).reset_index(drop=True)
 
 
 def dedupe_chitchat(df: pd.DataFrame) -> pd.DataFrame:
@@ -77,6 +84,28 @@ def normalize_action_types_column(df: pd.DataFrame) -> pd.DataFrame:
     """Gộp nhãn hiếm / trùng nghĩa để encoder action_type ổn định."""
     out = df.copy()
     out["action_type"] = out["action_type"].replace({"Setting": "SYSTEM_SETTING"})
+    return out
+
+
+_ALERT_FROM_SETTING_RE = re.compile(
+    r"cảnh\s*báo|canh\s*bao|thông\s*báo|thong\s*bao|"
+    r"nhắc\s*khi\s*chi|nhac\s*khi\s*chi|vượt\s*mức|vuot\s*muc|"
+    r"nhắc\s*nhở.*(?:chi\s*tiêu|di[eê]m\s*chi|mục\s*tiêu|muc\s*tieu|"
+    r"thanh\s*toán|thanh\s*toan|đến\s*hạn|den\s*han)",
+    re.IGNORECASE,
+)
+
+
+def relabel_system_setting_alerts(df: pd.DataFrame) -> pd.DataFrame:
+    """SYSTEM_SETTING bị gán nhầm cho cảnh báo/thông báo chi tiêu → SET_ALERT."""
+    out = df.copy()
+    mask = (out["action_type"] == "SYSTEM_SETTING") & out["text"].astype(str).str.contains(
+        _ALERT_FROM_SETTING_RE, na=False, regex=True
+    )
+    n = int(mask.sum())
+    if n:
+        out.loc[mask, "action_type"] = "SET_ALERT"
+        print(f"  relabel SYSTEM_SETTING → SET_ALERT: {n} rows")
     return out
 
 
@@ -200,7 +229,6 @@ def augment_action(existing: set[str]) -> list[dict]:
         ("Báo cáo {cat} tuần trước", "REPORT_GENERAL"),
         ("So sánh {cat} tuần này với tuần trước", "REPORT_GENERAL"),
         ("Tìm khoản {cat} trên {amt}", "SEARCH_RECORD"),
-        ("Xóa giao dịch {cat} vừa nhập", "DELETE_RECORD"),
         ("Đặt hạn mức {cat} {amt}", "SET_LIMIT"),
         ("Giảm hạn mức {cat} xuống {amt}", "SET_LIMIT"),
         ("Tăng mục tiêu {cat} lên {amt}", "ADD_GOAL"),
@@ -209,14 +237,28 @@ def augment_action(existing: set[str]) -> list[dict]:
         ("Cho xem biểu đồ {cat}", "REPORT_GENERAL"),
         ("Đổi giọng bot sang hài hước", "SET_TONE"),
         ("Đặt cảnh báo khi chi {cat} quá {amt}", "SET_ALERT"),
-        ("Cập nhật khoản {cat} thành {amt}", "UPDATE_RECORD"),
-        ("Đặt thu nhập cố định {amt}", "SET_INCOME"),
         ("Đổi tên hiển thị thành Minh Anh", "SET_USERNAME"),
         ("Tắt đồng bộ dữ liệu đám mây", "SYSTEM_SETTING"),
         ("tim kiem khoan {cat} lon hon {amt}", "SEARCH_RECORD"),
         ("bao cao tong chi thang nay", "REPORT_GENERAL"),
-        ("xoa ban ghi gan nhat", "DELETE_RECORD"),
-        ("sua lai khoan {cat} thanh {amt}", "UPDATE_RECORD"),
+        ("So sánh {cat} tháng này với tháng trước", "REPORT_GENERAL"),
+        ("So sánh {cat} tuần này với tuần trước", "REPORT_GENERAL"),
+        ("So sánh {cat} hôm nay với hôm qua", "REPORT_GENERAL"),
+        ("so sánh {cat} tháng này với tháng trước", "REPORT_GENERAL"),
+        ("so sánh {cat} tuần này với tuần trước", "REPORT_GENERAL"),
+        ("so sánh {cat} hôm nay với hôm qua", "REPORT_GENERAL"),
+        ("So sánh chi tiêu tháng này với tháng trước", "REPORT_GENERAL"),
+        ("So sánh chi tiêu tuần này với tuần trước", "REPORT_GENERAL"),
+        ("So sánh chi tiêu hôm nay với hôm qua", "REPORT_GENERAL"),
+        ("Tháng này tiêu nhiều hay ít hơn tháng trước", "REPORT_GENERAL"),
+        ("Tuần này chi tiêu thế nào so với tuần trước", "REPORT_GENERAL"),
+        ("So sánh chi tiêu của mình với sinh viên khác", "REPORT_GENERAL"),
+        ("mình tiêu thế nào so với người khác", "REPORT_GENERAL"),
+        ("so sánh ăn uống của mình với mọi người", "REPORT_GENERAL"),
+        ("chi tiêu của tớ có cao hơn mức trung bình không", "REPORT_GENERAL"),
+        ("so sánh ví của mình với người dùng khác", "REPORT_GENERAL"),
+        ("so sanh chi tieu cua minh voi sinh vien khac", "REPORT_GENERAL"),
+        ("so sanh an uong cua minh voi moi nguoi", "REPORT_GENERAL"),
         ("Báo cáo chi tiêu tháng", "REPORT_GENERAL"),
         ("Báo cáo chi tiêu tuần", "REPORT_GENERAL"),
         ("Báo cáo chi tiêu năm", "REPORT_GENERAL"),
@@ -822,6 +864,7 @@ def main() -> None:
     act = pd.read_csv(ACTION_CSV, encoding="utf-8-sig")
     act = normalize_action_types_column(act)
     print("intent_action before", len(act))
+    act = relabel_system_setting_alerts(act)
     act = dedupe_action(act)
     ex_a = set(act["text"].astype(str).str.strip())
     add_a = augment_action(ex_a)

@@ -16,10 +16,15 @@ Chạy:
 """
 from __future__ import annotations
 
+import sys
+import io
+import os
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+os.environ["PYTHONIOENCODING"] = "utf-8"
+
 import argparse
 import csv
 import subprocess
-import sys
 from pathlib import Path
 
 import pandas as pd

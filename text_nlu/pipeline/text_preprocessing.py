@@ -26,8 +26,16 @@ def clean_category_text(text: str) -> str:
         text,
         flags=re.I,
     )
+    # Remove payment methods and currency words
     text = re.sub(
-        r"\b(vnđ|vnd|banking|momo|zalopay|vnpay|qr|thẻ|the|tiền mặt|cash|chuyển khoản)\b",
+        r"\b(vnđ|vnd|banking|momo|zalopay|vnpay|qr|thẻ|the|tiền mặt|cash|chuyển khoản|pos)\b",
+        " ",
+        text,
+        flags=re.I,
+    )
+    # Remove receipt boilerplate headers/footers (hóa đơn, phiếu thanh toán, tổng tiền, thu ngân...)
+    text = re.sub(
+        r"\b(hóa đơn|hoa don|phiếu thanh toán|phieu thanh toan|thanh toán|tổng tiền|tong tien|tổng cộng|tong cong|thu ngân|thu ngan|tiền thối|tiền thừa|tiền khách|khách cần trả|khách thanh toán|mã số thuế|mst|sđt|hotline|đơn giá|thành tiền)\b",
         " ",
         text,
         flags=re.I,
