@@ -1,0 +1,248 @@
+﻿.\.venv\Scripts\python.exe : [nltk_data] Downloading package omw-1.4 to
+At C:\Users\LENOVO\AppData\Local\Temp\ps-script-6eea4c9b-0643-4f12-80b7-6c33a0e51000.ps1:90 char:41
++ ... se-ocr-nlu; .\.venv\Scripts\python.exe tests\test_action_slots_audit. ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([nltk_data] Dow...kage omw-1.4 to:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+[nltk_data]     C:\Users\LENOVO\AppData\Roaming\nltk_data...
+[nltk_data]   Package omw-1.4 is already up-to-date!
+D:\Luan-Van\Project\expense-ocr-nlu\.venv\Lib\site-packages\sklearn\base.py:463: InconsistentVersionWarning: Trying to 
+unpickle estimator TfidfTransformer from version 1.6.1 when using version 1.8.0. This might lead to breaking code or 
+invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+D:\Luan-Van\Project\expense-ocr-nlu\.venv\Lib\site-packages\sklearn\base.py:463: InconsistentVersionWarning: Trying to 
+unpickle estimator TfidfVectorizer from version 1.6.1 when using version 1.8.0. This might lead to breaking code or 
+invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+D:\Luan-Van\Project\expense-ocr-nlu\.venv\Lib\site-packages\sklearn\base.py:463: InconsistentVersionWarning: Trying to 
+unpickle estimator LogisticRegression from version 1.6.1 when using version 1.8.0. This might lead to breaking code or 
+invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+D:\Luan-Van\Project\expense-ocr-nlu\.venv\Lib\site-packages\sklearn\base.py:463: InconsistentVersionWarning: Trying to 
+unpickle estimator LinearSVC from version 1.6.1 when using version 1.8.0. This might lead to breaking code or invalid 
+results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+=== EXAMPLE.JSON ===
+[FAIL] th├¬m 1tr v├áo giß╗¢i hß║ín di chuyß╗ân
+  type=SET_LIMIT verb=ADD target=None value=1000000
+  slots={'AMOUNT': ['1tr'], 'TARGET': ['giß╗¢i hß║ín']}
+[OK] th├¬m v├áo ng├ón s├ích di chuyß╗ân 1 tr
+  type=SET_LIMIT verb=ADD target=Bonus value=1000000
+  slots={'TARGET': ['ng├ón s├ích'], 'CATEGORY': ['di'], 'AMOUNT': ['1 tr']}
+[FAIL] th├¬m v├áo ─ân uß╗æng 1tr
+  type=SET_LIMIT verb=ADD target=None value=1000000
+  slots={'TARGET': ['─ân uß╗æng'], 'AMOUNT': ['1tr']}
+[OK] th├¬m v├áo giß╗¢i hß║ín ─ân uß╗æng 1tr
+  type=SET_LIMIT verb=ADD target=Food value=1000000
+  slots={'VERB': ['th├¬m v├áo'], 'TARGET': ['giß╗¢i hß║ín'], 'CATEGORY': ['─ân uß╗æng'], 'AMOUNT': ['1tr']}
+[OK] t─âng hß║ín mß╗⌐c ─æi lß║íi th├¬m 1tr
+  type=SET_LIMIT verb=ADD target=Essentials value=1000000
+  slots={'VERB': ['t─âng'], 'TARGET': ['hß║ín mß╗⌐c'], 'CATEGORY': ['─æi lß║íi'], 'AMOUNT': ['1tr']}
+[OK] th├¬m v├áo hß║ín mß╗⌐c ─æß╗ô d├╣ng cß║ºn thiß║┐t 2tr
+  type=SET_LIMIT verb=ADD target=Food value=2000000
+  slots={'TARGET': ['hß║ín mß╗⌐c'], 'CATEGORY': ['─æß╗ô d├╣ng'], 'AMOUNT': ['2tr']}
+[FAIL] b├╣ 2tr v├áo mß╗Ñc ti├¬u mua nh├á
+  type=ADD_GOAL verb=SET target=Shopping value=2000000
+  slots={'AMOUNT': ['2tr'], 'TARGET': ['mß╗Ñc ti├¬u'], 'CATEGORY': ['mua nh├á']}
+
+=== SAMPLES PER ACTION TYPE (3 each) ===
+
+--- ADD_GOAL ---
+  pred=ADD_GOAL match=True
+    verb=ADD target=None value=80000 slots={'VERB': ['cß╗Öng th├¬m'], 'AMOUNT': ['80k'], 'TARGET': ['heo ─æß║Ñt']}
+    text: ├⌐t ├┤ ├⌐t cß╗Öng th├¬m 80k v├áo heo ─æß║Ñt tiß║┐t kiß╗çm xß╗ïn x├▓
+  pred=ADD_GOAL match=True
+    verb=ADD target=None value=15000 slots={'VERB': ['cß╗Öng th├¬m'], 'AMOUNT': ['15k'], 'TARGET': ['kß║┐ hoß║ích tiß║┐t kiß╗çm']}
+    text: bot ╞íi cß╗Öng th├¬m 15k v├áo kß║┐ hoß║ích tiß║┐t kiß╗çm tiß║┐t kiß╗çm nh├⌐
+  pred=ADD_GOAL match=True
+    verb=SET target=None value=200 slots={'TARGET': ['mß╗Ñc ti├¬u tiß║┐t kiß╗çm'], 'AMOUNT': ['200.000 vnd']}
+    text: n├óng mß╗Ñc ti├¬u tiß║┐t kiß╗çm 200.000 vnd healing
+
+--- DELETE_RECORD ---
+  pred=DELETE_RECORD match=True
+    verb=SUB target=None value=None slots={'ACTION_TYPE': ['bo'], 'TIME': ['t5']}
+    text: n├¿ bot bo giao dß╗ïch t5 slay
+  pred=DELETE_RECORD match=True
+    verb=SET target=None value=None slots={'ACTION_TYPE': ['hß╗ºy khoß║ún']}
+    text: v├┤ tri hß╗ºy khoß║ún giao dß╗ïch vß╗½a rß╗ôi nha Mimo
+  pred=DELETE_RECORD match=True
+    verb=SET target=None value=None slots={}
+    text: x├│a giao dß╗ïch vß╗½a rß╗ôi chill chill
+
+--- REPORT_GENERAL ---
+  pred=REPORT_GENERAL match=True
+    verb=SET target=Essentials value=None slots={'TIME': ['Mß║Ñy h├┤m nay'], 'CATEGORY': ['─æi chß╗ú']}
+    text: Mß║Ñy h├┤m nay m├¼nh ─æß╗æt cho ─æi chß╗ú bao nhi├¬u
+  pred=REPORT_GENERAL match=True
+    verb=SET target=Health value=3 slots={'ACTION_TYPE': ['biß╗âu ─æß╗ô'], 'CATEGORY': ['thuß╗æc men'], 'TIME': ['thu 3']}
+    text: v├┤ tri biß╗âu ─æß╗ô thuß╗æc men thu 3 ─æß╗ënh n├│c kß╗ïch trß║ºn
+  pred=REPORT_GENERAL match=True
+    verb=SET target=Transport value=None slots={'ACTION_TYPE': ['so s├ính'], 'CATEGORY': ['taxi'], 'TIME': ['thang sau']}
+    text: Mimo ╞íi so s├ính taxi thang sau nh├⌐ Mimo
+
+--- SEARCH_RECORD ---
+  pred=SEARCH_RECORD match=True
+    verb=SET target=Shopping value=None slots={'CATEGORY': ['shopping']}
+    text: tra cuu tß╗½ kh├│a shopping
+  pred=SEARCH_RECORD match=True
+    verb=SET target=Education value=None slots={'CATEGORY': ['mua s├ích'], 'TIME': ['hq']}
+    text: tim kiem h├│a ─æ╞ín mua s├ích hq nha bß║ín
+  pred=SEARCH_RECORD match=True
+    verb=SET target=Entertainment value=500000 slots={'CATEGORY': ['du lß╗ïch'], 'AMOUNT': ['500k']}
+    text: Lß╗ìc c├íc khoß║ún du lß╗ïch d╞░ß╗¢i 500k
+
+--- SET_ALERT ---
+  pred=SET_ALERT match=True
+    verb=SET target=None value=25000 slots={'AMOUNT': ['25k']}
+    text: hey mimo ─æß║╖t cß║únh b├ío khi chi qu├í 25k xß╗ïn x├▓
+  pred=SET_ALERT match=True
+    verb=SET target=None value=None slots={}
+    text: l├ám ╞ín bß║¡t cß║únh b├ío chi ti├¬u nh├⌐ Mimo
+  pred=SET_ALERT match=True
+    verb=SET target=None value=50000 slots={'AMOUNT': ['50 c├ánh']}
+    text: g├⌐t g├┤ ─æß║╖t cß║únh b├ío khi chi qu├í 50 c├ánh
+
+--- SET_GOAL ---
+  pred=SET_GOAL match=True
+    verb=SET target=None value=250000 slots={'VERB': ['thay ─æß╗òi'], 'TARGET': ['kß║┐ hoß║ích tiß║┐t kiß╗çm'], 'AMOUNT': ['250k'], 'TIME': ['t6']}
+    text: ├⌐t ├┤ ├⌐t thay ─æß╗òi kß║┐ hoß║ích tiß║┐t kiß╗çm 250k t6 hß║┐t n╞░ß╗¢c chß║Ñm
+  pred=SET_GOAL match=True
+    verb=SUB target=None value=50000 slots={'VERB': ['cai'], 'TARGET': ['muc tieu'], 'AMOUNT': ['50 c├ánh'], 'TIME': ['thß╗⌐ 5']}
+    text: bot cai muc tieu 50 c├ánh thß╗⌐ 5 nhe
+  pred=SET_GOAL match=True
+    verb=SET target=None value=100000 slots={'VERB': ['─æß╗òi'], 'TARGET': ['mß╗Ñc ti├¬u'], 'AMOUNT': ['100K']}
+    text: ├⌐t ├┤ ├⌐t ─æß╗òi mß╗Ñc ti├¬u tiß║┐t kiß╗çm 100K nh├⌐
+
+--- SET_INCOME ---
+  pred=SET_INCOME match=True
+    verb=SUB target=None value=180000 slots={'AMOUNT': ['180k']}
+    text: bot l╞░╞íng h├áng th├íng cß╗ºa m├¼nh l├á 180k v├┤ tri
+  pred=SET_INCOME match=True
+    verb=SET target=None value=30000 slots={'VERB': ['cß║¡p nhß║¡t'], 'AMOUNT': ['30k']}
+    text: v├┤ tri cß║¡p nhß║¡t thu nhß║¡p h├áng th├íng l├á 30k ch├íy phß╗æ
+  pred=SET_INCOME match=True
+    verb=SET target=None value=900000 slots={'VERB': ['set'], 'AMOUNT': ['900k']}
+    text: gi├║p m├¼nh set thu nhß║¡p h├áng th├íng l├á 900k xß╗ïn x├▓
+
+--- SET_LIMIT ---
+  pred=SET_LIMIT match=True
+    verb=ADD target=None value=50000 slots={'VERB': ['cß╗Öng th├¬m'], 'TARGET': ['ngan sach'], 'AMOUNT': ['50k']}
+    text: bot ╞íi cß╗Öng th├¬m ngan sach 50k nha
+  pred=SET_LIMIT match=True
+    verb=ADD target=Health value=50 slots={'VERB': ['cß╗Öng th├¬m'], 'TARGET': ['ngan sach'], 'CATEGORY': ['kh├ím bß╗çnh'], 'AMOUNT': ['50.000─æ'], 'TIME': ['thß╗⌐ 4']}
+    text: n├¿ bot cß╗Öng th├¬m ngan sach kh├ím bß╗çnh 50.000─æ thß╗⌐ 4 gi├╣m m├¼nh
+  pred=SET_LIMIT match=True
+    verb=SET target=Food value=50000 slots={'VERB': ['─æß║╖t'], 'TARGET': ['hß║ín mß╗⌐c'], 'CATEGORY': ['─ân uß╗æng'], 'AMOUNT': ['50k']}
+    text: ─æß║╖t hß║ín mß╗⌐c ─ân uß╗æng 50k
+
+--- SET_TONE ---
+  pred=SET_TONE match=True
+    verb=SET target=None value=None slots={}
+    text: n├│i chuyß╗çn kiß╗âu lß║ính l├╣ng nha bß║ín
+  pred=SET_TONE match=True
+    verb=SET target=None value=None slots={}
+    text: v├┤ tri ─æß╗òi phong c├ích n├│i th├ánh sarcastic hß║┐t n╞░ß╗¢c chß║Ñm
+  pred=SET_TONE match=True
+    verb=SET target=None value=None slots={}
+    text: ─æß╗òi phong c├ích n├│i chuyß╗çn th├ánh dß║ín d─⌐ nha
+
+--- SET_USERNAME ---
+  pred=SET_USERNAME match=True
+    verb=SUB target=None value=None slots={}
+    text: n├¿ bot gß╗ìi m├¼nh l├á T├╣ng ─æi
+  pred=SET_USERNAME match=True
+    verb=SET target=None value=None slots={}
+    text: t├¬n m├¼nh l├á Linh xß╗ïn x├▓
+  pred=SET_USERNAME match=True
+    verb=SET target=None value=None slots={}
+    text: ─æß╗òi t├¬n hiß╗ân thß╗ï th├ánh Hß║úi
+
+--- SUGGEST_BUDGET ---
+  pred=SUGGEST_BUDGET match=True
+    verb=SET target=None value=None slots={'TIME': ['hn']}
+    text: Mimo ╞íi ─æß╗ü xuß║Ñt hß║ín mß╗⌐c chi ti├¬u hn slay
+  pred=SUGGEST_BUDGET match=True
+    verb=SET target=None value=None slots={'TIME': ['cn']}
+    text: gß╗úi ├╜ tiß║┐t kiß╗çm cn slay
+  pred=SUGGEST_BUDGET match=True
+    verb=SUB target=None value=None slots={'TIME': ['thß╗⌐ 2']}
+    text: n├¿ bot gß╗úi ├╜ tiß║┐t kiß╗çm thß╗⌐ 2 nha bß║ín
+
+--- SYSTEM_SETTING ---
+  pred=Setting match=True
+    verb=SET target=Essentials value=None slots={'CATEGORY': ['─æi lß║íi']}
+    text: C├ái cß║únh b├ío v╞░ß╗út mß╗⌐c cho ─æi lß║íi
+  pred=Setting match=True
+    verb=SET target=None value=None slots={}
+    text: cho hß╗Åi chuyß╗ân sang giao diß╗çn tß╗æi chill chill
+  pred=Setting match=True
+    verb=SUB target=None value=None slots={}
+    text: bot ╞íi tß║»t dark mode trong app chill chill
+
+--- UPDATE_RECORD ---
+  pred=UPDATE_RECORD match=True
+    verb=SET target=Transport value=None slots={'TIME': ['thg 5'], 'CATEGORY': ['grab']}
+    text: ─æß╗òi danh mß╗Ñc giao dß╗ïch thg 5 sang grab xß╗ïn x├▓
+  pred=UPDATE_RECORD match=True
+    verb=SET target=Beauty value=500000 slots={'CATEGORY': ['mß╗╣ phß║⌐m'], 'AMOUNT': ['500k']}
+    text: Sß╗¡a khoß║ún mß╗╣ phß║⌐m th├ánh 500k
+  pred=UPDATE_RECORD match=True
+    verb=SET target=Social value=None slots={'TIME': ['h├┤m qua'], 'CATEGORY': ['qu├á sinh nhß║¡t']}
+    text: cho hß╗Åi ─æß╗òi danh mß╗Ñc giao dß╗ïch h├┤m qua sang qu├á sinh nhß║¡t v├┤ tri
+
+=== MANUAL SLOT TESTS ===
+[FAIL] th├¬m 1tr v├áo giß╗¢i hß║ín di chuyß╗ân
+  exp: type=SET_LIMIT verb=ADD target~=Transport val=1000000
+  got: type=SET_LIMIT verb=ADD target=None val=1000000 slots={'AMOUNT': ['1tr'], 'TARGET': ['giß╗¢i hß║ín']}
+[OK] giß║úm hß║ín mß╗⌐c ─ân uß╗æng 200k
+  exp: type=SET_LIMIT verb=SUB target~=Food val=200000
+  got: type=SET_LIMIT verb=SUB target=Food val=200000 slots={'VERB': ['giß║úm'], 'TARGET': ['hß║ín mß╗⌐c'], 'CATEGORY': ['─ân uß╗æng'], 'AMOUNT': ['200k']}
+[OK] ─æß║╖t hß║ín mß╗⌐c ─ân uß╗æng 2 triß╗çu
+  exp: type=SET_LIMIT verb=SET target~=Food val=2000000
+  got: type=SET_LIMIT verb=SET target=Food val=2000000 slots={'VERB': ['─æß║╖t'], 'TARGET': ['hß║ín mß╗⌐c'], 'CATEGORY': ['─ân uß╗æng'], 'AMOUNT': ['2 triß╗çu']}
+[OK] bß║¡t cß║únh b├ío v╞░ß╗út hß║ín mß╗⌐c cho ─ân uß╗æng
+  exp: type=SET_ALERT verb=None target~=Food val=None
+  got: type=SET_ALERT verb=SET target=Food val=None slots={'CATEGORY': ['─ân uß╗æng']}
+[OK] tß║»t th├┤ng b├ío chi ti├¬u
+  exp: type=SET_ALERT verb=None target~=None val=None
+  got: type=SET_ALERT verb=SET target=None val=None slots={}
+[OK] chuyß╗ân sang giao diß╗çn tß╗æi
+  exp: type=SYSTEM_SETTING verb=None target~=None val=None
+  got: type=Setting verb=SET target=None val=None slots={}
+[FAIL] b├╣ 2tr v├áo mß╗Ñc ti├¬u mua nh├á
+  exp: type=ADD_GOAL verb=ADD target~=mua nh├á val=2000000
+  got: type=ADD_GOAL verb=SET target=Shopping val=2000000 slots={'AMOUNT': ['2tr'], 'TARGET': ['mß╗Ñc ti├¬u'], 'CATEGORY': ['mua nh├á']}
+[FAIL] tß║ío mß╗Ñc ti├¬u mua laptop mß╗¢i 15 triß╗çu
+  exp: type=SET_GOAL verb=SET target~=laptop val=15000000
+  got: type=SET_GOAL verb=SET target=Shopping val=15000000 slots={'TARGET': ['mß╗Ñc ti├¬u'], 'CATEGORY': ['laptop mß╗¢i'], 'AMOUNT': ['15 triß╗çu']}
+[OK] ─æß╗òi sang giß╗ìng n├│i ch├óm chß╗ìc nh├⌐
+  exp: type=SET_TONE verb=None target~=None val=None
+  got: type=SET_TONE verb=SET target=None val=None slots={}
+[OK] gß╗ìi m├¼nh l├á Khang nh├⌐
+  exp: type=SET_USERNAME verb=None target~=None val=None
+  got: type=SET_USERNAME verb=SET target=None val=None slots={}
+[OK] thu nhß║¡p h├áng th├íng cß╗ºa m├¼nh l├á 10 triß╗çu
+  exp: type=SET_INCOME verb=None target~=None val=10000000
+  got: type=SET_INCOME verb=SET target=None val=10000000 slots={'AMOUNT': ['10 triß╗çu']}
+[FAIL] t├¼m c├íc giao dß╗ïch mua sß║»m
+  exp: type=SEARCH_RECORD verb=None target~=Shopping val=None
+  got: type=SEARCH_RECORD verb=SET target=Food val=None slots={'CATEGORY': ['mua sß║»m']}
+[OK] x├│a giao dß╗ïch vß╗½a nhß║¡p
+  exp: type=DELETE_RECORD verb=None target~=None val=None
+  got: type=DELETE_RECORD verb=SET target=None val=None slots={}
+[OK] thß╗æng k├¬ chi ti├¬u ─ân uß╗æng th├íng n├áy
+  exp: type=REPORT_GENERAL verb=None target~=None val=None
+  got: type=REPORT_GENERAL verb=SET target=Food val=None slots={'ACTION_TYPE': ['thß╗æng k├¬'], 'CATEGORY': ['─ân uß╗æng'], 'TIME': ['th├íng n├áy']}
+[OK] gß╗úi ├╜ ng├ón s├ích chi ti├¬u cho th├íng sau
+  exp: type=SUGGEST_BUDGET verb=None target~=None val=None
+  got: type=SUGGEST_BUDGET verb=SET target=None val=None slots={'TIME': ['th├íng sau']}
+[FAIL] sß╗¡a sß╗æ tiß╗ün giao dß╗ïch vß╗½a rß╗ôi th├ánh 50k
+  exp: type=UPDATE_RECORD verb=None target~=Food val=50000
+  got: type=UPDATE_RECORD verb=SET target=None val=50000 slots={'AMOUNT': ['50k']}
+
+=== SUMMARY: 5 manual slot tests failed ===

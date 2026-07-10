@@ -1,4 +1,8 @@
 import sys
+import io
+import os
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+os.environ["NLU_USE_ENCODER"] = "0"
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -9,6 +13,7 @@ from src.config import settings
 from src.config.env import load_env_file
 from src.nlu.models import (
     load_action_type_model,
+    load_action_slots_model,
     load_category_model,
     load_chitchat_sentiment_model,
     load_intent_model,
@@ -23,6 +28,7 @@ def main() -> None:
     intent_m = load_intent_model()
     cat_m = load_category_model()
     act_m = load_action_type_model()
+    slots_m = load_action_slots_model()
     rec_m = load_record_type_model()
     sent_m = load_chitchat_sentiment_model()
     ner = load_ner_model(settings.NER_MODEL_DIR)
@@ -64,7 +70,7 @@ def main() -> None:
         expected_action_type = case[3]
         expected_verb = case[4] if len(case) > 4 else None
 
-        nlu = run_nlu(text, intent_m, cat_m, act_m, rec_m, sent_m, ner)
+        nlu = run_nlu(text, intent_m, cat_m, act_m, rec_m, sent_m, ner, slots_m)
         intent = nlu.get("intent")
         category = nlu.get("category")
         action_type = nlu.get("action_type")

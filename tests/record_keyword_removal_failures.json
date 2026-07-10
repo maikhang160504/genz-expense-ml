@@ -1,0 +1,71 @@
+[
+  {
+    "text": "cf date với crush 80k",
+    "tag": "cafe_social",
+    "expected": {
+      "intent": "Record",
+      "category": "Entertainment",
+      "record_type": "Expense"
+    },
+    "got": {
+      "intent": "Record",
+      "category": "Food",
+      "record_type": "Expense"
+    },
+    "errors": [
+      "category=Food!=Entertainment"
+    ]
+  },
+  {
+    "text": "mẹ chuyển khoản 500k",
+    "tag": "income_transfer",
+    "expected": {
+      "intent": "Record",
+      "category": "Salary",
+      "record_type": "Income"
+    },
+    "got": {
+      "intent": "Record",
+      "category": "Food",
+      "record_type": "Expense"
+    },
+    "errors": [
+      "category=Food!=Salary",
+      "record_type=Expense!=Income"
+    ]
+  },
+  {
+    "text": "hoàn tiền shopee 89k",
+    "tag": "income_refund",
+    "expected": {
+      "intent": "Record",
+      "category": "Others",
+      "record_type": "Income"
+    },
+    "got": {
+      "intent": "Record",
+      "category": "Business",
+      "record_type": "Income"
+    },
+    "errors": [
+      "category=Business!=Others"
+    ]
+  },
+  {
+    "text": "Netflix tháng 109k",
+    "tag": "sub_entertainment",
+    "expected": {
+      "intent": "Record",
+      "category": "Entertainment",
+      "record_type": "Expense"
+    },
+    "got": {
+      "intent": "Record",
+      "category": "Entertainment",
+      "record_type": "Income"
+    },
+    "errors": [
+      "record_type=Income!=Expense"
+    ]
+  }
+]

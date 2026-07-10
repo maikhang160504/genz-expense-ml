@@ -31,3 +31,9 @@ archive/
 
 OCR/vendor/pick/
 OCR/verified_ocr_labels
+
+text_nlu/datasets/kaggle_upload
+text_nlu/models
+
+OCR/kaggle/datasets
+text_nlu/datasets/*.jsonl

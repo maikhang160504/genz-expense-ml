@@ -25,7 +25,7 @@ ANCHOR = datetime(2026, 5, 31, 15, 30, tzinfo=VN_TZ)
     ],
 )
 def test_parse_time_range_detects_granularity(text, granularity):
-    result = parse_time_range(text, now=ANCHOR)
+    result = parse_time_range(text, time_slots=[text], now=ANCHOR)
     assert result is not None
     assert result["granularity"] == granularity
     assert result["from"]
@@ -34,7 +34,7 @@ def test_parse_time_range_detects_granularity(text, granularity):
 
 
 def test_week_range_monday_to_sunday_anchor():
-    result = parse_time_range("tuần này", now=ANCHOR)
+    result = parse_time_range("tuần này", time_slots=["tuần này"], now=ANCHOR)
     assert result is not None
     assert result["from"].startswith("2026-05-25")
     assert "31/05" in result["period_label"] or "25/05" in result["period_label"]

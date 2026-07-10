@@ -84,6 +84,7 @@ python text_nlu\datasets\generate_dataset_15k.py all --target 15000
 # Chỉ sửa nhãn CSV hiện có
 python text_nlu\datasets\fix_disambiguation_labels.py
 
+# Cải thiện chất lượng dataset
 python text_nlu\datasets\improve_datasets.py
 ```
 
@@ -149,10 +150,25 @@ Sentiment PhoBERT không dùng — xem `archive/deprecated_sentiment/README.md`.
 
 ---
 
-## 8. Triển khai server + multi-user
+## 8. Triển khai API Server Hợp Nhất (FastAPI)
 
-Xem **[`ARCHITECTURE_TRIEN_KHAI.md`](ARCHITECTURE_TRIEN_KHAI.md)** — NLU trên server, `model_custom`, popup Action, scale.
+Kể từ phiên bản hợp nhất, server chạy trực tiếp từ `src.api.app:app` đã bao gồm toàn bộ tính năng **NLU (Text)**, **OCR (Image)** và **Gán nhãn & Retrain**.
 
-## 9. Phase tiếp theo — OCR
+```powershell
+# Chạy DEV server
+uvicorn src.api.app:app --reload --host 127.0.0.1 --port 8000
+```
 
-PaddleOCR + VietOCR → text → `run_nlu()` (chưa có trong repo). Xem `TASK.MD` mục TASK-OCR.
+Các Endpoint chính:
+*   `POST /api/v1/nlu/infer`: Nhận diện ý định, thực thể, và sinh câu trả lời Mimo (NLU text).
+*   `POST /api/v1/ocr/image`: Đọc ảnh hóa đơn bằng PaddleOCR + VietOCR + PICK KIE và trả về tổng tiền, sản phẩm, category.
+*   `POST /api/v1/bill-retrain/predict`: Dự đoán KIE trên 1 ảnh và trả về dữ liệu OCR kèm nhãn tự động chuẩn hóa bởi LLM.
+*   `POST /api/v1/bill-retrain/train`: Quản lý trigger retrain mô hình PICK KIE dựa trên các nhãn đã xác thực.
+
+---
+
+## 9. Huấn luyện lại và Gán nhãn hóa đơn (bill_ocr)
+
+Toàn bộ luồng huấn luyện PICK KIE, gán nhãn tự động bằng LLM và sửa nhãn thủ công (CLI) nằm trong thư mục `bill_ocr/`.
+*   Hướng dẫn chạy train Docker GPU và kiểm thử local: **[`bill_ocr/DOCKER_INSTRUCTIONS.md`](bill_ocr/DOCKER_INSTRUCTIONS.md)**.
+*   Hướng dẫn triển khai API sản xuất & chạy train Serverless GPU trên **Modal**: **[`docs/MODAL_DEPLOYMENT.md`](docs/MODAL_DEPLOYMENT.md)**.
