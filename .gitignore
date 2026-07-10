@@ -37,3 +37,5 @@ text_nlu/models
 
 OCR/kaggle/datasets
 text_nlu/datasets/*.jsonl
+data/
+scratch_extracted.txt
