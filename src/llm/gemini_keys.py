@@ -15,8 +15,8 @@ def get_all_llm_keys() -> list[dict[str, str]]:
     seen: set[str] = set()
     keys: list[dict[str, str]] = []
     
-    # 1. Gemini Keys (chỉ lấy v1 và v2)
-    gemini_names = ["gemini_API_v1", "gemini_API_v2"]
+    # 1. Gemini Keys
+    gemini_names = ["gemini_API_v1", "gemini_API_v2", "gemini_API_v3"]
     has_v1_v2 = any((os.environ.get(name) or "").strip() for name in gemini_names)
     if not has_v1_v2:
         gemini_names = ["gemini_API", "GEMINI_API"]
@@ -56,7 +56,7 @@ def list_gemini_api_keys() -> list[str]:
     """Legacy compatibility: returns list of Gemini API keys only."""
     seen: set[str] = set()
     keys: list[str] = []
-    gemini_names = ["gemini_API_v1", "gemini_API_v2"]
+    gemini_names = ["gemini_API_v1", "gemini_API_v2", "gemini_API_v3"]
     has_v1_v2 = any((os.environ.get(name) or "").strip() for name in gemini_names)
     if not has_v1_v2:
         gemini_names = ["gemini_API", "GEMINI_API"]

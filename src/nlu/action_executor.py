@@ -1,6 +1,9 @@
 """
 Demo executor: theo ``action_type`` in ra thao tác sẽ gọi DB/API (không kết nối thật).
 Production: thay phần ``print`` bằng repository / HTTP client.
+
+Đồng bộ với action.md — đã xóa UPDATE_RECORD, DELETE_RECORD, Edit.
+Đã bổ sung categoryCode cho REPORT_GENERAL, cải thiện SEARCH_RECORD.
 """
 from __future__ import annotations
 
@@ -29,31 +32,117 @@ def describe_action_execution(nlu_result: dict[str, Any]) -> list[str]:
     param = nlu_result.get("action_param")
     details = nlu_result.get("action_details") or {}
     text = nlu_result.get("text", "")
+    time_range = nlu_result.get("time_range")
 
-    handlers: dict[str, str] = {
-        "Report": f"Báo cáo / tổng hợp chi tiêu theo yêu cầu trong câu: {text[:80]!r}…",
-        "REPORT_GENERAL": "Truy vấn tổng chi + filter theo kỳ (API GET /reports/summary).",
-        "REPORT_COMPARE": "So sánh hai kỳ (API GET /reports/compare).",
-        "Edit": "Mở form / PATCH bản ghi đang chọn (API PATCH /records/{id}).",
-        "UPDATE_RECORD": "Cập nhật trường amount/category của một giao dịch (API PATCH /records/{id}).",
-        "Search": "Lọc danh sách giao dịch theo điều kiện tìm (API GET /records?query=…).",
-        "SEARCH_RECORD": "Tìm kiếm full-text + filter số tiền (API GET /records/search).",
-        "Setting": "Cập nhật cấu hình người dùng hoặc hạn mức (API PUT /settings).",
-        "SET_LIMIT": f"Đặt hạn mức danh mục (API PUT /budgets/limit), tham số số tiền: {param}.",
-        "SET_GOAL": f"Đặt mục tiêu tiết kiệm (API PUT /goals), giá trị: {param}.",
-        "ADD_GOAL": "Thêm mục tiêu mới (API POST /goals).",
-        "SET_ALERT": "Bật/tắt cảnh báo ngưỡng chi (API PUT /alerts).",
-        "SET_TONE": f"Đổi giọng NLG (API PUT /user_prefs/tone), chi tiết: {details.get('style')}.",
-        "SET_USERNAME": f"Đổi tên hiển thị (API PUT /user_prefs/name): {details.get('name')}.",
-        "SET_INCOME": f"Cập nhật thu nhập cố định (API PUT /income_profile), số: {param}.",
-        "SYSTEM_SETTING": "Cài đặt hệ thống / theme / ngôn ngữ (API PUT /system_prefs).",
-        "EXPORT_DATA": "Xuất CSV/Excel (API POST /export).",
-        "DELETE_RECORD": "Xóa giao dịch gần nhất hoặc theo id (API DELETE /records/last).",
-    }
+    # ── REPORT_GENERAL: Báo cáo chi tiêu theo thời gian + danh mục ──
+    if action_type in ("Report", "REPORT_GENERAL"):
+        category = details.get("target") or details.get("category_code")
+        parts = ["Báo cáo / tổng hợp chi tiêu"]
+        if time_range:
+            parts.append(f"theo kỳ: {time_range}")
+        if category:
+            parts.append(f"danh mục: {category}")
+        parts.append("(API GET /reports/summary)")
+        msg = " — ".join(parts)
 
-    msg = handlers.get(str(action_type))
-    if msg is None:
-        msg = f"Hành động chưa map chi tiết — gọi API generic /actions/{{type}} với body suy ra từ câu: {text[:100]!r}"
+    # ── SEARCH_RECORD: Tìm kiếm giao dịch multi-filter ──
+    elif action_type in ("Search", "SEARCH_RECORD"):
+        query = details.get("query") or ""
+        category = details.get("target") or details.get("category_code")
+        min_amount = param
+        filters = []
+        if query:
+            filters.append(f"query={query!r}")
+        if category:
+            filters.append(f"categoryCode={category}")
+        if min_amount:
+            filters.append(f"minAmount={min_amount}")
+        if time_range:
+            filters.append(f"time_range={time_range}")
+        filter_str = ", ".join(filters) if filters else "không có filter cụ thể"
+        msg = f"Tìm kiếm danh sách giao dịch [{filter_str}] (API GET /records/search)"
+
+    # ── REPORT_COMPARE: So sánh hai kỳ ──
+    elif action_type == "REPORT_COMPARE":
+        msg = f"So sánh chi tiêu hai kỳ (API GET /reports/compare), câu gốc: {text[:80]!r}"
+
+    # ── SET_LIMIT: Đặt/thay đổi hạn mức chi tiêu ──
+    elif action_type == "SET_LIMIT":
+        verb = details.get("verb", "SET")
+        category = details.get("target") or details.get("category_code")
+        verb_desc = {"SET": "Đặt mới", "ADD": "Cộng thêm", "SUB": "Giảm bớt"}.get(
+            str(verb).upper(), str(verb)
+        )
+        msg = f"{verb_desc} hạn mức"
+        if category:
+            msg += f" danh mục [{category}]"
+        if param:
+            msg += f", số tiền: {param}"
+        msg += " (API PUT /budgets/limit)"
+
+    # ── SET_GOAL / ADD_GOAL: Mục tiêu tiết kiệm ──
+    elif action_type in ("SET_GOAL", "ADD_GOAL"):
+        goal_name = details.get("goal_name") or details.get("target")
+        if action_type == "ADD_GOAL":
+            msg = f"Thêm mục tiêu tiết kiệm mới"
+        else:
+            msg = f"Đặt mục tiêu tiết kiệm"
+        if goal_name:
+            msg += f" [{goal_name}]"
+        if param:
+            msg += f", giá trị: {param}"
+        msg += f" (API {'POST' if action_type == 'ADD_GOAL' else 'PUT'} /goals)"
+
+    # ── SET_TONE: Đổi giọng nói mascot ──
+    elif action_type == "SET_TONE":
+        style = details.get("verbal_style") or details.get("style")
+        msg = f"Đổi giọng NLG (API PUT /user_prefs/tone)"
+        if style:
+            msg += f", phong cách: {style}"
+
+    # ── SET_USERNAME: Đổi tên người dùng ──
+    elif action_type == "SET_USERNAME":
+        name = details.get("name") or details.get("value") or param
+        msg = f"Đổi tên hiển thị (API PUT /user_prefs/name)"
+        if name:
+            msg += f": {name}"
+
+    # ── SET_ALERT: Bật/tắt cảnh báo hạn mức ──
+    elif action_type == "SET_ALERT":
+        enabled = details.get("enabled")
+        category = details.get("target") or details.get("category_code")
+        action = "Bật" if str(enabled).lower() in ("true", "1", "on") else "Tắt" if enabled is not None else "Cập nhật"
+        msg = f"{action} cảnh báo vượt hạn mức"
+        if category:
+            msg += f" cho [{category}]"
+        msg += " (API PUT /alerts)"
+
+    # ── SET_INCOME: Cập nhật thu nhập cố định ──
+    elif action_type == "SET_INCOME":
+        msg = f"Cập nhật thu nhập cố định (API PUT /income_profile)"
+        if param:
+            msg += f", số: {param}"
+
+    # ── SUGGEST_BUDGET: Gợi ý ngân sách ──
+    elif action_type == "SUGGEST_BUDGET":
+        target_month = details.get("time") or time_range
+        msg = f"Gợi ý ngân sách chi tiêu (API GET /budgets/suggest)"
+        if target_month:
+            msg += f", tháng: {target_month}"
+
+    # ── SYSTEM_SETTING / Setting: Mở cài đặt / đổi giao diện ──
+    elif action_type in ("Setting", "SYSTEM_SETTING"):
+        theme = details.get("theme")
+        msg = "Cài đặt hệ thống / theme / ngôn ngữ (API PUT /system_prefs)"
+        if theme:
+            msg += f", theme: {theme}"
+
+    # ── Fallback cho action_type chưa map ──
+    else:
+        msg = (
+            f"Hành động [{action_type}] chưa map chi tiết — "
+            f"gọi API generic /actions/{{type}} với body suy ra từ câu: {text[:100]!r}"
+        )
 
     lines = [_line(msg)]
     if details:

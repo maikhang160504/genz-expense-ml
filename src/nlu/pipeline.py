@@ -12,15 +12,8 @@ from src.nlu.ner import (
     select_record_item_from_slots,
 )
 from src.nlu.multi_record import extract_multi_records
-from src.nlu.action_query import (
-    is_action_query,
-    report_general_action_type,
-    suggest_budget_action_type,
-    is_limit_or_goal_action,
-    is_system_or_delete_action,
-)
 from src.nlu.time_parser import parse_time_range
-from src.nlu.income_phrase import is_clear_income_phrase
+from src.nlu.llm_intent_handler import run_llm_fallback
 from pipeline.text_preprocessing import clean_category_text
 
 
@@ -38,14 +31,10 @@ def _no_accent(s: str) -> str:
 
 
 def detect_relationship_tag(text: str, slots: dict | None = None) -> str | None:
-    """Phát hiện quan hệ CHA_ME hoặc NGUOI_YEU dựa trên slots COMPANION hoặc fallback."""
-    if slots and "COMPANION" in slots:
-        for val in slots["COMPANION"]:
-            norm = _no_accent(val.lower())
-            if any(w in norm for w in ["me", "ma", "ba", "bo", "cha", "cu", "ong ba", "bo me", "ba me"]):
-                return "CHA_ME"
-            if any(w in norm for w in ["bo", "nguoi yeu", "ny", "crush", "ban gai", "ban trai", "ghe", "gf", "bf"]):
-                return "NGUOI_YEU"
+    """Chỉ dùng NER slot COMPANION — không keyword fallback."""
+    if not slots or "COMPANION" not in slots:
+        return None
+    # Model NER gán COMPANION; backend chỉ pass-through tag nếu đã có trong slot meta
     return None
 
 
@@ -65,8 +54,6 @@ def classify_intent(text: str, intent_model: dict) -> tuple[str, float | None, d
         for c, p in zip(model.classes_, proba):
             dist[str(c)] = float(p)
     intent = pred_raw
-    if MONEY_RE.search(text) and pred_raw == "Chitchat":
-        intent = "Record"
     if dist:
         conf = dist.get(str(intent), max(dist.values()))
     else:
@@ -74,59 +61,37 @@ def classify_intent(text: str, intent_model: dict) -> tuple[str, float | None, d
     return intent, conf, dist
 
 from src.nlu.models import predict_category_from_text
+from src.nlu.action_slots import predict_action_details
 
 
 INCOME_TYPE_LABELS = {"salary", "bonus", "investment", "business"}
 
 
-def build_action_details_from_slots(slots: dict | None, text: str, category_mapper=None) -> dict:
-    slots = slots or {}
-    raw_verb = slots.get("VERB", [None])[0]
-    
-    norm_text = _no_accent(text.lower()).replace("đ", "d")
-    verb = "SET"
-    
-    if any(kw in norm_text for kw in ["cong them", "tang them", "bo sung", "them", "tang", "bu vao"]):
-        verb = "ADD"
-    elif any(kw in norm_text for kw in ["bot", "giam", "tru di", "giam di"]):
-        verb = "SUB"
-    elif any(kw in norm_text for kw in ["thay doi thanh", "dat lai", "thiet lap", "dat", "thanh", "la", "chot"]):
-        verb = "SET"
-    elif raw_verb:
-        norm_v = _no_accent(raw_verb.lower()).replace("đ", "d")
-        if any(kw in norm_v for kw in ["them", "cong", "tang", "bu", "bo sung"]):
-            verb = "ADD"
-        elif any(kw in norm_v for kw in ["bot", "giam", "tru"]):
-            verb = "SUB"
+def _sanitize_match_intent(match: dict | None) -> dict | None:
+    if not match:
+        return match
+    intent = match.get("intent")
+    if intent:
+        intent_lower = str(intent).strip().lower()
+        if intent_lower in ("record", "log_expense", "log expense", "log transaction", "log_transaction", "log"):
+            match["intent"] = "Record"
+        elif intent_lower in ("action", "system"):
+            match["intent"] = "Action"
+        elif intent_lower in ("chitchat", "chat"):
+            match["intent"] = "Chitchat"
+        elif intent_lower in ("unknown",):
+            match["intent"] = "Unknown"
         else:
-            verb = "SET"
-    target = slots.get("CATEGORY", [None])[0]
-    if category_mapper and target:
-        mapped_target = category_mapper(target)
-        if mapped_target:
-            target = mapped_target
-    target_raw = slots.get("TARGET", [None])[0]
-    action_type_token = slots.get("ACTION_TYPE", [None])[0]
-    time_values = slots.get("TIME", [])
-    amount_text = slots.get("AMOUNT", [None])[0]
-    amount_values = extract_amounts(amount_text or text)
-    value = amount_values[0] if amount_values else None
-
-    target_type = None
-    if target_raw in {"hạn mức", "giới hạn", "ngân sách"}:
-        target_type = "LIMIT"
-    elif target_raw == "mục tiêu":
-        target_type = "GOAL"
-
-    return {
-        "verb": verb,
-        "target": target,
-        "target_type": target_type,
-        "value": value,
-        "unit": "VND" if value is not None else None,
-        "time": time_values or None,
-        "action_type_token": action_type_token,
-    }
+            match["intent"] = "Record"
+            
+    rt = match.get("record_type")
+    if rt:
+        rt_lower = str(rt).strip().lower()
+        if rt_lower in ("expense", "spending", "chi"):
+            match["record_type"] = "Expense"
+        elif rt_lower in ("income", "earnings", "thu"):
+            match["record_type"] = "Income"
+    return match
 
 
 def find_matching_correction(
@@ -146,7 +111,7 @@ def find_matching_correction(
         if c_text == cleaned_input:
             match = c.copy()
             match["match_type"] = "exact"
-            return match
+            return _sanitize_match_intent(match)
 
     # 2. Layer 2: Semantic Similarity
     if not vectorizer:
@@ -180,21 +145,11 @@ def find_matching_correction(
             match = valid_corrections[best_idx].copy()
             match["match_type"] = "similarity"
             match["similarity_score"] = best_score
-            return match
+            return _sanitize_match_intent(match)
     except Exception as e:
         print(f"[NLU Personalization] Error calculating similarity: {e}")
 
     return None
-
-
-def is_entertainment_cafe(text: str) -> bool:
-    norm = _no_accent(text.lower()).replace("đ", "d")
-    # Matches "di/hen/tu tap ca phe/cafe/cf" or "ca phe/cafe/cf ... voi/ban/be/bo/ny/crush/nguoi yeu"
-    pattern = re.compile(
-        r"\b(di|hen|tu\s+tap)\s+(ca\s+phe|cafe|cf)\b|\b(ca\s+phe|cafe|cf)\b.*\b(voi|ban|be|bo|ny|crush|nguoi\s+yeu)\b",
-        re.IGNORECASE
-    )
-    return bool(pattern.search(norm))
 
 
 def run_nlu(
@@ -205,18 +160,110 @@ def run_nlu(
     record_type_model,
     sentiment_model,
     ner_model,
+    action_slots_model=None,
     *,
     run_llm: bool = False,
     user_id: str | None = None,
     user_corrections: list[dict] | None = None,
+    profile: dict | None = None,
 ) -> dict:
+    from src.nlu.models import get_inference_backend
+    if get_inference_backend() == "llm":
+        from src.nlu.llm_intent_handler import run_llm_nlu
+        from src.nlg.context_meta import build_unified_llm_context
+        
+        # Priority 1: Check personalization layer before calling the heavy LLM
+        match = None
+        if user_corrections:
+            vectorizer = category_model.get("vectorizer")
+            match = find_matching_correction(user_text, user_corrections, vectorizer)
+            
+        if match:
+            intent = match.get("intent", "Record")
+            category = match.get("category_code")
+            record_type = match.get("record_type")
+            amounts = extract_amounts(user_text)
+            amount = amounts[0] if amounts else None
+            
+            vietCategoryMap = {
+                'Food': 'Ăn uống', 'Transport': 'Di chuyển', 'Housing': 'Nhà ở', 'Shopping': 'Mua sắm',
+                'Entertainment': 'Giải trí', 'Health': 'Sức khỏe', 'Education': 'Giáo dục', 'Others': 'Tiêu dùng khác',
+                'Other': 'Tiêu dùng khác', 'Essentials': 'Thiết yếu', 'Beauty': 'Làm đẹp', 'Social': 'Xã hội',
+                'Salary': 'Lương', 'Bonus': 'Thưởng', 'Business': 'Kinh doanh'
+            }
+            vietCat = vietCategoryMap.get(category, category or "khoản chi")
+            
+            if amount:
+                formatted_amt = f"{amount:,}".replace(",", ".") + "đ"
+                if record_type == "Income":
+                    resp = f"Tuyệt vời! Mimo đã ghi nhận khoản thu nhập {formatted_amt} vào danh mục {vietCat}."
+                else:
+                    resp = f"Mimo đã ghi nhận khoản chi {formatted_amt} cho {vietCat} vào ví của bạn."
+            else:
+                if record_type == "Income":
+                    resp = f"Mimo đã chuẩn bị sẵn phiếu ghi nhận thu nhập cho danh mục {vietCat}. Bạn hãy nhập số tiền và bấm lưu nhé!"
+                else:
+                    resp = f"Mimo đã chuẩn bị sẵn phiếu ghi nhận chi tiêu cho danh mục {vietCat}. Bạn hãy nhập số tiền và bấm lưu nhé!"
+            
+            return {
+                "intent": intent,
+                "intent_confidence": 1.0,
+                "intent_backend": f"user_{match['match_type']}",
+                "text": user_text,
+                "item": clean_content(user_text),
+                "category": category,
+                "amount": amount,
+                "record_type": record_type,
+                "is_expense": record_type == "Expense",
+                "nlg_response": resp,
+                "mimo_emotion": "Success" if record_type == "Income" else "Chill",
+                "backend": f"user_{match['match_type']}",
+            }
+
+        # Priority 2: Action Heuristic Rules (First Pass Action queries bypass LLM)
+        user_text_lower = user_text.lower().strip()
+        is_suggest = any(kw in user_text_lower for kw in ("gợi ý", "đề xuất", "khuyên", "suggest", "recommend"))
+        is_report = any(kw in user_text_lower for kw in ("tổng chi", "báo cáo", "thống kê", "chi tiêu tuần", "chi tiêu tháng", "chi tiêu hôm nay", "thu nhập tuần", "thu nhập tháng", "thu nhập hôm nay"))
+        is_search = any(kw in user_text_lower for kw in ("tìm kiếm", "tra cứu", "tìm giao dịch", "tìm khoản"))
+        
+        if is_suggest or is_report or is_search:
+            action_type = "SUGGEST_BUDGET" if is_suggest else ("REPORT_GENERAL" if is_report else "SEARCH_RECORD")
+            # If it's a second pass (has action_facts in profile), let it fall through to Qwen
+            if profile and "action_facts" in profile:
+                pass
+            else:
+                # First pass: response is empty
+                return {
+                    "intent": "Action",
+                    "intent_confidence": 1.0,
+                    "intent_backend": "rule_heuristic",
+                    "text": user_text,
+                    "item": None,
+                    "category": None,
+                    "amount": None,
+                    "record_type": None,
+                    "is_expense": None,
+                    "action_type": action_type,
+                    "action_details": {
+                        "time_range": parse_time_range(user_text, []) if is_report else None
+                    },
+                    "nlg_response": "",
+                    "mimo_emotion": "Chill",
+                    "backend": "llm_unified",
+                }
+
+        context_metadata = None
+        if profile:
+            try:
+                context_metadata = build_unified_llm_context(profile)
+            except Exception as e:
+                print(f"[NLU pipeline] Error building unified context: {e}")
+
+        # Fallback to Qwen LLM NLU if personalization not matched
+        result = run_llm_nlu(user_text, context_metadata=context_metadata, run_llm=True)
+        return result
+
     intent, intent_conf, intent_proba = classify_intent(user_text, intent_model)
-    if is_action_query(user_text) and intent != "Action":
-        intent = "Action"
-    if is_limit_or_goal_action(user_text) and intent != "Action":
-        intent = "Action"
-    if is_system_or_delete_action(user_text) and intent != "Action":
-        intent = "Action"
 
     # Personalization Hybrid Layer: exact match or semantic similarity match
     match = None
@@ -229,6 +276,18 @@ def run_nlu(
             intent = match["intent"]
             intent_conf = match.get("similarity_score", 1.0)
 
+    # LLM Fallback: khi encoder confidence thấp → dùng LLM để re-classify
+    llm_fallback_result = None
+    if run_llm and not match:
+        llm_fallback_result = run_llm_fallback(
+            user_text,
+            encoder_intent=intent,
+            encoder_confidence=intent_conf,
+        )
+        if llm_fallback_result:
+            intent = llm_fallback_result["intent"]
+            intent_conf = llm_fallback_result.get("intent_confidence", intent_conf)
+
     amounts = extract_amounts(user_text)
     content = clean_content(user_text)
 
@@ -240,7 +299,11 @@ def run_nlu(
     result = {
         "text": user_text,
         "intent": intent,
-        "intent_backend": intent_model.get("backend") if not match or not match.get("intent") else f"user_{match['match_type']}",
+        "intent_backend": (
+            "llm_fallback" if llm_fallback_result
+            else f"user_{match['match_type']}" if match and match.get("intent")
+            else intent_model.get("backend")
+        ),
         "intent_confidence": intent_conf,
         "intent_proba": intent_proba or None,
         "clean_content": content,
@@ -271,8 +334,6 @@ def run_nlu(
                 result["record_type"] = "Income" if rec_pred == "income" else "Expense"
             else:
                 result["record_type"] = None
-            if is_clear_income_phrase(user_text):
-                result["record_type"] = "Income"
         result["income_type"] = None
 
         ner_category = None
@@ -297,11 +358,15 @@ def run_nlu(
                 raw_category = category_model["model"].predict(cat_vec)[0]
                 result["category_backend"] = "tfidf"
 
-        # Resolve category: prefer mapped_category from NER slots, fallback to raw_category from full text
-        final_category = mapped_category if mapped_category else raw_category
-        if is_entertainment_cafe(user_text):
-            final_category = "Entertainment"
-                
+        # Full sentence vs NER span: nếu hai model khác nhau → ưu tiên câu đủ (có ngữ cảnh xã hội)
+        if raw_category and mapped_category:
+            if str(raw_category).lower() != str(mapped_category).lower():
+                final_category = raw_category
+            else:
+                final_category = mapped_category
+        else:
+            final_category = mapped_category or raw_category
+
         if final_category is not None:
             result["category"] = final_category
             if result["record_type"] == "Income" and final_category:
@@ -331,24 +396,21 @@ def run_nlu(
             result["action_type"] = str(action_type_model["model"].predict(act_vec)[0])
         else:
             result["action_type"] = None
-        if str(result.get("action_type")) == "SYSTEM_SETTING":
-            result["action_type"] = "Setting"
-        sb = suggest_budget_action_type(user_text)
-        if sb:
-            result["action_type"] = sb
-        else:
-            rg = report_general_action_type(user_text)
-            if rg and str(result.get("action_type")) != rg:
-                result["action_type"] = rg
         result["action_type_backend"] = action_type_model.get("backend")
         result["action_param"] = amounts[0] if amounts else None
-        
-        if ner_model:
-            result["action_details"] = build_action_details_from_slots(
-                slots, user_text, lambda x: predict_category_from_text(x, category_model)
-            )
-        else:
-            result["action_details"] = None
+
+        slots_bundle = None
+        if action_slots_model and action_slots_model.get("backend") == "slots":
+            slots_bundle = action_slots_model.get("bundle")
+        result["action_details"] = predict_action_details(
+            user_text,
+            result.get("action_type"),
+            slots_bundle,
+            ner_slots=slots,
+        )
+        result["action_details_backend"] = (
+            "slots_model" if slots_bundle else "missing_slots_model"
+        )
         time_slots = (result.get("action_details") or {}).get("time")
         if isinstance(time_slots, str):
             time_slots = [time_slots]
@@ -361,3 +423,64 @@ def run_nlu(
         result["chitchat_response_via"] = "llm"
 
     return result
+
+
+def infer_with_tfidf(user_text: str, bundle: dict) -> dict:
+    import os
+    old_env = os.environ.get("NLU_USE_ENCODER")
+    os.environ["NLU_USE_ENCODER"] = "0"
+    
+    from src.nlu import models
+    old_backend_fn = models._registry_inference_backend
+    models._registry_inference_backend = lambda: "tfidf"
+    
+    try:
+        return run_nlu(
+            user_text,
+            bundle["intent"],
+            bundle["category"],
+            bundle["action_type"],
+            bundle["record_type"],
+            bundle["sentiment"],
+            bundle["ner"],
+            bundle.get("action_slots"),
+            run_llm=False
+        )
+    finally:
+        if old_env is not None:
+            os.environ["NLU_USE_ENCODER"] = old_env
+        else:
+            os.environ.pop("NLU_USE_ENCODER", None)
+        models._registry_inference_backend = old_backend_fn
+
+
+def infer_with_phobert(user_text: str, bundle: dict) -> dict:
+    import os
+    old_env = os.environ.get("NLU_USE_ENCODER")
+    os.environ["NLU_USE_ENCODER"] = "1"
+    
+    from src.nlu import models
+    old_backend_fn = models._registry_inference_backend
+    models._registry_inference_backend = lambda: "encoder"
+    
+    try:
+        return run_nlu(
+            user_text,
+            bundle["intent"],
+            bundle["category"],
+            bundle["action_type"],
+            bundle["record_type"],
+            bundle["sentiment"],
+            bundle["ner"],
+            bundle.get("action_slots"),
+            run_llm=False
+        )
+    finally:
+        if old_env is not None:
+            os.environ["NLU_USE_ENCODER"] = old_env
+        else:
+            os.environ.pop("NLU_USE_ENCODER", None)
+        models._registry_inference_backend = old_backend_fn
+
+
+infer_with_encoder = infer_with_phobert

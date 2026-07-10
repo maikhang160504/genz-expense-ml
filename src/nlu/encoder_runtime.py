@@ -19,7 +19,7 @@ def _get_hf(model_name: str):
         from transformers import AutoModel, AutoTokenizer
 
         tok = AutoTokenizer.from_pretrained(model_name, use_fast=True)
-        model = AutoModel.from_pretrained(model_name)
+        model = AutoModel.from_pretrained(model_name, use_safetensors=True)
         model.eval()
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         model.to(device)
@@ -70,8 +70,6 @@ def predict_intent_encoder(bundle: dict[str, Any], text: str, money_re) -> tuple
         for c, p in zip(clf.classes_, proba):
             dist[str(c)] = float(p)
     intent = pred_raw
-    if money_re.search(text) and pred_raw == "Chitchat":
-        intent = "Record"
     conf = dist.get(str(intent), max(dist.values())) if dist else None
     return intent, conf, dist
 

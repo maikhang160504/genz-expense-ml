@@ -207,13 +207,15 @@ def parse_time_range(
     *,
     now: datetime | None = None,
 ) -> dict | None:
-    """Return ``{ period_label, from, to, granularity }`` or ``None``."""
+    """Chỉ parse từ slot time do model dự đoán; không quét keyword trên full câu."""
     anchor = _as_vn(now or datetime.now(VN_TZ))
-    parts = [text or ""]
-    if time_slots:
-        parts.extend(str(s) for s in time_slots if s)
-    combined = " ".join(parts)
-    norm = _norm(combined)
-    if not norm:
+    if not time_slots:
         return None
-    return _match_range(norm, anchor)
+    for raw in time_slots:
+        norm = _norm(str(raw))
+        if not norm:
+            continue
+        hit = _match_range(norm, anchor)
+        if hit:
+            return hit
+    return None

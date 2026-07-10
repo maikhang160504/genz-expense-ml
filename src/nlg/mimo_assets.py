@@ -11,7 +11,7 @@ MIMO_ASSET_NAMES = frozenset({
 
 # Persona NLG (prompts.json) — không phải tên file PNG
 NLG_PERSONA_KEYS = frozenset({
-    "hai_huoc", "dan_doi", "dong_cam", "cham_choc", "nghiem_tuc", "vui",
+    "vui", "dan_doi"
 })
 
 
@@ -24,12 +24,8 @@ def coerce_mimo_asset(value: str | None) -> str | None:
     
     # Map persona keys directly to visual mascot emotions
     PERSONA_TO_EMOTION = {
-        "vui": "Happy",
-        "dan_doi": "Worried",
-        "cham_choc": "Taunting",
-        "dong_cam": "Chill",
-        "nghiem_tuc": "Approved",
-        "hai_huoc": "Giggle"
+        "vui":     "Happy",   # Năng lượng cao
+        "dan_doi": "Angry", # Lo lắng nhẹ
     }
     if v_lower in PERSONA_TO_EMOTION:
         return PERSONA_TO_EMOTION[v_lower]

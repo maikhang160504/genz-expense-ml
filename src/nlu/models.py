@@ -1,3 +1,13 @@
+"""Load NLU classifiers for inference.
+
+Production (default): TF-IDF joblib only — Kaggle/local retrain pipeline.
+Encoder (PhoBERT): experimental comparison track; never auto-selected by file mtime.
+Enable encoder inference only with env ``NLU_USE_ENCODER=1`` (benchmark / A-B).
+"""
+from __future__ import annotations
+
+import json
+import os
 import sys
 import warnings
 
@@ -6,6 +16,46 @@ import joblib
 from src.config import settings
 
 _PATCHED_TOKENIZER = False
+
+
+def _registry_inference_backend() -> str:
+    from pathlib import Path
+    reg_path = settings.TEXT_NLU_DIR / "models" / "nlu_model_registry.json"
+    storage_path = Path("/storage/nlu_models") / "nlu_model_registry.json"
+    if storage_path.exists() and storage_path.is_file():
+        reg_path = storage_path
+
+    if not reg_path.is_file():
+        return "llm"
+    try:
+        data = json.loads(reg_path.read_text(encoding="utf-8"))
+        backend = str(data.get("inference_backend", "llm")).strip().lower()
+        if backend in {"encoder", "phobert"}:
+            return "encoder"
+        if backend == "llm":
+            return "llm"
+        if backend == "tfidf":
+            return "tfidf"
+    except Exception:
+        pass
+    return "llm"
+
+
+def use_encoder_runtime() -> bool:
+    """TF-IDF by default; encoder when registry or NLU_USE_ENCODER=1."""
+    env = os.environ.get("NLU_USE_ENCODER", "").strip().lower()
+    if env in ("1", "true", "yes"):
+        return True
+    if env in ("0", "false", "no"):
+        return False
+    return _registry_inference_backend() == "encoder"
+
+
+def get_inference_backend() -> str:
+    backend = _registry_inference_backend()
+    if backend == "llm":
+        return "llm"
+    return "encoder" if use_encoder_runtime() else "tfidf"
 
 
 def _ensure_pickled_tokenizer() -> None:
@@ -20,6 +70,9 @@ def _ensure_pickled_tokenizer() -> None:
     )
 
     root = settings.TEXT_NLU_DIR
+    pipeline_dir = root / "pipeline"
+    if str(pipeline_dir) not in sys.path:
+        sys.path.insert(0, str(pipeline_dir))
     if str(root) not in sys.path:
         sys.path.insert(0, str(root))
 
@@ -31,114 +84,128 @@ def _ensure_pickled_tokenizer() -> None:
     _PATCHED_TOKENIZER = True
 
 
-def load_intent_model():
-    """Trả dict: ``{backend: encoder|tfidf, ...}`` để pipeline phân nhánh."""
-    encoder_exists = settings.INTENT_ENCODER_PATH.exists()
-    tfidf_exists = settings.MODEL_PATH.exists()
+def _load_tfidf(path) -> dict:
+    _ensure_pickled_tokenizer()
+    payload = joblib.load(path)
+    return {"backend": "tfidf", "vectorizer": payload["vectorizer"], "model": payload["model"]}
 
-    if encoder_exists and tfidf_exists:
-        enc_mtime = settings.INTENT_ENCODER_PATH.stat().st_mtime
-        tfidf_mtime = settings.MODEL_PATH.stat().st_mtime
-        if enc_mtime >= tfidf_mtime:
-            return {"backend": "encoder", "bundle": joblib.load(settings.INTENT_ENCODER_PATH)}
-        else:
-            _ensure_pickled_tokenizer()
-            payload = joblib.load(settings.MODEL_PATH)
-            return {"backend": "tfidf", "vectorizer": payload["vectorizer"], "model": payload["model"]}
-    elif encoder_exists:
-        return {"backend": "encoder", "bundle": joblib.load(settings.INTENT_ENCODER_PATH)}
-    elif tfidf_exists:
-        _ensure_pickled_tokenizer()
-        payload = joblib.load(settings.MODEL_PATH)
-        return {"backend": "tfidf", "vectorizer": payload["vectorizer"], "model": payload["model"]}
-    else:
-        raise FileNotFoundError(f"Neither intent encoder model ({settings.INTENT_ENCODER_PATH}) nor TF-IDF model ({settings.MODEL_PATH}) exists.")
+
+def _load_encoder(path) -> dict:
+    return {"backend": "encoder", "bundle": joblib.load(path)}
+
+
+def _get_path(default_path: Path) -> Path:
+    from pathlib import Path
+    storage_path = Path("/storage/nlu_models") / default_path.name
+    if storage_path.exists() and storage_path.is_file():
+        return storage_path
+    return default_path
+
+
+def load_intent_model():
+    """Production: TF-IDF only. Encoder only if ``NLU_USE_ENCODER=1``. LLM backend skips local models."""
+    if get_inference_backend() == "llm":
+        return {"backend": "llm"}
+    intent_enc = _get_path(settings.INTENT_ENCODER_PATH)
+    if use_encoder_runtime() and intent_enc.is_file():
+        return _load_encoder(intent_enc)
+    intent_model = _get_path(settings.MODEL_PATH)
+    if intent_model.is_file():
+        return _load_tfidf(intent_model)
+    return {"backend": "missing"}
 
 
 def load_category_model():
-    encoder_exists = settings.CATEGORY_ENCODER_PATH.exists()
-    tfidf_exists = settings.CATEGORY_MODEL_PATH.exists()
-
-    if encoder_exists and tfidf_exists:
-        enc_mtime = settings.CATEGORY_ENCODER_PATH.stat().st_mtime
-        tfidf_mtime = settings.CATEGORY_MODEL_PATH.stat().st_mtime
-        if enc_mtime >= tfidf_mtime:
-            return {"backend": "encoder", "bundle": joblib.load(settings.CATEGORY_ENCODER_PATH)}
-        else:
-            _ensure_pickled_tokenizer()
-            payload = joblib.load(settings.CATEGORY_MODEL_PATH)
-            return {"backend": "tfidf", "vectorizer": payload["vectorizer"], "model": payload["model"]}
-    elif encoder_exists:
-        return {"backend": "encoder", "bundle": joblib.load(settings.CATEGORY_ENCODER_PATH)}
-    elif tfidf_exists:
-        _ensure_pickled_tokenizer()
-        payload = joblib.load(settings.CATEGORY_MODEL_PATH)
-        return {"backend": "tfidf", "vectorizer": payload["vectorizer"], "model": payload["model"]}
+    if get_inference_backend() == "llm":
+        return {"backend": "llm"}
+    cat_enc = _get_path(settings.CATEGORY_ENCODER_PATH)
+    if use_encoder_runtime() and cat_enc.is_file():
+        return _load_encoder(cat_enc)
+    cat_model = _get_path(settings.CATEGORY_MODEL_PATH)
+    if cat_model.is_file():
+        return _load_tfidf(cat_model)
     return {"backend": "missing"}
 
 
 def load_action_type_model():
-    encoder_exists = settings.ACTION_TYPE_ENCODER_PATH.exists()
-    tfidf_exists = settings.ACTION_TYPE_MODEL_PATH.exists()
-
-    if encoder_exists and tfidf_exists:
-        enc_mtime = settings.ACTION_TYPE_ENCODER_PATH.stat().st_mtime
-        tfidf_mtime = settings.ACTION_TYPE_MODEL_PATH.stat().st_mtime
-        if enc_mtime >= tfidf_mtime:
-            return {"backend": "encoder", "bundle": joblib.load(settings.ACTION_TYPE_ENCODER_PATH)}
-        else:
-            _ensure_pickled_tokenizer()
-            payload = joblib.load(settings.ACTION_TYPE_MODEL_PATH)
-            return {"backend": "tfidf", "vectorizer": payload["vectorizer"], "model": payload["model"]}
-    elif encoder_exists:
-        return {"backend": "encoder", "bundle": joblib.load(settings.ACTION_TYPE_ENCODER_PATH)}
-    elif tfidf_exists:
-        _ensure_pickled_tokenizer()
-        payload = joblib.load(settings.ACTION_TYPE_MODEL_PATH)
-        return {"backend": "tfidf", "vectorizer": payload["vectorizer"], "model": payload["model"]}
+    if get_inference_backend() == "llm":
+        return {"backend": "llm"}
+    act_enc = _get_path(settings.ACTION_TYPE_ENCODER_PATH)
+    if use_encoder_runtime() and act_enc.is_file():
+        return _load_encoder(act_enc)
+    act_model = _get_path(settings.ACTION_TYPE_MODEL_PATH)
+    if act_model.is_file():
+        return _load_tfidf(act_model)
     return {"backend": "missing"}
+
+
+def load_action_slots_model():
+    if get_inference_backend() == "llm":
+        return {"backend": "llm"}
+    from src.nlu.action_slots import load_action_slots_model as _load
+
+    slots_model = _get_path(settings.ACTION_SLOTS_MODEL_PATH)
+    bundle = _load(slots_model)
+    if bundle is None:
+        return {"backend": "missing"}
+    return {"backend": "slots", "bundle": bundle}
 
 
 def load_record_type_model():
-    encoder_exists = settings.RECORD_TYPE_ENCODER_PATH.exists()
-    tfidf_exists = settings.RECORD_TYPE_MODEL_PATH.exists()
-
-    if encoder_exists and tfidf_exists:
-        enc_mtime = settings.RECORD_TYPE_ENCODER_PATH.stat().st_mtime
-        tfidf_mtime = settings.RECORD_TYPE_MODEL_PATH.stat().st_mtime
-        if enc_mtime >= tfidf_mtime:
-            return {"backend": "encoder", "bundle": joblib.load(settings.RECORD_TYPE_ENCODER_PATH)}
-        else:
-            _ensure_pickled_tokenizer()
-            payload = joblib.load(settings.RECORD_TYPE_MODEL_PATH)
-            return {"backend": "tfidf", "vectorizer": payload["vectorizer"], "model": payload["model"]}
-    elif encoder_exists:
-        return {"backend": "encoder", "bundle": joblib.load(settings.RECORD_TYPE_ENCODER_PATH)}
-    elif tfidf_exists:
-        _ensure_pickled_tokenizer()
-        payload = joblib.load(settings.RECORD_TYPE_MODEL_PATH)
-        return {"backend": "tfidf", "vectorizer": payload["vectorizer"], "model": payload["model"]}
+    if get_inference_backend() == "llm":
+        return {"backend": "llm"}
+    rec_enc = _get_path(settings.RECORD_TYPE_ENCODER_PATH)
+    if use_encoder_runtime() and rec_enc.is_file():
+        return _load_encoder(rec_enc)
+    rec_model = _get_path(settings.RECORD_TYPE_MODEL_PATH)
+    if rec_model.is_file():
+        return _load_tfidf(rec_model)
     return {"backend": "missing"}
 
 
+def load_encoder_intent_model() -> dict:
+    """Comparison track — intent encoder only."""
+    if not settings.INTENT_ENCODER_PATH.is_file():
+        raise FileNotFoundError(settings.INTENT_ENCODER_PATH)
+    return _load_encoder(settings.INTENT_ENCODER_PATH)
+
+
+def load_encoder_category_model() -> dict:
+    if not settings.CATEGORY_ENCODER_PATH.is_file():
+        raise FileNotFoundError(settings.CATEGORY_ENCODER_PATH)
+    return _load_encoder(settings.CATEGORY_ENCODER_PATH)
+
+
+def load_encoder_action_type_model() -> dict:
+    if not settings.ACTION_TYPE_ENCODER_PATH.is_file():
+        raise FileNotFoundError(settings.ACTION_TYPE_ENCODER_PATH)
+    return _load_encoder(settings.ACTION_TYPE_ENCODER_PATH)
+
+
+def load_encoder_record_type_model() -> dict:
+    if not settings.RECORD_TYPE_ENCODER_PATH.is_file():
+        raise FileNotFoundError(settings.RECORD_TYPE_ENCODER_PATH)
+    return _load_encoder(settings.RECORD_TYPE_ENCODER_PATH)
+
+
 def load_chitchat_sentiment_model():
-    """
-    Chitchat dùng LLM cho tone + trả lời — không load PhoBERT sentiment.
-    Giữ hàm để signature run_nlu() không đổi.
-    """
+    """Chitchat dùng LLM — không load PhoBERT sentiment."""
     return {"backend": "llm"}
 
 
 def predict_category_from_text(text: str | None, category_model: dict) -> str | None:
-    """Dự đoán danh mục của một đoạn văn bản ngắn (ví dụ: item từ NER) bằng category_model."""
+    """Dự đoán danh mục của một đoạn văn bản ngắn (ví dụ: item từ NER hoặc BILL text)."""
     if not text or not text.strip():
         return None
+    from pipeline.text_preprocessing import clean_category_text
+    cleaned_input = clean_category_text(text)
+    if not cleaned_input:
+        cleaned_input = text.strip()
     if category_model.get("backend") == "encoder" and category_model.get("bundle"):
         from src.nlu.encoder_runtime import predict_category_encoder
-        return predict_category_encoder(category_model["bundle"], text)
-    elif category_model.get("backend") == "tfidf" and category_model.get("vectorizer"):
-        from pipeline.text_preprocessing import clean_category_text
-        cat_input = clean_category_text(text)
-        cat_vec = category_model["vectorizer"].transform([cat_input])
+
+        return predict_category_encoder(category_model["bundle"], cleaned_input)
+    if category_model.get("backend") == "tfidf" and category_model.get("vectorizer"):
+        cat_vec = category_model["vectorizer"].transform([cleaned_input])
         return str(category_model["model"].predict(cat_vec)[0])
     return None

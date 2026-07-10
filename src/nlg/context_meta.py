@@ -99,6 +99,8 @@ def build_context_metadata(nlu_result: dict[str, Any], profile: dict[str, Any]) 
             res["wallet_type"] = profile["wallet_type"]
         if "member_count" in profile:
             res["member_count"] = profile["member_count"]
+        if "username" in profile:
+            res["username"] = profile["username"]
         return res
 
     if intent == "Record":
@@ -284,6 +286,9 @@ def filter_context_metadata_for_prompt(
     is_group = (ctx.get("wallet_type") == "group" or ctx.get("is_shared_wallet") is True)
     if is_group:
         slim["is_shared_wallet"] = True
+
+    if "username" in ctx:
+        slim["username"] = ctx["username"]
 
     # 2. Extract Priority 3 fields (lowest, only if mentioned by user)
     weather = ctx.get("weather")
@@ -489,3 +494,45 @@ def build_mock_context_metadata(
         }
 
     return base
+
+
+def build_unified_llm_context(profile: dict[str, Any]) -> dict[str, Any]:
+    """Tạo CONTEXT_META hợp nhất đồng bộ với định dạng dataset train LLM."""
+    from datetime import datetime
+    now = datetime.now()
+    
+    time_of_day_val = _get_time_of_day(now.hour)
+    time_vn_map = {
+        "sáng_sớm": "Sáng sớm",
+        "buổi_trưa": "Trưa nắng",
+        "chiều_tối": "Chiều muộn",
+        "đêm_muộn": "Đêm khuya"
+    }
+    time_vn = time_vn_map.get(time_of_day_val, "Trong ngày")
+    
+    day = now.day
+    days_to_payday = _get_days_to_payday(day)
+    
+    budget_remain = profile.get("budget_remain")
+    budget_total = profile.get("budget_total")
+    wallet_health_raw = _get_wallet_health(budget_remain, budget_total)
+    
+    wallet_health_map = {
+        "an_toan": "rủng rỉnh",
+        "can_than": "tạm ổn",
+        "bao_dong": "đang báo động",
+        "không_rõ": "tạm ổn"
+    }
+    wallet_health = wallet_health_map.get(wallet_health_raw, "tạm ổn")
+    
+    res = {
+        "time_of_day": time_vn,
+        "weather": profile.get("weather") or "nắng ấm",
+        "wallet_health": wallet_health,
+        "days_to_payday": f"{days_to_payday} ngày nữa tới kỳ lương"
+    }
+    if profile.get("username"):
+        res["user_name"] = profile.get("username")
+    if "action_facts" in profile:
+        res["action_facts"] = profile["action_facts"]
+    return res

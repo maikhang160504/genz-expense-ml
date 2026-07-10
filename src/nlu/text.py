@@ -33,9 +33,9 @@ AMOUNT_RE = re.compile(
     re.IGNORECASE,
 )
 
-# Composite format: 2tr400 => 2,400,000
+# Composite: 1tr200 => 1,200,000 ; 1tr2 => 1,200,000 (1.2 triệu)
 TR_COMPOSITE_RE = re.compile(
-    r"(?P<million>\d+)\s*(?:tr|trieu|triệu)\s*(?P<thousand>\d{1,3})",
+    r"(?P<million>\d+)\s*(?:tr|trieu|triệu)\s*(?P<thousand>\d{1,3})(?!\d)",
     re.IGNORECASE,
 )
 
@@ -110,11 +110,14 @@ def extract_amounts(text: str) -> list[int]:
     
     for m in TR_COMPOSITE_RE.finditer(normalized_text):
         million = int(m.group("million"))
-        thousand = int(m.group("thousand"))
-        amounts.append(million * 1_000_000 + thousand * 1_000)
+        thousand_raw = m.group("thousand")
+        if len(thousand_raw) == 1:
+            amounts.append(int(round((million + int(thousand_raw) / 10.0) * 1_000_000)))
+        else:
+            amounts.append(million * 1_000_000 + int(thousand_raw) * 1_000)
 
     for m in AMOUNT_RE.finditer(normalized_text):
-        raw = m.group("num").replace(",", ".")
+        raw = m.group("num").replace(",", ".") if "," in m.group("num") and "." not in m.group("num") else m.group("num").replace(",", "")
         try:
             value = float(raw)
         except ValueError:
