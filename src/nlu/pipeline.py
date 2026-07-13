@@ -166,6 +166,7 @@ def run_nlu(
     user_id: str | None = None,
     user_corrections: list[dict] | None = None,
     profile: dict | None = None,
+    nlg_persona: str | None = None,
 ) -> dict:
     from src.nlu.models import get_inference_backend
     if get_inference_backend() == "llm":
@@ -260,7 +261,7 @@ def run_nlu(
                 print(f"[NLU pipeline] Error building unified context: {e}")
 
         # Fallback to Qwen LLM NLU if personalization not matched
-        result = run_llm_nlu(user_text, context_metadata=context_metadata, run_llm=True)
+        result = run_llm_nlu(user_text, context_metadata=context_metadata, run_llm=True, nlg_persona=nlg_persona)
         return result
 
     intent, intent_conf, intent_proba = classify_intent(user_text, intent_model)

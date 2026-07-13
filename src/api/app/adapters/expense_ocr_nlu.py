@@ -244,6 +244,7 @@ def run_real_nlu(
         user_id=user_id,
         user_corrections=user_corrections,
         profile=profile,
+        nlg_persona=(nlg_persona or emotion),
     )
 
     if result.get("intent") == "Action":
