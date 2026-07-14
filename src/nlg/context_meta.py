@@ -41,7 +41,10 @@ def _get_wallet_health(budget_remain: float | None, budget_total: float | None) 
 
 def _build_environment_fields(profile: dict[str, Any]) -> dict[str, Any]:
     """Trả về các trường môi trường tính từ thời gian thực + profile."""
-    now = datetime.now()
+    # Use UTC+7 for Vietnam time
+    from datetime import timezone, timedelta
+    vn_tz = timezone(timedelta(hours=7))
+    now = datetime.now(vn_tz)
     hour = now.hour
     day = now.day
     return {
@@ -498,8 +501,9 @@ def build_mock_context_metadata(
 
 def build_unified_llm_context(profile: dict[str, Any]) -> dict[str, Any]:
     """Tạo CONTEXT_META hợp nhất đồng bộ với định dạng dataset train LLM."""
-    from datetime import datetime
-    now = datetime.now()
+    from datetime import datetime, timezone, timedelta
+    vn_tz = timezone(timedelta(hours=7))
+    now = datetime.now(vn_tz)
     
     time_of_day_val = _get_time_of_day(now.hour)
     time_vn_map = {
