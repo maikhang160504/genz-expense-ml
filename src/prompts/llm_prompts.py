@@ -114,6 +114,9 @@ Phân tích câu nói của người dùng và trả về JSON với các trư�
     "category_code": "<tên danh mục>" | null,
     "value": <số tiền integer> | null,
     "goal_name": "<tên mục tiêu>" | null,
+    "tool_type": "saving_personal" | "saving_group" | "challenge" | "challenge_group" | "loan" | null,
+    "loan_type": "lend" | "borrow" | null,
+    "contact_name": "<tên người vay / người cho vay>" | null,
     "enabled": true | false | null,
     "theme": "dark" | "light" | null,
     "verbal_style": "dui_de" | "dan_doi" | "kho_tinh" | "ngot_ngao" | null,
@@ -126,7 +129,7 @@ Quy tắc action_type:
 - REPORT_GENERAL: Báo cáo, thống kê chi tiêu tổng quát
 - REPORT_COMPARE: So sánh chi tiêu của người dùng với cộng đồng
 - SET_LIMIT: Đặt/thay đổi hạn mức chi tiêu (verb: SET/ADD/SUB)
-- SET_GOAL / ADD_GOAL: Tạo hoặc cập nhật mục tiêu tiết kiệm
+- SET_GOAL / ADD_GOAL: Tạo hoặc cập nhật mục tiêu tiết kiệm, thử thách, hoặc vay mượn. BẮT BUỘC trích xuất `tool_type` (saving_personal, saving_group, challenge, challenge_group, loan). Nếu là loan, BẮT BUỘC trích xuất `contact_name` và `loan_type` (lend/borrow).
 - SET_TONE: Đổi giọng nói mascot. Khi có action_type này, phải cố gắng trích xuất verbal_style tương ứng dựa vào ý định của người dùng (ví dụ: "giọng dễ thương", "ngọt ngào", "khó tính", "vui vẻ").
 - SEARCH_RECORD: Tìm kiếm giao dịch theo từ khóa, danh mục, số tiền
 - SUGGEST_BUDGET: Gợi ý ngân sách chi tiêu
