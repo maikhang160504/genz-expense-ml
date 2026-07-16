@@ -153,7 +153,7 @@ class ExpenseService:
         # Ưu tiên 2: Sử dụng category từ OCR suggestion nếu hợp lệ và cụ thể
         suggestion_cat = suggestion.category if (suggestion.category and suggestion.category != "Others") else None
 
-        final_category = routed_brand_cat or suggestion_cat or nlu_category or "Food"
+        final_category = routed_brand_cat or nlu_category or suggestion_cat or "Food"
 
         extracted = ExpenseExtracted(
             amount=suggestion.amount,
