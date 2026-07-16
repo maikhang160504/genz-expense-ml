@@ -1,10 +1,16 @@
+import json
 import sys
 from pathlib import Path
 
 import joblib
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics import classification_report, confusion_matrix
+from sklearn.metrics import (
+    accuracy_score,
+    classification_report,
+    confusion_matrix,
+    precision_recall_fscore_support,
+)
 from sklearn.model_selection import train_test_split
 from sklearn.svm import LinearSVC
 
@@ -61,6 +67,25 @@ def train_model(df: pd.DataFrame) -> tuple[TfidfVectorizer, LinearSVC]:
     print(classification_report(y_test, y_pred))
     print("confusion_matrix")
     print(confusion_matrix(y_test, y_pred))
+
+    # === Save metrics to JSON for thesis evidence ===
+    labels = sorted(set(y_test) | set(y_pred))
+    cm = confusion_matrix(y_test, y_pred, labels=labels)
+    per_class = classification_report(y_test, y_pred, zero_division=0, output_dict=True)
+    mp, mr, mf1, _ = precision_recall_fscore_support(y_test, y_pred, average="macro", zero_division=0)
+    acc = float(accuracy_score(y_test, y_pred))
+
+    metrics_out = MODEL_DIR / "tfidf_category_metrics.json"
+    metrics_out.write_text(json.dumps({
+        "task": "category",
+        "accuracy": round(acc, 4),
+        "macro_precision": round(float(mp), 4),
+        "macro_recall": round(float(mr), 4),
+        "macro_f1": round(float(mf1), 4),
+        "per_class_report": {k: v for k, v in per_class.items() if k not in ("accuracy", "macro avg", "weighted avg")},
+        "confusion_matrix": {"labels": labels, "matrix": cm.tolist()},
+    }, ensure_ascii=False, indent=2), encoding="utf-8")
+    print(f"Saved TF-IDF category metrics -> {metrics_out}")
 
     return vectorizer, model
 

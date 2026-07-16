@@ -1,4 +1,5 @@
 import json
+import random
 from typing import Any
 
 from src.nlg.mimo_assets import MIMO_ASSET_NAMES
@@ -113,7 +114,13 @@ def build_nlg_prompt(
     slang_list = emotion_cfg.get("slang_pool", [])
     slang_instruction = ""
     if slang_list:
-        slang_instruction = f"[SLANG GỢI Ý]: Bạn có thể sử dụng các từ slang sau để phản hồi tự nhiên: {', '.join(slang_list)}."
+        sampled_slang = random.sample(slang_list, min(3, len(slang_list)))
+        slang_instruction = (
+            f"[QUAN TRỌNG - PHONG CÁCH PHẢN HỒI]: Bạn PHẢI dùng phong cách '{nlg_persona}'. "
+            f"Đặc biệt, HÃY CHỌN DÙNG NGẪU NHIÊN 1-2 TỪ LÓNG SAU ĐÂY: {', '.join(sampled_slang)}. "
+            "LƯU Ý QUAN TRỌNG: TUYỆT ĐỐI KHÔNG lặp lại các từ lóng đã dùng ở các câu trước (ví dụ: không được dùng lại 'ét ô ét' liên tục). "
+            "Hãy thay đổi từ vựng ngẫu nhiên để thể hiện cá tính thật rõ nét, KHÔNG trả lời chung chung an toàn."
+        )
 
     system_parts = [emotion_cfg.get("system"), common.get("style"), common.get("response_rules")]
     if diversity_rule:
