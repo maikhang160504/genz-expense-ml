@@ -23,6 +23,23 @@ from src.prompts.llm_prompts import (
     RECORD_SLOT_EXTRACTION_PROMPT
 )
 
+_PROMPTS_CACHE = None
+
+def _load_prompts_json() -> dict:
+    global _PROMPTS_CACHE
+    if _PROMPTS_CACHE is not None:
+        return _PROMPTS_CACHE
+    try:
+        from pathlib import Path
+        prompts_path = Path(__file__).resolve().parent.parent / "prompts" / "prompts.json"
+        with open(prompts_path, "r", encoding="utf-8") as f:
+            _PROMPTS_CACHE = json.load(f)
+    except Exception as e:
+        logger.error(f"Error loading prompts.json: {e}")
+        _PROMPTS_CACHE = {}
+    return _PROMPTS_CACHE
+
+
 
 # ── Default confidence threshold ──
 DEFAULT_CONFIDENCE_THRESHOLD = 0.65
@@ -352,30 +369,62 @@ def run_llm_nlu(
     nlg_persona: str | None = None,
 ) -> dict[str, Any]:
     try:
-        tone_instruction = ""
+        system_tone_addition = ""
+        user_tone_addition = ""
+        prompts_config = _load_prompts_json()
+        
         if nlg_persona:
-            tone_instruction = f"\n\n[QUAN TRỌNG - PHONG CÁCH PHẢN HỒI]: Bạn PHẢI dùng phong cách '{nlg_persona}'. "
-            if nlg_persona == "kho_tinh":
-                tone_instruction += "Giọng điệu cực kỳ nghiêm khắc, kỷ luật thép, thẳng thắn phê bình những khoản chi tiêu không hợp lý, dập tắt ảo tưởng giàu có. Dùng từ như 'báo động đỏ', 'chi tiêu vô tội vạ'."
-            elif nlg_persona == "ngot_ngao":
-                tone_instruction += "Giọng điệu siêu ngọt ngào, thấu cảm tối đa, luôn chữa lành tâm hồn người dùng. Dùng từ như 'thương thương', 'ngoan xinh yêu', 'ôm một cái'."
-            elif nlg_persona == "dan_doi":
-                tone_instruction += "Giọng điệu dận dỗi, xéo xắt, lo lắng. Dùng từ như 'ét ô ét', 'rớt nước mắt', 'nhức nhức cái đầu'."
-            else: # dui_de
-                tone_instruction += "Giọng vui vẻ, năng lượng cao, hài hước, thân thiện. Dùng từ như 'vibe cực', 'hết nước chấm', 'mãi đỉnh'."
-            tone_instruction += " (TUYỆT ĐỐI KHÔNG DÙNG TIẾNG TRUNG/NGOẠI QUỐC)"
+            emotions = prompts_config.get("emotions", {})
+            persona_key = nlg_persona.lower()
+            if persona_key in emotions:
+                persona_config = emotions[persona_key]
+                sys_msg = persona_config.get("system", "")
+                user_msg = persona_config.get("user", "")
+                slangs = ", ".join(persona_config.get("slang_pool", []))
+                
+                system_tone_addition = f"\n\n[QUY TẮC PHONG CÁCH (Persona): {nlg_persona}]\n{sys_msg}\nTừ lóng được phép dùng: {slangs}"
+                user_tone_addition = f"\n\n[YÊU CẦU PHẢN HỒI]: {user_msg}\n(TUYỆT ĐỐI KHÔNG DÙNG TIẾNG TRUNG/NGOẠI QUỐC)"
+            else:
+                system_tone_addition = f"\n\n[QUY TẮC PHONG CÁCH (Persona): {nlg_persona}]\nHãy đóng vai và trả lời theo phong cách này."
+                user_tone_addition = "\n\n(TUYỆT ĐỐI KHÔNG DÙNG TIẾNG TRUNG/NGOẠI QUỐC)"
+
+        # Check relationship override
+        text_lower = text.lower()
+        relationship_rule = ""
+        rel_override = prompts_config.get("relationship_override", {})
+        
+        # Keywords for CHA_ME
+        if any(kw in text_lower for kw in ["cha", "mẹ", "me", "ba", "má", "ma", "bố", "bo", "ông", "ong", "bà"]):
+            cha_me = rel_override.get("CHA_ME", {})
+            if "rule" in cha_me:
+                relationship_rule = f"\n\n[ĐẶC BIỆT - QUAN HỆ NGƯỜI THÂN]: {cha_me['rule']}"
+                
+        # Keywords for NGUOI_YEU
+        elif any(kw in text_lower for kw in ["người yêu", "nguoi yeu", "bồ", "bo", "vợ", "vo", "chồng", "chong", "gấu", "gau", "crush"]):
+            nguoi_yeu = rel_override.get("NGUOI_YEU", {})
+            is_expense = any(kw in text_lower for kw in ["mua", "tặng", "chuyển", "trả", "bao", "đãi", "đưa", "ăn"])
+            is_income = any(kw in text_lower for kw in ["nhận", "được", "cho", "đòi"])
+            if not is_income and not is_expense:
+                is_expense = True # default
+            
+            if is_expense and "rule_happy" in nguoi_yeu:
+                relationship_rule = f"\n\n[ĐẶC BIỆT - QUAN HỆ NGƯỜI YÊU]: {nguoi_yeu['rule_happy']}"
+            elif is_income and "rule_sad" in nguoi_yeu:
+                relationship_rule = f"\n\n[ĐẶC BIỆT - QUAN HỆ NGƯỜI YÊU]: {nguoi_yeu['rule_sad']}"
+
+        user_tone_addition += relationship_rule
 
         if context_metadata:
             context_meta_str = json.dumps(context_metadata, ensure_ascii=False)
-            user_prompt = f"Ngữ cảnh hệ thống (CONTEXT_META): {context_meta_str}\nCâu thoại của người dùng: {text}{tone_instruction}"
+            user_prompt = f"Ngữ cảnh hệ thống (CONTEXT_META): {context_meta_str}\nCâu thoại của người dùng: {text}{user_tone_addition}"
         else:
             context_meta_str = "null"
-            user_prompt = f"Ngữ cảnh hệ thống (CONTEXT_META): null\nCâu thoại của người dùng: {text}{tone_instruction}"
+            user_prompt = f"Ngữ cảnh hệ thống (CONTEXT_META): null\nCâu thoại của người dùng: {text}{user_tone_addition}"
 
         # 1. Check if we are in the second-pass for Action commentary
         if context_metadata and "action_facts" in context_metadata:
             system_prompt = (
-                "Bạn là Mimo, trợ lý tài chính cá nhân thân thiện và thông thái của hệ thống spending-diary. "
+                "Bạn là Mimo, trợ lý tài chính cá nhân của hệ thống spending-diary. "
                 "Hãy phân tích dữ liệu thực tế được cung cấp trong trường 'action_facts' của 'Ngữ cảnh hệ thống (CONTEXT_META)' và câu nói của người dùng để trả về một cấu trúc JSON hợp lệ có dạng:\n"
                 "{\n"
                 '  "intent": "Action",\n'
@@ -385,13 +434,15 @@ def run_llm_nlu(
                 "Quy tắc:\n"
                 "1. Lời phản hồi 'response' PHẢI dựa trực tiếp trên số liệu thực tế được cung cấp trong 'action_facts' (ví dụ: tổng số tiền, số lượng giao dịch, danh mục chi nhiều nhất). Không được bịa đặt hoặc đoán mò số liệu nằm ngoài 'action_facts'.\n"
                 "2. Nếu 'action_facts' trống hoặc chỉ ra không có dữ liệu chi tiêu (ví dụ: tổng chi tiêu = 0đ hoặc danh sách rỗng), hãy viết câu phản hồi hài hước nhẹ nhàng thông báo rằng người dùng chưa có giao dịch nào ghi nhận trong khoảng thời gian này và khuyên họ hãy bắt đầu ghi chép bằng cách nhắn 'ăn trưa 50k' hoặc tương tự nhé. TUYỆT ĐỐI KHÔNG được bịa đặt so sánh hay ảo giác nói rằng người dùng đã chi tiêu nhiều hơn hay bớt đi khi số liệu thực tế là 0đ.\n"
-                "3. 'response' PHẢI là câu NHẬN XÉT CỤ THỂ, TỰ NHIÊN về dữ liệu. KHÔNG lặp lại các từ cửa miệng vô nghĩa (tuyệt đối KHÔNG DÙNG 'Ét ô ét', 'mlem' liên tục). Phản hồi phải phù hợp với phong cách của bạn (dịu dàng, đanh đá, hài hước...).\n"
+                "3. 'response' PHẢI là câu NHẬN XÉT CỤ THỂ, TỰ NHIÊN về dữ liệu. KHÔNG lặp lại các từ cửa miệng vô nghĩa. Phản hồi phải tuân thủ chặt chẽ QUY TẮC PHONG CÁCH bên dưới.\n"
                 "4. 'response' phải viết bằng tiếng Việt 100% tự nhiên. TUYỆT ĐỐI không chứa bất kỳ chữ cái, từ ngữ nước ngoài nào khác (không tiếng Nga, không tiếng Anh, không tiếng Trung).\n"
                 "5. Các con số tiền phải được viết rõ ràng định dạng phân cách hàng nghìn bằng dấu chấm (ví dụ: '1.200.000đ', '600.000đ', '400.000đ'). Không viết kiểu '1 triệu hai trăm nghìn'.\n"
                 "Chỉ trả về JSON, không giải thích."
             )
+            system_prompt += system_tone_addition
         else:
             system_prompt = override_prompt if override_prompt else UNIFIED_NLU_PROMPT
+            system_prompt += system_tone_addition
 
         response = _call_llm(
             system_prompt=system_prompt,
