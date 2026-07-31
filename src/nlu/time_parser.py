@@ -32,7 +32,8 @@ _GRANULARITY_LABELS = {
 
 
 def _norm(s: str) -> str:
-    nfd = unicodedata.normalize("NFD", (s or "").lower().strip())
+    s_clean = (s or "").lower().replace("đ", "d").replace("Đ", "d").strip()
+    nfd = unicodedata.normalize("NFD", s_clean)
     return "".join(c for c in nfd if unicodedata.category(c) != "Mn")
 
 
@@ -88,6 +89,63 @@ def _build_result(
 
 def _match_range(norm_text: str, now: datetime) -> dict | None:
     today = _start_of_day(now)
+
+    # 0. Custom date ranges: "tu ngay 1 den ngay 10 thang nay", "tu 1 den 10 thang nay", "tu 01/07 den 10/07"
+    m_range = re.search(
+        r"(?:tu\s+)?(?:ngay\s+)?(\d{1,2})\s+(?:den|toi)\s+(?:ngay\s+)?(\d{1,2})(?:\s+(?:thang\s+(\d{1,2})|thang\s+(nay|truoc)))?",
+        norm_text
+    )
+    if m_range and not re.search(r"\d{1,2}/\d{1,2}", norm_text):
+        d1 = int(m_range.group(1))
+        d2 = int(m_range.group(2))
+        month_str = m_range.group(3)
+        month_word = m_range.group(4)
+
+        y = today.year
+        if month_str:
+            m = int(month_str)
+        elif month_word == "truoc":
+            m = today.month - 1
+            if m == 0:
+                m = 12
+                y -= 1
+        else:
+            m = today.month
+
+        try:
+            start_dt = _start_of_day(today.replace(year=y, month=m, day=d1))
+            end_dt = _end_of_day(today.replace(year=y, month=m, day=d2))
+            label = f"Từ {d1:02d}/{m:02d} đến {d2:02d}/{m:02d}/{y}"
+            return _build_result(
+                granularity="custom",
+                start=start_dt,
+                end=end_dt,
+                label_prefix=label
+            )
+        except ValueError:
+            pass
+
+    m_slash = re.search(
+        r"(?:tu\s+)?(?:ngay\s+)?(\d{1,2})[\/\-](\d{1,2})(?:[\/\-](\d{4}))?\s+(?:den|toi)\s+(?:ngay\s+)?(\d{1,2})[\/\-](\d{1,2})(?:[\/\-](\d{4}))?",
+        norm_text
+    )
+    if m_slash:
+        d1, m1 = int(m_slash.group(1)), int(m_slash.group(2))
+        y1 = int(m_slash.group(3)) if m_slash.group(3) else today.year
+        d2, m2 = int(m_slash.group(4)), int(m_slash.group(5))
+        y2 = int(m_slash.group(6)) if m_slash.group(6) else today.year
+        try:
+            start_dt = _start_of_day(today.replace(year=y1, month=m1, day=d1))
+            end_dt = _end_of_day(today.replace(year=y2, month=m2, day=d2))
+            label = f"Từ {d1:02d}/{m1:02d} đến {d2:02d}/{m2:02d}/{y2}"
+            return _build_result(
+                granularity="custom",
+                start=start_dt,
+                end=end_dt,
+                label_prefix=label
+            )
+        except ValueError:
+            pass
 
     if re.search(r"\bhom nay\b", norm_text):
         return _build_result(granularity="day", start=today, end=_end_of_day(now))

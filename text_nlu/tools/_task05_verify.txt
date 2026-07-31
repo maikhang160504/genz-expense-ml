@@ -1,9 +1,0 @@
-OK | 'Tháng này tiêu bao nhiêu rồi' -> REPORT_GENERAL (expected REPORT_GENERAL)
-OK | 'tổng chi tháng này' -> REPORT_GENERAL (expected REPORT_GENERAL)
-OK | 'thống kê chi tiêu tuần này' -> REPORT_GENERAL (expected REPORT_GENERAL)
-OK | 'xem tổng chi hôm nay giúp mình' -> REPORT_GENERAL (expected REPORT_GENERAL)
-OK | 'thang nay tieu bao nhieu roi' -> REPORT_GENERAL (expected REPORT_GENERAL)
-OK | 'Báo cáo ăn uống tháng này' -> Report (expected Report)
-OK | 'Tìm khoản chi trên 500k' -> SEARCH_RECORD (expected SEARCH_RECORD)
-
-7/7 action_type match

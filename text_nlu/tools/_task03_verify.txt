@@ -1,9 +1,0 @@
-OK | mua trên shopee 120k -> Shopping (expected Shopping)
-OK | tiktok shop 89k -> Shopping (expected Shopping)
-OK | shopee 200k -> Shopping (expected Shopping)
-OK | mua sạc 150k -> Shopping (expected Shopping)
-OK | mua giày sneaker 800k -> Shopping (expected Shopping)
-OK | gạo 50k -> Essentials (expected Essentials)
-OK | mua quà cho mẹ 200k -> Essentials (expected Essentials)
-
-7/7 category match

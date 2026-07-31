@@ -226,7 +226,7 @@ def trigger_modal_layoutlmv3_train(num_epochs: int = 30, learning_rate: float = 
     """Trigger serverless LayoutLMv3 training on Modal Cloud."""
     try:
         import modal
-        f = modal.Function.lookup("expense-ocr-nlu", "train_layoutlmv3_model")
+        f = modal.Function.from_name("expense-ocr-nlu", "train_layoutlmv3_model")
         handle = f.spawn(num_epochs=num_epochs, learning_rate=learning_rate)
         return {
             "ok": True,

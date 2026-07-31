@@ -1,8 +1,8 @@
 {
   "intent": {
     "accuracy": 1.0,
-    "test_set": 29299,
-    "macro_precision": 0.99,
+    "test_set": 29417,
+    "macro_precision": 1.0,
     "macro_recall": 1.0,
     "macro_f1": 1.0,
     "weighted_precision": 1.0,
@@ -10,19 +10,19 @@
     "weighted_f1": 1.0
   },
   "record_type": {
-    "accuracy": 0.99,
+    "accuracy": 0.98,
     "test_set": 12638,
     "macro_precision": 0.93,
     "macro_recall": 0.98,
-    "macro_f1": 0.96,
+    "macro_f1": 0.95,
     "weighted_precision": 0.99,
-    "weighted_recall": 0.99,
+    "weighted_recall": 0.98,
     "weighted_f1": 0.99
   },
   "category": {
     "accuracy": 0.96,
     "test_set": 12638,
-    "macro_precision": 0.94,
+    "macro_precision": 0.93,
     "macro_recall": 0.95,
     "macro_f1": 0.94,
     "weighted_precision": 0.96,
@@ -31,7 +31,7 @@
   },
   "action_type": {
     "accuracy": 1.0,
-    "test_set": 8331,
+    "test_set": 8390,
     "macro_precision": 1.0,
     "macro_recall": 1.0,
     "macro_f1": 1.0,
@@ -43,15 +43,15 @@
     "fields": {
       "verb": {
         "type": "classifier",
-        "train_samples": 15328,
+        "train_samples": 15377,
         "classes": [
           "ADD",
           "SET",
           "SUB"
         ],
-        "accuracy": 0.998,
-        "weighted_f1": 0.998,
-        "test_samples": 3066
+        "accuracy": 0.9984,
+        "weighted_f1": 0.9984,
+        "test_samples": 3076
       },
       "category_code": {
         "type": "classifier",
@@ -76,7 +76,7 @@
       },
       "value": {
         "type": "regressor",
-        "train_samples": 21499
+        "train_samples": 21548
       },
       "value_text": {
         "type": "classifier",
@@ -117,8 +117,50 @@
       },
       "goal_name": {
         "type": "classifier",
-        "train_samples": 8911,
+        "train_samples": 8960,
         "classes": [
+          "Cho Khang vay",
+          "Cho Linh vay",
+          "Cho Minh vay",
+          "Cho Nam vay",
+          "Cho Tuấn vay",
+          "Cho anh Hoàng vay",
+          "Mua máy ảnh",
+          "Mượn Hùng",
+          "Mượn Mai",
+          "Mượn Thành",
+          "Quà sinh nhật mẹ",
+          "Quỹ du lịch gia đình",
+          "Quỹ dự phòng",
+          "Thử thách cai mua sắm",
+          "Thử thách chạy bộ",
+          "Thử thách không cà phê sang chảnh",
+          "Thử thách không uống trà sữa",
+          "Thử thách không ăn vặt",
+          "Thử thách mang cơm trưa",
+          "Thử thách tiết kiệm 30 ngày",
+          "Thử thách tiết kiệm hôm nay",
+          "Thử thách tiết kiệm mỗi ngày",
+          "Thử thách tập thể không uống trà sữa",
+          "Thử thách tự nấu ăn",
+          "Tiết kiệm chung Phú Quốc",
+          "Tiết kiệm chung gia đình",
+          "Tiết kiệm cưới vợ",
+          "Tiết kiệm du lịch",
+          "Tiết kiệm du lịch hè",
+          "Tiết kiệm du lịch Đà Nẵng",
+          "Tiết kiệm mua laptop",
+          "Tiết kiệm mua nhà",
+          "Tiết kiệm mua xe máy",
+          "Tiết kiệm mua ô tô",
+          "Tiết kiệm mua điện thoại",
+          "Tiết kiệm nhóm cắm trại",
+          "Tiết kiệm nhóm đi Đà Lạt",
+          "Tiết kiệm quỹ lớp",
+          "Tiết kiệm sửa nhà",
+          "Tiết kiệm tập thể du lịch Thái Lan",
+          "Tiết kiệm tập thể quà cưới",
+          "Vay Ngân hàng",
           "du lịch Đà Nẵng",
           "học ielts",
           "học tiếng Anh",
@@ -150,9 +192,9 @@
           "đổi xe máy",
           "đổi điện thoại"
         ],
-        "accuracy": 0.9994,
-        "weighted_f1": 0.9997,
-        "test_samples": 1783
+        "accuracy": 0.9961,
+        "weighted_f1": 0.9955,
+        "test_samples": 1792
       },
       "enabled": {
         "type": "classifier",
@@ -609,22 +651,34 @@
         "accuracy": 0.9936,
         "weighted_f1": 0.9936,
         "test_samples": 625
+      },
+      "note": {
+        "type": "classifier",
+        "train_samples": 49,
+        "classes": [
+          "challenge",
+          "loan",
+          "saving"
+        ],
+        "accuracy": 1.0,
+        "weighted_f1": 1.0,
+        "test_samples": 10
       }
     },
     "summary": {
-      "trained_fields": 10,
-      "classifier_fields": 9,
+      "trained_fields": 11,
+      "classifier_fields": 10,
       "regressor_fields": 1,
-      "avg_weighted_f1": 0.9796,
-      "avg_accuracy": 0.9777,
-      "dataset_rows": 41652,
-      "labeled_slot_cells": 89317
+      "avg_weighted_f1": 0.9813,
+      "avg_accuracy": 0.9796,
+      "dataset_rows": 41947,
+      "labeled_slot_cells": 89513
     }
   },
   "ner": {
-    "ents_f": 0.0,
-    "ents_p": 0.0,
-    "ents_r": 0.0,
-    "score": 0.0
+    "ents_f": 99.76,
+    "ents_p": 99.71,
+    "ents_r": 99.81,
+    "score": 1.0
   }
 }

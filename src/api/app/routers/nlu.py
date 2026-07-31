@@ -543,7 +543,7 @@ def model_meta():
 def trigger_llm_finetune(epochs: int = 3, lr: float = 2e-4, batch_size: int = 4):
     try:
         import modal
-        f = modal.Function.lookup("expense-ocr-nlu", "train_qwen_model")
+        f = modal.Function.from_name("expense-ocr-nlu", "train_qwen_model")
         # Run asynchronously by spawning a task
         handle = f.spawn(num_epochs=epochs, learning_rate=lr, batch_size=batch_size)
         return {

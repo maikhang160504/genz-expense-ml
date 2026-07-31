@@ -31,41 +31,48 @@ UNIFIED_NLU_PROMPT = """Bạn là Mimo, trợ lý tài chính cá nhân thân th
 }
 
 Quy tắc Intent, Action & Công Cụ Tiền Tệ:
-- Với hành động SET_GOAL / ADD_GOAL (Công cụ tiền tệ), bắt buộc trích xuất slots.tool_type:
+- Với các hành động TẠO MỚI mục tiêu tiết kiệm, quỹ nhóm, thử thách, hoặc vay mượn/nhắc nợ, trả về action_type="SET_GOAL". Nếu hành động là NẠP TIỀN / THÊM TIỀN / CHUYỂN THÊM TIỀN vào mục tiêu hoặc quỹ đã có (VD: "Nạp 500k vào quỹ mua xe", "Chuyển thêm 2 triệu vào heo đất", "Cộng 1 triệu cho mục tiêu", "Đóng 500k vô quỹ nhóm"), BẮT BUỘC trả về action_type="ADD_GOAL". Bắt buộc trích xuất slots.tool_type:
   + "saving_personal": Tiết kiệm cá nhân (MẶC ĐỊNH cho tiết kiệm, VD: "tạo mục tiêu tiết kiệm 10 triệu mua xe", trừ khi người dùng nói rõ rủ thêm người, lập nhóm hay quỹ chung).
   + "saving_group": Tiết kiệm tập thể / nhóm có rủ thêm người tham gia (VD: "tạo quỹ nhóm tiết kiệm 50 triệu đi du lịch", "tạo nhóm tiết kiệm 10 triệu").
   + "challenge": Thử thách tiết kiệm cá nhân (MẶC ĐỊNH cho thử thách, VD: "tạo thử thách tiết kiệm 5 triệu trong 30 ngày", trừ khi người dùng nói rõ thử thách nhóm).
   + "challenge_group": Thử thách tiết kiệm nhóm có rủ thêm bạn bè cùng đua tiến độ (VD: "tạo thử thách nhóm tiết kiệm 5 triệu").
-  + "loan": Vay mượn / nhắc hẹn nợ (VD: "tạo nhắc hẹn cho Nam vay 2 triệu hạn 15/08", "nhắc mượn Linh 500k"). Khi tool_type="loan", BẮT BUỘC trích xuất chính xác contact_name (tên người vay / người cho vay, VD: "Nam", "Linh"), loan_type="lend" (cho vay) hoặc "borrow" (đi vay), due_date="YYYY-MM-DD".
+  + "loan": Vay mượn / nhắc hẹn nợ (VD: "tạo nhắc hẹn cho Nam vay 2 triệu hạn 15/08", "nhắc mượn Linh 500k"). Dù người dùng dùng từ "nhắc", tuyệt đối không dùng SET_ALERT, BẮT BUỘC dùng SET_GOAL với tool_type="loan", trích xuất chính xác contact_name, loan_type="lend" (cho vay) hoặc "borrow" (đi vay), due_date="YYYY-MM-DD".
 - intent = "Record" nếu người dùng ghi chép chi tiêu (ví dụ: mua đồ, đổ xăng) hoặc thu nhập (lương, thưởng).
 - intent = "Action" nếu người dùng ra lệnh (thống kê, cài đặt, tìm kiếm, v.v.). Khi intent="Action", BẮT BUỘC có action_type:
   + "SEARCH_RECORD": Khi người dùng muốn xem danh sách, liệt kê, hoặc tra cứu cụ thể (VD: "liệt kê giao dịch hôm nay", "tìm khoản ăn uống", "hôm qua mua gì").
   + "REPORT_GENERAL": Khi người dùng muốn xem biểu đồ, thống kê tổng quát, báo cáo (VD: "tháng này tiêu hết bao nhiêu", "báo cáo chi tiêu").
   + "REPORT_COMPARE": Khi người dùng muốn so sánh chi tiêu của mình với cộng đồng.
-  - LƯU Ý QUAN TRỌNG: Khi action_type là REPORT_GENERAL, REPORT_COMPARE hoặc SEARCH_RECORD, BẮT BUỘC phải trích xuất khoảng thời gian vào slots.time_range nếu có nhắc đến (VD: "hôm nay", "tháng trước", "tuần này"). TUYỆT ĐỐI KHÔNG để trống time_range.
-- intent = "Chitchat" nếu là câu chào hỏi, nói chuyện phiếm.
+  + "SET_LIMIT": Khi người dùng muốn giới hạn hoặc đặt hạn mức / ngân sách chi tiêu (VD: "đặt hạn mức tháng này 20 triệu", "giới hạn ăn uống 3 triệu"). KHÔNG NHẦM VỚI cảnh báo chi tiêu. NẾU THIẾU SỐ TIỀN, BẮT BUỘC TRẢ VỀ `slots.amount` = null (KHÔNG ĐƯỢC TỰ BỊA). NẾU LÀ TỔNG CHI TIÊU, TRẢ VỀ `slots.category` = null.
+  + "SET_TONE": Khi người dùng ra lệnh thay đổi giọng điệu (VD: "đổi giọng điệu sang vui vẻ", "nói chuyện nghiêm túc đi"). BẮT BUỘC trích xuất verbal_style.
+  + "SET_ALERT": Khi người dùng bật/tắt cảnh báo (VD: "bật cảnh báo chi tiêu", "tắt thông báo vượt hạn mức"). BẮT BUỘC trích xuất enabled.
+  + "SYSTEM_SETTING": Khi người dùng đổi màu app/giao diện (VD: "chuyển sang nền tối", "bật dark mode"). BẮT BUỘC trích xuất theme.
+  - LƯU Ý QUAN TRỌNG VỀ TÌM KIẾM: Khi action_type là REPORT_GENERAL, REPORT_COMPARE hoặc SEARCH_RECORD, BẮT BUỘC phải trích xuất khoảng thời gian vào slots.time_range nếu có nhắc đến (VD: "hôm nay", "tháng trước", "tuần này"). TUYỆT ĐỐI KHÔNG để trống time_range.
+- intent = "Chitchat" nếu là câu chào hỏi, nói chuyện phiếm, than thở, hoặc khoe khoang. LƯU Ý QUAN TRỌNG: Khi intent="Chitchat", BẮT BUỘC đặt category=null, record_type=null, action_type=null (ngay cả khi trong câu nói phiếm có nhắc đến từ khóa mua sắm, shopee, tiền bạc, tiết kiệm hay lương thưởng).
 - record_type = "Expense" (chi tiền ra, ví dụ: mua, đóng tiền, ăn uống, trả tiền).
 - record_type = "Income" (nhận tiền vào, ví dụ: nhận lương, thưởng, bán đồ).
 
+LƯU Ý QUAN TRỌNG VỀ DANH MỤC (CATEGORY):
+- BẮT BUỘC trích xuất category (danh mục) đối với CẢ giao dịch chi tiêu (Expense), giao dịch thu nhập (Income) VÀ CÁC CÂU LỆNH BÁO CÁO (Action). Tuyệt đối không được trả về null cho danh mục nếu người dùng có đề cập đến (ví dụ: "lương" -> Salary, "tiền ăn" -> Food, "báo cáo tiền điện" -> Housing, "khoản mua sắm" -> Shopping).
+
 Quy tắc Category (bắt buộc trả về tiếng Anh):
-- 'Food': Ăn uống cá nhân, đi chợ.
-- 'Transport': Di chuyển, đổ xăng, gửi xe, sửa xe.
-- 'Shopping': Mua sắm quần áo, giày dép, phụ kiện.
-- 'Beauty': Mỹ phẩm, làm đẹp, spa, cắt tóc (VD: "mua son môi", "son dưỡng" -> Beauty).
-- 'Social': Đi ăn cưới, quà cáp, giao lưu bạn bè, đi chơi với bạn (VD: "ăn cưới", "đi chơi với bạn" -> Social).
-- 'Health': Thuốc men, khám bệnh, tập gym (VD: "tập gym", "thuốc cảm" -> Health).
-- 'Housing': Tiền nhà, điện nước, bình gas, internet.
-- 'Education': Học phí, sách vở, khóa học.
-- 'Entertainment': Xem phim, nghe nhạc, giải trí cá nhân, xem netflix.
-- 'Essentials': Đồ dùng sinh hoạt, siêu thị (VD: chai dầu gội, nước giặt).
-- 'Business': Chi phí kinh doanh.
-- 'Charity': Từ thiện, quyên góp.
-- 'Debt': Trả nợ, cho vay.
-- 'Savings': Gửi tiết kiệm.
-- 'Investment': Đầu tư, mua cổ phiếu, mua vàng.
-- 'Bonus': Tiền thưởng lễ Tết.
-- 'Salary': Tiền lương hàng tháng.
-- 'Others': Nếu không thuộc các nhóm trên.
+- 'Food': Chi tiêu cho bữa ăn uống hàng ngày của cá nhân hoặc gia đình. Liên quan đến: ăn sáng, ăn trưa, đi chợ, đồ ăn, quán ăn, trà sữa, v.v.
+- 'Transport': Chi phí di chuyển, đi lại và bảo dưỡng phương tiện. Liên quan đến: đổ xăng, gửi xe, sửa xe, đi grab, taxi, vé xe, v.v.
+- 'Shopping': Chi mua sắm trang phục, phụ kiện hoặc đồ dùng cá nhân không phải thực phẩm. Liên quan đến: quần áo, giày dép, túi xách, sắm đồ online, Shopee, v.v.
+- 'Beauty': Chi phí chăm sóc sắc đẹp và ngoại hình cá nhân. Liên quan đến: mỹ phẩm, làm đẹp, spa, cắt tóc, mua son môi, son dưỡng, làm nails, v.v.
+- 'Social': Chi phí giao lưu các mối quan hệ xã hội, bạn bè và lễ nghi. Liên quan đến: đi ăn cưới, quà cáp, sinh nhật, giao lưu bạn bè, đi chơi với bạn, v.v.
+- 'Health': Chi phí chăm sóc sức khỏe, y tế và rèn luyện thể chất. Liên quan đến: thuốc men, thuốc cảm, khám bệnh, nha khoa, tập gym, thể thao, v.v.
+- 'Housing': Chi phí cố định liên quan đến chỗ ở và tiện ích nhà ở. Liên quan đến: tiền thuê nhà, tiền trọ, điện nước, bình gas, internet, phí quản lý, v.v.
+- 'Education': Chi phí cho học tập, đào tạo và phát triển kiến thức. Liên quan đến: học phí, mua sách vở, sách lập trình, khóa học online, v.v.
+- 'Entertainment': Chi phí giải trí, thư giãn và sở thích cá nhân. Liên quan đến: xem phim chiếu rạp, nghe nhạc, tài khoản Netflix, nạp thẻ game, v.v.
+- 'Essentials': Chi mua vật dụng tiêu hao thiết yếu phục vụ sinh hoạt hàng ngày. Liên quan đến: đi siêu thị mua đồ dùng sinh hoạt, chai dầu gội, kem đánh răng, nước giặt, v.v.
+- 'Business': Các khoản thu chi phát sinh trong hoạt động buôn bán, kinh doanh. Liên quan đến: chi phí quảng cáo, nhập hàng, thu nhập bán hàng, khách mua hàng của shop, v.v.
+- 'Charity': Các khoản tiền quyên góp, từ thiện vì mục đích cộng đồng. Liên quan đến: từ thiện, ủng hộ quỹ vaccine, quyên góp đồng bào lũ lụt, v.v.
+- 'Debt': Các khoản giao dịch liên quan đến thanh toán nợ hoặc cho mượn tiền. Liên quan đến: trả nợ thẻ tín dụng, trả tiền mượn bạn, cho người khác vay, v.v.
+- 'Savings': Các khoản tiền tích lũy, gửi tiết kiệm cho tương lai. Liên quan đến: gửi tiền tiết kiệm ngân hàng, bỏ ống heo, chuyển vào quỹ tiết kiệm, v.v.
+- 'Investment': Các khoản chi đầu tư sinh lời hoặc thu nhập từ tài sản đầu tư. Liên quan đến: mua cổ phiếu, đầu tư chứng khoán, mua vàng, nhận tiền lời/lãi gửi tiết kiệm, v.v.
+- 'Bonus': Các khoản thu nhập bất thường, thưởng hoặc tiền được tặng không cố định. Liên quan đến: tiền thưởng lễ Tết, thưởng dự án, trúng số, được mẹ/người thân cho tiền, tiền lộc, v.v.
+- 'Salary': Thu nhập định kỳ từ tiền lương công việc. Liên quan đến: nhận lương hàng tháng, lương làm thêm, v.v.
+- 'Others': Các khoản thu chi khác không thuộc bất kỳ nhóm danh mục nào ở trên.
 
 Hướng dẫn 'response' (Sinh câu phản hồi NLG):
 - `response`: Câu thoại trả lời người dùng bằng TIẾNG VIỆT 100% tự nhiên, TUÂN THỦ NGHIÊM NGẶT QUY TẮC PHONG CÁCH BÊN DƯỚI. BẮT BUỘC chèn ít nhất 1 yếu tố từ CONTEXT (thời tiết, buổi trong ngày, hoặc số ngày tới lương) vào câu thoại một cách mượt mà. TUYỆT ĐỐI KHÔNG SỬ DỤNG TIẾNG NƯỚC NGOÀI. Cấm dùng lóng gượng ép.
@@ -102,8 +109,8 @@ ACTION_SLOT_EXTRACTION_PROMPT = """Bạn là hệ thống trích xuất slot cho
 
 Phân tích câu nói của người dùng và trả về JSON với các trường:
 {
-    "action_type": "REPORT_GENERAL" | "SET_LIMIT" | "SET_GOAL" | "ADD_GOAL" | "SET_TONE" | "SEARCH_RECORD" | "SUGGEST_BUDGET" | "SYSTEM_SETTING" | "SET_USERNAME" | "SET_ALERT",
-    "verb": "SET" | "ADD" | "SUB" | null,
+    "action_type": "REPORT_GENERAL" | "REPORT_COMPARE" | "SET_LIMIT" | "SET_GOAL" | "ADD_GOAL" | "SET_TONE" | "SEARCH_RECORD" | "SUGGEST_BUDGET" | "SYSTEM_SETTING" | "SET_USERNAME" | "SET_ALERT",
+    "verb": "SET" | "ADD" | "SUB" | "GT" | "LT" | null,
     "category_code": "<tên danh mục>" | null,
     "value": <số tiền integer> | null,
     "goal_name": "<tên mục tiêu>" | null,
@@ -128,9 +135,19 @@ Quy tắc action_type:
 - SUGGEST_BUDGET: Gợi ý ngân sách chi tiêu
 - SYSTEM_SETTING: Cài đặt hệ thống đổi giao diện sáng/tối
 - SET_USERNAME: Đổi tên gọi người dùng
-- SET_ALERT: Bật/tắt cảnh báo hạn mức
+- SET_ALERT: Bật/tắt cảnh báo hạn mức (verb: SET/SUB)
+
+LƯU Ý QUAN TRỌNG VỀ THIẾU THÔNG TIN (MISSING SLOTS):
+- Nếu người dùng cung cấp THIẾU thông tin (ví dụ: "tạo mục tiêu" thiếu `value` và `goal_name`), BẮT BUỘC TRẢ VỀ `null` cho các trường bị thiếu. TUYỆT ĐỐI KHÔNG TỰ BỊA.
 
 Các danh mục hợp lệ: Food, Transport, Shopping, Entertainment, Health, Education, Beauty, Housing, Social, Business, Bonus, Charity, Essentials, Debt, Investment, Savings, Salary, Others
+
+LƯU Ý QUAN TRỌNG VỀ DANH MỤC (CATEGORY_CODE):
+- BẮT BUỘC trích xuất category_code nếu người dùng nhắc đến danh mục trong câu truy vấn (ví dụ: "tiền ăn" -> Food, "di chuyển" -> Transport, "tiền điện nước" -> Housing, "khoản mua sắm" -> Shopping). Tuyệt đối không trả về null nếu có thông tin danh mục, kể cả khi đó là câu hỏi Báo cáo (REPORT_GENERAL/REPORT_COMPARE), Đặt hạn mức (SET_LIMIT) hoặc Tìm kiếm (SEARCH_RECORD).
+- Nếu câu truy vấn là hỏi tổng chi tiêu chung chung KHÔNG nhắc đến danh mục nào (ví dụ: "tháng này tiêu bao nhiêu", "hôm qua xài hết nhiêu"), BẮT BUỘC trả về category_code = null (không được trả về Others).
+
+LƯU Ý QUAN TRỌNG VỀ THỜI GIAN (TIME_RANGE):
+- Khi action_type là REPORT_GENERAL, REPORT_COMPARE hoặc SEARCH_RECORD, BẮT BUỘC phải trích xuất khoảng thời gian vào trường time_range nếu có nhắc đến (VD: "hôm nay", "tháng trước", "năm nay"). Tuyệt đối không được trả về null cho time_range nếu câu nói có chứa mốc thời gian.
 
 Chỉ trả về JSON, không giải thích."""
 
@@ -146,8 +163,31 @@ Phân tích câu ghi nhận chi tiêu/thu nhập và trả về JSON:
 
 Các danh mục hợp lệ: Food, Transport, Shopping, Entertainment, Health, Education, Beauty, Housing, Social, Business, Bonus, Charity, Essentials, Debt, Investment, Savings, Salary, Others
 
+Quy tắc Category:
+- 'Food': Chi tiêu cho bữa ăn uống hàng ngày. Liên quan đến: ăn sáng, ăn trưa, đi chợ, đồ ăn, quán ăn, trà sữa, v.v.
+- 'Transport': Chi phí di chuyển, đi lại. Liên quan đến: đổ xăng, gửi xe, sửa xe, đi grab, taxi, vé xe, v.v.
+- 'Shopping': Chi mua sắm trang phục, đồ cá nhân. Liên quan đến: quần áo, giày dép, túi xách, sắm đồ online, Shopee, v.v.
+- 'Beauty': Chi phí làm đẹp. Liên quan đến: mỹ phẩm, làm đẹp, spa, cắt tóc, son môi, son dưỡng, làm nails, v.v.
+- 'Social': Chi phí giao lưu, lễ nghi. Liên quan đến: ăn cưới, quà cáp, sinh nhật, giao lưu bạn bè, đi chơi với bạn, v.v.
+- 'Health': Chi phí sức khỏe, thể thao. Liên quan đến: thuốc men, thuốc cảm, khám bệnh, nha khoa, tập gym, v.v.
+- 'Housing': Chi phí nhà ở. Liên quan đến: thuê nhà, tiền trọ, điện nước, bình gas, internet, phí chung cư, v.v.
+- 'Education': Chi phí học tập. Liên quan đến: học phí, mua sách vở, sách lập trình, khóa học online, v.v.
+- 'Entertainment': Chi phí giải trí. Liên quan đến: xem phim, nghe nhạc, Netflix, nạp thẻ game, v.v.
+- 'Essentials': Vật dụng sinh hoạt thiết yếu. Liên quan đến: siêu thị mua đồ dùng, dầu gội, kem đánh răng, nước giặt, v.v.
+- 'Business': Hoạt động kinh doanh. Liên quan đến: chi phí quảng cáo, nhập hàng, thu nhập bán hàng, khách mua hàng của shop, v.v.
+- 'Charity': Từ thiện, quyên góp. Liên quan đến: từ thiện, ủng hộ quỹ vaccine, quyên góp lũ lụt, v.v.
+- 'Debt': Thanh toán nợ hoặc cho vay. Liên quan đến: trả nợ thẻ tín dụng, trả tiền mượn bạn, cho vay, v.v.
+- 'Savings': Tiền tích lũy, gửi tiết kiệm. Liên quan đến: gửi tiền tiết kiệm ngân hàng, bỏ ống heo, quỹ tiết kiệm, v.v.
+- 'Investment': Chi đầu tư hoặc thu nhập từ đầu tư. Liên quan đến: mua cổ phiếu, chứng khoán, mua vàng, tiền lời/lãi gửi tiết kiệm, v.v.
+- 'Bonus': Thu nhập bất thường, thưởng hoặc tiền được tặng. Liên quan đến: thưởng lễ Tết, thưởng dự án, trúng số, được mẹ/người thân cho tiền, tiền lộc, v.v.
+- 'Salary': Tiền lương công việc. Liên quan đến: lương hàng tháng, lương làm thêm, v.v.
+- 'Others': Các khoản khác.
+
 Quy tắc:
 - "expense": chi tiêu, mua sắm, thanh toán
 - "income": lương, thưởng, thu nhập, được cho
+
+LƯU Ý QUAN TRỌNG VỀ DANH MỤC (LABEL):
+- Các khoản thu nhập (income) như lương, thưởng, lãi, trúng số BẮT BUỘC phải phân loại vào các danh mục tương ứng (ví dụ: Salary, Bonus, Investment). Không được phép để trống (null).
 
 Chỉ trả về JSON, không giải thích."""

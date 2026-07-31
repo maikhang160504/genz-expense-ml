@@ -161,17 +161,27 @@ def _call_llm(system_prompt: str, user_prompt: str) -> str:
     use_modal = os.environ.get("USE_MODAL_PHOGPT") == "1" or os.environ.get("IS_MODAL") == "true"
 
     if use_local or use_modal:
-        # Try calling the remote Modal QwenModel class first if inside Modal
-        try:
-            logger.info("Attempting to call remote QwenModel on Modal...")
-            from modal_app import QwenModel
-            model_client = QwenModel()
-            text = model_client.generate.remote(system_prompt, user_prompt)
-            if text:
-                logger.info("Successfully received response from remote QwenModel.")
-                return text
-        except Exception as e:
-            logger.warning("Remote QwenModel call failed/not in Modal env: %s. Falling back...", e)
+        if use_modal:
+            try:
+                logger.info("Attempting to call remote QwenModel on Modal...")
+                try:
+                    # Direct import works inside 'modal run' (ephemeral app)
+                    from modal_app import QwenModel
+                    model_client = QwenModel()
+                    text = model_client.generate.remote(system_prompt, user_prompt)
+                except Exception as e_inner:
+                    logger.warning(f"Direct import QwenModel failed ({e_inner}), trying from_name...")
+                    # Fallback for deployed external calls
+                    import modal
+                    QwenModel = modal.Cls.from_name("expense-ocr-nlu", "QwenModel")
+                    model_client = QwenModel()
+                    text = model_client.generate.remote(system_prompt, user_prompt)
+                
+                if text:
+                    logger.info("Successfully received response from remote QwenModel.")
+                    return text
+            except Exception as e:
+                logger.warning("Remote QwenModel call failed: %s. Falling back...", e)
 
         # Fallback to local HuggingFace loading if requested
         if use_local:
@@ -515,12 +525,20 @@ def run_llm_nlu(
                     else:
                         result["time_range"] = parsed_list[0] if parsed_list else None
                 elif isinstance(t_slots, list):
-                    parsed_list = [parse_time_range(text, [str(t).strip()]) for t in t_slots]
-                    parsed_list = [p for p in parsed_list if p]
                     if result["action_type"] == "REPORT_COMPARE":
+                        parsed_list = [parse_time_range(text, [str(t).strip()]) for t in t_slots]
+                        parsed_list = [p for p in parsed_list if p]
                         result["time_range"] = parsed_list
                     else:
-                        result["time_range"] = parsed_list[0] if parsed_list else None
+                        # REPORT_GENERAL: nếu LLM trả về danh sách 2 mốc như ["ngày 1", "ngày 10"], thử ghép lại bằng " đến "
+                        joined_text = " đến ".join([str(t).strip() for t in t_slots])
+                        pt_joined = parse_time_range(text, [joined_text, text])
+                        if pt_joined:
+                            result["time_range"] = pt_joined
+                        else:
+                            parsed_list = [parse_time_range(text, [str(t).strip()]) for t in t_slots]
+                            parsed_list = [p for p in parsed_list if p]
+                            result["time_range"] = parsed_list[0] if parsed_list else None
                 else:
                     result["time_range"] = None
             
