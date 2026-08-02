@@ -146,21 +146,24 @@ class ExpenseService:
         except Exception as exc:
             logger.warning("NLU model classification for bill failed: %s", exc)
 
-        # Ưu tiên 1: Kiểm tra brand routing từ merchant hoặc text hóa đơn
+        # Ưu tiên 1: Sử dụng category từ mô hình ngôn ngữ lớn (NLU/LLM) nếu hợp lệ và cụ thể
+        # Ưu tiên 2: Kiểm tra brand routing từ điển thương hiệu
         from receipt_ocr.brand_routing import route_brand_category
         routed_brand_cat = route_brand_category(merchant) or route_brand_category(ocr_response.text)
 
-        # Ưu tiên 2: Sử dụng category từ OCR suggestion nếu hợp lệ và cụ thể
+        # Ưu tiên 3: Sử dụng category từ OCR suggestion nếu hợp lệ và cụ thể
         suggestion_cat = suggestion.category if (suggestion.category and suggestion.category != "Others") else None
 
-        final_category = routed_brand_cat or nlu_category or suggestion_cat or "Food"
+        final_category = nlu_category or routed_brand_cat or suggestion_cat or "Food"
 
         extracted = ExpenseExtracted(
             amount=suggestion.amount,
             category=final_category,
-            note=merchant or (nlu_response.item if nlu_response else None),
+            note=merchant or (nlu_response.item if nlu_response else None) or "Hóa đơn bán lẻ",
             record_type="Expense" if suggestion.amount else None,
             confidence=suggestion.confidence,
+            aiComment=nlu_response.nlg_response if nlu_response else None,
+            mascotMood=nlu_response.mimo_emotion if nlu_response else None,
         )
         return ExpenseFromImageResponse(
             extracted=extracted,

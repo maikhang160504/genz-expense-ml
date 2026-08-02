@@ -41,7 +41,7 @@ Quy tắc Intent, Action & Công Cụ Tiền Tệ:
 - intent = "Action" nếu người dùng ra lệnh (thống kê, cài đặt, tìm kiếm, v.v.). Khi intent="Action", BẮT BUỘC có action_type:
   + "SEARCH_RECORD": Khi người dùng muốn xem danh sách, liệt kê, hoặc tra cứu cụ thể (VD: "liệt kê giao dịch hôm nay", "tìm khoản ăn uống", "hôm qua mua gì").
   + "REPORT_GENERAL": Khi người dùng muốn xem biểu đồ, thống kê tổng quát, báo cáo (VD: "tháng này tiêu hết bao nhiêu", "báo cáo chi tiêu").
-  + "REPORT_COMPARE": Khi người dùng muốn so sánh chi tiêu của mình với cộng đồng.
+  + "REPORT_COMPARE": Khi người dùng muốn so sánh chi tiêu của mình với thời gian trước(thảng trước, tuần trước, tuần vừa rồi,...).
   + "SET_LIMIT": Khi người dùng muốn giới hạn hoặc đặt hạn mức / ngân sách chi tiêu (VD: "đặt hạn mức tháng này 20 triệu", "giới hạn ăn uống 3 triệu"). KHÔNG NHẦM VỚI cảnh báo chi tiêu. NẾU THIẾU SỐ TIỀN, BẮT BUỘC TRẢ VỀ `slots.amount` = null (KHÔNG ĐƯỢC TỰ BỊA). NẾU LÀ TỔNG CHI TIÊU, TRẢ VỀ `slots.category` = null.
   + "SET_TONE": Khi người dùng ra lệnh thay đổi giọng điệu (VD: "đổi giọng điệu sang vui vẻ", "nói chuyện nghiêm túc đi"). BẮT BUỘC trích xuất verbal_style.
   + "SET_ALERT": Khi người dùng bật/tắt cảnh báo (VD: "bật cảnh báo chi tiêu", "tắt thông báo vượt hạn mức"). BẮT BUỘC trích xuất enabled.
@@ -138,7 +138,7 @@ Quy tắc action_type:
 - SET_ALERT: Bật/tắt cảnh báo hạn mức (verb: SET/SUB)
 
 LƯU Ý QUAN TRỌNG VỀ THIẾU THÔNG TIN (MISSING SLOTS):
-- Nếu người dùng cung cấp THIẾU thông tin (ví dụ: "tạo mục tiêu" thiếu `value` và `goal_name`), BẮT BUỘC TRẢ VỀ `null` cho các trường bị thiếu. TUYỆT ĐỐI KHÔNG TỰ BỊA.
+- Nếu người dùng cung cấp THIẾU thông tin (ví dụ: "SET_GOAL" thiếu `value` và `goal_name`), BẮT BUỘC TRẢ VỀ `null` cho các trường bị thiếu. TUYỆT ĐỐI KHÔNG TỰ BỊA.
 
 Các danh mục hợp lệ: Food, Transport, Shopping, Entertainment, Health, Education, Beauty, Housing, Social, Business, Bonus, Charity, Essentials, Debt, Investment, Savings, Salary, Others
 
