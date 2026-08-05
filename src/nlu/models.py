@@ -18,44 +18,31 @@ from src.config import settings
 _PATCHED_TOKENIZER = False
 
 
-def _registry_inference_backend() -> str:
-    from pathlib import Path
-    reg_path = settings.TEXT_NLU_DIR / "models" / "nlu_model_registry.json"
-    storage_path = Path("/storage/nlu_models") / "nlu_model_registry.json"
-    if storage_path.exists() and storage_path.is_file():
-        reg_path = storage_path
+def get_intent_backend() -> str:
+    from src.api.app.services.nlu_registry import get_intent_backend as _get
+    from src.config import settings
+    return _get(settings.TEXT_NLU_DIR.parent)
 
-    if not reg_path.is_file():
-        return "llm"
-    try:
-        data = json.loads(reg_path.read_text(encoding="utf-8"))
-        backend = str(data.get("inference_backend", "llm")).strip().lower()
-        if backend in {"encoder", "phobert"}:
-            return "encoder"
-        if backend == "llm":
-            return "llm"
-        if backend == "tfidf":
-            return "tfidf"
-    except Exception:
-        pass
-    return "llm"
+def get_category_backend() -> str:
+    from src.api.app.services.nlu_registry import get_category_backend as _get
+    from src.config import settings
+    return _get(settings.TEXT_NLU_DIR.parent)
 
-
-def use_encoder_runtime() -> bool:
-    """TF-IDF by default; encoder when registry or NLU_USE_ENCODER=1."""
+def use_intent_encoder_runtime() -> bool:
     env = os.environ.get("NLU_USE_ENCODER", "").strip().lower()
     if env in ("1", "true", "yes"):
         return True
     if env in ("0", "false", "no"):
         return False
-    return _registry_inference_backend() == "encoder"
+    return get_intent_backend() == "encoder"
 
-
-def get_inference_backend() -> str:
-    backend = _registry_inference_backend()
-    if backend == "llm":
-        return "llm"
-    return "encoder" if use_encoder_runtime() else "tfidf"
+def use_category_encoder_runtime() -> bool:
+    env = os.environ.get("NLU_USE_ENCODER", "").strip().lower()
+    if env in ("1", "true", "yes"):
+        return True
+    if env in ("0", "false", "no"):
+        return False
+    return get_category_backend() == "encoder"
 
 
 def _ensure_pickled_tokenizer() -> None:
@@ -104,10 +91,10 @@ def _get_path(default_path: Path) -> Path:
 
 def load_intent_model():
     """Production: TF-IDF only. Encoder only if ``NLU_USE_ENCODER=1``. LLM backend skips local models."""
-    if get_inference_backend() == "llm":
+    if get_intent_backend() == "llm":
         return {"backend": "llm"}
     intent_enc = _get_path(settings.INTENT_ENCODER_PATH)
-    if use_encoder_runtime() and intent_enc.is_file():
+    if use_intent_encoder_runtime() and intent_enc.is_file():
         return _load_encoder(intent_enc)
     intent_model = _get_path(settings.MODEL_PATH)
     if intent_model.is_file():
@@ -116,10 +103,10 @@ def load_intent_model():
 
 
 def load_category_model():
-    if get_inference_backend() == "llm":
+    if get_category_backend() == "llm":
         return {"backend": "llm"}
     cat_enc = _get_path(settings.CATEGORY_ENCODER_PATH)
-    if use_encoder_runtime() and cat_enc.is_file():
+    if use_category_encoder_runtime() and cat_enc.is_file():
         return _load_encoder(cat_enc)
     cat_model = _get_path(settings.CATEGORY_MODEL_PATH)
     if cat_model.is_file():
@@ -128,10 +115,10 @@ def load_category_model():
 
 
 def load_action_type_model():
-    if get_inference_backend() == "llm":
+    if get_intent_backend() == "llm":
         return {"backend": "llm"}
     act_enc = _get_path(settings.ACTION_TYPE_ENCODER_PATH)
-    if use_encoder_runtime() and act_enc.is_file():
+    if use_intent_encoder_runtime() and act_enc.is_file():
         return _load_encoder(act_enc)
     act_model = _get_path(settings.ACTION_TYPE_MODEL_PATH)
     if act_model.is_file():
@@ -140,7 +127,7 @@ def load_action_type_model():
 
 
 def load_action_slots_model():
-    if get_inference_backend() == "llm":
+    if get_intent_backend() == "llm":
         return {"backend": "llm"}
     from src.nlu.action_slots import load_action_slots_model as _load
 
@@ -152,10 +139,10 @@ def load_action_slots_model():
 
 
 def load_record_type_model():
-    if get_inference_backend() == "llm":
+    if get_intent_backend() == "llm":
         return {"backend": "llm"}
     rec_enc = _get_path(settings.RECORD_TYPE_ENCODER_PATH)
-    if use_encoder_runtime() and rec_enc.is_file():
+    if use_intent_encoder_runtime() and rec_enc.is_file():
         return _load_encoder(rec_enc)
     rec_model = _get_path(settings.RECORD_TYPE_MODEL_PATH)
     if rec_model.is_file():

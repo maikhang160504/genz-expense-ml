@@ -205,26 +205,9 @@ def _call_llm(system_prompt: str, user_prompt: str) -> str:
             if text:
                 return text
         except Exception as e:
-            logger.warning("Local LLM call failed: %s. Falling back to API...", e)
+            logger.warning("Local LLM call failed: %s.", e)
 
-    try:
-        from src.llm.gemini_keys import call_gemini_with_key_fallback
-        from pipeline.llm_module import extract_chat_text
-        gemini_model = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash")
-        payload = {
-            "systemInstruction": system_prompt,
-            "contents": [{"parts": [{"text": user_prompt}]}],
-            "generationConfig": {
-                "responseMimeType": "application/json",
-                "temperature": 0.1
-            }
-        }
-        logger.info("Calling Gemini key rotation fallback for NLU...")
-        resp = call_gemini_with_key_fallback(gemini_model, payload)
-        return extract_chat_text(resp)
-    except Exception as e:
-        logger.error("All LLM NLU calls failed: %s", e)
-        return ""
+    raise RuntimeError("Qwen2.5 LLM không khả dụng. Kiểm tra Modal (modal serve) hoặc local server.")
 
 
 def classify_intent_llm(
@@ -506,6 +489,7 @@ def run_llm_nlu(
                 "mascot_mood": parsed.get("emotion") or "neutral",
                 "nlg_response": _sanitize_nlg_response(parsed.get("response") or "Mimo đã ghi nhận rồi nha."),
                 "suggested_actions": parsed.get("suggested_actions") or (["Thêm giao dịch", "Xem báo cáo", "Quét hóa đơn"] if intent == "Chitchat" else None),
+                "llm_json": parsed,
                 "backend": "llm_unified"
             }
             if result["action_type"] in ("REPORT_GENERAL", "REPORT_COMPARE"):
@@ -559,3 +543,273 @@ def run_llm_nlu(
         "nlg_response": "Mimo gặp chút trục trặc kết nối rồi, bạn thử lại sau nha.",
         "backend": "llm_fallback"
     }
+
+
+# ─── KẾ HOẠCH 2: Stage 2 — Rule-based LLM (run_llm_nlu_v2) ─────────────────
+# Thay thế UNIFIED_NLU_PROMPT monolithic bằng 3 rule block riêng biệt
+# (record_rule / action_rule / chitchat_rule) được load từ llm_rules.json.
+# Luồng: Stage 1 classifier → chọn rule đúng → inject persona + relationship
+# → gọi Qwen → parse JSON → trả kết quả chuẩn hóa.
+
+_LLM_RULES_CACHE: dict | None = None
+
+
+def _load_llm_rules() -> dict:
+    """Load và cache llm_rules.json. Chứa record_rule, action_rule, chitchat_rule, action_slot_schema."""
+    global _LLM_RULES_CACHE
+    if _LLM_RULES_CACHE is not None:
+        return _LLM_RULES_CACHE
+    try:
+        from pathlib import Path
+        rules_path = Path(__file__).resolve().parent.parent / "prompts" / "llm_rules.json"
+        with open(rules_path, "r", encoding="utf-8") as f:
+            _LLM_RULES_CACHE = json.load(f)
+        logger.info("Loaded llm_rules.json successfully.")
+    except Exception as e:
+        logger.error("Error loading llm_rules.json: %s", e)
+        _LLM_RULES_CACHE = {}
+    return _LLM_RULES_CACHE
+
+
+def _build_persona_addition(nlg_persona: str | None, prompts_config: dict) -> str:
+    """Inject persona từ prompts.json → emotions vào cuối system prompt.
+    
+    Cấu trúc: [QUY TẮC PHONG CÁCH — Persona: KEY]
+               <system> + hướng dẫn viết response + từ lóng
+    """
+    if not nlg_persona:
+        return ""
+    emotions = prompts_config.get("emotions", {})
+    persona_key = nlg_persona.lower()
+    if persona_key in emotions:
+        cfg = emotions[persona_key]
+        sys_msg = cfg.get("system", "")
+        user_guide = cfg.get("user", "")
+        slangs = ", ".join(cfg.get("slang_pool", []))
+        return (
+            f"\n\n[QUY TẮC PHONG CÁCH — Persona: {persona_key.upper()}]\n"
+            f"{sys_msg}\n"
+            f"Hướng dẫn viết response: {user_guide}\n"
+            f"Từ lóng được phép dùng (linh hoạt, không lặp): {slangs}"
+        )
+    return f"\n\n[QUY TẮC PHONG CÁCH — Persona: {nlg_persona}]\nHãy đóng vai và trả lời theo phong cách này."
+
+
+def _build_relationship_addition(text: str, prompts_config: dict) -> str:
+    """Phát hiện từ khóa quan hệ trong câu người dùng và inject rule tương ứng.
+    
+    Ưu tiên cao nhất — ghi đè lên cả persona (VD: dù persona là dan_doi,
+    vẫn KHÔNG khịa khi nhắc đến cha mẹ).
+    """
+    text_lower = text.lower()
+    rel = prompts_config.get("relationship_override", {})
+
+    cha_me_keywords = [
+        "cha", "mẹ", "me", "ba", "má", "bố", "ông", "bà",
+        "anh hai", "chị hai", "anh ba", "chị ba",
+        "ông bô", "bà bô", "ông nội", "bà nội",
+        "ông ngoại", "bà ngoại",
+        "mom", "mommy", "momy", "má mỳ",
+        "dad", "daddy", "dady",
+        "cậu", "mợ", "dì", "chú", "thím", "bác",
+    ]
+    if any(kw in text_lower for kw in cha_me_keywords):
+        rule = rel.get("CHA_ME", {}).get("rule", "")
+        if rule:
+            return f"\n\n[ĐẶC BIỆT — QUAN HỆ NGƯỜI THÂN]: {rule}"
+
+    nguoi_yeu_keywords = [
+        "người yêu", "bồ", "vợ", "chồng", "gấu", "crush",
+        "ny", "cr", "vk", "ck",
+        "bã xã", "bà xã", "ông xã",
+        "iu", "babe", "baby",
+        "người thương", "nửa kia",
+    ]
+    if any(kw in text_lower for kw in nguoi_yeu_keywords):
+        nguoi_yeu = rel.get("NGUOI_YEU", {})
+        is_expense = any(kw in text_lower for kw in
+            ["mua", "tặng", "chuyển", "trả", "bao", "đãi", "đưa", "chi", "tiêu", "mời"])
+        if is_expense and nguoi_yeu.get("rule_happy"):
+            return f"\n\n[ĐẶC BIỆT — QUAN HỆ NGƯỜI YÊU]: {nguoi_yeu['rule_happy']}"
+        elif nguoi_yeu.get("rule_sad"):
+            return f"\n\n[ĐẶC BIỆT — QUAN HỆ NGƯỜI YÊU]: {nguoi_yeu['rule_sad']}"
+    return ""
+
+
+def _build_system_prompt(intent: str, nlg_persona: str | None, text: str) -> str:
+    """Ghép system prompt hoàn chỉnh: rule đúng theo intent + persona + relationship.
+    
+    Thứ tự ưu tiên: Base rule → Persona injection → Relationship injection (cao nhất).
+    """
+    rules = _load_llm_rules()
+    prompts = _load_prompts_json()
+
+    intent_lower = (intent or "").strip().lower()
+    if intent_lower == "record":
+        base_rule = rules.get("record_rule", {}).get("system", "")
+    elif intent_lower == "action":
+        base_rule = rules.get("action_rule", {}).get("system", "")
+    else:
+        base_rule = rules.get("chitchat_rule", {}).get("system", "")
+
+    persona_block = _build_persona_addition(nlg_persona, prompts)
+    relationship_block = _build_relationship_addition(text, prompts)
+
+    return base_rule + persona_block + relationship_block
+
+
+def run_llm_nlu_v2(
+    text: str,
+    context_metadata: dict[str, Any] | None = None,
+    nlg_persona: str | None = None,
+    forced_intent: str | None = None,
+    override_prompt: str | None = None,
+) -> dict[str, Any]:
+    """Stage 2 — Gọi Qwen với rule đúng theo intent (thay thế run_llm_nlu cũ).
+    
+    Sử dụng llm_rules.json thay vì UNIFIED_NLU_PROMPT monolithic.
+    Nhận forced_intent để hỗ trợ caller_context=addstory (bỏ qua Stage 1, force Record).
+    
+    Args:
+        text: Câu nói của người dùng.
+        context_metadata: Ngữ cảnh hệ thống (budget, username, time_of_day, ...).
+        nlg_persona: Persona NLG (dui_de, dan_doi, kho_tinh, ngot_ngao, ...).
+        forced_intent: Nếu không None, bỏ qua phân loại intent, dùng giá trị này.
+                       Dùng khi caller_context == "addstory" để force intent = "Record".
+        override_prompt: System prompt tùy biến từ giao diện test.
+    
+    Returns:
+        Dict chuẩn hóa giống run_llm_nlu, backend = "llm_v2".
+    """
+    try:
+        # Xác định intent: nếu có forced_intent thì dùng ngay, không cần classify
+        if forced_intent:
+            intent = forced_intent
+            logger.info("[run_llm_nlu_v2] forced_intent=%s, skip Stage 1.", intent)
+        else:
+            # Stage 1 classify intent bằng LLM (chỉ dùng trong v2 nếu không có kết quả TF-IDF)
+            intent, _ = classify_intent_llm(text)
+            logger.info("[run_llm_nlu_v2] classified intent=%s", intent)
+
+        # Build system prompt theo rule đúng với intent (hoặc override_prompt nếu có)
+        if override_prompt:
+            system_prompt = override_prompt
+        else:
+            system_prompt = _build_system_prompt(intent, nlg_persona, text)
+
+
+        # Build user prompt với context metadata
+        if context_metadata:
+            context_meta_str = json.dumps(context_metadata, ensure_ascii=False)
+            user_prompt = f"Ngữ cảnh hệ thống (CONTEXT_META): {context_meta_str}\nCâu thoại của người dùng: {text}"
+        else:
+            user_prompt = f"Ngữ cảnh hệ thống (CONTEXT_META): null\nCâu thoại của người dùng: {text}"
+
+        response = _call_llm(system_prompt=system_prompt, user_prompt=user_prompt)
+        parsed = _parse_llm_json(str(response))
+
+        if parsed:
+            slots = parsed.get("slots") or {}
+
+            # Normalize record_type
+            raw_record_type = parsed.get("record_type")
+            if not raw_record_type or raw_record_type not in ("Income", "Expense"):
+                raw_record_type = "Expense"
+
+            # Normalize action_type
+            act_type = parsed.get("action_type") if intent == "Action" else None
+
+            # Build kết quả chuẩn hóa
+            return {
+                **parsed,
+                "intent": intent,
+                "intent_confidence": 1.0,
+                "text": text,
+                "item": slots.get("item"),
+                "category": parsed.get("category") or slots.get("category"),
+                "amount": parsed.get("amount") or slots.get("amount") or slots.get("value") or 0,
+                "clean_content": parsed.get("clean_content") or text,
+                "record_type": raw_record_type if intent == "Record" else None,
+                "action_type": act_type,
+                "action_details": slots if intent == "Action" else {},
+                "time_range": slots.get("time_range"),
+                "mimo_emotion": parsed.get("emotion") or "neutral",
+                "llm_emotion": parsed.get("emotion") or "neutral",
+                "mascot_mood": parsed.get("emotion") or "neutral",
+                "nlg_response": _sanitize_nlg_response(
+                    parsed.get("response") or "Mimo đã ghi nhận rồi nha."
+                ),
+                "suggested_actions": parsed.get("suggested_actions") or (
+                    ["Thêm giao dịch", "Xem báo cáo", "Quét hóa đơn"]
+                    if intent == "Chitchat"
+                    else None
+                ),
+                "llm_json": parsed,
+                "backend": "llm_v2",
+                "rule_used": f"{(intent or 'chitchat').strip().lower()}_rule",
+            }
+
+            # Parse time_range cho REPORT_* và SEARCH_RECORD
+            if intent == "Action" and act_type in ("REPORT_GENERAL", "REPORT_COMPARE", "SEARCH_RECORD"):
+                try:
+                    from src.nlu.time_parser import parse_time_range
+                    import re
+                    t_slots = slots.get("time_range")
+                    if isinstance(t_slots, str):
+                        if act_type == "REPORT_COMPARE":
+                            parts = re.split(r'(?i)\s+vs\s+|\s+với\s+', t_slots)
+                            result["time_range"] = [
+                                parse_time_range(text, [p.strip()]) for p in parts
+                                if parse_time_range(text, [p.strip()])
+                            ] or parse_time_range(text, [t_slots])
+                        else:
+                            result["time_range"] = parse_time_range(text, [t_slots])
+                    elif isinstance(t_slots, list) and t_slots:
+                        result["time_range"] = parse_time_range(text, t_slots)
+                    else:
+                        result["time_range"] = parse_time_range(text, [])
+                except Exception as e:
+                    logger.warning("[run_llm_nlu_v2] time_range parse error: %s", e)
+
+            # Check missing slots theo action_slot_schema
+            if intent == "Action" and act_type:
+                try:
+                    rules = _load_llm_rules()
+                    schema = rules.get("action_slot_schema", {}).get(act_type, {})
+                    missing = []
+                    for field in schema.get("missing_check", []):
+                        val = slots.get(field)
+                        if val is None or val == "":
+                            missing.append(field)
+                    # Conditional check cho loan
+                    cond = schema.get("conditional", {})
+                    if "tool_type == loan" in cond and slots.get("tool_type") == "loan":
+                        for field in cond["tool_type == loan"]:
+                            if not slots.get(field):
+                                missing.append(field)
+                    if missing:
+                        result["missing_slots"] = missing
+                        logger.info("[run_llm_nlu_v2] missing_slots for %s: %s", act_type, missing)
+                except Exception as e:
+                    logger.warning("[run_llm_nlu_v2] missing_slots check error: %s", e)
+
+            return result
+
+    except Exception as e:
+        logger.error("[run_llm_nlu_v2] failed: %s", e)
+
+    return {
+        "intent": "Chitchat",
+        "intent_confidence": 0.0,
+        "text": text,
+        "category": None,
+        "amount": None,
+        "record_type": None,
+        "action_type": None,
+        "action_details": {},
+        "mimo_emotion": "neutral",
+        "nlg_response": "Mimo gặp chút trục trặc kết nối rồi, bạn thử lại sau nha.",
+        "backend": "llm_v2_fallback",
+        "rule_used": "chitchat_rule",
+    }
+

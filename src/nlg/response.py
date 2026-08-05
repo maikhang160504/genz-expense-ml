@@ -43,20 +43,11 @@ def _parse_json_text(text: str) -> dict | None:
         return None
 
 
-def parse_llm_response(response: dict, source: str) -> dict | None:
+def parse_llm_response(response: dict | str, source: str = "qwen") -> dict | None:
     if not response:
         return None
-    if source == "gemini":
-        parsed = response.get("parsed")
-        if isinstance(parsed, dict):
-            return parsed
-        candidates = response.get("candidates", [])
-        if candidates:
-            parts = candidates[0].get("content", {}).get("parts", [])
-            if parts:
-                return _parse_json_text(parts[0].get("text", ""))
-        return None
-
+    if isinstance(response, str):
+        return _parse_json_text(response)
     if source == "llama":
         choices = response.get("choices", [])
         if choices:

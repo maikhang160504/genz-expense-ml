@@ -146,6 +146,7 @@ class NLUService:
                     nlg_persona=persona,
                     user_id=request.user_id,
                     user_corrections=corrections,
+                    caller_context=getattr(request, "caller_context", "chat") or "chat",
                 )
                 return self._normalize_real(raw, text)
             except Exception as exc:  # noqa: BLE001
@@ -169,9 +170,9 @@ class NLUService:
         ]
 
         mimo_emotion = _extract_mimo_emotion_from_raw(raw, intent)
-        gemini_json = raw.get("gemini_json")
-        if isinstance(gemini_json, dict):
-            gemini_json = {**gemini_json, "mimo_emotion": mimo_emotion, "emotion": mimo_emotion}
+        llm_json = raw.get("llm_json") or raw.get("gemini_json")
+        if isinstance(llm_json, dict):
+            llm_json = {**llm_json, "mimo_emotion": mimo_emotion, "emotion": mimo_emotion}
 
         nlg_text = _sanitize_nlg_text(raw.get("nlg_response") or _extract_nlg_text(raw))
         return {
@@ -192,13 +193,15 @@ class NLUService:
             "sentiment": raw.get("sentiment"),
             "nlg_persona": raw.get("nlg_persona"),
             "nlg_prompt": raw.get("nlg_prompt"),
-            "gemini_json": gemini_json,
+            "llm_json": llm_json,
+            "gemini_json": llm_json,
             "llama_json": raw.get("llama_json"),
             "nlg_response": nlg_text,
             "mimo_emotion": mimo_emotion,
             "llm_emotion": mimo_emotion,
             "mascot_mood": mimo_emotion,
             "backend": raw.get("backend") or "real",
+            "rule_used": raw.get("rule_used"),
             "debug_info": raw.get("debug_info"),
         }
 

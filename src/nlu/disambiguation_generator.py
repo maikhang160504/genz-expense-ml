@@ -11,7 +11,7 @@ sys.path.insert(0, str(ROOT / "text_nlu"))
 
 from src.config import settings
 from src.config.env import load_env_file
-from src.llm.gemini_keys import call_gemini_with_key_fallback
+from src.nlu.llm_intent_handler import _call_llm
 
 
 def _no_accent(s: str) -> str:
@@ -50,47 +50,8 @@ def main() -> None:
 
     user_prompt = "Hãy cung cấp các từ khóa rộng rãi cho các hoạt động tụ tập giải trí xã hội."
 
-    payload = {
-        "contents": [
-            {"parts": [{"text": user_prompt}]}
-        ],
-        "generationConfig": {
-            "responseMimeType": "application/json",
-            "responseSchema": {
-                "type": "object",
-                "properties": {
-                    "verbs": {
-                        "type": "array",
-                        "items": {"type": "string"},
-                        "description": "Các động từ hoặc hành động rủ rê, đi chơi, tụ tập, khao, bao, hẹn hò."
-                    },
-                    "activities_places": {
-                        "type": "array",
-                        "items": {"type": "string"},
-                        "description": "Các địa điểm ăn chơi, ăn nhậu, giải trí, trò chơi, rạp phim, trà sữa, cafe hoặc các món ăn/đồ uống đi kèm hội họp."
-                    },
-                    "companions": {
-                        "type": "array",
-                        "items": {"type": "string"},
-                        "description": "Từ chỉ mối quan hệ, bạn bè, đồng nghiệp, đối tượng đi cùng."
-                    }
-                },
-                "required": ["verbs", "activities_places", "companions"]
-            }
-        },
-        "systemInstruction": system_prompt
-    }
-
     try:
-        response_dict = call_gemini_with_key_fallback(gemini_model, payload)
-        
-        # Extract the text content from response
-        # The structure returned by call_gemini is usually a dictionary containing candidate choices
-        candidates = response_dict.get("candidates", [])
-        if not candidates:
-            raise RuntimeError(f"No candidates found in Gemini response: {response_dict}")
-        
-        content_text = candidates[0]["content"]["parts"][0]["text"]
+        content_text = _call_llm(system_prompt, user_prompt)
         result_json = json.loads(content_text)
         
         # Base/default lists to ensure we never lose current working matches
@@ -103,7 +64,7 @@ def main() -> None:
         raw_activities = result_json.get("activities_places", [])
         raw_companions = result_json.get("companions", [])
 
-        print(f"Generated raw from Gemini: {len(raw_verbs)} verbs, {len(raw_activities)} activities/places, {len(raw_companions)} companions.")
+        print(f"Generated raw from LLM: {len(raw_verbs)} verbs, {len(raw_activities)} activities/places, {len(raw_companions)} companions.")
 
         normalized_verbs = sorted(list(set(base_verbs + [_no_accent(v) for v in raw_verbs if v.strip()])))
         normalized_activities = sorted(list(set(base_activities + [_no_accent(a) for a in raw_activities if a.strip()])))

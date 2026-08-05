@@ -129,8 +129,8 @@ else:
     timeout=600,
     secrets=secrets_list,
     max_containers=5,
-    min_containers=1,             # Keep at least 1 container warm 24/7 for instant 0ms responses
-    scaledown_window=1800,  # Keep idle container alive for 30 minutes
+    min_containers=0,             # Scale to 0 when idle to save costs
+    scaledown_window=900,  # Keep idle container warm for 15 minutes before shutting down
 )
 @modal.concurrent(max_inputs=100)
 @modal.asgi_app()
@@ -525,8 +525,8 @@ def train_qwen_model(num_epochs: int = 3, learning_rate: float = 2e-4, batch_siz
     timeout=600,
     secrets=secrets_list,
     max_containers=1,
-    min_containers=1,                  # Keep 1 Qwen GPU container warm 24/7
-    scaledown_window=1800,  # Keep idle container alive for 30 minutes
+    min_containers=0,                  # Scale to 0 when idle
+    scaledown_window=900,  # Keep idle container alive for 15 minutes
     memory=32768,
 )
 class QwenModel:

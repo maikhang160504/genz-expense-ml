@@ -48,31 +48,45 @@ def load_registry(nlu_root: Path) -> dict[str, Any]:
             "last_accepted_run_index": 0,
             "pending_run_index": None,
             "accepted_at": None,
-            "inference_backend": "llm",
+            "intent_backend": "llm_v2",
+            "category_backend": "llm_v2",
         }
         _save_json(p, reg)
-    if "inference_backend" not in reg:
-        reg["inference_backend"] = "llm"
+    if "intent_backend" not in reg:
+        reg["intent_backend"] = reg.get("inference_backend", "llm_v2")
+    if "category_backend" not in reg:
+        reg["category_backend"] = reg.get("inference_backend", "llm_v2")
     return reg
 
 
-def get_inference_backend(nlu_root: Path) -> str:
+def get_intent_backend(nlu_root: Path) -> str:
     reg = load_registry(nlu_root)
-    backend = str(reg.get("inference_backend", "tfidf")).strip().lower()
-    if backend == "llm":
-        return "llm"
+    backend = str(reg.get("intent_backend", "llm_v2")).strip().lower()
+    if backend in {"llm", "llm_v2"}:
+        return backend
     return "encoder" if backend in {"encoder", "phobert"} else "tfidf"
 
 
-def set_inference_backend(nlu_root: Path, backend: str) -> dict[str, Any]:
-    normalized = str(backend).strip().lower()
-    if normalized not in {"tfidf", "encoder", "phobert", "llm"}:
-        raise ValueError("backend must be 'tfidf', 'encoder', or 'llm'")
+def get_category_backend(nlu_root: Path) -> str:
     reg = load_registry(nlu_root)
-    if normalized == "llm":
-        reg["inference_backend"] = "llm"
-    else:
-        reg["inference_backend"] = "encoder" if normalized in {"encoder", "phobert"} else "tfidf"
+    backend = str(reg.get("category_backend", "llm_v2")).strip().lower()
+    if backend in {"llm", "llm_v2"}:
+        return backend
+    return "encoder" if backend in {"encoder", "phobert"} else "tfidf"
+
+
+def set_inference_backends(nlu_root: Path, intent_backend: str, category_backend: str) -> dict[str, Any]:
+    def normalize(b: str) -> str:
+        b = str(b).strip().lower()
+        if b not in {"tfidf", "encoder", "phobert", "llm", "llm_v2"}:
+            raise ValueError(f"invalid backend '{b}', must be 'tfidf', 'encoder', 'llm', or 'llm_v2'")
+        if b in {"llm", "llm_v2"}:
+            return b
+        return "encoder" if b in {"encoder", "phobert"} else "tfidf"
+
+    reg = load_registry(nlu_root)
+    reg["intent_backend"] = normalize(intent_backend)
+    reg["category_backend"] = normalize(category_backend)
     save_registry(nlu_root, reg)
     return reg
 
@@ -116,9 +130,40 @@ def mark_train_success(nlu_root: Path, run_index: int) -> dict[str, Any]:
 
 def accept_pending_version(nlu_root: Path) -> dict[str, Any]:
     """Accept pending model on disk — bump v1.x-global and mark run accepted."""
+    import shutil
     reg = load_registry(nlu_root)
     pending = reg.get("pending_run_index")
     last = reg.get("last_accepted_run_index", 0)
+
+    # Physical directory promote if models_new exists
+    models_dir = nlu_root / "text_nlu" / "models"
+    models_new = nlu_root / "text_nlu" / "models_new"
+    models_old = nlu_root / "text_nlu" / "models_old"
+
+    if models_new.exists():
+        try:
+            if models_dir.exists():
+                if models_old.exists():
+                    shutil.rmtree(models_old, ignore_errors=True)
+                shutil.copytree(models_dir, models_old)
+                shutil.rmtree(models_dir, ignore_errors=True)
+            shutil.copytree(models_new, models_dir)
+            
+            # Also copy to Modal persistent storage if mounted
+            storage_models = Path("/storage/nlu_models")
+            if Path("/storage").is_dir():
+                print(f"[NLU Registry] Promoting to persistent storage {storage_models}...", flush=True)
+                if storage_models.exists():
+                    # Keep old storage just in case
+                    storage_old = Path("/storage/nlu_models_old")
+                    if storage_old.exists():
+                        shutil.rmtree(storage_old, ignore_errors=True)
+                    shutil.copytree(storage_models, storage_old)
+                    shutil.rmtree(storage_models, ignore_errors=True)
+                shutil.copytree(models_new, storage_models)
+
+        except Exception as e:
+            print(f"[NLU Registry] Warning while copying candidate model folder: {e}", flush=True)
 
     if pending and pending > last:
         minor = int(reg.get("minor", 1)) + 1
@@ -131,6 +176,13 @@ def accept_pending_version(nlu_root: Path) -> dict[str, Any]:
         reg["accepted_at"] = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
     elif reg.get("version") is None:
         reg["version"] = DEFAULT_VERSION
+    else:
+        minor = int(reg.get("minor", 1)) + 1
+        major = int(reg.get("major", 1))
+        reg["minor"] = minor
+        reg["major"] = major
+        reg["version"] = f"v{major}.{minor}-global"
+        reg["accepted_at"] = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
 
     save_registry(nlu_root, reg)
     return reg
@@ -182,7 +234,8 @@ def get_model_meta(nlu_root: Path, *, nlu_real: bool = True, nlu_loaded: bool = 
         "pendingNote": pending_note,
         "lastAcceptedRunIndex": reg.get("last_accepted_run_index", 0),
         "actionSlots": action_slots,
-        "inferenceBackend": get_inference_backend(nlu_root),
+        "intent_backend": get_intent_backend(nlu_root),
+        "category_backend": get_category_backend(nlu_root),
     }
 
 

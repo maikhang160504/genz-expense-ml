@@ -24,7 +24,7 @@ from pipeline.text_preprocessing import vi_tokenize
 # consider using StandardScaler or similar normalization.
 
 DATA_DIR = ROOT / "datasets"
-MODEL_DIR = ROOT / "models"
+MODEL_DIR = Path(os.environ.get("NLU_MODEL_OUT_DIR", str(ROOT / "models")))
 RECORD_CSV = DATA_DIR / "intent_record.csv"
 ACTION_CSV = DATA_DIR / "intent_action.csv"
 CHITCHAT_CSV = DATA_DIR / "intent_chitchat.csv"

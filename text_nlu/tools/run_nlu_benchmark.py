@@ -147,7 +147,8 @@ def evaluate_backend(name, samples, backend_override="tfidf") -> dict:
     
     # Monkey-patch the models.py so it forces the correct backend for benchmark isolation
     import src.nlu.models
-    src.nlu.models._registry_inference_backend = lambda: backend_override
+    src.nlu.models.get_intent_backend = lambda: backend_override
+    src.nlu.models.get_category_backend = lambda: backend_override
     
     from src.nlu.models import load_intent_model, load_category_model, load_action_type_model, load_record_type_model, load_chitchat_sentiment_model, load_action_slots_model
     from src.nlu.ner import load_ner_model
@@ -188,25 +189,28 @@ def evaluate_backend(name, samples, backend_override="tfidf") -> dict:
         
         y_true_intent.append(s["expected_intent"])
         y_pred_intent.append(pred_intent)
-        
-        y_true_cat.append(norm_cat(s.get("expected_category")))
-        y_pred_cat.append(pred_cat)
-        
-        exp_rec = s.get("expected_rec_type", s.get("expected_record_type", "expense"))
-        y_true_rec.append(exp_rec)
-        y_pred_rec.append(pred_rec)
-        
-        exp_act = s.get("expected_action_type", "None")
-        y_true_act.append(exp_act)
-        y_pred_act.append(pred_act)
-        
-        exp_cat = norm_cat(s.get("expected_category"))
-        if pred_cat.lower() != exp_cat.lower():
-            mismatches.append(f"  - [Cat] Text: '{s['text']}' | True: '{s['expected_category']}' | Pred: '{pred_cat}'")
-        if pred_act.lower() != str(exp_act).lower():
-            mismatches.append(f"  - [Act] Text: '{s['text']}' | True: '{exp_act}' | Pred: '{pred_act}'")
         if pred_intent.lower() != str(s["expected_intent"]).lower():
             mismatches.append(f"  - [Intent] Text: '{s['text']}' | True: '{s['expected_intent']}' | Pred: '{pred_intent}'")
+
+        # Category and Record type evaluated strictly on Record intent
+        if s.get("expected_intent") == "Record":
+            exp_cat = norm_cat(s.get("expected_category"))
+            y_true_cat.append(exp_cat)
+            y_pred_cat.append(pred_cat)
+            if pred_cat.lower() != exp_cat.lower():
+                mismatches.append(f"  - [Cat] Text: '{s['text']}' | True: '{s.get('expected_category')}' | Pred: '{pred_cat}'")
+
+            exp_rec = s.get("expected_rec_type", s.get("expected_record_type", "expense"))
+            y_true_rec.append(exp_rec)
+            y_pred_rec.append(pred_rec)
+
+        # Action type evaluated strictly on Action intent
+        if s.get("expected_intent") == "Action":
+            exp_act = s.get("expected_action_type", "None")
+            y_true_act.append(exp_act)
+            y_pred_act.append(pred_act)
+            if pred_act.lower() != str(exp_act).lower():
+                mismatches.append(f"  - [Act] Text: '{s['text']}' | True: '{exp_act}' | Pred: '{pred_act}'")
             
     os.environ["NLU_USE_ENCODER"] = "0"
     
@@ -219,7 +223,7 @@ def evaluate_backend(name, samples, backend_override="tfidf") -> dict:
     
     if mismatches:
         print(f"\n[!] Mismatches for {name}:")
-        for m in mismatches:
+        for m in mismatches[:10]:
             print(m)
             
     return {

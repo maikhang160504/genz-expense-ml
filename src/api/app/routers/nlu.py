@@ -25,6 +25,8 @@ TRAIN_STATUS_INFO = {
     "elapsed_seconds": 0,
     "progress_percent": 0,
     "error": None,
+    "model_type": "intent_and_category",
+    "model_state": "Current",
 }
 
 import datetime
@@ -40,13 +42,33 @@ def _update_train_status(active: bool, stage: str, message: str, percent: int, s
     TRAIN_STATUS_INFO["message"] = message
     TRAIN_STATUS_INFO["progress_percent"] = percent
     TRAIN_STATUS_INFO["error"] = error
+    if stage == "SUCCESS":
+        TRAIN_STATUS_INFO["model_state"] = "New / Candidate"
+    elif stage == "TRAINING":
+        TRAIN_STATUS_INFO["model_state"] = "Training..."
     if start_ts:
         TRAIN_STATUS_INFO["started_ts"] = start_ts
         TRAIN_STATUS_INFO["elapsed_seconds"] = round(time.time() - start_ts, 1)
     elif not active and TRAIN_STATUS_INFO.get("started_ts"):
         TRAIN_STATUS_INFO["elapsed_seconds"] = round(time.time() - TRAIN_STATUS_INFO["started_ts"], 1)
         TRAIN_STATUS_INFO["started_ts"] = None
-
+        
+    import os
+    if os.environ.get("IS_MODAL") == "true" or os.environ.get("MODAL_PROJECT_NAME") or "modal" in str(sys.executable):
+        try:
+            status_file = Path("/storage/nlu_models/training_status.json")
+            status_file.parent.mkdir(parents=True, exist_ok=True)
+            with open(status_file, "w") as f:
+                json.dump(TRAIN_STATUS_INFO, f)
+            try:
+                import sys
+                sys.path.insert(0, str(Path(os.environ.get("EXPENSE_OCR_NLU_DIR", "/workspace"))))
+                from modal_app import volume
+                volume.commit()
+            except Exception as v_err:
+                pass
+        except Exception as e:
+            print(f"Failed to update storage train status: {e}")
 
 def _count_csv_rows(csv_path: Path) -> int:
     """Count non-empty rows in a CSV file (excluding header)."""
@@ -59,83 +81,30 @@ def _count_csv_rows(csv_path: Path) -> int:
         return 0
 
 
-def append_nlu_history(nlu_dir: Path, status: str, duration_sec: float, error_msg: str | None = None):
-    """Append a training run record using **real** metrics from retrain_all_metrics.json."""
+def append_nlu_history(
+    nlu_dir: Path,
+    status: str,
+    duration_sec: float,
+    error_msg: str | None = None,
+    source: str = "webadmin",
+    train_type: str = "tfidf"
+):
+    """Append NLU training run record with metrics, row counts, and candidate promotion tracking."""
     history_file = nlu_dir / "text_nlu" / "models" / "nlu_training_history.json"
-    metrics_file = nlu_dir / "text_nlu" / "models" / "retrain_all_metrics.json"
+    
+    if train_type == "encoder":
+        metrics_file = nlu_dir / "text_nlu" / "models_new" / "encoder_metrics.json"
+    else:
+        metrics_file = nlu_dir / "text_nlu" / "models_new" / "retrain_all_metrics.json"
 
     # Count training rows from each dataset
     datasets_dir = nlu_dir / "text_nlu" / "datasets"
-    training_rows = {
+    training_rows_detail = {
         "intent_record": _count_csv_rows(datasets_dir / "intent_record.csv"),
         "intent_action": _count_csv_rows(datasets_dir / "intent_action.csv"),
         "intent_chitchat": _count_csv_rows(datasets_dir / "intent_chitchat.csv"),
     }
-    total_rows = sum(training_rows.values())
-
-    # Load existing history
-    history = []
-    if history_file.exists():
-        try:
-            with open(history_file, "r", encoding="utf-8") as f:
-                history = json.load(f)
-        except Exception:
-            pass
-
-    run_idx = len(history) + 1
-
-    # Read REAL metrics from retrain_all_metrics.json (produced by retrain_all.py)
-    metrics = None
-    f1_score = None
-    if status == "success" and metrics_file.exists():
-        try:
-            with open(metrics_file, "r", encoding="utf-8") as f:
-                metrics = json.load(f)
-            cat = metrics.get("category", {})
-            raw_f1 = cat.get("weighted_f1", cat.get("accuracy", 0))
-            from app.services.nlu_registry import _format_f1
-            f1_score = _format_f1(raw_f1).replace("%", "")
-        except Exception as e:
-            print(f"[NLU history] Failed to read metrics file: {e}", flush=True)
-
-    record = {
-        "run_index": run_idx,
-        "trained_at": datetime.datetime.utcnow().isoformat() + "Z",
-        "duration_sec": round(duration_sec, 2),
-        "status": status,
-        "train_type": "tfidf",
-        "training_rows": total_rows,
-        "training_rows_detail": training_rows,
-        "error": error_msg,
-        "f1_score": f1_score,
-        "metrics": metrics,
-    }
-    history.append(record)
-    history = history[-100:]
-
-    try:
-        history_file.parent.mkdir(parents=True, exist_ok=True)
-        with open(history_file, "w", encoding="utf-8") as f:
-            json.dump(history, f, ensure_ascii=False, indent=2)
-    except Exception as e:
-        print(f"Failed to write NLU history: {e}", flush=True)
-
-    if status == "success":
-        try:
-            from app.services.nlu_registry import mark_train_success
-            mark_train_success(nlu_dir, run_idx)
-        except Exception as e:
-            print(f"[NLU history] Failed to update registry pending: {e}", flush=True)
-
-
-def append_nlu_history(nlu_dir: Path, status: str, duration_sec: float, error_msg: str = None, source: str = "webadmin", train_type: str = "tfidf"):
-    """Append NLU training run using the corresponding metrics file (tfidf or encoder)."""
-    history_file = nlu_dir / "text_nlu" / "models" / "nlu_training_history.json"
-    
-    if train_type == "encoder":
-        metrics_file = nlu_dir / "text_nlu" / "models" / "encoder_metrics.json"
-    else:
-        metrics_file = nlu_dir / "text_nlu" / "models" / "retrain_all_metrics.json"
+    total_rows = sum(training_rows_detail.values())
 
     history = []
     # Try reading from storage first, then local
@@ -182,7 +151,8 @@ def append_nlu_history(nlu_dir: Path, status: str, duration_sec: float, error_ms
         "status": status,
         "train_type": train_type,
         "source": source,
-        "training_rows": None,
+        "training_rows": total_rows,
+        "training_rows_detail": training_rows_detail,
         "error": error_msg,
         "f1_score": f1_score,
         "metrics": metrics,
@@ -206,6 +176,21 @@ def append_nlu_history(nlu_dir: Path, status: str, duration_sec: float, error_ms
     except Exception as e:
         print(f"Failed to write NLU training history: {e}", flush=True)
 
+    if status == "success":
+        try:
+            from app.services.nlu_registry import mark_train_success
+            mark_train_success(nlu_dir, run_idx)
+        except Exception as e:
+            print(f"[NLU history] Failed to update registry candidate: {e}", flush=True)
+
+
+def get_venv_python_path(base_dir: Path) -> str:
+    venv_python = base_dir / ".venv" / "Scripts" / "python.exe"
+    if not venv_python.exists():
+        venv_python = base_dir / ".venv" / "Scripts" / "python"
+    if not venv_python.exists():
+        venv_python = base_dir / ".venv" / "bin" / "python"
+    return str(venv_python) if venv_python.exists() else sys.executable
 
 def run_retraining(nlu_dir: Path, target: str = "local"):
     global TRAINING_ACTIVE
@@ -214,29 +199,36 @@ def run_retraining(nlu_dir: Path, target: str = "local"):
     status = "failed"
     train_type = "encoder" if target in ("encoder", "phobert") else "tfidf"
     try:
-        _update_train_status(True, "PREPARING", f"Đang chuẩn bị dữ liệu huấn luyện ({train_type})...", 15, start_time, target=target)
-        # Find python path in NLU project venv (Windows: .venv/Scripts/python.exe, Unix: .venv/bin/python)
-        venv_python = nlu_dir / ".venv" / "Scripts" / "python.exe"
-        if not venv_python.exists():
-            venv_python = nlu_dir / ".venv" / "Scripts" / "python"
-        if not venv_python.exists():
-            venv_python = nlu_dir / ".venv" / "bin" / "python"
-        
-        python_exec = str(venv_python) if venv_python.exists() else sys.executable
+        if train_type == "encoder":
+            _update_train_status(True, "PREPARING", "Đang chuẩn bị dữ liệu huấn luyện (Encoder)...", 15, start_time, target=target)
+        else:
+            _update_train_status(True, "PREPARING", "Đang chuẩn bị dữ liệu huấn luyện (TF-IDF)...", 15, start_time, target=target)
+        python_exec = get_venv_python_path(nlu_dir)
         
         if train_type == "encoder":
             script_path = nlu_dir / "text_nlu" / "train" / "retrain_encoders.py"
         else:
             script_path = nlu_dir / "text_nlu" / "train" / "retrain_all.py"
         
-        # Set environment variable to make it train fast or normal
+        _update_train_status(True, "CLEANING", "Đang làm sạch và chuẩn hóa dữ liệu câu chi tiêu từ MongoDB...", 25, start_time, target=target)
+        models_new_dir = nlu_dir / "text_nlu" / "models_new"
+        models_new_dir.mkdir(parents=True, exist_ok=True)
         env = os.environ.copy()
         env.setdefault("INTENT_ENCODER_MAX_SAMPLES", "5000")
         env.setdefault("ACTION_TYPE_ENCODER_MAX_SAMPLES", "3000")
         env.setdefault("RECORD_TYPE_ENCODER_MAX_SAMPLES", "3000")
         env.setdefault("CATEGORY_ENCODER_MAX_SAMPLES", "3000")
+        # Ensure all scripts output to models_new
+        env["NLU_MODEL_OUT_DIR"] = str(models_new_dir)
+        env["INTENT_ENCODER_OUT"] = str(models_new_dir / "intent_encoder.joblib")
+        env["CATEGORY_ENCODER_OUT"] = str(models_new_dir / "category_encoder.joblib")
+        env["ENCODER_METRICS_OUT"] = str(models_new_dir / "encoder_metrics.json")
 
-        _update_train_status(True, "TRAINING", f"Đang huấn luyện mô hình NLU ({train_type})...", 45, start_time, target=target)
+        if train_type == "encoder":
+            _update_train_status(True, "TRAINING", "Đang huấn luyện mô hình PhoBERT Encoder...", 50, start_time, target=target)
+        else:
+            _update_train_status(True, "TRAINING", "Đang huấn luyện mô hình TF-IDF NLU...", 50, start_time, target=target)
+            
         subprocess.run(
             [python_exec, str(script_path)],
             cwd=str(nlu_dir),
@@ -248,39 +240,16 @@ def run_retraining(nlu_dir: Path, target: str = "local"):
             errors="replace"
         )
         
-        _update_train_status(True, "SYNCING", "Đang nạp nóng mô hình NLU mới vào bộ nhớ...", 85, start_time, target=target)
-        # After successful retraining, copy models to /storage/nlu_models/ if storage is mounted
-        storage_models_dir = Path("/storage/nlu_models")
-        if Path("/storage").exists():
-            import shutil
-            print(f"[NLU training] Copying newly trained {train_type} models to persistent storage /storage/nlu_models...", flush=True)
-            storage_models_dir.mkdir(parents=True, exist_ok=True)
-            local_models_dir = nlu_dir / "text_nlu" / "models"
-            
-            # Copy all joblib files
-            for f in local_models_dir.glob("*.joblib"):
-                shutil.copy2(f, storage_models_dir / f.name)
-            
-            # Copy registry and metrics JSON
-            for f in local_models_dir.glob("*.json"):
-                shutil.copy2(f, storage_models_dir / f.name)
-                
-            # Copy spacy ner_model if it exists (only for tfidf)
-            ner_dir = local_models_dir / "ner_model" / "model-best"
-            if train_type != "encoder" and ner_dir.exists():
-                dest_ner = storage_models_dir / "ner_model" / "model-best"
-                if dest_ner.exists():
-                    shutil.rmtree(dest_ner)
-                shutil.copytree(ner_dir, dest_ner)
-            print("[NLU training] Sync to /storage/nlu_models completed successfully!", flush=True)
-        
+        _update_train_status(True, "EVALUATING", "Đang đánh giá hiệu năng F1 Macro và Accuracy trên tập Golden Set...", 75, start_time, target=target)
+        _update_train_status(True, "SYNCING", "Đang nạp nóng mô hình mới vào bộ nhớ...", 90, start_time, target=target)
+        print(f"[{'Encoder' if train_type == 'encoder' else 'NLU'} training] Candidate models generated in models_new. Waiting for promotion.", flush=True)
         # Force reload in memory
         get_nlu_service().reload()
         status = "success"
         _update_train_status(False, "SUCCESS", "Huấn luyện lại mô hình hoàn tất thành công!", 100, start_time, target=target)
     except Exception as e:
         error_msg = str(e)
-        print(f"[NLU training] Error: {e}", flush=True)
+        print(f"[{'Encoder' if train_type == 'encoder' else 'NLU'} training] Error: {e}", flush=True)
         _update_train_status(False, "ERROR", f"Huấn luyện thất bại: {e}", 0, start_time, error=str(e), target=target)
     finally:
         TRAINING_ACTIVE = False
@@ -391,14 +360,29 @@ def train(payload: NluTrainRequest = NluTrainRequest(), background_tasks: Backgr
 
 @router.get("/train/status", summary="Lấy trạng thái huấn luyện")
 def train_status():
+    import os
+    is_modal = os.environ.get("IS_MODAL") == "true" or os.environ.get("MODAL_PROJECT_NAME") or "modal" in str(sys.executable)
+    
     # If running on Modal, check status file in shared volume
-    status_file = Path("/storage/nlu_models/training_status.json")
-    if status_file.is_file():
-        try:
-            with open(status_file, "r") as f:
-                return json.load(f)
-        except Exception:
-            pass
+    if is_modal:
+        status_file = Path("/storage/nlu_models/training_status.json")
+        if status_file.is_file():
+            try:
+                import sys
+                sys.path.insert(0, str(Path(os.environ.get("EXPENSE_OCR_NLU_DIR", "/workspace"))))
+                from modal_app import volume
+                volume.reload()
+            except Exception:
+                pass
+            
+            try:
+                with open(status_file, "r") as f:
+                    return json.load(f)
+            except Exception:
+                pass
+
+    # Local fallback
+    global TRAINING_ACTIVE, TRAIN_STATUS_INFO
     res = dict(TRAIN_STATUS_INFO)
     res["training_active"] = TRAINING_ACTIVE
     if res.get("started_ts") and TRAINING_ACTIVE:
@@ -416,24 +400,99 @@ def internal_status():
     }
 
 
-@router.get("/train/history", summary="Lấy lịch sử retrain NLU")
-def train_history():
-    # Check storage first for persistent history
-    storage_history = Path("/storage/nlu_models/nlu_training_history.json")
-    if storage_history.is_file():
+@router.get("/models/status", summary="Lấy thông tin các phiên bản mô hình (hiện tại, mới, cũ)")
+def models_status():
+    settings = get_settings()
+    nlu_dir = Path(settings.expense_ocr_nlu_dir).resolve() / "text_nlu"
+    
+    def get_metrics(model_dir: Path):
+        metrics_file = model_dir / "retrain_all_metrics.json"
+        if not metrics_file.exists():
+            return None
         try:
-            with open(storage_history, "r", encoding="utf-8") as f:
+            with open(metrics_file, "r", encoding="utf-8") as f:
                 return json.load(f)
-        except Exception:
-            pass
+        except:
+            return None
 
+    def get_dir_time(model_dir: Path):
+        if not model_dir.exists():
+            return None
+        return os.path.getmtime(model_dir)
+
+    return {
+        "current": {
+            "exists": (nlu_dir / "models").exists(),
+            "metrics": get_metrics(nlu_dir / "models"),
+            "modified": get_dir_time(nlu_dir / "models")
+        },
+        "candidate": {
+            "exists": (nlu_dir / "models_new").exists(),
+            "metrics": get_metrics(nlu_dir / "models_new"),
+            "modified": get_dir_time(nlu_dir / "models_new")
+        },
+        "old": {
+            "exists": (nlu_dir / "models_old").exists(),
+            "metrics": get_metrics(nlu_dir / "models_old"),
+            "modified": get_dir_time(nlu_dir / "models_old")
+        }
+    }
+
+
+
+@router.post("/export-finetune", summary="Xuất dữ liệu fine-tune (JSONL)")
+def export_finetune():
+    import subprocess
     settings = get_settings()
     nlu_dir = Path(settings.expense_ocr_nlu_dir).resolve()
-    history_file = nlu_dir / "text_nlu" / "models" / "nlu_training_history.json"
-    if not history_file.exists():
+    script_path = nlu_dir / "text_nlu" / "tools" / "export_finetune_data.py"
+    output_path = nlu_dir / "text_nlu" / "datasets" / "dataset_finetune.jsonl"
+    
+    try:
+        python_exec = get_venv_python_path(nlu_dir)
+        subprocess.run([python_exec, str(script_path)], check=True, cwd=str(nlu_dir))
+        if output_path.exists():
+            from fastapi.responses import FileResponse
+            return FileResponse(
+                path=output_path, 
+                media_type='application/jsonl', 
+                filename="dataset_finetune.jsonl"
+            )
+        else:
+            raise HTTPException(status_code=500, detail="Không tìm thấy file sau khi xuất.")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/train/history", summary="Lấy lịch sử retrain NLU")
+def train_history():
+    import os
+    is_modal = os.environ.get("IS_MODAL") == "true" or os.environ.get("MODAL_PROJECT_NAME") or "modal" in str(sys.executable)
+
+    # Check storage first for persistent history if on Modal
+    if is_modal:
+        storage_history = Path("/storage/nlu_models/nlu_training_history.json")
+        if storage_history.is_file():
+            try:
+                import sys
+                sys.path.insert(0, str(Path(os.environ.get("EXPENSE_OCR_NLU_DIR", "/workspace"))))
+                from modal_app import volume
+                volume.reload()
+            except Exception:
+                pass
+            try:
+                with open(storage_history, "r", encoding="utf-8") as f:
+                    return json.load(f)
+            except Exception:
+                pass
+            
+    # Local fallback
+    settings = get_settings()
+    local_history = Path(settings.expense_ocr_nlu_dir).resolve() / "text_nlu" / "models" / "nlu_training_history.json"
+    if not local_history.exists():
         return []
     try:
-        with open(history_file, "r", encoding="utf-8") as f:
+        with open(local_history, "r", encoding="utf-8") as f:
             return json.load(f)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to read NLU training history: {e}")
@@ -556,40 +615,39 @@ def trigger_llm_finetune(epochs: int = 3, lr: float = 2e-4, batch_size: int = 4)
         raise HTTPException(status_code=500, detail=f"Failed to trigger LLM fine-tuning: {e}")
 
 
-@router.get("/inference-backend", summary="Backend NLU đang dùng: tfidf | encoder")
+@router.get("/inference-backend", summary="Cấu hình mô hình cho Tầng 1 và Tầng 2")
 def get_nlu_inference_backend():
-    from app.services.nlu_registry import get_inference_backend
+    from app.services.nlu_registry import get_intent_backend, get_category_backend
 
     settings = get_settings()
     nlu_dir = Path(settings.expense_ocr_nlu_dir).resolve()
-    backend = get_inference_backend(nlu_dir)
-    return {"backend": backend}
+    return {
+        "intent_backend": get_intent_backend(nlu_dir),
+        "category_backend": get_category_backend(nlu_dir),
+    }
 
 
-@router.post("/inference-backend", summary="Chọn backend NLU: tfidf hoặc encoder")
+@router.post("/inference-backend", summary="Chọn mô hình Tầng 1 và Tầng 2")
 def set_nlu_inference_backend(payload: dict):
-    import os
+    from app.services.nlu_registry import set_inference_backends
 
-    from app.services.nlu_registry import set_inference_backend
-
-    backend = str(payload.get("backend", "")).strip().lower()
-    if backend not in {"tfidf", "encoder", "phobert", "llm"}:
-        raise HTTPException(status_code=400, detail="backend must be 'tfidf', 'encoder', or 'llm'")
+    intent_b = str(payload.get("intent_backend") or payload.get("backend", "")).strip().lower()
+    cat_b = str(payload.get("category_backend") or payload.get("backend", "")).strip().lower()
 
     settings = get_settings()
     nlu_dir = Path(settings.expense_ocr_nlu_dir).resolve()
     try:
-        reg = set_inference_backend(nlu_dir, backend)
+        reg = set_inference_backends(nlu_dir, intent_b, cat_b)
     except ValueError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
 
-    use_enc = reg.get("inference_backend") == "encoder"
-    os.environ["NLU_USE_ENCODER"] = "1" if use_enc else "0"
+    # Env NLU_USE_ENCODER is no longer used for dynamic routing, models.py handles it
     get_nlu_service().reload()
 
     return {
-        "backend": reg.get("inference_backend", "tfidf"),
-        "message": f"NLU inference switched to {reg.get('inference_backend')}",
+        "intent_backend": reg.get("intent_backend", "tfidf"),
+        "category_backend": reg.get("category_backend", "tfidf"),
+        "message": f"NLU updated: Layer 1 ({reg.get('intent_backend')}), Layer 2 ({reg.get('category_backend')})",
         "reloaded": True,
     }
 
@@ -597,15 +655,17 @@ def set_nlu_inference_backend(payload: dict):
 @router.post(
     "/test-prompt",
     response_model=dict,
-    summary="Test prompt trực tiếp không lưu lịch sử",
+    summary="Test prompt trực tiếp không lưu lịch sử (Kiến trúc 2 tầng)",
 )
 def test_prompt(payload: dict) -> dict:
-    from src.nlu.llm_intent_handler import run_llm_nlu
+    from src.nlu.llm_intent_handler import run_llm_nlu_v2
     import time
 
     text = payload.get("text", "")
     override_prompt = payload.get("override_prompt")
     persona = payload.get("persona", "hai_huoc")
+    caller_context = payload.get("caller_context", "chat")
+    force_intent = payload.get("force_intent", "Auto")
     
     t0 = time.monotonic()
     
@@ -617,11 +677,19 @@ def test_prompt(payload: dict) -> dict:
         "verbal_style": persona
     }
     
-    result = run_llm_nlu(
+    # Xác định forced_intent
+    forced_intent_val = None
+    if force_intent in ("Record", "Action", "Chitchat"):
+        forced_intent_val = force_intent
+    elif caller_context == "addstory":
+        forced_intent_val = "Record"
+    
+    result = run_llm_nlu_v2(
         text=text,
         context_metadata=context,
-        run_llm=True,
-        override_prompt=override_prompt
+        nlg_persona=persona,
+        forced_intent=forced_intent_val,
+        override_prompt=override_prompt,
     )
     
     latency = int((time.monotonic() - t0) * 1000)
@@ -631,3 +699,30 @@ def test_prompt(payload: dict) -> dict:
         "latency_ms": latency,
         "result": result
     }
+
+
+
+@router.post("/benchmark", summary="Chạy kiểm thử hiệu năng Golden Set 2 tầng (Intent & Category) cho 3 model")
+def run_nlu_benchmark():
+    try:
+        from src.nlu.llm_benchmark import run_golden_set_benchmark
+        return run_golden_set_benchmark()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Benchmark execution failed: {e}")
+
+
+@router.post("/models/promote", summary="Duyệt áp dụng mô hình mới (Candidate -> Active)")
+def promote_candidate_model():
+    try:
+        from app.services.nlu_registry import accept_pending_version
+        settings = get_settings()
+        nlu_dir = Path(settings.expense_ocr_nlu_dir).resolve()
+        reg = accept_pending_version(nlu_dir)
+        get_nlu_service().reload()
+        return {
+            "ok": True,
+            "message": "Đã duyệt áp dụng mô hình mới thành công! Mô hình chuyển sang trạng thái Active.",
+            "registry": reg,
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to promote model: {e}")

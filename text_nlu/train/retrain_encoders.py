@@ -27,9 +27,7 @@ def main() -> None:
 
     reset_metrics()
     run("train_intent_encoder.py")
-    run("train_action_type_encoder.py")
     run("train_category_encoder.py")
-    run("train_record_type_encoder.py")
     metrics_path = finalize_metrics()
     print(f"\nEncoder metrics saved → {metrics_path}")
     print(

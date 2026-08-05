@@ -107,7 +107,7 @@ def _load_nlu_bundle_unlocked() -> dict[str, Any]:
 
     # Pre-load Qwen local LLM if active backend is LLM and local loading is enabled (disabled in Modal to use RPC GPU container)
     try:
-        if models_module.get_inference_backend() == "llm" and os.environ.get("USE_LOCAL_PHOGPT") == "1" and os.environ.get("IS_MODAL") != "true":
+        if models_module.get_intent_backend() == "llm" and os.environ.get("USE_LOCAL_PHOGPT") == "1" and os.environ.get("IS_MODAL") != "true":
             logger.info("NLU inference backend is LLM. Pre-loading local Qwen model into GPU...")
             local_llm = importlib.import_module("src.nlu.local_llm")
             local_llm.load_local_phogpt()
@@ -186,7 +186,7 @@ def reload_nlu() -> bool:
 
         # Pre-load Qwen local LLM if active backend is LLM and local loading is enabled (disabled in Modal)
         try:
-            if models_module.get_inference_backend() == "llm" and os.environ.get("USE_LOCAL_PHOGPT") == "1" and os.environ.get("IS_MODAL") != "true":
+            if models_module.get_intent_backend() == "llm" and os.environ.get("USE_LOCAL_PHOGPT") == "1" and os.environ.get("IS_MODAL") != "true":
                 logger.info("NLU inference backend is LLM. Pre-loading local Qwen model into GPU...")
                 local_llm = importlib.import_module("src.nlu.local_llm")
                 local_llm.load_local_phogpt()
@@ -219,8 +219,9 @@ def run_real_nlu(
     emotion: str | None = None,
     user_id: str | None = None,
     user_corrections: list[dict[str, Any]] | None = None,
+    caller_context: str | None = "chat",
 ) -> dict[str, Any]:
-    """Call the real NLU pipeline + optional Gemini NLG layer."""
+    """Call the real NLU pipeline + optional LLM NLG layer."""
     bundle = _NLU_BUNDLE
     if bundle is None:
         raise RuntimeError("real NLU bundle not loaded")
@@ -245,6 +246,7 @@ def run_real_nlu(
         user_corrections=user_corrections,
         profile=profile,
         nlg_persona=(nlg_persona or emotion),
+        caller_context=caller_context or "chat",
     )
 
     if result.get("intent") == "Action":
@@ -275,8 +277,8 @@ def run_real_nlu(
     is_action_first_pass = (result.get("intent") == "Action") and (not profile or "action_facts" not in profile)
     
     # Skip LLM call if already processed in a single pass by Qwen LLM or active backend is LLM
-    from src.nlu.models import get_inference_backend
-    is_already_unified = (result.get("backend") == "llm_unified") or (get_inference_backend() == "llm")
+    from src.nlu.models import get_intent_backend
+    is_already_unified = (result.get("backend") in ("llm_unified", "llm_v2")) or (get_intent_backend() in ("llm", "llm_v2"))
 
     if (run_llm or result.get("intent") == "Chitchat") and not is_action_first_pass and not is_already_unified:
         try:

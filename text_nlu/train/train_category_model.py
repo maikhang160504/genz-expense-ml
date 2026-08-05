@@ -20,7 +20,7 @@ sys.path.insert(0, str(ROOT))
 from pipeline.text_preprocessing import clean_category_text, vi_tokenize
 
 DATA_DIR = ROOT / "datasets"
-MODEL_DIR = ROOT / "models"
+MODEL_DIR = Path(os.environ.get("NLU_MODEL_OUT_DIR", str(ROOT / "models")))
 RECORD_CSV = DATA_DIR / "intent_record.csv"
 MODEL_PATH = MODEL_DIR / "category_model.joblib"
 

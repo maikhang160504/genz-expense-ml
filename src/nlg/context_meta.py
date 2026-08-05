@@ -536,7 +536,11 @@ def build_unified_llm_context(profile: dict[str, Any]) -> dict[str, Any]:
         "days_to_payday": f"{days_to_payday} ngày nữa tới kỳ lương"
     }
     if profile.get("username"):
+        res["username"] = profile.get("username")
         res["user_name"] = profile.get("username")
+    elif profile.get("user_name"):
+        res["username"] = profile.get("user_name")
+        res["user_name"] = profile.get("user_name")
     if "action_facts" in profile:
         res["action_facts"] = profile["action_facts"]
     return res

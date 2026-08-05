@@ -29,12 +29,12 @@ _STATUS_TO_ASSET = {
 }
 
 
-def _pick_llm_text(gemini_json: dict | None, llama_json: dict | None) -> tuple[str | None, str | None]:
+def _pick_llm_text(llm_json: dict | None, llama_json: dict | None) -> tuple[str | None, str | None]:
     story = None
     source = None
-    if gemini_json and gemini_json.get("story"):
-        story = str(gemini_json.get("story"))
-        source = "Gemini"
+    if llm_json and llm_json.get("story"):
+        story = str(llm_json.get("story"))
+        source = "Qwen"
     elif llama_json and llama_json.get("story"):
         story = str(llama_json.get("story"))
         source = "Groq"
@@ -97,9 +97,10 @@ def _print_demo_summary(
     if context_metadata.get("historical_fact"):
         lines.append(f"  → fact: {context_metadata['historical_fact']}")
 
-    story, src = _pick_llm_text(gemini_json, llama_json)
+    llm_res = result.get("llm_json") or result.get("gemini_json")
+    story, src = _pick_llm_text(llm_res, llama_json)
     if story:
-        llm_data = gemini_json if (gemini_json and gemini_json.get("story")) else (llama_json or {})
+        llm_data = llm_res if (llm_res and llm_res.get("story")) else (llama_json or {})
         status = llm_data.get("status")
         lines.append(f"LLM ({src}) — story: {story}")
         if status is not None:

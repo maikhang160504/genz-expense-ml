@@ -114,51 +114,9 @@ Ví dụ tham khảo (không copy):
 
 
 def _call_llm(prompt: str) -> list[dict]:
-    from src.llm.gemini_keys import call_gemini_with_key_fallback
+    from src.nlu.llm_intent_handler import _call_llm as qwen_call_llm
 
-    model = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash")
-    payload = {
-        "systemInstruction": SYSTEM_PROMPT,
-        "contents": [{"role": "user", "parts": [{"text": prompt}]}],
-        "generationConfig": {
-            "temperature": 0.9,
-            "responseMimeType": "application/json",
-            "responseSchema": {
-                "type": "object",
-                "properties": {
-                    "samples": {
-                        "type": "array",
-                        "items": {
-                            "type": "object",
-                            "properties": {
-                                "text": {"type": "string"},
-                                "action_type": {"type": "string"},
-                                "verb": {"type": "string"},
-                                "category_code": {"type": "string"},
-                                "value": {"type": "number"},
-                                "goal_name": {"type": "string"},
-                                "enabled": {"type": "string"},
-                                "theme": {"type": "string"},
-                                "verbal_style": {"type": "string"},
-                                "time_range": {"type": "string"},
-                                "query": {"type": "string"},
-                                "note": {"type": "string"},
-                            },
-                            "required": ["text", "action_type"],
-                        },
-                    }
-                },
-                "required": ["samples"],
-            },
-        },
-    }
-    raw = call_gemini_with_key_fallback(model, payload)
-    text = ""
-    for c in raw.get("candidates") or []:
-        parts = (c.get("content") or {}).get("parts") or []
-        for p in parts:
-            if p.get("text"):
-                text += p["text"]
+    text = qwen_call_llm(SYSTEM_PROMPT, prompt)
     if not text.strip():
         raise RuntimeError("Empty LLM response")
     data = json.loads(text)

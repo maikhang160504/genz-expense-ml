@@ -1,0 +1,167 @@
+[
+  {
+    "name": "Record — ghi chép chi tiêu có số tiền",
+    "pass": true,
+    "intent": "Record",
+    "action_type": null,
+    "backend": "llm_v2",
+    "emotion": "Success",
+    "nlg_response": "Phở mà còn vibe cực 🔥 vậy hả? Momo ghi nhận rồi nha! Ăn ngon miệng chưa?",
+    "suggested_actions": null,
+    "latency_ms": 22051
+  },
+  {
+    "name": "Record — ghi chép chi tiêu KHÔNG có số tiền",
+    "pass": true,
+    "intent": "Record",
+    "action_type": null,
+    "backend": "llm_v2",
+    "emotion": "Success",
+    "nlg_response": "Mới mua áo mới hả? Rất cool đấy! Chi hết bao nhiêu vậy? 💵",
+    "suggested_actions": null,
+    "latency_ms": 17985
+  },
+  {
+    "name": "Action — REPORT_GENERAL",
+    "pass": true,
+    "intent": "Action",
+    "action_type": "REPORT_GENERAL",
+    "backend": "llm_v2",
+    "emotion": "Approved",
+    "nlg_response": "Tháng này bạn đã tiêu bao nhiêu rồi nhỉ? Mimo sẽ kiểm tra giúp bạn ngay đây! 💰",
+    "suggested_actions": null,
+    "latency_ms": 9768
+  },
+  {
+    "name": "Action — REPORT_COMPARE",
+    "pass": true,
+    "intent": "Action",
+    "action_type": "REPORT_COMPARE",
+    "backend": "llm_v2",
+    "emotion": "Approved",
+    "nlg_response": "Để Mimo so sánh chi tiêu tháng này và tháng trước cho bạn xem nha! 📊",
+    "suggested_actions": null,
+    "latency_ms": 9872
+  },
+  {
+    "name": "Action — SET_LIMIT",
+    "pass": true,
+    "intent": "Action",
+    "action_type": "SET_LIMIT",
+    "backend": "llm_v2",
+    "emotion": "Happy",
+    "nlg_response": "Đã đặt hạn mức ăn uống tháng này là 3 triệu đồng cho bạn rồi nè! 🍽️",
+    "suggested_actions": null,
+    "latency_ms": 10865
+  },
+  {
+    "name": "Action — SET_GOAL (saving_personal)",
+    "pass": true,
+    "intent": "Action",
+    "action_type": "SET_GOAL",
+    "backend": "llm_v2",
+    "emotion": "Happy",
+    "nlg_response": "Mimo đã tạo mục tiêu tiết kiệm 10 triệu mua xe trong 6 tháng cho bạn rồi nè! 🚗 Bạn xác nhận nhé?",
+    "suggested_actions": null,
+    "latency_ms": 12100
+  },
+  {
+    "name": "Action — ADD_GOAL",
+    "pass": true,
+    "intent": "Action",
+    "action_type": "ADD_GOAL",
+    "backend": "llm_v2",
+    "emotion": "Proud",
+    "nlg_response": "Được rồi, Mimo đã nạp thêm 500 nghìn vào quỹ tiết kiệm mua xe cho bạn! 💪",
+    "suggested_actions": null,
+    "latency_ms": 10564
+  },
+  {
+    "name": "Action — SET_TONE",
+    "pass": true,
+    "intent": "Action",
+    "action_type": "SET_TONE",
+    "backend": "llm_v2",
+    "emotion": "Approved",
+    "nlg_response": "Được rồi, từ giờ Mimo sẽ nói chuyện một cách nghiêm túc hơn nhé! 💬",
+    "suggested_actions": null,
+    "latency_ms": 9431
+  },
+  {
+    "name": "Action — SET_ALERT",
+    "pass": true,
+    "intent": "Action",
+    "action_type": "SET_ALERT",
+    "backend": "llm_v2",
+    "emotion": "Approved",
+    "nlg_response": "Đã bật cảnh báo chi tiêu cho bạn rồi đó! 💡",
+    "suggested_actions": null,
+    "latency_ms": 8353
+  },
+  {
+    "name": "Action — SYSTEM_SETTING (dark mode)",
+    "pass": true,
+    "intent": "Action",
+    "action_type": "SYSTEM_SETTING",
+    "backend": "llm_v2",
+    "emotion": "Approved",
+    "nlg_response": "Đã chuyển giao diện sang chế độ tối cho bạn rồi đó! 🌃",
+    "suggested_actions": null,
+    "latency_ms": 9631
+  },
+  {
+    "name": "Action — SEARCH_RECORD",
+    "pass": true,
+    "intent": "Action",
+    "action_type": "SEARCH_RECORD",
+    "backend": "llm_v2",
+    "emotion": "Approved",
+    "nlg_response": "Đang lấy danh sách các giao dịch trong tuần này cho bạn đây ạ! 💼",
+    "suggested_actions": null,
+    "latency_ms": 9111
+  },
+  {
+    "name": "Action — SUGGEST_BUDGET",
+    "pass": true,
+    "intent": "Action",
+    "action_type": "SUGGEST_BUDGET",
+    "backend": "llm_v2",
+    "emotion": "Approved",
+    "nlg_response": "Tháng này bạn nên cân nhắc ngân sách cho ăn uống khoảng 3 triệu đồng nha. Ăn uống tiết kiệm sẽ giúp bạn tiết kiệm được nhiều hơn đấy! 🍽️",
+    "suggested_actions": null,
+    "latency_ms": 12298
+  },
+  {
+    "name": "Action — SET_USERNAME",
+    "pass": false,
+    "intent": "Record",
+    "action_type": null,
+    "backend": "llm_v2",
+    "emotion": "Success",
+    "nlg_response": "Chào Khang nha! Momo sẵn sàng giúp gì cho cậu chưa? 😊",
+    "suggested_actions": null,
+    "latency_ms": 19862
+  },
+  {
+    "name": "Chitchat — nói chuyện phiếm",
+    "pass": true,
+    "intent": "Chitchat",
+    "action_type": null,
+    "backend": "llm_v2",
+    "emotion": "Hello",
+    "nlg_response": "Đúng rồi, thời tiết đẹp thế này thật tuyệt phải không Mimo cũng thấy vui lây luôn đó! 🌞",
+    "suggested_actions": null,
+    "latency_ms": 15770
+  },
+  {
+    "name": "caller_context=addstory — text chitchat phải ra Record",
+    "pass": true,
+    "intent": "Record",
+    "action_type": null,
+    "backend": "llm_v2",
+    "emotion": "Success",
+    "nlg_response": "Trời đẹp thật đấy, đi dạo hay hẹn hò cũng tuyệt vời nhỉ? ☀️",
+    "suggested_actions": null,
+    "latency_ms": 15706
+  }
+]

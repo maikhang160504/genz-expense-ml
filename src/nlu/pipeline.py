@@ -167,9 +167,45 @@ def run_nlu(
     user_corrections: list[dict] | None = None,
     profile: dict | None = None,
     nlg_persona: str | None = None,
+    caller_context: str | None = "chat",
 ) -> dict:
-    from src.nlu.models import get_inference_backend
-    if get_inference_backend() == "llm":
+    from src.nlu.models import get_intent_backend
+
+    # ── KẾ HOẠCH 3: Nhánh llm_v2 — Stage 1 (TF-IDF/PhoBERT) + Stage 2 (Qwen rule-based) ──
+    # llm_v2 sử dụng llm_rules.json thay vì UNIFIED_NLU_PROMPT monolithic.
+    # Hỗ trợ addstory shortcut (force Record) và majority vote (confidence < 0.65).
+    if get_intent_backend() == "llm_v2":
+        from src.nlu.llm_intent_handler import run_llm_nlu_v2
+        from src.nlg.context_meta import build_unified_llm_context
+
+        context_metadata = None
+        if profile:
+            try:
+                context_metadata = build_unified_llm_context(profile)
+            except Exception as e:
+                print(f"[NLU pipeline llm_v2] Error building context: {e}")
+
+        # Shortcut addstory: bỏ qua Stage 1, force intent = Record
+        if caller_context == "addstory":
+            return run_llm_nlu_v2(
+                user_text,
+                context_metadata=context_metadata,
+                nlg_persona=nlg_persona,
+                forced_intent="Record",
+            )
+
+        # Stage 1: classify intent bằng TF-IDF/encoder
+        intent, intent_conf, _ = classify_intent(user_text, intent_model)
+
+        # Stage 2: gọi Qwen với rule đúng theo intent từ Stage 1
+        return run_llm_nlu_v2(
+            user_text,
+            context_metadata=context_metadata,
+            nlg_persona=nlg_persona,
+            forced_intent=intent,
+        )
+
+    if get_intent_backend() == "llm":
         from src.nlu.llm_intent_handler import run_llm_nlu
         from src.nlg.context_meta import build_unified_llm_context
         
@@ -423,6 +459,35 @@ def run_nlu(
         result["sentiment_backend"] = "llm"
         result["chitchat_response_via"] = "llm"
 
+    # Chỉ gọi LLM để sinh NLG khi backend là tfidf/encoder (ML thuần, không có nlg_response từ Stage 2 LLM).
+    # Nếu backend đã là llm_v2 hoặc llm_unified, nlg_response đã được sinh bởi Qwen Stage 2, skip luôn.
+    backend = result.get("backend", "")
+    is_llm_backend = str(backend).startswith("llm") or "llm" in str(backend)
+    if run_llm and "nlg_response" not in result and not is_llm_backend:
+        result = _enrich_nlg_response(result, user_text, nlg_persona)
+
+    return result
+
+
+def _enrich_nlg_response(result: dict, text: str, nlg_persona: str | None) -> dict:
+    """Luồng kép ML + LLM NLG: Khi dùng tfidf/pho_bert, gọi LLM lần 2 sinh lời bình tự nhiên."""
+    try:
+        from src.nlu.llm_intent_handler import _call_llm, _build_persona_addition, _load_prompts_json
+        prompts = _load_prompts_json()
+        persona_block = _build_persona_addition(nlg_persona, prompts)
+        
+        sys_prompt = (
+            "Bạn là trợ lý tài chính Mimo. Hãy sinh một đoạn lời bình ngắn tiếng Việt (2-3 câu, có emoji) "
+            "phản hồi cho người dùng dựa trên kết quả phân tích NLU dưới đây.\n"
+            f"Văn phong: {persona_block}"
+        )
+        user_prompt = f"Câu người dùng: \"{text}\"\nKết quả NLU: {json.dumps(result, ensure_ascii=False, default=str)}"
+        nlg_text = str(_call_llm(system_prompt=sys_prompt, user_prompt=user_prompt)).strip()
+        result["nlg_response"] = nlg_text
+        result["mimo_emotion"] = "Success" if result.get("record_type") == "Income" else "Chill"
+    except Exception as e:
+        import logging
+        logging.getLogger(__name__).warning("ML + LLM NLG hybrid response generation failed: %s", e)
     return result
 
 

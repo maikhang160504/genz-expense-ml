@@ -82,7 +82,7 @@ def main() -> None:
             emotion=emotion,
         )
 
-        g = result.get("gemini_json") or {}
+        g = result.get("llm_json") or result.get("gemini_json") or {}
         rtag = result.get("relationship_tag") or "-"
         print(f"[{emotion}] {text}")
         print(f"  intent={result.get('intent')}  rel_tag={rtag}  time={ctx.get('time_of_day')}  wallet={ctx.get('wallet_health')}  payday_in={ctx.get('days_to_payday')}d")
@@ -94,7 +94,7 @@ def main() -> None:
             print(f"  story: {g['story']}")
             print(f"  status={api_status} → mascot_mood={mascot}")
         else:
-            err = result.get("gemini_error") or "LLM tắt hoặc không có API key"
+            err = result.get("llm_error") or result.get("gemini_error") or "LLM tắt hoặc không có API key"
             print(f"  [no LLM] {err}")
         print()
 

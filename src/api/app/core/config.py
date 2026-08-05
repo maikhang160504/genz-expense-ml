@@ -80,6 +80,7 @@ class Settings(BaseSettings):
     kaggle_config_dir: str = Field(default="")
     verified_ocr_labels_dir: str = Field(default="")
 
+    qwen_api_url: str | None = Field(default=None, alias="QWEN_API_URL")
     gemini_api_key: str | None = Field(default=None, alias="GEMINI_API_KEY")
     gemini_model: str = Field(default="gemini-2.5-flash")
     run_llm: bool = Field(default=False)

@@ -6,8 +6,8 @@ import os
 from pathlib import Path
 from typing import Any
 
-from src.llm.client import call_groq, ensure_gemini_system_instruction
-from src.llm.gemini_keys import call_gemini_with_key_fallback
+from src.llm.client import call_groq
+from src.nlu.llm_intent_handler import _call_llm
 from src.nlg.context_meta import filter_context_metadata_for_prompt
 from src.nlg.prompt import build_nlg_prompt
 from src.nlg.response import (
@@ -175,25 +175,22 @@ def attach_nlg_and_llm(
     llm_mode = os.environ.get("LLM_MODE", "both")
     is_triggered = bool(context_metadata.get("is_triggered", False))
 
-    if llm_mode in {"gemini", "both"}:
-        payload = json.loads(json.dumps(request_template))
-        payload["contents"][0]["parts"][0]["text"] = llm_user_text
-        _apply_gemini_nlg_schema(payload)
-        ensure_gemini_system_instruction(payload, result["nlg_prompt"]["system"])
+    if llm_mode in {"qwen", "gemini", "both", "real", "llm"}:
         try:
-            raw = call_gemini_with_key_fallback(gemini_model, payload)
-            result["gemini_response"] = raw
-            gemini_json = parse_llm_response(raw, "gemini")
-            if gemini_json:
+            raw = _call_llm(result["nlg_prompt"]["system"], llm_user_text)
+            result["llm_response"] = raw
+            llm_json = parse_llm_response(raw, "qwen")
+            if llm_json:
                 _finalize_llm_block(
-                    gemini_json,
+                    llm_json,
                     intent=intent,
                     _is_triggered=is_triggered,
                     record_type=nlu_result.get("record_type"),
                 )
-            result["gemini_json"] = gemini_json
+            result["llm_json"] = llm_json
+            result["gemini_json"] = llm_json
         except Exception as exc:
-            result["gemini_error"] = str(exc)
+            result["llm_error"] = str(exc)
 
     if llama_api and llm_mode in {"llama", "both"}:
         try:

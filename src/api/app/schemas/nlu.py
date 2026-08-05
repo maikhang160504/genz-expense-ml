@@ -45,6 +45,15 @@ class NLURequest(BaseModel):
     )
     user_id: str | None = None
     user_corrections: list[UserCorrectionItem] | None = None
+    caller_context: str | None = Field(
+        default="chat",
+        description=(
+            "Ngữ cảnh gọi: 'chat' (mặc định — chạy Stage 1 phân loại intent bình thường) "
+            "hoặc 'addstory' (bỏ qua Stage 1, luôn force intent = Record — "
+            "dùng khi người dùng đang ở màn hình AddStory của app)."
+        ),
+        examples=["chat", "addstory"],
+    )
 
     def resolved_nlg_persona(self) -> str:
         return (self.nlg_persona or self.emotion or "hai_huoc").strip()
@@ -102,8 +111,8 @@ class NLUResponse(BaseModel):
     multi_records: list[MultiRecordItem] = []
     multi_record_task: bool = False
     sentiment: str | None = None
-    nlg_prompt: dict[str, Any] | None = None
-    gemini_json: dict[str, Any] | None = None
+    llm_json: dict[str, Any] | None = None
+    gemini_json: dict[str, Any] | None = None  # deprecated alias for BE compat
     llama_json: dict[str, Any] | None = None
     nlg_persona: str | None = Field(default=None, description="Persona NLG đã dùng (hai_huoc, ...)")
     mimo_emotion: str | None = Field(default=None, description="Tên file PNG mascot (PascalCase)")
@@ -111,5 +120,6 @@ class NLUResponse(BaseModel):
     mascot_mood: str | None = Field(default=None, description="Alias of mimo_emotion for Flutter")
     nlg_response: str | None = None
     backend: str = Field(default="mock", description="`real` if full pipeline used, else `mock`.")
+    rule_used: str | None = Field(default=None, description="Tên rule đã sử dụng trong llm_v2")
     latency_ms: int | None = None
     suggested_actions: list[str] | None = Field(default=None, description="Danh sách các tính năng/câu hỏi gợi ý khi intent là Chitchat")

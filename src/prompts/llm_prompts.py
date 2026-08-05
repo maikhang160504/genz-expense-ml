@@ -55,7 +55,7 @@ LƯU Ý QUAN TRỌNG VỀ DANH MỤC (CATEGORY):
 - BẮT BUỘC trích xuất category (danh mục) đối với CẢ giao dịch chi tiêu (Expense), giao dịch thu nhập (Income) VÀ CÁC CÂU LỆNH BÁO CÁO (Action). Tuyệt đối không được trả về null cho danh mục nếu người dùng có đề cập đến (ví dụ: "lương" -> Salary, "tiền ăn" -> Food, "báo cáo tiền điện" -> Housing, "khoản mua sắm" -> Shopping).
 
 Quy tắc Category (bắt buộc trả về tiếng Anh):
-- 'Food': Chi tiêu cho bữa ăn uống hàng ngày của cá nhân hoặc gia đình. Liên quan đến: ăn sáng, ăn trưa, đi chợ, đồ ăn, quán ăn, trà sữa, v.v.
+- 'Food': Chi tiêu cho bữa ăn uống và mua sắm thực phẩm hàng ngày. Liên quan đến: ăn sáng, ăn trưa, ăn tối, đi chợ mua rau củ quả, trái cây, thịt cá, đồ ăn, quán ăn, trà sữa, cafe, v.v.
 - 'Transport': Chi phí di chuyển, đi lại và bảo dưỡng phương tiện. Liên quan đến: đổ xăng, gửi xe, sửa xe, đi grab, taxi, vé xe, v.v.
 - 'Shopping': Chi mua sắm trang phục, phụ kiện hoặc đồ dùng cá nhân không phải thực phẩm. Liên quan đến: quần áo, giày dép, túi xách, sắm đồ online, Shopee, v.v.
 - 'Beauty': Chi phí chăm sóc sắc đẹp và ngoại hình cá nhân. Liên quan đến: mỹ phẩm, làm đẹp, spa, cắt tóc, mua son môi, son dưỡng, làm nails, v.v.
@@ -64,7 +64,7 @@ Quy tắc Category (bắt buộc trả về tiếng Anh):
 - 'Housing': Chi phí cố định liên quan đến chỗ ở và tiện ích nhà ở. Liên quan đến: tiền thuê nhà, tiền trọ, điện nước, bình gas, internet, phí quản lý, v.v.
 - 'Education': Chi phí cho học tập, đào tạo và phát triển kiến thức. Liên quan đến: học phí, mua sách vở, sách lập trình, khóa học online, v.v.
 - 'Entertainment': Chi phí giải trí, thư giãn và sở thích cá nhân. Liên quan đến: xem phim chiếu rạp, nghe nhạc, tài khoản Netflix, nạp thẻ game, v.v.
-- 'Essentials': Chi mua vật dụng tiêu hao thiết yếu phục vụ sinh hoạt hàng ngày. Liên quan đến: đi siêu thị mua đồ dùng sinh hoạt, chai dầu gội, kem đánh răng, nước giặt, v.v.
+- 'Essentials': Chi mua vật dụng tiêu hao thiết yếu phục vụ sinh hoạt hàng ngày (phi thực phẩm). Liên quan đến: đi siêu thị mua đồ dùng sinh hoạt gia đình, chai dầu gội, sữa tắm, kem đánh răng, nước giặt, xà phòng, nước rửa chén, giấy vệ sinh, chổi quét nhà, v.v.
 - 'Business': Các khoản thu chi phát sinh trong hoạt động buôn bán, kinh doanh. Liên quan đến: chi phí quảng cáo, nhập hàng, thu nhập bán hàng, khách mua hàng của shop, v.v.
 - 'Charity': Các khoản tiền quyên góp, từ thiện vì mục đích cộng đồng. Liên quan đến: từ thiện, ủng hộ quỹ vaccine, quyên góp đồng bào lũ lụt, v.v.
 - 'Debt': Các khoản giao dịch liên quan đến thanh toán nợ hoặc cho mượn tiền. Liên quan đến: trả nợ thẻ tín dụng, trả tiền mượn bạn, cho người khác vay, v.v.
