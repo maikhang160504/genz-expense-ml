@@ -105,19 +105,15 @@ image = (
 secrets_list = []
 # 1. Forward local environment variables loaded from .env during CLI deploy
 local_keys = {}
-for key in ["gemini_API_v1", "gemini_API_v2", "gemini_API_v3", "HF_TOKEN", "USE_LOCAL_PHOGPT"]:
+for key in ["HF_TOKEN"]:
     val = os.environ.get(key)
     if val:
         local_keys[key] = val
 
-# Dynamically map GEMINI_API_KEY to gemini_API_v1 for internal packages
-if "gemini_API_v1" in local_keys:
-    local_keys["GEMINI_API_KEY"] = local_keys["gemini_API_v1"]
-
 if local_keys:
     secrets_list.append(modal.Secret.from_dict(local_keys))
 else:
-    # 2. Fall back to cloud-configured Modal Secret 'gemini-secrets' if deploying from CI/CD
+    # 2. Fall back to cloud-configured Modal Secret 'gemini-secrets' (kept for historical naming) if deploying from CI/CD
     secrets_list.append(modal.Secret.from_name("gemini-secrets"))
 
 

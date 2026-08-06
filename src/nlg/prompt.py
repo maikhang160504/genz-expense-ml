@@ -114,10 +114,10 @@ def build_nlg_prompt(
     slang_list = emotion_cfg.get("slang_pool", [])
     slang_instruction = ""
     if slang_list:
-        sampled_slang = random.sample(slang_list, min(3, len(slang_list)))
+        slang_to_use = random.choice(slang_list)
         slang_instruction = (
             f"[QUAN TRỌNG - PHONG CÁCH PHẢN HỒI]: Bạn PHẢI dùng phong cách '{nlg_persona}'. "
-            f"Đặc biệt, HÃY CHỌN DÙNG NGẪU NHIÊN 1-2 TỪ LÓNG SAU ĐÂY: {', '.join(sampled_slang)}. "
+            f"Đặc biệt, HÃY SỬ DỤNG TỪ LÓNG SAU ĐÂY TRONG CÂU PHẢN HỒI: {slang_to_use}. "
             "LƯU Ý QUAN TRỌNG: TUYỆT ĐỐI KHÔNG lặp lại các từ lóng đã dùng ở các câu trước (ví dụ: không được dùng lại 'ét ô ét' liên tục). "
             "Hãy thay đổi từ vựng ngẫu nhiên để thể hiện cá tính thật rõ nét, KHÔNG trả lời chung chung an toàn."
         )

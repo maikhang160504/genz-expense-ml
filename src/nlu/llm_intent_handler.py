@@ -12,6 +12,7 @@ from __future__ import annotations
 import json
 import os
 import logging
+import random
 from typing import Any
 
 logger = logging.getLogger(__name__)
@@ -373,9 +374,11 @@ def run_llm_nlu(
                 persona_config = emotions[persona_key]
                 sys_msg = persona_config.get("system", "")
                 user_msg = persona_config.get("user", "")
-                slangs = ", ".join(persona_config.get("slang_pool", []))
+                slangs_list = persona_config.get("slang_pool", [])
+                slang_to_use = random.choice(slangs_list) if slangs_list else ""
+                slang_text = f"\nTừ lóng được đính kèm (hãy sử dụng từ này trong câu): {slang_to_use}" if slang_to_use else ""
                 
-                system_tone_addition = f"\n\n[QUY TẮC PHONG CÁCH (Persona): {nlg_persona}]\n{sys_msg}\nTừ lóng được phép dùng: {slangs}"
+                system_tone_addition = f"\n\n[QUY TẮC PHONG CÁCH (Persona): {nlg_persona}]\n{sys_msg}{slang_text}"
                 user_tone_addition = f"\n\n[YÊU CẦU PHẢN HỒI]: {user_msg}\n(TUYỆT ĐỐI KHÔNG DÙNG TIẾNG TRUNG/NGOẠI QUỐC)"
             else:
                 system_tone_addition = f"\n\n[QUY TẮC PHONG CÁCH (Persona): {nlg_persona}]\nHãy đóng vai và trả lời theo phong cách này."
@@ -585,12 +588,13 @@ def _build_persona_addition(nlg_persona: str | None, prompts_config: dict) -> st
         cfg = emotions[persona_key]
         sys_msg = cfg.get("system", "")
         user_guide = cfg.get("user", "")
-        slangs = ", ".join(cfg.get("slang_pool", []))
+        slangs_list = cfg.get("slang_pool", [])
+        slang_to_use = random.choice(slangs_list) if slangs_list else ""
+        slang_text = f"\nTừ lóng được đính kèm (hãy sử dụng từ này trong câu): {slang_to_use}" if slang_to_use else ""
         return (
             f"\n\n[QUY TẮC PHONG CÁCH — Persona: {persona_key.upper()}]\n"
             f"{sys_msg}\n"
-            f"Hướng dẫn viết response: {user_guide}\n"
-            f"Từ lóng được phép dùng (linh hoạt, không lặp): {slangs}"
+            f"Hướng dẫn viết response: {user_guide}{slang_text}"
         )
     return f"\n\n[QUY TẮC PHONG CÁCH — Persona: {nlg_persona}]\nHãy đóng vai và trả lời theo phong cách này."
 
@@ -636,7 +640,7 @@ def _build_relationship_addition(text: str, prompts_config: dict) -> str:
     return ""
 
 
-def _build_system_prompt(intent: str, nlg_persona: str | None, text: str) -> str:
+def _build_system_prompt(intent: str, nlg_persona: str | None, text: str, is_rag: bool = False) -> str:
     """Ghép system prompt hoàn chỉnh: rule đúng theo intent + persona + relationship.
     
     Thứ tự ưu tiên: Base rule → Persona injection → Relationship injection (cao nhất).
@@ -644,13 +648,31 @@ def _build_system_prompt(intent: str, nlg_persona: str | None, text: str) -> str
     rules = _load_llm_rules()
     prompts = _load_prompts_json()
 
-    intent_lower = (intent or "").strip().lower()
-    if intent_lower == "record":
-        base_rule = rules.get("record_rule", {}).get("system", "")
-    elif intent_lower == "action":
-        base_rule = rules.get("action_rule", {}).get("system", "")
+    if is_rag:
+        base_rule = (
+            "Bạn là Mimo, trợ lý tài chính cá nhân của hệ thống spending-diary.\n"
+            "Hãy phân tích số liệu thực tế được cung cấp trong trường 'action_facts' của 'Ngữ cảnh hệ thống (CONTEXT_META)' và câu nói của người dùng để trả về DUY NHẤT một JSON hợp lệ có dạng:\n"
+            "{\n"
+            '  "intent": "Action",\n'
+            '  "emotion": "Alert | Angry | Approved | Celebrate | Chill | Cooking | Cool | Determined | Error | Excited | Giggle | Happy | Hello | Love | Proud | Relax | Sad | Sleepy | Sassy | Shopping | Travel | Sorry | Success | Taunting | Thankful | Thinking | Working | Worried",\n'
+            '  "response": "<lời nhận xét, phân tích số liệu chi tiêu/so sánh thực tế 2-3 câu, tiếng Việt 100%, TUYỆT ĐỐI KHÔNG DÙNG EMOJI>",\n'
+            '  "story": "<tương tự response>"\n'
+            "}\n\n"
+            "[QUY TẮC NHẬN XÉT RAG]\n"
+            "1. Lời phản hồi 'response' và 'story' PHẢI dựa trực tiếp trên số liệu thực tế được cung cấp trong 'action_facts' (tổng chi tiêu, phần trăm so sánh, các danh mục chi nhiều nhất). Tuyệt đối không bịa số liệu.\n"
+            "2. Giải thích 'compare_percent': Nếu compare_percent âm (< 0), nghĩa là chi tiêu GIẢM/ÍT HƠN so với cùng kỳ trước (ví dụ: -76% là giảm 76%). Nếu compare_percent dương (> 0), nghĩa là chi tiêu TĂNG/NHIỀU HƠN so với cùng kỳ trước (ví dụ: +30% là tăng 30%). Hãy dùng từ ngữ tự nhiên, ví dụ: 'bạn đã chi tiêu ít hơn 76% so với cùng kỳ tháng trước'.\n"
+            "3. Nếu 'action_facts' trống hoặc tổng chi tiêu = 0đ: phản hồi nhẹ nhàng thông báo người dùng chưa có giao dịch nào trong khoảng thời gian này và khuyên bắt đầu ghi chép.\n"
+            "4. Viết bằng tiếng Việt 100% tự nhiên, TUYỆT ĐỐI KHÔNG DÙNG EMOJI.\n"
+            "5. Các con số tiền phải được viết rõ ràng định dạng phân cách hàng nghìn bằng dấu chấm (ví dụ: '1.200.000đ', '600.000đ', '400.000đ').\n"
+        )
     else:
-        base_rule = rules.get("chitchat_rule", {}).get("system", "")
+        intent_lower = (intent or "").strip().lower()
+        if intent_lower == "record":
+            base_rule = rules.get("record_rule", {}).get("system", "")
+        elif intent_lower == "action":
+            base_rule = rules.get("action_rule", {}).get("system", "")
+        else:
+            base_rule = rules.get("chitchat_rule", {}).get("system", "")
 
     persona_block = _build_persona_addition(nlg_persona, prompts)
     relationship_block = _build_relationship_addition(text, prompts)
@@ -682,10 +704,14 @@ def run_llm_nlu_v2(
         Dict chuẩn hóa giống run_llm_nlu, backend = "llm_v2".
     """
     try:
+        is_rag = bool(context_metadata and "action_facts" in context_metadata)
+
         # Xác định intent: nếu có forced_intent thì dùng ngay, không cần classify
         if forced_intent:
             intent = forced_intent
             logger.info("[run_llm_nlu_v2] forced_intent=%s, skip Stage 1.", intent)
+        elif is_rag:
+            intent = "Action"
         else:
             # Stage 1 classify intent bằng LLM (chỉ dùng trong v2 nếu không có kết quả TF-IDF)
             intent, _ = classify_intent_llm(text)
@@ -695,8 +721,7 @@ def run_llm_nlu_v2(
         if override_prompt:
             system_prompt = override_prompt
         else:
-            system_prompt = _build_system_prompt(intent, nlg_persona, text)
-
+            system_prompt = _build_system_prompt(intent, nlg_persona, text, is_rag=is_rag)
 
         # Build user prompt với context metadata
         if context_metadata:
@@ -720,7 +745,10 @@ def run_llm_nlu_v2(
             act_type = parsed.get("action_type") if intent == "Action" else None
 
             # Build kết quả chuẩn hóa
-            return {
+            resp_text = _sanitize_nlg_response(
+                parsed.get("response") or parsed.get("story") or "Mimo đã ghi nhận rồi nha."
+            )
+            result = {
                 **parsed,
                 "intent": intent,
                 "intent_confidence": 1.0,
@@ -736,9 +764,9 @@ def run_llm_nlu_v2(
                 "mimo_emotion": parsed.get("emotion") or "neutral",
                 "llm_emotion": parsed.get("emotion") or "neutral",
                 "mascot_mood": parsed.get("emotion") or "neutral",
-                "nlg_response": _sanitize_nlg_response(
-                    parsed.get("response") or "Mimo đã ghi nhận rồi nha."
-                ),
+                "nlg_response": resp_text,
+                "story": parsed.get("story") or resp_text,
+                "rag_narrative": parsed.get("story") or resp_text,
                 "suggested_actions": parsed.get("suggested_actions") or (
                     ["Thêm giao dịch", "Xem báo cáo", "Quét hóa đơn"]
                     if intent == "Chitchat"
@@ -746,7 +774,7 @@ def run_llm_nlu_v2(
                 ),
                 "llm_json": parsed,
                 "backend": "llm_v2",
-                "rule_used": f"{(intent or 'chitchat').strip().lower()}_rule",
+                "rule_used": "rag_rule" if is_rag else f"{(intent or 'chitchat').strip().lower()}_rule",
             }
 
             # Parse time_range cho REPORT_* và SEARCH_RECORD

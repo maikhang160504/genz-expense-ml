@@ -169,35 +169,55 @@ def run_nlu(
     nlg_persona: str | None = None,
     caller_context: str | None = "chat",
 ) -> dict:
-    from src.nlu.models import get_intent_backend
+    from src.nlu.models import get_intent_backend, get_category_backend
+    from src.nlu.llm_intent_handler import run_llm_nlu_v2, classify_intent_llm
+    from src.nlg.context_meta import build_unified_llm_context
 
-    # ── KẾ HOẠCH 3: Nhánh llm_v2 — Stage 1 (TF-IDF/PhoBERT) + Stage 2 (Qwen rule-based) ──
-    # llm_v2 sử dụng llm_rules.json thay vì UNIFIED_NLU_PROMPT monolithic.
-    # Hỗ trợ addstory shortcut (force Record) và majority vote (confidence < 0.65).
-    if get_intent_backend() == "llm_v2":
-        from src.nlu.llm_intent_handler import run_llm_nlu_v2
-        from src.nlg.context_meta import build_unified_llm_context
+    intent_backend_choice = get_intent_backend()
+    category_backend_choice = get_category_backend()
 
-        context_metadata = None
-        if profile:
-            try:
-                context_metadata = build_unified_llm_context(profile)
-            except Exception as e:
-                print(f"[NLU pipeline llm_v2] Error building context: {e}")
+    context_metadata = None
+    if profile:
+        try:
+            context_metadata = build_unified_llm_context(profile)
+        except Exception as e:
+            print(f"[NLU pipeline] Error building context: {e}")
 
-        # Shortcut addstory: bỏ qua Stage 1, force intent = Record
-        if caller_context == "addstory":
+    # RAG second pass: if action_facts is in profile, execute RAG narrative directly
+    if profile and "action_facts" in profile:
+        return run_llm_nlu_v2(
+            user_text,
+            context_metadata=context_metadata,
+            nlg_persona=nlg_persona,
+            forced_intent="Action",
+        )
+
+    # Shortcut addstory: force intent = Record
+    if caller_context == "addstory":
+        if category_backend_choice in ("llm", "llm_v2"):
             return run_llm_nlu_v2(
                 user_text,
                 context_metadata=context_metadata,
                 nlg_persona=nlg_persona,
                 forced_intent="Record",
             )
+        intent = "Record"
+        intent_conf = 1.0
+        intent_proba = {"Record": 1.0}
 
-        # Stage 1: classify intent bằng TF-IDF/encoder
-        intent, intent_conf, _ = classify_intent(user_text, intent_model)
+    # ── STAGE 1: Nhận dạng ý định (TF-IDF, PhoBERT encoder, hoặc LLM) ──
+    else:
+        if intent_backend_choice in ("llm", "llm_v2"):
+            intent, intent_conf = classify_intent_llm(user_text)
+            intent_proba = {intent: intent_conf}
+        else:
+            intent, intent_conf, intent_proba = classify_intent(user_text, intent_model)
 
-        # Stage 2: gọi Qwen với rule đúng theo intent từ Stage 1
+    # ── STAGE 2: Trích xuất thông tin + Phản hồi ──
+    # Quy tắc:
+    # 1. Action và Chitchat: LUÔN DÙNG LLM Qwen (run_llm_nlu_v2)
+    # 2. Record: Dùng LLM Qwen nếu category_backend là llm, ngược lại dùng ML (PhoBERT / TF-IDF)
+    if intent in ("Action", "Chitchat"):
         return run_llm_nlu_v2(
             user_text,
             context_metadata=context_metadata,
@@ -205,102 +225,17 @@ def run_nlu(
             forced_intent=intent,
         )
 
-    if get_intent_backend() == "llm":
-        from src.nlu.llm_intent_handler import run_llm_nlu
-        from src.nlg.context_meta import build_unified_llm_context
-        
-        # Priority 1: Check personalization layer before calling the heavy LLM
-        match = None
-        if user_corrections:
-            vectorizer = category_model.get("vectorizer")
-            match = find_matching_correction(user_text, user_corrections, vectorizer)
-            
-        if match:
-            intent = match.get("intent", "Record")
-            category = match.get("category_code")
-            record_type = match.get("record_type")
-            amounts = extract_amounts(user_text)
-            amount = amounts[0] if amounts else None
-            
-            vietCategoryMap = {
-                'Food': 'Ăn uống', 'Transport': 'Di chuyển', 'Housing': 'Nhà ở', 'Shopping': 'Mua sắm',
-                'Entertainment': 'Giải trí', 'Health': 'Sức khỏe', 'Education': 'Giáo dục', 'Others': 'Tiêu dùng khác',
-                'Other': 'Tiêu dùng khác', 'Essentials': 'Thiết yếu', 'Beauty': 'Làm đẹp', 'Social': 'Xã hội',
-                'Salary': 'Lương', 'Bonus': 'Thưởng', 'Business': 'Kinh doanh'
-            }
-            vietCat = vietCategoryMap.get(category, category or "khoản chi")
-            
-            if amount:
-                formatted_amt = f"{amount:,}".replace(",", ".") + "đ"
-                if record_type == "Income":
-                    resp = f"Tuyệt vời! Mimo đã ghi nhận khoản thu nhập {formatted_amt} vào danh mục {vietCat}."
-                else:
-                    resp = f"Mimo đã ghi nhận khoản chi {formatted_amt} cho {vietCat} vào ví của bạn."
-            else:
-                if record_type == "Income":
-                    resp = f"Mimo đã chuẩn bị sẵn phiếu ghi nhận thu nhập cho danh mục {vietCat}. Bạn hãy nhập số tiền và bấm lưu nhé!"
-                else:
-                    resp = f"Mimo đã chuẩn bị sẵn phiếu ghi nhận chi tiêu cho danh mục {vietCat}. Bạn hãy nhập số tiền và bấm lưu nhé!"
-            
-            return {
-                "intent": intent,
-                "intent_confidence": 1.0,
-                "intent_backend": f"user_{match['match_type']}",
-                "text": user_text,
-                "item": clean_content(user_text),
-                "category": category,
-                "amount": amount,
-                "record_type": record_type,
-                "is_expense": record_type == "Expense",
-                "nlg_response": resp,
-                "mimo_emotion": "Success" if record_type == "Income" else "Chill",
-                "backend": f"user_{match['match_type']}",
-            }
+    if intent == "Record" and category_backend_choice in ("llm", "llm_v2"):
+        return run_llm_nlu_v2(
+            user_text,
+            context_metadata=context_metadata,
+            nlg_persona=nlg_persona,
+            forced_intent="Record",
+        )
 
-        # Priority 2: Action Heuristic Rules (First Pass Action queries bypass LLM)
-        user_text_lower = user_text.lower().strip()
-        is_suggest = any(kw in user_text_lower for kw in ("gợi ý", "đề xuất", "khuyên", "suggest", "recommend"))
-        is_report = any(kw in user_text_lower for kw in ("tổng chi", "báo cáo", "thống kê", "chi tiêu tuần", "chi tiêu tháng", "chi tiêu hôm nay", "thu nhập tuần", "thu nhập tháng", "thu nhập hôm nay"))
-        is_search = any(kw in user_text_lower for kw in ("tìm kiếm", "tra cứu", "tìm giao dịch", "tìm khoản"))
-        
-        if is_suggest or is_report or is_search:
-            action_type = "SUGGEST_BUDGET" if is_suggest else ("REPORT_GENERAL" if is_report else "SEARCH_RECORD")
-            # If it's a second pass (has action_facts in profile), let it fall through to Qwen
-            if profile and "action_facts" in profile:
-                pass
-            else:
-                # First pass: response is empty
-                return {
-                    "intent": "Action",
-                    "intent_confidence": 1.0,
-                    "intent_backend": "rule_heuristic",
-                    "text": user_text,
-                    "item": None,
-                    "category": None,
-                    "amount": None,
-                    "record_type": None,
-                    "is_expense": None,
-                    "action_type": action_type,
-                    "action_details": {
-                        "time_range": parse_time_range(user_text, []) if is_report else None
-                    },
-                    "nlg_response": "",
-                    "mimo_emotion": "Chill",
-                    "backend": "llm_unified",
-                }
-
-        context_metadata = None
-        if profile:
-            try:
-                context_metadata = build_unified_llm_context(profile)
-            except Exception as e:
-                print(f"[NLU pipeline] Error building unified context: {e}")
-
-        # Fallback to Qwen LLM NLU if personalization not matched
-        result = run_llm_nlu(user_text, context_metadata=context_metadata, run_llm=True, nlg_persona=nlg_persona)
-        return result
-
-    intent, intent_conf, intent_proba = classify_intent(user_text, intent_model)
+    # ── Classic ML Pipeline (Chỉ áp dụng cho Record khi cấu hình dùng PhoBERT / TF-IDF) ──
+    amounts = extract_amounts(user_text)
+    content = clean_content(user_text)
 
     # Personalization Hybrid Layer: exact match or semantic similarity match
     match = None

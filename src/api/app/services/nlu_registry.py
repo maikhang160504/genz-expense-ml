@@ -48,12 +48,12 @@ def load_registry(nlu_root: Path) -> dict[str, Any]:
             "last_accepted_run_index": 0,
             "pending_run_index": None,
             "accepted_at": None,
-            "intent_backend": "llm_v2",
+            "intent_backend": "encoder",
             "category_backend": "llm_v2",
         }
         _save_json(p, reg)
     if "intent_backend" not in reg:
-        reg["intent_backend"] = reg.get("inference_backend", "llm_v2")
+        reg["intent_backend"] = reg.get("inference_backend", "encoder")
     if "category_backend" not in reg:
         reg["category_backend"] = reg.get("inference_backend", "llm_v2")
     return reg
@@ -61,7 +61,7 @@ def load_registry(nlu_root: Path) -> dict[str, Any]:
 
 def get_intent_backend(nlu_root: Path) -> str:
     reg = load_registry(nlu_root)
-    backend = str(reg.get("intent_backend", "llm_v2")).strip().lower()
+    backend = str(reg.get("intent_backend", "encoder")).strip().lower()
     if backend in {"llm", "llm_v2"}:
         return backend
     return "encoder" if backend in {"encoder", "phobert"} else "tfidf"

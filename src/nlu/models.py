@@ -90,8 +90,8 @@ def _get_path(default_path: Path) -> Path:
 
 
 def load_intent_model():
-    """Production: TF-IDF only. Encoder only if ``NLU_USE_ENCODER=1``. LLM backend skips local models."""
-    if get_intent_backend() == "llm":
+    """Production: TF-IDF or Encoder depending on backend. LLM backend skips local models."""
+    if get_intent_backend() in ("llm", "llm_v2"):
         return {"backend": "llm"}
     intent_enc = _get_path(settings.INTENT_ENCODER_PATH)
     if use_intent_encoder_runtime() and intent_enc.is_file():
@@ -103,7 +103,7 @@ def load_intent_model():
 
 
 def load_category_model():
-    if get_category_backend() == "llm":
+    if get_category_backend() in ("llm", "llm_v2"):
         return {"backend": "llm"}
     cat_enc = _get_path(settings.CATEGORY_ENCODER_PATH)
     if use_category_encoder_runtime() and cat_enc.is_file():
@@ -115,7 +115,7 @@ def load_category_model():
 
 
 def load_action_type_model():
-    if get_intent_backend() == "llm":
+    if get_intent_backend() in ("llm", "llm_v2") and get_category_backend() in ("llm", "llm_v2"):
         return {"backend": "llm"}
     act_enc = _get_path(settings.ACTION_TYPE_ENCODER_PATH)
     if use_intent_encoder_runtime() and act_enc.is_file():
@@ -127,7 +127,7 @@ def load_action_type_model():
 
 
 def load_action_slots_model():
-    if get_intent_backend() == "llm":
+    if get_intent_backend() in ("llm", "llm_v2") and get_category_backend() in ("llm", "llm_v2"):
         return {"backend": "llm"}
     from src.nlu.action_slots import load_action_slots_model as _load
 
@@ -139,7 +139,7 @@ def load_action_slots_model():
 
 
 def load_record_type_model():
-    if get_intent_backend() == "llm":
+    if get_intent_backend() in ("llm", "llm_v2") and get_category_backend() in ("llm", "llm_v2"):
         return {"backend": "llm"}
     rec_enc = _get_path(settings.RECORD_TYPE_ENCODER_PATH)
     if use_intent_encoder_runtime() and rec_enc.is_file():
