@@ -90,7 +90,7 @@ Quy tắc kiểm duyệt nội dung (Guardrails):
 
 CHÚ Ý: ĐẦU RA PHẢI LÀ JSON HỢP LỆ. BẮT ĐẦU BẰNG { VÀ KẾT THÚC BẰNG }."""
 
-INTENT_CLASSIFICATION_PROMPT = """Bạn là hệ thống phân loại intent cho ứng dụng quản lý chi tiêu Mimo.
+INTENT_CLASSIFICATION_PROMPT = """Bạn là hệ thống phân loại intent (ý định) cho ứng dụng quản lý chi tiêu Mimo.
 
 Phân tích câu nói của người dùng và trả về JSON với format:
 {
@@ -98,10 +98,19 @@ Phân tích câu nói của người dùng và trả về JSON với format:
     "confidence": 0.0-1.0
 }
 
-Quy tắc:
-- "Record": Khi người dùng ghi nhận chi tiêu hoặc thu nhập (ví dụ: "mua cà phê 30k", "được lương 10 triệu")
-- "Action": Khi người dùng yêu cầu thực hiện hành động hệ thống (báo cáo, đặt hạn mức, tìm kiếm, cài đặt...)
-- `Chitchat` = Yêu cầu trò chuyện phím, tâm sự, hỏi đáp thông thường. (BẮT BUỘC DÙNG TIẾNG VIỆT 100%, TUYỆT ĐỐI KHÔNG DÙNG TIẾNG TRUNG) (ví dụ: "xin chào", "bạn khỏe không")
+Quy tắc phân loại cực kỳ chi tiết:
+1. "Record": CHỈ dùng khi người dùng ghi chép lại một khoản CHI TIÊU hoặc THU NHẬP đã/đang diễn ra.
+   - Ví dụ: "mua cà phê 30k", "được lương 10 triệu", "tiêu hết 500k tiền điện", "nhận 2 triệu tiền thưởng".
+   - TUYỆT ĐỐI KHÔNG dùng "Record" cho các hành động lên kế hoạch, tạo quỹ, tạo thử thách, hay hỏi đáp.
+
+2. "Action": Dùng khi người dùng yêu cầu thực hiện lệnh hệ thống, tra cứu hoặc TẠO/ĐIỀU CHỈNH thiết lập, KẾ HOẠCH TÀI CHÍNH. Bao gồm:
+   - Tạo, nhắc nhở hoặc thêm tiền vào quỹ/mục tiêu/thử thách tiết kiệm/vay mượn (Ví dụ: "tạo thử thách đi biển 2tr", "lập quỹ nhóm 10 triệu", "nhắc nợ Nam 500k").
+   - Xem báo cáo, thống kê, tra cứu, tìm kiếm (Ví dụ: "tháng này tiêu bao nhiêu", "tìm khoản ăn uống tháng trước").
+   - Đặt hạn mức, cài đặt hệ thống, đổi giọng điệu (Ví dụ: "đặt hạn mức tháng 5 triệu", "đổi sang giao diện tối").
+
+3. "Chitchat": Dùng cho các câu trò chuyện phiếm, tâm sự, chào hỏi, hoặc hỏi đáp thông thường.
+   - BẮT BUỘC DÙNG TIẾNG VIỆT 100%, TUYỆT ĐỐI KHÔNG DÙNG TIẾNG TRUNG.
+   - Ví dụ: "xin chào", "hôm nay buồn quá".
 
 Chỉ trả về JSON, không giải thích."""
 

@@ -193,13 +193,14 @@ def run_nlu(
         )
 
     # Shortcut addstory: force intent = Record
-    if caller_context == "addstory":
+    if caller_context in ("addstory", "bill"):
         if category_backend_choice in ("llm", "llm_v2"):
             return run_llm_nlu_v2(
                 user_text,
                 context_metadata=context_metadata,
                 nlg_persona=nlg_persona,
                 forced_intent="Record",
+                caller_context=caller_context,
             )
         intent = "Record"
         intent_conf = 1.0
@@ -247,6 +248,7 @@ def run_nlu(
             context_metadata=context_metadata,
             nlg_persona=nlg_persona,
             forced_intent="Record",
+                caller_context=caller_context,
             forced_category=forced_category,
             forced_record_type=forced_record_type,
         )

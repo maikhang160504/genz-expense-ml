@@ -139,6 +139,7 @@ class ExpenseService:
             nlu_req = NLURequest(
                 text=nlu_text[:900],
                 run_llm=True,
+                caller_context="bill",
             )
             nlu_response = get_nlu_service().infer(nlu_req)
             if nlu_response and nlu_response.category and nlu_response.category != "Others":

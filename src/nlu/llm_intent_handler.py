@@ -398,7 +398,7 @@ def run_llm_nlu(
         # Keywords for NGUOI_YEU
         elif any(kw in text_lower for kw in ["người yêu", "nguoi yeu", "bồ", "bo", "vợ", "vo", "chồng", "chong", "gấu", "gau", "crush"]):
             nguoi_yeu = rel_override.get("NGUOI_YEU", {})
-            is_expense = any(kw in text_lower for kw in ["mua", "tặng", "chuyển", "trả", "bao", "đãi", "đưa", "ăn"])
+            is_expense = any(re.search(rf"\b{kw}\b", text_lower) for kw in ["mua", "tặng", "chuyển", "trả", "bao", "đãi", "đưa", "ăn"])
             is_income = any(kw in text_lower for kw in ["nhận", "được", "cho", "đòi"])
             if not is_income and not is_expense:
                 is_expense = True # default
@@ -617,7 +617,7 @@ def _build_relationship_addition(text: str, prompts_config: dict) -> str:
         "dad", "daddy", "dady",
         "cậu", "mợ", "dì", "chú", "thím", "bác",
     ]
-    if any(kw in text_lower for kw in cha_me_keywords):
+    if any(re.search(rf"\b{kw}\b", text_lower) for kw in cha_me_keywords):
         rule = rel.get("CHA_ME", {}).get("rule", "")
         if rule:
             return f"\n\n[ĐẶC BIỆT — QUAN HỆ NGƯỜI THÂN]: {rule}"
@@ -629,9 +629,9 @@ def _build_relationship_addition(text: str, prompts_config: dict) -> str:
         "iu", "babe", "baby",
         "người thương", "nửa kia",
     ]
-    if any(kw in text_lower for kw in nguoi_yeu_keywords):
+    if any(re.search(rf"\b{kw}\b", text_lower) for kw in nguoi_yeu_keywords):
         nguoi_yeu = rel.get("NGUOI_YEU", {})
-        is_expense = any(kw in text_lower for kw in
+        is_expense = any(re.search(rf"\b{kw}\b", text_lower) for kw in
             ["mua", "tặng", "chuyển", "trả", "bao", "đãi", "đưa", "chi", "tiêu", "mời"])
         if is_expense and nguoi_yeu.get("rule_happy"):
             return f"\n\n[ĐẶC BIỆT — QUAN HỆ NGƯỜI YÊU]: {nguoi_yeu['rule_happy']}"
@@ -640,7 +640,7 @@ def _build_relationship_addition(text: str, prompts_config: dict) -> str:
     return ""
 
 
-def _build_system_prompt(intent: str, nlg_persona: str | None, text: str, is_rag: bool = False) -> str:
+def _build_system_prompt(intent: str, nlg_persona: str | None, text: str, is_rag: bool = False, caller_context: str | None = None) -> str:
     """Ghép system prompt hoàn chỉnh: rule đúng theo intent + persona + relationship.
     
     Thứ tự ưu tiên: Base rule → Persona injection → Relationship injection (cao nhất).
@@ -674,8 +674,12 @@ def _build_system_prompt(intent: str, nlg_persona: str | None, text: str, is_rag
         else:
             base_rule = rules.get("chitchat_rule", {}).get("system", "")
 
-    persona_block = _build_persona_addition(nlg_persona, prompts)
-    relationship_block = _build_relationship_addition(text, prompts)
+    if caller_context == "bill":
+        persona_block = ""
+        relationship_block = ""
+    else:
+        persona_block = _build_persona_addition(nlg_persona, prompts)
+        relationship_block = _build_relationship_addition(text, prompts)
 
     return base_rule + persona_block + relationship_block
 
@@ -685,7 +689,7 @@ def run_llm_nlu_v2(
     context_metadata: dict[str, Any] | None = None,
     nlg_persona: str | None = None,
     forced_intent: str | None = None,
-    override_prompt: str | None = None,
+    override_prompt: str | None = None, caller_context: str | None = None, 
     forced_category: str | None = None,
     forced_record_type: str | None = None,
 ) -> dict[str, Any]:
@@ -723,7 +727,7 @@ def run_llm_nlu_v2(
         if override_prompt:
             system_prompt = override_prompt
         else:
-            system_prompt = _build_system_prompt(intent, nlg_persona, text, is_rag=is_rag)
+            system_prompt = _build_system_prompt(intent, nlg_persona, text, is_rag=is_rag, caller_context=caller_context)
 
         # Build user prompt với context metadata
         if context_metadata:

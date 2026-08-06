@@ -11,7 +11,7 @@ def sync_nlu_models():
         print(f"📂 Đã tạo thư mục '{local_dir}'")
         
     # Sử dụng command dạng string với shell=True trên Windows để nhận diện đúng biến môi trường và file .exe/.cmd
-    cmd = "modal volume get expense-ocr-nlu-storage nlu_models/* models/"
+    cmd = "modal volume get expense-ocr-nlu-storage nlu_models/ models/"
     
     try:
         print(f"🔄 Đang thực thi: {cmd}")
