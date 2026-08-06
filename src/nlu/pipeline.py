@@ -213,30 +213,6 @@ def run_nlu(
         else:
             intent, intent_conf, intent_proba = classify_intent(user_text, intent_model)
 
-    # ── STAGE 2: Trích xuất thông tin + Phản hồi ──
-    # Quy tắc:
-    # 1. Action và Chitchat: LUÔN DÙNG LLM Qwen (run_llm_nlu_v2)
-    # 2. Record: Dùng LLM Qwen nếu category_backend là llm, ngược lại dùng ML (PhoBERT / TF-IDF)
-    if intent in ("Action", "Chitchat"):
-        return run_llm_nlu_v2(
-            user_text,
-            context_metadata=context_metadata,
-            nlg_persona=nlg_persona,
-            forced_intent=intent,
-        )
-
-    if intent == "Record" and category_backend_choice in ("llm", "llm_v2"):
-        return run_llm_nlu_v2(
-            user_text,
-            context_metadata=context_metadata,
-            nlg_persona=nlg_persona,
-            forced_intent="Record",
-        )
-
-    # ── Classic ML Pipeline (Chỉ áp dụng cho Record khi cấu hình dùng PhoBERT / TF-IDF) ──
-    amounts = extract_amounts(user_text)
-    content = clean_content(user_text)
-
     # Personalization Hybrid Layer: exact match or semantic similarity match
     match = None
     if user_corrections:
@@ -247,6 +223,37 @@ def run_nlu(
         if match.get("intent"):
             intent = match["intent"]
             intent_conf = match.get("similarity_score", 1.0)
+
+    forced_category = match.get("category_code") if match else None
+    forced_record_type = match.get("record_type") if match else None
+
+    # ── STAGE 2: Trích xuất thông tin + Phản hồi ──
+    # Quy tắc:
+    # 1. Action và Chitchat: LUÔN DÙNG LLM Qwen (run_llm_nlu_v2)
+    # 2. Record: Dùng LLM Qwen nếu category_backend là llm, ngược lại dùng ML (PhoBERT / TF-IDF)
+    if intent in ("Action", "Chitchat"):
+        return run_llm_nlu_v2(
+            user_text,
+            context_metadata=context_metadata,
+            nlg_persona=nlg_persona,
+            forced_intent=intent,
+            forced_category=forced_category,
+            forced_record_type=forced_record_type,
+        )
+
+    if intent == "Record" and category_backend_choice in ("llm", "llm_v2"):
+        return run_llm_nlu_v2(
+            user_text,
+            context_metadata=context_metadata,
+            nlg_persona=nlg_persona,
+            forced_intent="Record",
+            forced_category=forced_category,
+            forced_record_type=forced_record_type,
+        )
+
+    # ── Classic ML Pipeline (Chỉ áp dụng cho Record khi cấu hình dùng PhoBERT / TF-IDF) ──
+    amounts = extract_amounts(user_text)
+    content = clean_content(user_text)
 
     # LLM Fallback: khi encoder confidence thấp → dùng LLM để re-classify
     llm_fallback_result = None

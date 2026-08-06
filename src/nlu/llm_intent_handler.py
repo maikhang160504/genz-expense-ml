@@ -686,6 +686,8 @@ def run_llm_nlu_v2(
     nlg_persona: str | None = None,
     forced_intent: str | None = None,
     override_prompt: str | None = None,
+    forced_category: str | None = None,
+    forced_record_type: str | None = None,
 ) -> dict[str, Any]:
     """Stage 2 — Gọi Qwen với rule đúng theo intent (thay thế run_llm_nlu cũ).
     
@@ -737,7 +739,7 @@ def run_llm_nlu_v2(
             slots = parsed.get("slots") or {}
 
             # Normalize record_type
-            raw_record_type = parsed.get("record_type")
+            raw_record_type = forced_record_type or parsed.get("record_type")
             if not raw_record_type or raw_record_type not in ("Income", "Expense"):
                 raw_record_type = "Expense"
 
@@ -754,7 +756,7 @@ def run_llm_nlu_v2(
                 "intent_confidence": 1.0,
                 "text": text,
                 "item": slots.get("item"),
-                "category": parsed.get("category") or slots.get("category"),
+                "category": forced_category or parsed.get("category") or slots.get("category"),
                 "amount": parsed.get("amount") or slots.get("amount") or slots.get("value") or 0,
                 "clean_content": parsed.get("clean_content") or text,
                 "record_type": raw_record_type if intent == "Record" else None,
