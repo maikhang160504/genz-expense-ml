@@ -190,8 +190,10 @@ def reload_nlu() -> bool:
                 logger.info("NLU inference backend is LLM. Pre-loading local Qwen model into GPU...")
                 local_llm = importlib.import_module("src.nlu.local_llm")
                 local_llm.load_local_phogpt()
-        except Exception as exc:
-            logger.warning(f"Failed to pre-load Qwen LLM during reload: {exc}")
+        except Exception as e:
+            logger.error(f"Failed to load NLU joblib models: {e}")
+            _NLU_ERROR = str(e)
+            raise e
 
         with _LOCK:
             _NLU_BUNDLE = bundle

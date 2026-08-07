@@ -6,6 +6,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 PROMPTS_PATH = ROOT / "src" / "prompts" / "prompts.json"
 OUTPUT_PATH = ROOT / "text_nlu" / "datasets" / "dataset_finetune.jsonl"
+OUTPUT_STORAGE_PATH = Path("/storage/exported/vistral_finetune_incremental.jsonl")
 BACKEND_ENV = ROOT.parent / "app" / "backend" / ".env"
 
 def get_db_url():
@@ -88,6 +89,13 @@ def export_finetune_data():
     with open(OUTPUT_PATH, "w", encoding="utf-8") as f:
         for r in results:
             f.write(json.dumps(r, ensure_ascii=False) + "\n")
+            
+    # Sao chép vào /storage để dùng cho huấn luyện Modal nếu thư mục gốc /storage tồn tại
+    if Path("/storage").exists() or OUTPUT_STORAGE_PATH.parent.exists():
+        import shutil
+        OUTPUT_STORAGE_PATH.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(OUTPUT_PATH, OUTPUT_STORAGE_PATH)
+        print(f">>> Đã copy dữ liệu sang Modal Storage: {OUTPUT_STORAGE_PATH}")
             
     print(f">>> Đã xuất {len(results)} mẫu thực tế từ DB ra {OUTPUT_PATH}")
     return str(OUTPUT_PATH)

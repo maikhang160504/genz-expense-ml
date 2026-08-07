@@ -13,6 +13,7 @@ import json
 import os
 import logging
 import random
+import re
 from typing import Any
 
 logger = logging.getLogger(__name__)
@@ -491,7 +492,7 @@ def run_llm_nlu(
                 "llm_emotion": parsed.get("emotion") or "neutral",
                 "mascot_mood": parsed.get("emotion") or "neutral",
                 "nlg_response": _sanitize_nlg_response(parsed.get("response") or "Mimo đã ghi nhận rồi nha."),
-                "suggested_actions": parsed.get("suggested_actions") or (["Thêm giao dịch", "Xem báo cáo", "Quét hóa đơn"] if intent == "Chitchat" else None),
+                "suggested_actions": parsed.get("suggested_actions") or (["Ghi chép", "Quét bill", "Xem báo cáo"] if intent == "Chitchat" else None),
                 "llm_json": parsed,
                 "backend": "llm_unified"
             }
@@ -654,16 +655,15 @@ def _build_system_prompt(intent: str, nlg_persona: str | None, text: str, is_rag
             "Hãy phân tích số liệu thực tế được cung cấp trong trường 'action_facts' của 'Ngữ cảnh hệ thống (CONTEXT_META)' và câu nói của người dùng để trả về DUY NHẤT một JSON hợp lệ có dạng:\n"
             "{\n"
             '  "intent": "Action",\n'
-            '  "emotion": "Alert | Angry | Approved | Celebrate | Chill | Cooking | Cool | Determined | Error | Excited | Giggle | Happy | Hello | Love | Proud | Relax | Sad | Sleepy | Sassy | Shopping | Travel | Sorry | Success | Taunting | Thankful | Thinking | Working | Worried",\n'
-            '  "response": "<lời nhận xét, phân tích số liệu chi tiêu/so sánh thực tế 2-3 câu, tiếng Việt 100%, TUYỆT ĐỐI KHÔNG DÙNG EMOJI>",\n'
-            '  "story": "<tương tự response>"\n'
+            '  "response": "<lời nhận xét, phân tích số liệu chi tiêu/so sánh thực tế 2-3 câu, tiếng Việt 100%, TUYỆT ĐỐI KHÔNG DÙNG EMOJI>"\n'
             "}\n\n"
             "[QUY TẮC NHẬN XÉT RAG]\n"
-            "1. Lời phản hồi 'response' và 'story' PHẢI dựa trực tiếp trên số liệu thực tế được cung cấp trong 'action_facts' (tổng chi tiêu, phần trăm so sánh, các danh mục chi nhiều nhất). Tuyệt đối không bịa số liệu.\n"
+            "1. Lời phản hồi 'response' PHẢI dựa trực tiếp trên số liệu thực tế được cung cấp trong 'action_facts' (tổng chi tiêu, phần trăm so sánh, các danh mục chi nhiều nhất). Tuyệt đối không bịa số liệu.\n"
             "2. Giải thích 'compare_percent': Nếu compare_percent âm (< 0), nghĩa là chi tiêu GIẢM/ÍT HƠN so với cùng kỳ trước (ví dụ: -76% là giảm 76%). Nếu compare_percent dương (> 0), nghĩa là chi tiêu TĂNG/NHIỀU HƠN so với cùng kỳ trước (ví dụ: +30% là tăng 30%). Hãy dùng từ ngữ tự nhiên, ví dụ: 'bạn đã chi tiêu ít hơn 76% so với cùng kỳ tháng trước'.\n"
             "3. Nếu 'action_facts' trống hoặc tổng chi tiêu = 0đ: phản hồi nhẹ nhàng thông báo người dùng chưa có giao dịch nào trong khoảng thời gian này và khuyên bắt đầu ghi chép.\n"
             "4. Viết bằng tiếng Việt 100% tự nhiên, TUYỆT ĐỐI KHÔNG DÙNG EMOJI.\n"
             "5. Các con số tiền phải được viết rõ ràng định dạng phân cách hàng nghìn bằng dấu chấm (ví dụ: '1.200.000đ', '600.000đ', '400.000đ').\n"
+            "6. Xưng hô: Gọi người dùng là 'bạn' hoặc dùng tên (user_name trong CONTEXT_META), tự xưng là 'Mimo'. TUYỆT ĐỐI KHÔNG dùng từ 'mày', 'tao'.\n"
         )
     else:
         intent_lower = (intent or "").strip().lower()
@@ -774,7 +774,7 @@ def run_llm_nlu_v2(
                 "story": parsed.get("story") or resp_text,
                 "rag_narrative": parsed.get("story") or resp_text,
                 "suggested_actions": parsed.get("suggested_actions") or (
-                    ["Thêm giao dịch", "Xem báo cáo", "Quét hóa đơn"]
+                    ["Ghi chép", "Quét bill", "Xem báo cáo"]
                     if intent == "Chitchat"
                     else None
                 ),
@@ -824,6 +824,9 @@ def run_llm_nlu_v2(
                     if missing:
                         result["missing_slots"] = missing
                         logger.info("[run_llm_nlu_v2] missing_slots for %s: %s", act_type, missing)
+                        
+                        missing_text_vi = ", ".join(missing).replace("amount", "số tiền").replace("category", "danh mục").replace("theme", "chủ đề").replace("verb", "hành động")
+                        result["nlg_response"] = f"Mimo cần thêm thông tin về **{missing_text_vi}** để thực hiện yêu cầu này. Bạn vui lòng bổ sung ở khung bên dưới nhé!"
                 except Exception as e:
                     logger.warning("[run_llm_nlu_v2] missing_slots check error: %s", e)
 

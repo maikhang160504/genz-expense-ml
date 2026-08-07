@@ -33,8 +33,12 @@ def _load_json(path: Path, default: Any) -> Any:
 
 
 def _save_json(path: Path, data: Any) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+    try:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+    except OSError as e:
+        import logging
+        logging.getLogger(__name__).warning(f"Failed to save {path}: {e}")
 
 
 def load_registry(nlu_root: Path) -> dict[str, Any]:
@@ -48,12 +52,12 @@ def load_registry(nlu_root: Path) -> dict[str, Any]:
             "last_accepted_run_index": 0,
             "pending_run_index": None,
             "accepted_at": None,
-            "intent_backend": "encoder",
+            "intent_backend": "llm_v2",
             "category_backend": "llm_v2",
         }
         _save_json(p, reg)
     if "intent_backend" not in reg:
-        reg["intent_backend"] = reg.get("inference_backend", "encoder")
+        reg["intent_backend"] = reg.get("inference_backend", "llm_v2")
     if "category_backend" not in reg:
         reg["category_backend"] = reg.get("inference_backend", "llm_v2")
     return reg
@@ -186,6 +190,53 @@ def accept_pending_version(nlu_root: Path) -> dict[str, Any]:
 
     save_registry(nlu_root, reg)
     return reg
+
+
+def rollback_to_previous_version(nlu_root: Path) -> dict[str, Any]:
+    """Rollback to the previous model (models_old -> models)."""
+    import shutil
+    reg = load_registry(nlu_root)
+
+    models_dir = nlu_root / "text_nlu" / "models"
+    models_old = nlu_root / "text_nlu" / "models_old"
+
+    if not models_old.exists():
+        raise ValueError("Không tìm thấy mô hình cũ (models_old) để khôi phục.")
+
+    try:
+        # Xóa models hiện tại và copy models_old sang models
+        if models_dir.exists():
+            shutil.rmtree(models_dir, ignore_errors=True)
+        shutil.copytree(models_old, models_dir)
+
+        # Xóa nlu_models trên /storage nếu có, và copy nlu_models_old sang
+        storage_models = Path("/storage/nlu_models")
+        storage_models_old = Path("/storage/nlu_models_old")
+        if storage_models_old.exists():
+            if storage_models.exists():
+                shutil.rmtree(storage_models, ignore_errors=True)
+            shutil.copytree(storage_models_old, storage_models)
+    except Exception as e:
+        print(f"[NLU Registry] Lỗi khi khôi phục mô hình: {e}", flush=True)
+        raise ValueError(f"Khôi phục thất bại: {e}")
+
+    # Giảm version
+    minor = int(reg.get("minor", 1))
+    major = int(reg.get("major", 1))
+    if minor > 1:
+        minor -= 1
+    elif major > 1:
+        major -= 1
+        minor = 1
+        
+    reg["minor"] = minor
+    reg["major"] = major
+    reg["version"] = f"v{major}.{minor}-global"
+    reg["accepted_at"] = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+
+    save_registry(nlu_root, reg)
+    return reg
+
 
 
 def get_model_meta(nlu_root: Path, *, nlu_real: bool = True, nlu_loaded: bool = False) -> dict[str, Any]:

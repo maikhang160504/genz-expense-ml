@@ -83,11 +83,12 @@ def ensure_benchmark_dataset(dataset_path: Path):
             for row in reader:
                 if len(row) >= 5 and row[0].strip() and row[1].strip() == "Action":
                     act_type = row[2].strip()
+                    cat = row[4].strip() if len(row) > 4 and row[4].strip() else "None"
                     actions_by_type[act_type].append({
                         "text": row[0].strip(),
                         "expected_intent": "Action",
-                        "expected_category": "Others",
-                        "expected_record_type": "expense",
+                        "expected_category": cat,
+                        "expected_record_type": "None",
                         "expected_action_type": act_type
                     })
         # Sample evenly across action types (total ~35)
@@ -114,8 +115,8 @@ def ensure_benchmark_dataset(dataset_path: Path):
                     all_chitchats.append({
                         "text": row[0].strip(),
                         "expected_intent": "Chitchat",
-                        "expected_category": "Others",
-                        "expected_record_type": "expense",
+                        "expected_category": "None",
+                        "expected_record_type": "None",
                         "expected_action_type": "None"
                     })
         if all_chitchats:
@@ -192,20 +193,25 @@ def evaluate_backend(name, samples, backend_override="tfidf") -> dict:
         if pred_intent.lower() != str(s["expected_intent"]).lower():
             mismatches.append(f"  - [Intent] Text: '{s['text']}' | True: '{s['expected_intent']}' | Pred: '{pred_intent}'")
 
-        # Category and Record type evaluated strictly on Record intent
-        if s.get("expected_intent") == "Record":
+        exp_intent = s.get("expected_intent")
+
+        # Record type evaluated strictly on Record intent
+        if exp_intent == "Record":
+            exp_rec = s.get("expected_rec_type", s.get("expected_record_type", "expense"))
+            y_true_rec.append(exp_rec)
+            y_pred_rec.append(pred_rec)
+
+        # Category evaluated on Record OR specific Action types that need it
+        ACTIONS_WITH_CATEGORY = {"REPORT_GENERAL", "REPORT_COMPARE", "SET_LIMIT", "SEARCH_RECORD", "SUGGEST_BUDGET"}
+        if exp_intent == "Record" or (exp_intent == "Action" and s.get("expected_action_type") in ACTIONS_WITH_CATEGORY):
             exp_cat = norm_cat(s.get("expected_category"))
             y_true_cat.append(exp_cat)
             y_pred_cat.append(pred_cat)
             if pred_cat.lower() != exp_cat.lower():
                 mismatches.append(f"  - [Cat] Text: '{s['text']}' | True: '{s.get('expected_category')}' | Pred: '{pred_cat}'")
 
-            exp_rec = s.get("expected_rec_type", s.get("expected_record_type", "expense"))
-            y_true_rec.append(exp_rec)
-            y_pred_rec.append(pred_rec)
-
         # Action type evaluated strictly on Action intent
-        if s.get("expected_intent") == "Action":
+        if exp_intent == "Action":
             exp_act = s.get("expected_action_type", "None")
             y_true_act.append(exp_act)
             y_pred_act.append(pred_act)
@@ -278,7 +284,10 @@ def main():
     for model_key, res in results.items():
         name = "TF-IDF" if model_key == "tfidf" else "PhoBERT" if model_key == "phobert" else "Qwen 2.5"
         intent_str = f"{res['intent_accuracy']:.1f}%/{res['intent_f1']:.1f}%"
-        action_str = f"{res['action_type_accuracy']:.1f}%/{res['action_type_f1']:.1f}%"
+        if model_key == "qwen25_lora":
+            action_str = f"{res['action_type_accuracy']:.1f}%/{res['action_type_f1']:.1f}%"
+        else:
+            action_str = "N/A"
         cat_str = f"{res['category_accuracy']:.1f}%/{res['category_f1']:.1f}%"
         rec_str = f"{res['record_type_accuracy']:.1f}%/{res['record_type_f1']:.1f}%"
         print(f"{name:<15} | {intent_str:<18} | {action_str:<18} | {cat_str:<18} | {rec_str:<18} | {res['avg_latency_ms']:<9.1f} ms | {res['p95_latency_ms']:<9.1f} ms")

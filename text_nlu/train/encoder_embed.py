@@ -14,7 +14,7 @@ def _get_hf(model_name: str):
         from transformers import AutoModel, AutoTokenizer
 
         tok = AutoTokenizer.from_pretrained(model_name, use_fast=True)
-        model = AutoModel.from_pretrained(model_name, use_safetensors=True)
+        model = AutoModel.from_pretrained(model_name, use_safetensors=False)
         model.eval()
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         model.to(device)

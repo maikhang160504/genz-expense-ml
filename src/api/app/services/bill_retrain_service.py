@@ -84,7 +84,7 @@ def prelabel_image(image_bytes: bytes, filename: str | None = None) -> dict[str,
         Path(tmp_path).unlink(missing_ok=True)
 
 
-def export_verified(samples: list[dict[str, Any]]) -> dict[str, Any]:
+def export_verified(samples: list[dict[str, Any]], webhook_url: str | None = None) -> dict[str, Any]:
     _ocr_paths()
     import shutil
     import json
@@ -123,7 +123,14 @@ def export_verified(samples: list[dict[str, Any]]) -> dict[str, Any]:
             if url:
                 try:
                     if url.startswith("/"):
-                        base_url = os.environ.get("BILL_RETRAIN_WEBHOOK_URL") or "http://127.0.0.1:4000"
+                        base_url = webhook_url
+                        if base_url:
+                            # Strip off the specific webhook path to get the base
+                            from urllib.parse import urlparse
+                            parsed = urlparse(base_url)
+                            base_url = f"{parsed.scheme}://{parsed.netloc}"
+                        else:
+                            base_url = os.environ.get("BILL_RETRAIN_WEBHOOK_URL") or "http://127.0.0.1:4000"
                         url = urljoin(base_url, url)
                     urllib_request.urlretrieve(url, str(dest))
                     image_rows.append({"image": f"images/{dest_name}", "sample_id": sid, "split": "train"})

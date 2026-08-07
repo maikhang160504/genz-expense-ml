@@ -61,7 +61,6 @@ def _update_train_status(active: bool, stage: str, message: str, percent: int, s
             with open(status_file, "w") as f:
                 json.dump(TRAIN_STATUS_INFO, f)
             try:
-                import sys
                 sys.path.insert(0, str(Path(os.environ.get("EXPENSE_OCR_NLU_DIR", "/workspace"))))
                 from modal_app import volume
                 volume.commit()
@@ -90,6 +89,10 @@ def append_nlu_history(
     train_type: str = "tfidf"
 ):
     """Append NLU training run record with metrics, row counts, and candidate promotion tracking."""
+    if status == "error" or status == "failed":
+        print(f"[NLU history] Training failed: {error_msg}. Not saving history.", flush=True)
+        return
+
     history_file = nlu_dir / "text_nlu" / "models" / "nlu_training_history.json"
     
     if train_type == "encoder":
@@ -214,10 +217,6 @@ def run_retraining(nlu_dir: Path, target: str = "local"):
         models_new_dir = nlu_dir / "text_nlu" / "models_new"
         models_new_dir.mkdir(parents=True, exist_ok=True)
         env = os.environ.copy()
-        env.setdefault("INTENT_ENCODER_MAX_SAMPLES", "5000")
-        env.setdefault("ACTION_TYPE_ENCODER_MAX_SAMPLES", "3000")
-        env.setdefault("RECORD_TYPE_ENCODER_MAX_SAMPLES", "3000")
-        env.setdefault("CATEGORY_ENCODER_MAX_SAMPLES", "3000")
         # Ensure all scripts output to models_new
         env["NLU_MODEL_OUT_DIR"] = str(models_new_dir)
         env["INTENT_ENCODER_OUT"] = str(models_new_dir / "intent_encoder.joblib")
@@ -474,7 +473,6 @@ def train_history():
         storage_history = Path("/storage/nlu_models/nlu_training_history.json")
         if storage_history.is_file():
             try:
-                import sys
                 sys.path.insert(0, str(Path(os.environ.get("EXPENSE_OCR_NLU_DIR", "/workspace"))))
                 from modal_app import volume
                 volume.reload()

@@ -232,7 +232,7 @@ def run_nlu(
     # Quy tắc:
     # 1. Action và Chitchat: LUÔN DÙNG LLM Qwen (run_llm_nlu_v2)
     # 2. Record: Dùng LLM Qwen nếu category_backend là llm, ngược lại dùng ML (PhoBERT / TF-IDF)
-    if intent in ("Action", "Chitchat"):
+    if (run_llm and intent in ("Action", "Chitchat")) or (intent in ("Action", "Chitchat") and intent_backend_choice in ("llm", "llm_v2")):
         return run_llm_nlu_v2(
             user_text,
             context_metadata=context_metadata,

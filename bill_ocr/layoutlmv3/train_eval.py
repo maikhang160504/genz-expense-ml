@@ -53,7 +53,7 @@ VOLUME_TEST_IMG = Path("/storage/mc_ocr_test")
 VOLUME_TEST_CSV = Path("/storage/mcocr_test_df.csv")
 
 CHECKPOINT_PATH = Path("/workspace/bill_ocr/models/layoutlmv3/model_best.pth")
-VOLUME_CHECKPOINT = Path("/storage/layoutlmv3/model_best.pth")
+VOLUME_CHECKPOINT = Path("/storage/layoutlmv3/candidate_model.pth")
 RESULTS_PATH = Path("/storage/evaluation_metrics_layoutlmv3.txt")
 TEST_RESULT_CSV = Path("/storage/result.csv")
 
@@ -93,6 +93,110 @@ def convert_csv_to_jsonl(csv_path: Path, jsonl_dir: Path):
         str(jsonl_dir),
     ])
     print(f"✅ CSV -> JSONL conversion completed: {jsonl_dir}")
+
+def merge_incremental_data(jsonl_dir: Path, train_dir: Path):
+    """Merge newly approved incremental data from WebAdmin into the JSONL training set."""
+    incremental_dir = Path("/storage/exported/incremental")
+    if not incremental_dir.exists():
+        return
+        
+    tsv_dir = incremental_dir / "boxes_and_transcripts"
+    inc_images_dir = incremental_dir / "images"
+    if not tsv_dir.exists() or not inc_images_dir.exists():
+        return
+        
+    print(f"➕ Merging incremental data from {incremental_dir}...")
+    
+    # 1. Copy incremental images to train_dir/imgs
+    target_img_dir = train_dir / "imgs"
+    for img_file in inc_images_dir.iterdir():
+        if img_file.is_file():
+            shutil.copy2(img_file, target_img_dir / img_file.name)
+            
+    # 2. Convert TSVs to JSONL format and append to train_df.jsonl
+    jsonl_file = jsonl_dir / "train_df.jsonl"
+    
+    # Import cv2 or PIL to get image dimensions, we use PIL here since it's standard
+    from PIL import Image
+    
+    records_added = 0
+    with open(jsonl_file, "a", encoding="utf-8") as f_out:
+        for tsv_file in tsv_dir.glob("*.tsv"):
+            sample_id = tsv_file.stem
+            # Find the corresponding image
+            img_path = None
+            for ext in [".jpg", ".png", ".jpeg"]:
+                candidate = target_img_dir / f"{sample_id}{ext}"
+                if candidate.exists():
+                    img_path = candidate
+                    break
+                    
+            if not img_path:
+                print(f"⚠️ Missing image for incremental sample {sample_id}, skipping.")
+                continue
+                
+            try:
+                with Image.open(img_path) as img:
+                    w_img, h_img = img.size
+            except Exception as e:
+                print(f"⚠️ Failed to read image size for {img_path}: {e}")
+                continue
+                
+            words = []
+            boxes = []
+            labels = []
+            
+            with open(tsv_file, "r", encoding="utf-8") as f_in:
+                for line in f_in:
+                    parts = line.strip("\n").split("\t")
+                    if len(parts) < 11:
+                        continue
+                    # format: index, x0, y0, x1, y1, x2, y2, x3, y3, text, label
+                    x0 = float(parts[1])
+                    y0 = float(parts[2])
+                    x2 = float(parts[5])
+                    y2 = float(parts[6])
+                    
+                    text = parts[9]
+                    label = parts[10]
+                    
+                    x0_norm = max(0, min(1000, int(1000 * x0 / w_img)))
+                    y0_norm = max(0, min(1000, int(1000 * y0 / h_img)))
+                    x1_norm = max(0, min(1000, int(1000 * x2 / w_img)))
+                    y1_norm = max(0, min(1000, int(1000 * y2 / h_img)))
+                    
+                    norm_box = [x0_norm, y0_norm, x1_norm, y1_norm]
+                    
+                    seg_words = text.split()
+                    if not seg_words:
+                        continue
+                        
+                    clean_label = label.strip()
+                    if clean_label == "TIMESTAMPS":
+                        clean_label = "TIMESTAMP"
+                    elif clean_label == "TOTAL_TOTAL_COST":
+                        clean_label = "TOTAL_COST"
+                        
+                    for idx, word in enumerate(seg_words):
+                        words.append(word)
+                        boxes.append(norm_box)
+                        if clean_label == "O" or not clean_label:
+                            labels.append("O")
+                        else:
+                            prefix = "B-" if idx == 0 else "I-"
+                            labels.append(prefix + clean_label)
+                            
+            if words:
+                record = {
+                    "image": str(img_path),
+                    "words": words,
+                    "boxes": boxes,
+                    "labels": labels
+                }
+                f_out.write(json.dumps(record, ensure_ascii=False) + "\n")
+                records_added += 1
+                
+    print(f"✅ Appended {records_added} incremental samples to JSONL training data.")
 
 def build_label_maps(dataset: DatasetDict = None) -> Tuple[dict, dict]:
     """Generate ``label2id`` and ``id2label`` using a fixed, predefined label list to prevent index mismatches."""
@@ -164,7 +268,32 @@ def preprocess_examples(examples, processor, label2id):
 # ---------------------------------------------------------------------------
 # Training
 # ---------------------------------------------------------------------------
-from transformers import EarlyStoppingCallback
+from transformers import EarlyStoppingCallback, TrainerCallback
+
+class ProgressCallback(TrainerCallback):
+    def __init__(self, num_epochs, progress_file="/storage/layoutlmv3/training_progress.json"):
+        self.num_epochs = num_epochs
+        self.progress_file = Path(progress_file)
+        
+    def on_log(self, args, state, control, logs=None, **kwargs):
+        if logs and "loss" in logs:
+            epoch = state.epoch or 0.0
+            percent = min(100, int((epoch / self.num_epochs) * 100))
+            
+            data = {
+                "isTraining": True,
+                "stage": "training",
+                "progress_percent": percent,
+                "epoch": round(epoch, 2),
+                "loss": round(logs["loss"], 4),
+                "message": f"Đang huấn luyện (Epoch {int(epoch)}/{self.num_epochs}) - Loss: {logs['loss']:.4f}..."
+            }
+            try:
+                self.progress_file.parent.mkdir(parents=True, exist_ok=True)
+                with open(self.progress_file, "w", encoding="utf-8") as f:
+                    json.dump(data, f, ensure_ascii=False)
+            except Exception as e:
+                pass
 
 def train(num_epochs: int = 5, learning_rate: float = 2e-5, seed: int = 42, early_stop_patience: int = 3, resume_from: str | None = None):
     set_seed(seed)
@@ -195,6 +324,9 @@ def train(num_epochs: int = 5, learning_rate: float = 2e-5, seed: int = 42, earl
         
         # Convert CSV → JSONL
         convert_csv_to_jsonl(train_dir / "train_df.csv", jsonl_dir)
+        
+        # Merge Incremental Data
+        merge_incremental_data(jsonl_dir, train_dir)
         
         # Load raw dataset to split it
         raw_dataset = load_dataset("json", data_files={"train": str(jsonl_dir / "train_df.jsonl")})
@@ -269,13 +401,14 @@ def train(num_epochs: int = 5, learning_rate: float = 2e-5, seed: int = 42, earl
     eval_dataset = tokenized_ds["val"]
 
     import inspect
+    callbacks = [EarlyStoppingCallback(early_stopping_patience=early_stop_patience), ProgressCallback(num_epochs)]
     trainer_kwargs = {
         "model": model,
         "args": args,
         "train_dataset": train_dataset,
         "eval_dataset": eval_dataset,
         "compute_metrics": compute_metrics,
-        "callbacks": [EarlyStoppingCallback(early_stopping_patience=early_stop_patience)],
+        "callbacks": callbacks,
     }
     sig = inspect.signature(Trainer.__init__)
     if "processing_class" in sig.parameters:

@@ -63,6 +63,7 @@ image = (
         "joblib==1.4.2",
         "scikit-learn==1.5.2",
         "pyvi==0.1.1",
+        "psycopg2-binary",
         "spacy==3.8.10",
         "overrides",
         "prefetch-generator",
@@ -240,6 +241,7 @@ def train_layoutlmv3_model(num_epochs: int = 15, learning_rate: float = 5e-5, se
                 "trained_at": trained_at,
                 "duration_sec": round(duration, 2),
                 "status": "success",
+                "is_candidate": True,
                 "metrics": {
                     "precision": round(p * 100, 2) if p <= 1.0 else p,
                     "recall": round(r * 100, 2) if r <= 1.0 else r,
@@ -253,6 +255,20 @@ def train_layoutlmv3_model(num_epochs: int = 15, learning_rate: float = 5e-5, se
             print(f"💾 LayoutLMv3 Run #{run_idx} appended to training history.")
     except Exception as e:
         print(f"⚠️ Failed to append LayoutLMv3 run to history: {e}")
+        
+    # Reset training progress
+    try:
+        progress_file = Path("/storage/layoutlmv3/training_progress.json")
+        with open(progress_file, "w", encoding="utf-8") as f:
+            json.dump({
+                "isTraining": False,
+                "stage": "done",
+                "progress_percent": 100,
+                "message": "Huấn luyện LayoutLMv3 hoàn tất!"
+            }, f, ensure_ascii=False)
+        print("✅ Reset training progress to done.")
+    except Exception as e:
+        print(f"⚠️ Failed to reset training progress: {e}")
 
 @app.function(
     image=image,
@@ -711,3 +727,73 @@ def reset_storage_to_base_qwen():
 
     volume.commit()
     print("✅ Completed resetting /storage/qwen_vismimo to base Qwen/Qwen2.5-14B-Instruct!")
+
+
+@app.function(
+    image=image,
+    volumes={"/storage": volume},
+    timeout=300,
+)
+def promote_layoutlmv3_model():
+    """Promote candidate_model.pth to model_best.pth and backup current model."""
+    import shutil
+    import json
+    from pathlib import Path
+    
+    candidate_path = Path("/storage/layoutlmv3/candidate_model.pth")
+    best_path = Path("/storage/layoutlmv3/model_best.pth")
+    previous_path = Path("/storage/layoutlmv3/model_previous.pth")
+    
+    if not candidate_path.is_file():
+        return {"ok": False, "error": "No candidate model found."}
+        
+    # Backup current model if it exists
+    if best_path.is_file():
+        shutil.copy2(best_path, previous_path)
+        
+    # Promote candidate
+    shutil.copy2(candidate_path, best_path)
+    
+    # Mark in history that it is no longer a candidate
+    history_file = Path("/storage/layoutlmv3/ocr_training_history.json")
+    if history_file.is_file():
+        try:
+            with open(history_file, "r", encoding="utf-8") as f:
+                history = json.load(f)
+                
+            for run in reversed(history):
+                if run.get("is_candidate"):
+                    run["is_candidate"] = False
+                    break
+                    
+            with open(history_file, "w", encoding="utf-8") as f:
+                json.dump(history, f, ensure_ascii=False, indent=2)
+        except Exception as e:
+            print(f"Error updating history: {e}")
+            
+    volume.commit()
+    return {"ok": True, "message": "Model promoted successfully and old model backed up."}
+
+@app.function(
+    image=image,
+    volumes={"/storage": volume},
+    timeout=300,
+)
+def rollback_layoutlmv3_model():
+    """Rollback model_best.pth to model_previous.pth."""
+    import shutil
+    import json
+    from pathlib import Path
+    
+    best_path = Path("/storage/layoutlmv3/model_best.pth")
+    previous_path = Path("/storage/layoutlmv3/model_previous.pth")
+    
+    if not previous_path.is_file():
+        return {"ok": False, "error": "No previous model backup found."}
+        
+    # Overwrite best_path with previous_path
+    shutil.copy2(previous_path, best_path)
+    
+    # Mark candidate status back? (Optional, just leave it as is, or we can just say rollback success)
+    volume.commit()
+    return {"ok": True, "message": "Model rolled back to previous version successfully."}
