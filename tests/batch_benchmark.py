@@ -167,7 +167,8 @@ def run_model_benchmark(name, use_encoder, test_cases):
 
     intent_acc, intent_f1 = calc_metrics(y_true_intent, y_pred_intent)
     category_acc, category_f1 = calc_metrics(y_true_cat, y_pred_cat)
-    action_acc, action_f1 = calc_metrics(y_true_act, y_pred_act)
+    # Action type skipped for TF-IDF / PhoBERT since it's an LLM task
+    action_acc, action_f1 = 0.0, 0.0
     record_acc, record_f1 = calc_metrics(y_true_rec, y_pred_rec)
     
     print(f"Results for {name}:")

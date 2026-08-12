@@ -38,7 +38,12 @@ def _save_json(path: Path, data: Any) -> None:
         path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
     except OSError as e:
         import logging
-        logging.getLogger(__name__).warning(f"Failed to save {path}: {e}")
+        logger = logging.getLogger(__name__)
+        # Suppress Operation not permitted on Modal Volumes as it's a known quirk with `volume put`
+        if getattr(e, 'errno', None) == 1 or "Operation not permitted" in str(e):
+            logger.debug(f"Skipped saving {path} due to volume permission limits.")
+        else:
+            logger.warning(f"Failed to save {path}: {e}")
 
 
 def load_registry(nlu_root: Path) -> dict[str, Any]:
@@ -52,12 +57,12 @@ def load_registry(nlu_root: Path) -> dict[str, Any]:
             "last_accepted_run_index": 0,
             "pending_run_index": None,
             "accepted_at": None,
-            "intent_backend": "llm_v2",
+            "intent_backend": "encoder",
             "category_backend": "llm_v2",
         }
         _save_json(p, reg)
     if "intent_backend" not in reg:
-        reg["intent_backend"] = reg.get("inference_backend", "llm_v2")
+        reg["intent_backend"] = reg.get("inference_backend", "encoder")
     if "category_backend" not in reg:
         reg["category_backend"] = reg.get("inference_backend", "llm_v2")
     return reg

@@ -132,8 +132,11 @@ def _parse_llm_json(text: str) -> dict | None:
     return None
 
 
-def _sanitize_nlg_response(text: str) -> str:
-    """Strip CJK characters, code snippets and repeated words from LLM NLG response."""
+def _sanitize_nlg_response(text: str, max_words: int = 25) -> str:
+    """Strip CJK characters, code snippets and repeated words from LLM NLG response.
+    
+    Sau khi clean, truncate xuống max_words từ để giữ response ngắn gọn.
+    """
     import re
     if not text:
         return text
@@ -148,7 +151,25 @@ def _sanitize_nlg_response(text: str) -> str:
     # 4. Strip trailing/leading whitespace and punctuation artifacts
     text = re.sub(r"\s{2,}", " ", text).strip()
     text = text.rstrip("，。！？,.")
-    return text if text else "Mimo đã ghi nhận rồi nha!"
+    if not text:
+        return "Mimo đã ghi nhận rồi nha!"
+    # 5. Truncate to max_words từ tiếng Việt (đếm theo khoảng trắng, bỏ qua emoji)
+    # Tách tokens, bỏ qua emoji (Unicode > U+1F000)
+    tokens = text.split()
+    word_tokens = [t for t in tokens if not all(ord(c) > 0x1F000 for c in t)]
+    emoji_only = [t for t in tokens if all(ord(c) > 0x1F000 for c in t)]
+    if len(word_tokens) > max_words:
+        # Cắt ở từ thứ max_words và thêm "..." nếu chưa có
+        truncated_words = word_tokens[:max_words]
+        # Giữ lại emoji cuối (nếu có) sau khi cắt
+        trailing_emojis = emoji_only[:2]  # tối đa 2 emoji
+        result = " ".join(truncated_words)
+        if not result.endswith("..."):
+            result += "..."
+        if trailing_emojis:
+            result += " " + " ".join(trailing_emojis)
+        return result
+    return text
 
 
 def _call_llm(system_prompt: str, user_prompt: str) -> str:
@@ -165,25 +186,25 @@ def _call_llm(system_prompt: str, user_prompt: str) -> str:
     if use_local or use_modal:
         if use_modal:
             try:
-                logger.info("Attempting to call remote QwenModel on Modal...")
+                logger.info("Attempting to call remote QwenBaseModel on Modal...")
                 try:
                     # Direct import works inside 'modal run' (ephemeral app)
-                    from modal_app import QwenModel
-                    model_client = QwenModel()
+                    from modal_app import QwenBaseModel
+                    model_client = QwenBaseModel()
                     text = model_client.generate.remote(system_prompt, user_prompt)
                 except Exception as e_inner:
-                    logger.warning(f"Direct import QwenModel failed ({e_inner}), trying from_name...")
+                    logger.warning(f"Direct import QwenBaseModel failed ({e_inner}), trying from_name...")
                     # Fallback for deployed external calls
                     import modal
-                    QwenModel = modal.Cls.from_name("expense-ocr-nlu", "QwenModel")
-                    model_client = QwenModel()
+                    QwenBaseModel_cls = modal.Cls.from_name("expense-ocr-nlu", "QwenBaseModel")
+                    model_client = QwenBaseModel_cls()
                     text = model_client.generate.remote(system_prompt, user_prompt)
                 
                 if text:
-                    logger.info("Successfully received response from remote QwenModel.")
+                    logger.info("Successfully received response from remote QwenBaseModel.")
                     return text
             except Exception as e:
-                logger.warning("Remote QwenModel call failed: %s. Falling back...", e)
+                logger.warning("Remote QwenBaseModel call failed: %s. Falling back...", e)
 
         # Fallback to local HuggingFace loading if requested
         if use_local:
@@ -237,9 +258,20 @@ def classify_intent_llm(
         if parsed:
             intent = parsed.get("intent", "Chitchat")
             confidence = float(parsed.get("confidence", 0.5))
-            if intent not in ("Record", "Action", "Chitchat"):
+        else:
+            # Fallback for LLMs (like Qwen Base) that return raw text instead of JSON
+            raw_text = str(response).lower()
+            if "record" in raw_text:
+                intent = "Record"
+            elif "action" in raw_text:
+                intent = "Action"
+            else:
                 intent = "Chitchat"
-            return intent, confidence
+            confidence = 0.5
+            
+        if intent not in ("Record", "Action", "Chitchat"):
+            intent = "Chitchat"
+        return intent, confidence
     except Exception as e:
         logger.warning("LLM intent classification failed: %s", e)
     
@@ -425,7 +457,7 @@ def run_llm_nlu(
                 "Hãy phân tích dữ liệu thực tế được cung cấp trong trường 'action_facts' của 'Ngữ cảnh hệ thống (CONTEXT_META)' và câu nói của người dùng để trả về một cấu trúc JSON hợp lệ có dạng:\n"
                 "{\n"
                 '  "intent": "Action",\n'
-                '  "emotion": "Alert" | "Angry" | "Approved" | "Celebrate" | "Chill" | "Cooking" | "Cool" | "Determined" | "Error" | "Excited" | "Giggle" | "Happy" | "Hello" | "Love" | "Proud" | "Relax" | "Sad" | "Sleepy" | "Sassy" | "Shopping" | "Travel" | "Sorry" | "Success" | "Taunting" | "Thankful" | "Thinking" | "Working" | "Worried",\n'
+                '  "emotion": "Alert" | "Angry" | "Approved" | "Celebrate" | "Chill" | "Cooking" | "Cool" | "Determined" | "Error" | "Excited" | "Giggle" | "Happy" | "Hello" | "Loading" | "Love" | "Proud" | "Relax" | "Sad" | "Sleepy" | "Sassy" | "Shopping" | "Travel" | "Sorry" | "Success" | "Taunting" | "Thankful" | "Thinking" | "Working" | "Worried",\n'
                 '  "response": "<lời nhận xét, phân tích số liệu chi tiêu/thu nhập/kết quả tìm kiếm bằng tiếng Việt kiểu Gen Z, tối đa 2-3 câu ngắn>"\n'
                 "}\n"
                 "Quy tắc:\n"
@@ -575,7 +607,7 @@ def _load_llm_rules() -> dict:
     return _LLM_RULES_CACHE
 
 
-def _build_persona_addition(nlg_persona: str | None, prompts_config: dict) -> str:
+def _build_persona_addition(nlg_persona: str | None, prompts_config: dict, override_sys_msg: str | None = None) -> str:
     """Inject persona từ prompts.json → emotions vào cuối system prompt.
     
     Cấu trúc: [QUY TẮC PHONG CÁCH — Persona: KEY]
@@ -587,7 +619,7 @@ def _build_persona_addition(nlg_persona: str | None, prompts_config: dict) -> st
     persona_key = nlg_persona.lower()
     if persona_key in emotions:
         cfg = emotions[persona_key]
-        sys_msg = cfg.get("system", "")
+        sys_msg = override_sys_msg if override_sys_msg else cfg.get("system", "")
         user_guide = cfg.get("user", "")
         slangs_list = cfg.get("slang_pool", [])
         slang_to_use = random.choice(slangs_list) if slangs_list else ""
@@ -641,7 +673,7 @@ def _build_relationship_addition(text: str, prompts_config: dict) -> str:
     return ""
 
 
-def _build_system_prompt(intent: str, nlg_persona: str | None, text: str, is_rag: bool = False, caller_context: str | None = None) -> str:
+def _build_system_prompt(intent: str, nlg_persona: str | None, text: str, is_rag: bool = False, caller_context: str | None = None, override_sys_msg: str | None = None) -> str:
     """Ghép system prompt hoàn chỉnh: rule đúng theo intent + persona + relationship.
     
     Thứ tự ưu tiên: Base rule → Persona injection → Relationship injection (cao nhất).
@@ -655,6 +687,7 @@ def _build_system_prompt(intent: str, nlg_persona: str | None, text: str, is_rag
             "Hãy phân tích số liệu thực tế được cung cấp trong trường 'action_facts' của 'Ngữ cảnh hệ thống (CONTEXT_META)' và câu nói của người dùng để trả về DUY NHẤT một JSON hợp lệ có dạng:\n"
             "{\n"
             '  "intent": "Action",\n'
+            '  "emotion": "<xem danh sách 29 emotion>",\n'
             '  "response": "<lời nhận xét, phân tích số liệu chi tiêu/so sánh thực tế 2-3 câu, tiếng Việt 100%, TUYỆT ĐỐI KHÔNG DÙNG EMOJI>"\n'
             "}\n\n"
             "[QUY TẮC NHẬN XÉT RAG]\n"
@@ -664,6 +697,8 @@ def _build_system_prompt(intent: str, nlg_persona: str | None, text: str, is_rag
             "4. Viết bằng tiếng Việt 100% tự nhiên, TUYỆT ĐỐI KHÔNG DÙNG EMOJI.\n"
             "5. Các con số tiền phải được viết rõ ràng định dạng phân cách hàng nghìn bằng dấu chấm (ví dụ: '1.200.000đ', '600.000đ', '400.000đ').\n"
             "6. Xưng hô: Gọi người dùng là 'bạn' hoặc dùng tên (user_name trong CONTEXT_META), tự xưng là 'Mimo'. TUYỆT ĐỐI KHÔNG dùng từ 'mày', 'tao'.\n"
+            "\n[DANH SÁCH EMOTION]\n"
+            "Alert, Angry, Approved, Celebrate, Chill, Cooking, Cool, Determined, Error, Excited, Giggle, Happy, Hello, Loading, Love, Proud, Relax, Sad, Sleepy, Sassy, Shopping, Travel, Sorry, Success, Taunting, Thankful, Thinking, Working, Worried\n"
         )
     else:
         intent_lower = (intent or "").strip().lower()
@@ -678,7 +713,7 @@ def _build_system_prompt(intent: str, nlg_persona: str | None, text: str, is_rag
         persona_block = ""
         relationship_block = ""
     else:
-        persona_block = _build_persona_addition(nlg_persona, prompts)
+        persona_block = _build_persona_addition(nlg_persona, prompts, override_sys_msg)
         relationship_block = _build_relationship_addition(text, prompts)
 
     return base_rule + persona_block + relationship_block
@@ -723,11 +758,7 @@ def run_llm_nlu_v2(
             intent, _ = classify_intent_llm(text)
             logger.info("[run_llm_nlu_v2] classified intent=%s", intent)
 
-        # Build system prompt theo rule đúng với intent (hoặc override_prompt nếu có)
-        if override_prompt:
-            system_prompt = override_prompt
-        else:
-            system_prompt = _build_system_prompt(intent, nlg_persona, text, is_rag=is_rag, caller_context=caller_context)
+        system_prompt = _build_system_prompt(intent, nlg_persona, text, is_rag=is_rag, caller_context=caller_context, override_sys_msg=override_prompt)
 
         # Build user prompt với context metadata
         if context_metadata:
@@ -738,6 +769,14 @@ def run_llm_nlu_v2(
 
         response = _call_llm(system_prompt=system_prompt, user_prompt=user_prompt)
         parsed = _parse_llm_json(str(response))
+
+        if not parsed:
+            logger.warning(f"LLM did not output JSON. Recovering raw text as response. Raw: {str(response)[:200]}")
+            parsed = {
+                "intent": intent if intent else "Chitchat",
+                "emotion": "neutral",
+                "response": str(response)
+            }
 
         if parsed:
             slots = parsed.get("slots") or {}

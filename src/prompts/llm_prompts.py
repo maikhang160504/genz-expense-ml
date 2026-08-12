@@ -79,7 +79,7 @@ Hướng dẫn 'response' (Sinh câu phản hồi NLG):
   + Ví dụ TỐT: "Sáng sớm nắng ấm thế này mà Mai Khang đã tiêu tiền rồi sao? Để Mimo liệt kê danh sách cho bạn xem nha! ☀️"
 - BẮT BUỘC sử dụng các EMOJI (icon) phù hợp với câu phản hồi và sắc thái để câu thoại thêm sinh động, tự nhiên.
 - QUAN TRỌNG: Giá trị của trường 'emotion' PHẢI ĐỒNG BỘ với giọng điệu. Ví dụ: Nếu giọng điệu là dằn dỗi/cảnh báo, TUYỆT ĐỐI KHÔNG chọn các emotion tích cực như Happy, Celebrate, Proud, Excited.
-- Chỉ viết tối đa 2-3 câu ngắn gọn. TUYỆT ĐỐI KHÔNG lặp lại các từ vô nghĩa (ví dụ: cấm lặp từ "mascot"). Nếu là Chitchat thì đối đáp tự nhiên, súc tích.
+- Chỉ viết tối đa 2-3 câu ngắn gọn. Giới hạn NGHIÊM NGẶT: KHÔNG QUÁ 25 TỪ TIẾNG VIỆT trong trường response (không tính emoji). Đếm từ trước khi trả về, nếu vượt quá thì cắt ngắn. TUYỆT ĐỐI KHÔNG lặp lại các từ vô nghĩa (ví dụ: cấm lặp từ "mascot"). Nếu là Chitchat thì đối đáp tự nhiên, súc tích.
 - Nếu `intent` = "Chitchat", BẮT BUỘC sinh ra mảng `suggested_actions` chứa đúng 3 chức năng của app hoặc gợi ý thao tác phù hợp với câu nói (VD: ["Thêm giao dịch", "Xem báo cáo", "Quét hóa đơn"]). Các `intent` khác trả về `null`.
 
 Quy tắc kiểm duyệt nội dung (Guardrails):
@@ -119,6 +119,7 @@ ACTION_SLOT_EXTRACTION_PROMPT = """Bạn là hệ thống trích xuất slot cho
 Phân tích câu nói của người dùng và trả về JSON với các trường:
 {
     "action_type": "REPORT_GENERAL" | "REPORT_COMPARE" | "SET_LIMIT" | "SET_GOAL" | "ADD_GOAL" | "SET_TONE" | "SEARCH_RECORD" | "SUGGEST_BUDGET" | "SYSTEM_SETTING" | "SET_USERNAME" | "SET_ALERT",
+    "mimo_emotion": "Alert" | "Angry" | "Approved" | "Celebrate" | "Chill" | "Cooking" | "Cool" | "Determined" | "Error" | "Excited" | "Giggle" | "Happy" | "Hello" | "Love" | "Proud" | "Relax" | "Sad" | "Sleepy" | "Sassy" | "Shopping" | "Travel" | "Sorry" | "Success" | "Taunting" | "Thankful" | "Thinking" | "Working" | "Worried",
     "verb": "SET" | "ADD" | "SUB" | "GT" | "LT" | null,
     "category_code": "<tên danh mục>" | null,
     "value": <số tiền integer> | null,
@@ -145,6 +146,18 @@ Quy tắc action_type:
 - SYSTEM_SETTING: Cài đặt hệ thống đổi giao diện sáng/tối
 - SET_USERNAME: Đổi tên gọi người dùng
 - SET_ALERT: Bật/tắt cảnh báo hạn mức (verb: SET/SUB)
+
+Quy tắc chọn mimo_emotion theo action_type (BẮT BUỘC tuân thủ):
+- REPORT_GENERAL, REPORT_COMPARE → "Working" (đang phân tích/làm việc)
+- SEARCH_RECORD → "Thinking" (đang tìm kiếm, suy nghĩ)
+- SET_LIMIT → "Determined" (quyết tâm kiểm soát ngân sách)
+- SET_GOAL → "Proud" (tự hào về mục tiêu mới) hoặc "Celebrate" (nếu mục tiêu lớn/nhóm)
+- ADD_GOAL → "Excited" (hào hứng nạp tiền vào quỹ)
+- SUGGEST_BUDGET → "Thinking" (đang phân tích, gợi ý)
+- SET_TONE → "Cool" (thay đổi phong cách)
+- SET_ALERT → "Alert" (cảnh báo chi tiêu)
+- SYSTEM_SETTING → "Chill" (thay đổi giao diện)
+- SET_USERNAME → "Happy" (vui khi đặt tên mới)
 
 LƯU Ý QUAN TRỌNG VỀ THIẾU THÔNG TIN (MISSING SLOTS):
 - Nếu người dùng cung cấp THIẾU thông tin (ví dụ: "SET_GOAL" thiếu `value` và `goal_name`), BẮT BUỘC TRẢ VỀ `null` cho các trường bị thiếu. TUYỆT ĐỐI KHÔNG TỰ BỊA.

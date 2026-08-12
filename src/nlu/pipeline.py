@@ -229,26 +229,16 @@ def run_nlu(
     forced_record_type = match.get("record_type") if match else None
 
     # ── STAGE 2: Trích xuất thông tin + Phản hồi ──
-    # Quy tắc:
-    # 1. Action và Chitchat: LUÔN DÙNG LLM Qwen (run_llm_nlu_v2)
-    # 2. Record: Dùng LLM Qwen nếu category_backend là llm, ngược lại dùng ML (PhoBERT / TF-IDF)
-    if (run_llm and intent in ("Action", "Chitchat")) or (intent in ("Action", "Chitchat") and intent_backend_choice in ("llm", "llm_v2")):
+    # Quy tắc chuyển đổi mô hình:
+    # Nếu category_backend_choice (Stage 2) là llm_v2/llm HOẶC cờ run_llm=True được bật,
+    # chúng ta sẽ giao phó toàn bộ việc trích xuất thực thể, danh mục (Record, Action, Chitchat) cho Qwen.
+    if run_llm or category_backend_choice in ("llm", "llm_v2"):
         return run_llm_nlu_v2(
             user_text,
             context_metadata=context_metadata,
             nlg_persona=nlg_persona,
             forced_intent=intent,
-            forced_category=forced_category,
-            forced_record_type=forced_record_type,
-        )
-
-    if intent == "Record" and category_backend_choice in ("llm", "llm_v2"):
-        return run_llm_nlu_v2(
-            user_text,
-            context_metadata=context_metadata,
-            nlg_persona=nlg_persona,
-            forced_intent="Record",
-                caller_context=caller_context,
+            caller_context=caller_context,
             forced_category=forced_category,
             forced_record_type=forced_record_type,
         )

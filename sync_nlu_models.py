@@ -10,16 +10,22 @@ def sync_nlu_models():
         os.makedirs(local_dir)
         print(f"📂 Đã tạo thư mục '{local_dir}'")
         
-    # Sử dụng command dạng string với shell=True trên Windows để nhận diện đúng biến môi trường và file .exe/.cmd
-    cmd = "modal volume get expense-ocr-nlu-storage nlu_models/ models/"
+    # Tải thư mục nlu_models từ Modal về thư mục hiện tại (sẽ sinh ra thư mục nlu_models/)
+    cmd = "modal volume get expense-ocr-nlu-storage nlu_models/ . --force"
     
     try:
         print(f"🔄 Đang thực thi: {cmd}")
         print("⏳ Quá trình này có thể mất vài phút tùy vào tốc độ mạng...")
         
-        # Chạy subprocess và in trực tiếp output ra màn hình
         process = subprocess.run(cmd, shell=True, check=True)
         
+        # Di chuyển toàn bộ file từ nlu_models/ sang models/
+        import shutil
+        if os.path.exists("nlu_models"):
+            for file_name in os.listdir("nlu_models"):
+                shutil.move(os.path.join("nlu_models", file_name), os.path.join(local_dir, file_name))
+            os.rmdir("nlu_models") # Xóa thư mục rỗng
+            
         print("\n✅ ĐỒNG BỘ THÀNH CÔNG!")
         print(f"Tất cả các tệp (model, json) đã được lưu an toàn vào: {os.path.abspath(local_dir)}")
     except subprocess.CalledProcessError as e:

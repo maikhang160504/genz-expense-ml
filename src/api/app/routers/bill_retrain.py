@@ -154,22 +154,10 @@ def bill_modal_trigger(body: ModalTriggerRequest | None = None) -> dict[str, Any
 
 @router.get("/ocr-history")
 def get_ocr_history() -> list[dict[str, Any]]:
-    from pathlib import Path
-    import json
-    history_file = Path("/storage/layoutlmv3/ocr_training_history.json")
-    if not history_file.is_file():
-        try:
-            from bill_ocr.layoutlmv3.scripts import initialize_ocr_history
-            initialize_ocr_history.main()
-        except Exception:
-            pass
-
-    if history_file.is_file():
-        try:
-            with open(history_file, "r", encoding="utf-8") as f:
-                return json.load(f)
-        except Exception:
-            pass
+    data = read_modal_json("/storage/layoutlmv3/ocr_training_history.json")
+    if data:
+        return data
+    return []
 
 def read_modal_json(path_str: str) -> dict:
     from pathlib import Path

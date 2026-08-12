@@ -79,6 +79,7 @@ image = (
         "einops",
         "sentencepiece",
         "triton",  # standard triton; provides GPU kernels on H100/A10
+        "setuptools==69.5.1", # Added to fix 'pkg_resources' not found (pinned since v70+ might remove it)
     )
     # Pre-download PhoBERT and LayoutLMv3 weights during image building to avoid startup delays
     .run_commands(
@@ -350,9 +351,9 @@ def train_qwen_model(num_epochs: int = 3, learning_rate: float = 2e-4, batch_siz
         tokenizer.pad_token = tokenizer.eos_token
 
     # Load NLU dataset from text_nlu
-    dataset_path = Path("/workspace/text_nlu/datasets/vistral_finetune.jsonl")
+    dataset_path = Path("/workspace/text_nlu/datasets/benchmark_finetune_2k.jsonl")
     if not dataset_path.exists():
-        dataset_path = Path("text_nlu/datasets/vistral_finetune.jsonl")
+        dataset_path = Path("text_nlu/datasets/benchmark_finetune_2k.jsonl")
     if not dataset_path.exists():
         raise FileNotFoundError(f"Dataset not found at {dataset_path}!")
         
@@ -377,14 +378,28 @@ def train_qwen_model(num_epochs: int = 3, learning_rate: float = 2e-4, batch_siz
         
     tokenized_dataset = split_ds.map(tokenize_func, batched=True, remove_columns=["text"])
     
-    # Load model in BF16 for fast H100 execution
-    print("🚀 Loading base model in bfloat16...")
+    # Load model with 4-bit quantization (QLoRA) to save VRAM and prevent OOM
+    print("🚀 Loading base model in 4-bit quantization (QLoRA)...")
+    from transformers import BitsAndBytesConfig
+    from peft import prepare_model_for_kbit_training
+
+    quantization_config = BitsAndBytesConfig(
+        load_in_4bit=True,
+        bnb_4bit_compute_dtype=torch.bfloat16,
+        bnb_4bit_use_double_quant=True,
+        bnb_4bit_quant_type="nf4",
+    )
+    
     model = AutoModelForCausalLM.from_pretrained(
         model_id,
-        torch_dtype=torch.bfloat16,
+        quantization_config=quantization_config,
         device_map="auto",
         token=hf_token
     )
+    
+    # Enable gradient checkpointing to drastically reduce memory usage during training
+    model.gradient_checkpointing_enable()
+    model = prepare_model_for_kbit_training(model)
     
     # Setup LoRA config (targeting Qwen multi-head attention and MLP weights)
     peft_config = LoraConfig(
@@ -414,7 +429,8 @@ def train_qwen_model(num_epochs: int = 3, learning_rate: float = 2e-4, batch_siz
         eval_strategy="epoch",
         bf16=True,
         optim="adamw_torch",
-        report_to="none"
+        report_to="none",
+        gradient_checkpointing=True,
     )
     
     trainer = Trainer(
@@ -635,6 +651,77 @@ class QwenModel:
         return decoded
 
 
+@app.cls(
+    image=image,
+    volumes={"/storage": volume},
+    gpu="a10g",
+    timeout=600,
+    secrets=secrets_list,
+    max_containers=1,
+    min_containers=0,
+    scaledown_window=900,
+    memory=32768,
+)
+class QwenBaseModel:
+    @modal.enter()
+    def load_model(self):
+        import torch
+        from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
+        
+        model_id = "Qwen/Qwen2.5-14B-Instruct"
+        print(f"🤖 Initializing STRICT BASE model: {model_id} (No LoRA)")
+        
+        self.tokenizer = AutoTokenizer.from_pretrained(model_id)
+        if self.tokenizer.pad_token is None:
+            self.tokenizer.pad_token = self.tokenizer.eos_token
+            
+        quantization_config = BitsAndBytesConfig(
+            load_in_4bit=True,
+            bnb_4bit_compute_dtype=torch.bfloat16,
+            bnb_4bit_use_double_quant=True,
+            bnb_4bit_quant_type="nf4",
+        )
+        
+        self.model = AutoModelForCausalLM.from_pretrained(
+            model_id,
+            quantization_config=quantization_config,
+            device_map="auto"
+        )
+        self.model.eval()
+
+    @modal.method()
+    def generate(self, system_prompt: str, user_prompt: str) -> str:
+        import torch
+        try:
+            messages = [
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_prompt}
+            ]
+            prompt = self.tokenizer.apply_chat_template(
+                messages,
+                tokenize=False,
+                add_generation_prompt=True
+            )
+        except Exception as e:
+            prompt = f"<|im_start|>system\n{system_prompt}<|im_end|>\n<|im_start|>user\n{user_prompt}<|im_end|>\n<|im_start|>assistant\n"
+        
+        inputs = self.tokenizer(prompt, return_tensors="pt").to(self.model.device)
+        with torch.no_grad():
+            outputs = self.model.generate(
+                **inputs,
+                max_new_tokens=512,
+                do_sample=False,
+                tokenizer=self.tokenizer,
+                stop_strings=["<|im_end|>", "<|im_start|>", "</s>", "Human:", "[INST]"],
+                eos_token_id=self.tokenizer.eos_token_id,
+                pad_token_id=self.tokenizer.eos_token_id,
+            )
+        
+        input_len = inputs["input_ids"].shape[1]
+        decoded = self.tokenizer.decode(outputs[0][input_len:], skip_special_tokens=True).strip()
+        return decoded
+
+
 @app.function(
     image=image,
     volumes={"/storage": volume},
@@ -698,35 +785,49 @@ def run_nlu_benchmark():
     timeout=3600,
     secrets=secrets_list,
 )
-def reset_storage_to_base_qwen():
-    """Reset /storage/qwen_vismimo and /storage/qwen_vismimo_lora on Modal volume to official base model Qwen2.5-14B-Instruct."""
+def sync_qwen_models_to_storage():
+    """Tải đồng thời Base Model và Fine-tuned LoRA Model (nếu có trên HF) về /storage."""
+    import os
     import shutil
     from pathlib import Path
-    from transformers import AutoTokenizer, AutoModelForCausalLM
+    from huggingface_hub import snapshot_download
 
-    print("🧹 Cleaning old fine-tuned Qwen models from persistent storage...")
-    lora_dir = Path("/storage/qwen_vismimo_lora")
-    if lora_dir.exists():
-        shutil.rmtree(lora_dir)
-    lora_dir.mkdir(parents=True, exist_ok=True)
-
-    dest_dir = Path("/storage/qwen_vismimo")
-    if dest_dir.exists():
-        shutil.rmtree(dest_dir)
-    dest_dir.mkdir(parents=True, exist_ok=True)
-
-    model_id = "Qwen/Qwen2.5-14B-Instruct"
-    print(f"📥 Downloading official base model {model_id} to /storage/qwen_vismimo...")
     hf_token = os.environ.get("HF_TOKEN")
-    
-    tokenizer = AutoTokenizer.from_pretrained(model_id, token=hf_token)
-    tokenizer.save_pretrained(str(dest_dir))
-    
-    model = AutoModelForCausalLM.from_pretrained(model_id, token=hf_token, device_map="auto")
-    model.save_pretrained(str(dest_dir))
+    if not hf_token:
+        print("⚠️ Cảnh báo: Không tìm thấy HF_TOKEN. Việc tải các mô hình (đặc biệt là repo cá nhân) có thể thất bại.")
+
+    # 1. Tải Base Model
+    base_model_id = "Qwen/Qwen2.5-14B-Instruct"
+    base_dest_dir = Path("/storage/qwen_vismimo")
+    print(f"📥 Đang tải Base Model [{base_model_id}] về {base_dest_dir}...")
+    try:
+        snapshot_download(
+            repo_id=base_model_id,
+            local_dir=str(base_dest_dir),
+            token=hf_token,
+            ignore_patterns=["*.pt", "*.bin"] # Chỉ ưu tiên safetensors
+        )
+        print("✅ Đã tải Base Model thành công.")
+    except Exception as e:
+        print(f"❌ Lỗi khi tải Base Model: {e}")
+
+    # 2. Tải Fine-tuned LoRA Model (Từ Hugging Face)
+    lora_model_id = "Maikhang/qwen-vismimo-lora"
+    lora_dest_dir = Path("/storage/qwen_vismimo_lora")
+    print(f"📥 Đang thử tải LoRA Model [{lora_model_id}] về {lora_dest_dir}...")
+    try:
+        snapshot_download(
+            repo_id=lora_model_id,
+            local_dir=str(lora_dest_dir),
+            token=hf_token
+        )
+        print("✅ Đã tải Fine-tuned LoRA Model thành công.")
+    except Exception as e:
+        print(f"⚠️ Không thể tải LoRA Model từ Hugging Face (Có thể bạn chưa push lên hoặc repo private): {e}")
+        print("ℹ️ Quá trình train đang chạy trên Modal sẽ tự động tạo thư mục này sau khi hoàn tất.")
 
     volume.commit()
-    print("✅ Completed resetting /storage/qwen_vismimo to base Qwen/Qwen2.5-14B-Instruct!")
+    print("🎉 Hoàn tất đồng bộ các mô hình Qwen vào /storage!")
 
 
 @app.function(
