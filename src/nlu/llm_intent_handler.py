@@ -697,6 +697,7 @@ def _build_system_prompt(intent: str, nlg_persona: str | None, text: str, is_rag
             "4. Viết bằng tiếng Việt 100% tự nhiên, TUYỆT ĐỐI KHÔNG DÙNG EMOJI.\n"
             "5. Các con số tiền phải được viết rõ ràng định dạng phân cách hàng nghìn bằng dấu chấm (ví dụ: '1.200.000đ', '600.000đ', '400.000đ').\n"
             "6. Xưng hô: Gọi người dùng là 'bạn' hoặc dùng tên (user_name trong CONTEXT_META), tự xưng là 'Mimo'. TUYỆT ĐỐI KHÔNG dùng từ 'mày', 'tao'.\n"
+            "7. emotion: PHẢI SỬ DỤNG 'Working' (khi phân tích dữ liệu) hoặc 'Thinking' (khi suy nghĩ, so sánh). KHÔNG dùng các emotion khác.\n"
             "\n[DANH SÁCH EMOTION]\n"
             "Alert, Angry, Approved, Celebrate, Chill, Cooking, Cool, Determined, Error, Excited, Giggle, Happy, Hello, Loading, Love, Proud, Relax, Sad, Sleepy, Sassy, Shopping, Travel, Sorry, Success, Taunting, Thankful, Thinking, Working, Worried\n"
         )

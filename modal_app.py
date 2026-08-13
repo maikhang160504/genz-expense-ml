@@ -433,12 +433,61 @@ def train_qwen_model(num_epochs: int = 3, learning_rate: float = 2e-4, batch_siz
         gradient_checkpointing=True,
     )
     
+    from transformers import TrainerCallback
+    import time
+
+    class ProgressCallback(TrainerCallback):
+        def on_log(self, args, state, control, logs=None, **kwargs):
+            if state.is_local_process_zero and logs:
+                progress_pct = round(state.global_step / state.max_steps * 100, 1) if state.max_steps > 0 else 0
+                progress = {
+                    "isTraining": True,
+                    "stage": "TRAINING",
+                    "progress_percent": progress_pct,
+                    "message": f"Step {state.global_step}/{state.max_steps}",
+                    "loss": logs.get("loss", 0),
+                    "epoch": round(state.epoch, 2) if state.epoch else 0,
+                    "updated_at": time.time()
+                }
+                progress_file = Path("/storage/llm_finetune/training_progress.json")
+                progress_file.parent.mkdir(parents=True, exist_ok=True)
+                with open(progress_file, "w", encoding="utf-8") as f:
+                    json.dump(progress, f, ensure_ascii=False)
+
+        def on_train_end(self, args, state, control, **kwargs):
+            if state.is_local_process_zero:
+                progress = {
+                    "isTraining": False,
+                    "stage": "SUCCESS",
+                    "progress_percent": 100,
+                    "message": "Huấn luyện LLM hoàn tất. Đang lưu mô hình...",
+                    "updated_at": time.time()
+                }
+                progress_file = Path("/storage/llm_finetune/training_progress.json")
+                progress_file.parent.mkdir(parents=True, exist_ok=True)
+                with open(progress_file, "w", encoding="utf-8") as f:
+                    json.dump(progress, f, ensure_ascii=False)
+                    
+    # Initialize Progress file
+    init_progress = {
+        "isTraining": True,
+        "stage": "PREPARING",
+        "progress_percent": 0,
+        "message": "Đang chuẩn bị dữ liệu và mô hình Qwen...",
+        "updated_at": time.time()
+    }
+    progress_file = Path("/storage/llm_finetune/training_progress.json")
+    progress_file.parent.mkdir(parents=True, exist_ok=True)
+    with open(progress_file, "w", encoding="utf-8") as f:
+        json.dump(init_progress, f, ensure_ascii=False)
+    
     trainer = Trainer(
         model=model,
         args=training_args,
         train_dataset=tokenized_dataset["train"],
         eval_dataset=tokenized_dataset["test"],
-        data_collator=DataCollatorForLanguageModeling(tokenizer=tokenizer, mlm=False)
+        data_collator=DataCollatorForLanguageModeling(tokenizer=tokenizer, mlm=False),
+        callbacks=[ProgressCallback()]
     )
     
     print("🔥 Starting training...")

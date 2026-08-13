@@ -56,8 +56,17 @@ def main():
         
         updates_count = 0
         new_count = 0
+        seen_texts = set()
         
         for text_input, payload in rows:
+            if not text_input or not str(text_input).strip():
+                continue
+                
+            text_norm = str(text_input).strip().lower()
+            if text_norm in seen_texts:
+                continue
+            seen_texts.add(text_norm)
+            
             if not payload or not isinstance(payload, dict):
                 if isinstance(payload, str):
                     try:
@@ -77,8 +86,6 @@ def main():
                 
             if not corrected_intent and not corrected_category:
                 continue
-                
-            text_norm = text_input.strip().lower()
             
             # Xác định target intent (mặc định là Record nếu có category)
             target_intent = corrected_intent or 'Record'

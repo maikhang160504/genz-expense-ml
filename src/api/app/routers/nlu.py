@@ -312,6 +312,14 @@ def train(payload: NluTrainRequest = NluTrainRequest(), background_tasks: Backgr
     settings = get_settings()
     nlu_dir = Path(settings.expense_ocr_nlu_dir).resolve()
 
+    from app.services.nlu_registry import get_model_meta
+    meta = get_model_meta(nlu_dir, nlu_real=True)
+    if meta.get("pendingRunIndex") is not None:
+        raise HTTPException(
+            status_code=400, 
+            detail="Đang có một mô hình chờ duyệt (Candidate). Vui lòng 'Duyệt áp dụng' hoặc 'Khôi phục/Hủy' mô hình này trước khi huấn luyện đợt mới."
+        )
+
     # Modal training flow check
     import os
     if os.environ.get("IS_MODAL") == "true" or os.environ.get("MODAL_PROJECT_NAME") or "modal" in str(sys.executable):
@@ -612,6 +620,29 @@ def trigger_llm_finetune(epochs: int = 3, lr: float = 2e-4, batch_size: int = 4)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to trigger LLM fine-tuning: {e}")
 
+@router.get("/train/llm-status", summary="Lấy trạng thái tiến trình Fine-tune LLM Qwen trên Modal")
+def get_llm_finetune_status():
+    import os
+    is_modal = os.environ.get("IS_MODAL") == "true" or os.environ.get("MODAL_PROJECT_NAME") or "modal" in str(sys.executable)
+    status_file = Path("/storage/llm_finetune/training_progress.json")
+    
+    if is_modal and status_file.is_file():
+        try:
+            import sys
+            sys.path.insert(0, str(Path(os.environ.get("EXPENSE_OCR_NLU_DIR", "/workspace"))))
+            from modal_app import volume
+            volume.reload()
+        except Exception:
+            pass
+        
+        try:
+            with open(status_file, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except Exception:
+            pass
+            
+    return {"isTraining": False, "stage": "IDLE", "progress_percent": 0, "message": "Sẵn sàng"}
+
 
 @router.get("/inference-backend", summary="Cấu hình mô hình cho Tầng 1 và Tầng 2")
 def get_nlu_inference_backend():
@@ -724,3 +755,19 @@ def promote_candidate_model():
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to promote model: {e}")
+
+@router.post("/models/rollback", summary="Khôi phục mô hình cũ (Active -> Old)")
+def rollback_model():
+    try:
+        from app.services.nlu_registry import rollback_to_previous_version
+        settings = get_settings()
+        nlu_dir = Path(settings.expense_ocr_nlu_dir).resolve()
+        reg = rollback_to_previous_version(nlu_dir)
+        get_nlu_service().reload()
+        return {
+            "ok": True,
+            "message": "Đã khôi phục mô hình phiên bản trước thành công!",
+            "registry": reg,
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to rollback model: {e}")

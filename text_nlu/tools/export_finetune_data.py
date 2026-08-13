@@ -44,7 +44,16 @@ def export_finetune_data():
         cur.execute("SELECT text_input, intent, category, payload FROM nlu_logs WHERE log_type = 'chat'")
         rows = cur.fetchall()
         
+        seen_texts = set()
         for text_input, intent, category, payload in rows:
+            if not text_input or not str(text_input).strip():
+                continue
+                
+            text_norm = str(text_input).strip().lower()
+            if text_norm in seen_texts:
+                continue
+            seen_texts.add(text_norm)
+            
             if isinstance(payload, str):
                 try:
                     payload = json.loads(payload)
