@@ -119,8 +119,8 @@ for key in ["HF_TOKEN", "DATABASE_URL"]:
 if local_keys:
     secrets_list.append(modal.Secret.from_dict(local_keys))
 else:
-    # 2. Fall back to cloud-configured Modal Secret 'gemini-secrets' (kept for historical naming) if deploying from CI/CD
-    secrets_list.append(modal.Secret.from_name("gemini-secrets"))
+    # 2. Fall back to cloud-configured Modal Secret 'huggingface-secrets' if deploying from CI/CD
+    secrets_list.append(modal.Secret.from_name("huggingface-secrets"))
 
 
 
