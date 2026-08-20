@@ -70,6 +70,9 @@ def load_intent_rows(*, max_samples: int | None = None) -> pd.DataFrame:
     cap = max_samples if max_samples is not None else int(os.environ.get("INTENT_ENCODER_MAX_SAMPLES", "0"))
     if cap > 0:
         df = subsample_by_label(df, "intent", cap)
+    else:
+        # Lấy 1/4 dữ liệu để test nhanh
+        df = subsample_by_label(df, "intent", max(1, len(df) // 4))
     return df
 
 
@@ -81,6 +84,8 @@ def load_action_type_rows(*, max_samples: int | None = None) -> pd.DataFrame:
     cap = max_samples if max_samples is not None else int(os.environ.get("ACTION_TYPE_ENCODER_MAX_SAMPLES", "0"))
     if cap > 0:
         df = subsample_by_label(df, "action_type", cap)
+    else:
+        df = subsample_by_label(df, "action_type", max(1, len(df) // 4))
     return df
 
 
@@ -91,6 +96,8 @@ def load_record_type_rows(*, max_samples: int | None = None) -> pd.DataFrame:
     cap = max_samples if max_samples is not None else int(os.environ.get("RECORD_TYPE_ENCODER_MAX_SAMPLES", "0"))
     if cap > 0:
         df = subsample_by_label(df, "type", cap)
+    else:
+        df = subsample_by_label(df, "type", max(1, len(df) // 4))
     return df
 
 
@@ -100,6 +107,8 @@ def load_category_rows(*, max_samples: int | None = None) -> pd.DataFrame:
     cap = max_samples if max_samples is not None else int(os.environ.get("CATEGORY_ENCODER_MAX_SAMPLES", "0"))
     if cap > 0:
         df = subsample_by_label(df, "label", cap)
+    else:
+        df = subsample_by_label(df, "label", max(1, len(df) // 4))
     return df
 
 

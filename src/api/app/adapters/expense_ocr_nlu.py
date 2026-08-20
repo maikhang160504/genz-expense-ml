@@ -461,6 +461,32 @@ def get_ocr_error() -> str | None:
     return _OCR_ERROR
 
 
+def _compute_confidence(summary: dict) -> float:
+    """Tính confidence dựa trên kie_backend và số field trích được."""
+    amount = summary.get("amount")
+    if not amount:
+        return 0.3
+
+    backend = summary.get("kie_backend", "heuristic")
+    kie_fields = summary.get("kie_fields") or {}
+
+    # Base score theo backend
+    base = 0.82 if backend == "heuristic" else 0.88  # PICK/LayoutLMv3 cao hơn
+
+    # Bonus khi có thêm field (seller, timestamp)
+    bonus = 0.0
+    if kie_fields.get("SELLER"):
+        bonus += 0.04
+    if kie_fields.get("TIMESTAMP"):
+        bonus += 0.03
+
+    # Penalty nếu có warnings
+    warnings = summary.get("warnings", [])
+    penalty = min(len(warnings) * 0.03, 0.12)
+
+    return round(min(base + bonus - penalty, 0.97), 4)
+
+
 def run_real_ocr(image_bytes: bytes, filename_hint: str | None = None) -> dict[str, Any]:
     pipeline = _OCR_PIPELINE
     if pipeline is None:
@@ -513,7 +539,7 @@ def run_real_ocr(image_bytes: bytes, filename_hint: str | None = None) -> dict[s
         "suggestion": {
             "amount": summary.get("amount"),
             "category": summary.get("category"),
-            "confidence": 0.85 if summary.get("amount") else 0.3,
+            "confidence": _compute_confidence(summary),
             "currency": summary.get("currency", "VND"),
         },
         "requires_confirmation": True,

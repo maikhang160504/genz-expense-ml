@@ -50,6 +50,17 @@ def main() -> None:
     joblib.dump(bundle, OUT_PATH)
     print(f"Saved {OUT_PATH}")
 
+    # Đồng bộ trực tiếp vào /storage vĩnh viễn nếu môi trường hỗ trợ
+    if Path("/storage").is_dir():
+        for storage_dir in [Path("/storage/nlu_models_candidate"), Path("/storage/nlu_models")]:
+            try:
+                storage_dir.mkdir(parents=True, exist_ok=True)
+                dest = storage_dir / "intent_encoder.joblib"
+                joblib.dump(bundle, dest)
+                print(f"✅ Synced intent encoder to persistent storage: {dest}")
+            except Exception as e:
+                print(f"⚠️ Failed to sync intent encoder to {storage_dir}: {e}")
+
 
 if __name__ == "__main__":
     main()

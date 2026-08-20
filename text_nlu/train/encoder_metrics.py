@@ -71,5 +71,17 @@ def finalize_metrics(*, model_name: str | None = None) -> Path:
     data = load_metrics()
     data["train_type"] = "encoder"
     data["encoder_model"] = model_name or os.environ.get("ENCODER_MODEL_NAME", "vinai/phobert-base")
-    METRICS_PATH.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+    content = json.dumps(data, ensure_ascii=False, indent=2)
+    METRICS_PATH.parent.mkdir(parents=True, exist_ok=True)
+    METRICS_PATH.write_text(content, encoding="utf-8")
+    
+    if Path("/storage").is_dir():
+        for storage_dir in [Path("/storage/nlu_models_candidate"), Path("/storage/nlu_models")]:
+            try:
+                storage_dir.mkdir(parents=True, exist_ok=True)
+                (storage_dir / "encoder_metrics.json").write_text(content, encoding="utf-8")
+                print(f"✅ Synced encoder metrics to {storage_dir}/encoder_metrics.json")
+            except Exception:
+                pass
+
     return METRICS_PATH

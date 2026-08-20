@@ -86,6 +86,9 @@ def _get_path(default_path: Path) -> Path:
     storage_path = Path("/storage/nlu_models") / default_path.name
     if storage_path.exists() and storage_path.is_file():
         return storage_path
+    candidate_path = Path("/storage/nlu_models_candidate") / default_path.name
+    if candidate_path.exists() and candidate_path.is_file():
+        return candidate_path
     return default_path
 
 
@@ -152,27 +155,31 @@ def load_record_type_model():
 
 def load_encoder_intent_model() -> dict:
     """Comparison track — intent encoder only."""
-    if not settings.INTENT_ENCODER_PATH.is_file():
-        raise FileNotFoundError(settings.INTENT_ENCODER_PATH)
-    return _load_encoder(settings.INTENT_ENCODER_PATH)
+    p = _get_path(settings.INTENT_ENCODER_PATH)
+    if not p.is_file():
+        raise FileNotFoundError(p)
+    return _load_encoder(p)
 
 
 def load_encoder_category_model() -> dict:
-    if not settings.CATEGORY_ENCODER_PATH.is_file():
-        raise FileNotFoundError(settings.CATEGORY_ENCODER_PATH)
-    return _load_encoder(settings.CATEGORY_ENCODER_PATH)
+    p = _get_path(settings.CATEGORY_ENCODER_PATH)
+    if not p.is_file():
+        raise FileNotFoundError(p)
+    return _load_encoder(p)
 
 
 def load_encoder_action_type_model() -> dict:
-    if not settings.ACTION_TYPE_ENCODER_PATH.is_file():
-        raise FileNotFoundError(settings.ACTION_TYPE_ENCODER_PATH)
-    return _load_encoder(settings.ACTION_TYPE_ENCODER_PATH)
+    p = _get_path(settings.ACTION_TYPE_ENCODER_PATH)
+    if not p.is_file():
+        raise FileNotFoundError(p)
+    return _load_encoder(p)
 
 
 def load_encoder_record_type_model() -> dict:
-    if not settings.RECORD_TYPE_ENCODER_PATH.is_file():
-        raise FileNotFoundError(settings.RECORD_TYPE_ENCODER_PATH)
-    return _load_encoder(settings.RECORD_TYPE_ENCODER_PATH)
+    p = _get_path(settings.RECORD_TYPE_ENCODER_PATH)
+    if not p.is_file():
+        raise FileNotFoundError(p)
+    return _load_encoder(p)
 
 
 def load_chitchat_sentiment_model():

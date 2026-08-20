@@ -161,7 +161,9 @@ class NLUService:
         multi_records_raw = raw.get("multi_records") or []
         multi_records = [
             {
-                "text": m.get("text", ""),
+                "text": m.get("text") or m.get("segment", ""),
+                "item": m.get("item") or m.get("segment", ""),
+                "note": m.get("item") or m.get("text") or m.get("segment", ""),
                 "amount": m.get("amount"),
                 "category": m.get("category"),
                 "record_type": m.get("record_type"),

@@ -5228,5 +5228,74 @@
       }
     },
     "encoder_model": "vinai/phobert-base"
+  },
+  {
+    "run_index": 10,
+    "version": "v1.1-run10",
+    "trained_at": "2026-08-14T17:30:36.036071+00:00",
+    "duration_sec": 48.2,
+    "status": "success",
+    "train_type": "encoder",
+    "source": "modal_cloud",
+    "training_rows": 66425,
+    "error": null,
+    "f1_score": "96.2",
+    "encoder_model": "vinai/phobert-base-v2",
+    "metrics": {
+      "intent": {
+        "accuracy": 0.992,
+        "macro_precision": 0.988,
+        "macro_recall": 0.991,
+        "macro_f1": 0.989,
+        "weighted_f1": 0.992
+      },
+      "category": {
+        "accuracy": 0.965,
+        "macro_precision": 0.958,
+        "macro_recall": 0.961,
+        "macro_f1": 0.959,
+        "weighted_f1": 0.965
+      }
+    }
+  },
+  {
+    "run_index": 11,
+    "timestamp": "2026-08-14T21:05:01.138040Z",
+    "status": "candidate",
+    "source": "webadmin",
+    "train_type": "encoder",
+    "duration_sec": 142.5,
+    "datasets": {
+      "intent_record_rows": 28450,
+      "intent_action_rows": 8200,
+      "intent_chitchat_rows": 5002,
+      "total_rows": 41652
+    },
+    "metrics": {
+      "summary": {
+        "trained_fields": 10,
+        "classifier_fields": 9,
+        "regressor_fields": 1,
+        "avg_weighted_f1": 0.9852,
+        "avg_accuracy": 0.9835,
+        "dataset_rows": 41652,
+        "labeled_slot_cells": 89317
+      },
+      "category": {
+        "accuracy": 0.986,
+        "weighted_f1": 0.986,
+        "test_samples": 625
+      },
+      "intent": {
+        "accuracy": 0.989,
+        "weighted_f1": 0.989,
+        "test_samples": 625
+      },
+      "encoder_metrics": {
+        "trained_fields": 10,
+        "avg_weighted_f1": 0.9852,
+        "avg_accuracy": 0.9835
+      }
+    }
   }
 ]

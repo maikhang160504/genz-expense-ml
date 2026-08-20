@@ -61,6 +61,8 @@ class NLURequest(BaseModel):
 
 class MultiRecordItem(BaseModel):
     text: str
+    item: str | None = None
+    note: str | None = None
     amount: float | None = None
     category: str | None = None
     record_type: RecordType | None = None

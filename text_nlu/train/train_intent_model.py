@@ -1,6 +1,7 @@
 import json
 import re
 import sys
+import os
 from pathlib import Path
 
 import joblib
@@ -130,8 +131,20 @@ def save_model(vectorizer: TfidfVectorizer, model: LogisticRegression) -> None:
         "model": model,
         "labels": ["Record", "Action", "Chitchat"],
     }
+    MODEL_PATH.parent.mkdir(parents=True, exist_ok=True)
     joblib.dump(payload, MODEL_PATH)
     print(f"Saved model to {MODEL_PATH}")
+    
+    # Đồng bộ trực tiếp vào /storage vĩnh viễn nếu môi trường hỗ trợ
+    if Path("/storage").is_dir():
+        for storage_dir in [Path("/storage/nlu_models_candidate"), Path("/storage/nlu_models")]:
+            try:
+                storage_dir.mkdir(parents=True, exist_ok=True)
+                dest = storage_dir / "intent_model.joblib"
+                joblib.dump(payload, dest)
+                print(f"✅ Synced intent model to persistent storage: {dest}")
+            except Exception as e:
+                print(f"⚠️ Failed to sync intent model to {storage_dir}: {e}")
 
 
 def main() -> None:

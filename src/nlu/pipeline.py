@@ -194,7 +194,7 @@ def run_nlu(
 
     # Shortcut addstory: force intent = Record
     if caller_context in ("addstory", "bill"):
-        if category_backend_choice in ("llm", "llm_v2"):
+        if category_backend_choice in ("llm", "llm_v2", "llm_finetuned"):
             return run_llm_nlu_v2(
                 user_text,
                 context_metadata=context_metadata,
@@ -208,7 +208,7 @@ def run_nlu(
 
     # ── STAGE 1: Nhận dạng ý định (TF-IDF, PhoBERT encoder, hoặc LLM) ──
     else:
-        if intent_backend_choice in ("llm", "llm_v2"):
+        if intent_backend_choice in ("llm", "llm_v2", "llm_finetuned"):
             intent, intent_conf = classify_intent_llm(user_text)
             intent_proba = {intent: intent_conf}
         else:
@@ -232,7 +232,7 @@ def run_nlu(
     # Quy tắc chuyển đổi mô hình:
     # Nếu category_backend_choice (Stage 2) là llm_v2/llm HOẶC cờ run_llm=True được bật,
     # chúng ta sẽ giao phó toàn bộ việc trích xuất thực thể, danh mục (Record, Action, Chitchat) cho Qwen.
-    if run_llm or category_backend_choice in ("llm", "llm_v2"):
+    if run_llm or category_backend_choice in ("llm", "llm_v2", "llm_finetuned"):
         return run_llm_nlu_v2(
             user_text,
             context_metadata=context_metadata,

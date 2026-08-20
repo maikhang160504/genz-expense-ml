@@ -10,6 +10,9 @@ OUTPUT_STORAGE_PATH = Path("/storage/exported/vistral_finetune_incremental.jsonl
 BACKEND_ENV = ROOT.parent / "app" / "backend" / ".env"
 
 def get_db_url():
+    env_url = os.environ.get("DATABASE_URL")
+    if env_url:
+        return env_url
     if not BACKEND_ENV.exists():
         return None
     with open(BACKEND_ENV, "r", encoding="utf-8") as f:

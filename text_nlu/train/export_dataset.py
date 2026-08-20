@@ -13,13 +13,26 @@ CHITCHAT_CSV = DATASETS_DIR / "intent_chitchat.csv"
 BACKEND_ENV = ROOT.parent / "app" / "backend" / ".env"
 
 def get_db_url():
-    if not BACKEND_ENV.exists():
-        return None
-    with open(BACKEND_ENV, "r", encoding="utf-8") as f:
-        for line in f:
-            if line.startswith("DATABASE_URL="):
-                return line.split("=", 1)[1].strip().strip('"').strip("'")
-    return None
+    env_url = os.environ.get("DATABASE_URL")
+    if not env_url and BACKEND_ENV.exists():
+        with open(BACKEND_ENV, "r", encoding="utf-8") as f:
+            for line in f:
+                if line.startswith("DATABASE_URL="):
+                    env_url = line.split("=", 1)[1].strip().strip('"').strip("'")
+                    break
+    
+    if env_url:
+        # Strip sslrootcert query parameters completely
+        env_url = re.sub(r"&sslrootcert=[^&]*", "", env_url)
+        env_url = re.sub(r"\?sslrootcert=[^&]*&?", "?", env_url)
+        env_url = re.sub(r"&sslmode=[^&]*", "", env_url)
+        env_url = re.sub(r"\?sslmode=[^&]*&?", "?", env_url)
+        env_url = env_url.rstrip("?").rstrip("&")
+        delimiter = "&" if "?" in env_url else "?"
+        # CockroachDB cloud accepts sslmode=no-verify without searching for /root/.postgresql/root.crt
+        env_url = f"{env_url}{delimiter}sslmode=no-verify"
+        
+    return env_url
 
 def load_dfs():
     dfs = {}
@@ -48,8 +61,17 @@ def main():
     initial_total = sum(len(df) for df in dfs.values())
     print(f"Tổng số bản ghi ban đầu: {initial_total}")
     
+    conn = None
     try:
         conn = psycopg2.connect(db_url)
+    except Exception as e:
+        try:
+            conn = psycopg2.connect(db_url.replace("sslmode=no-verify", "sslmode=require"))
+        except Exception as e2:
+            print(f">>> [export_dataset] Bỏ qua đồng bộ DB do không kết nối được ({e2}). Sử dụng tập dữ liệu CSV hiện có.")
+            return
+
+    try:
         cur = conn.cursor()
         cur.execute("SELECT text_input, payload FROM nlu_logs WHERE log_type = 'dislike'")
         rows = cur.fetchall()

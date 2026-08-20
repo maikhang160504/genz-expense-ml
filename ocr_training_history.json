@@ -1,0 +1,28 @@
+[
+  {
+    "run_index": 1,
+    "trained_at": "2026-07-03T08:29:57.448771Z",
+    "duration_sec": 4200,
+    "status": "success",
+    "metrics": {
+      "precision": 88.01,
+      "recall": 93.62,
+      "f1": 90.73,
+      "classification_report": "              precision    recall  f1-score   support\n\n     ADDRESS       0.91      0.98      0.94       489\n      SELLER       0.93      0.98      0.95       333\n   TIMESTAMP       0.82      0.94      0.88       355\n  TOTAL_COST       0.87      0.89      0.88       783\n\n   micro avg       0.88      0.94      0.91      1960\n   macro avg       0.88      0.95      0.91      1960\nweighted avg       0.88      0.94      0.91      1960\n"
+    }
+  },
+  {
+    "run_index": 2,
+    "trained_at": "2026-08-14T09:26:35.773176+00:00",
+    "duration_sec": 4000,
+    "status": "success",
+    "error_msg": "",
+    "is_candidate": true,
+    "metrics": {
+      "precision": 88.65,
+      "recall": 92.17,
+      "f1": 90.37,
+      "classification_report": "              precision    recall  f1-score   support\n\n     ADDRESS       0.93      0.94      0.93       549\n      SELLER       0.88      0.91      0.89       333\n   TIMESTAMP       0.83      0.91      0.87       386\n  TOTAL_COST       0.89      0.92      0.90       800\n\n   micro avg       0.89      0.92      0.90      2068\n   macro avg       0.88      0.92      0.90      2068\nweighted avg       0.89      0.92      0.90      2068\n"
+    }
+  }
+]

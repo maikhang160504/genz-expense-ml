@@ -57,7 +57,7 @@ def load_registry(nlu_root: Path) -> dict[str, Any]:
             "last_accepted_run_index": 0,
             "pending_run_index": None,
             "accepted_at": None,
-            "intent_backend": "encoder",
+            "intent_backend": "llm_finetuned",
             "category_backend": "llm_v2",
         }
         _save_json(p, reg)
@@ -70,8 +70,8 @@ def load_registry(nlu_root: Path) -> dict[str, Any]:
 
 def get_intent_backend(nlu_root: Path) -> str:
     reg = load_registry(nlu_root)
-    backend = str(reg.get("intent_backend", "encoder")).strip().lower()
-    if backend in {"llm", "llm_v2"}:
+    backend = str(reg.get("intent_backend", "llm_finetuned")).strip().lower()
+    if backend in {"llm", "llm_v2", "llm_finetuned"}:
         return backend
     return "encoder" if backend in {"encoder", "phobert"} else "tfidf"
 
@@ -79,7 +79,7 @@ def get_intent_backend(nlu_root: Path) -> str:
 def get_category_backend(nlu_root: Path) -> str:
     reg = load_registry(nlu_root)
     backend = str(reg.get("category_backend", "llm_v2")).strip().lower()
-    if backend in {"llm", "llm_v2"}:
+    if backend in {"llm", "llm_v2", "llm_finetuned"}:
         return backend
     return "encoder" if backend in {"encoder", "phobert"} else "tfidf"
 
@@ -87,9 +87,9 @@ def get_category_backend(nlu_root: Path) -> str:
 def set_inference_backends(nlu_root: Path, intent_backend: str, category_backend: str) -> dict[str, Any]:
     def normalize(b: str) -> str:
         b = str(b).strip().lower()
-        if b not in {"tfidf", "encoder", "phobert", "llm", "llm_v2"}:
-            raise ValueError(f"invalid backend '{b}', must be 'tfidf', 'encoder', 'llm', or 'llm_v2'")
-        if b in {"llm", "llm_v2"}:
+        if b not in {"tfidf", "encoder", "phobert", "llm", "llm_v2", "llm_finetuned"}:
+            raise ValueError(f"invalid backend '{b}', must be 'tfidf', 'encoder', 'llm', 'llm_v2', or 'llm_finetuned'")
+        if b in {"llm", "llm_v2", "llm_finetuned"}:
             return b
         return "encoder" if b in {"encoder", "phobert"} else "tfidf"
 
@@ -148,28 +148,36 @@ def accept_pending_version(nlu_root: Path) -> dict[str, Any]:
     models_dir = nlu_root / "text_nlu" / "models"
     models_new = nlu_root / "text_nlu" / "models_new"
     models_old = nlu_root / "text_nlu" / "models_old"
+    storage_candidate = Path("/storage/nlu_models_candidate")
+    
+    src_new = models_new
+    if not models_new.exists() and storage_candidate.exists():
+        src_new = storage_candidate
 
-    if models_new.exists():
+    if src_new.exists():
         try:
             if models_dir.exists():
-                if models_old.exists():
-                    shutil.rmtree(models_old, ignore_errors=True)
-                shutil.copytree(models_dir, models_old)
-                shutil.rmtree(models_dir, ignore_errors=True)
-            shutil.copytree(models_new, models_dir)
+                models_old.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copytree(models_dir, models_old, dirs_exist_ok=True)
+            models_dir.mkdir(parents=True, exist_ok=True)
+            shutil.copytree(src_new, models_dir, dirs_exist_ok=True)
             
             # Also copy to Modal persistent storage if mounted
             storage_models = Path("/storage/nlu_models")
             if Path("/storage").is_dir():
                 print(f"[NLU Registry] Promoting to persistent storage {storage_models}...", flush=True)
+                storage_old = Path("/storage/nlu_models_old")
                 if storage_models.exists():
-                    # Keep old storage just in case
-                    storage_old = Path("/storage/nlu_models_old")
-                    if storage_old.exists():
-                        shutil.rmtree(storage_old, ignore_errors=True)
-                    shutil.copytree(storage_models, storage_old)
-                    shutil.rmtree(storage_models, ignore_errors=True)
-                shutil.copytree(models_new, storage_models)
+                    storage_old.mkdir(parents=True, exist_ok=True)
+                    shutil.copytree(storage_models, storage_old, dirs_exist_ok=True)
+                storage_models.mkdir(parents=True, exist_ok=True)
+                shutil.copytree(src_new, storage_models, dirs_exist_ok=True)
+                
+                # Cleanup candidate after promotion
+                if storage_candidate.exists():
+                    shutil.rmtree(storage_candidate, ignore_errors=True)
+            if models_new.exists():
+                shutil.rmtree(models_new, ignore_errors=True)
 
         except Exception as e:
             print(f"[NLU Registry] Warning while copying candidate model folder: {e}", flush=True)
@@ -192,6 +200,46 @@ def accept_pending_version(nlu_root: Path) -> dict[str, Any]:
         reg["major"] = major
         reg["version"] = f"v{major}.{minor}-global"
         reg["accepted_at"] = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+
+    save_registry(nlu_root, reg)
+    return reg
+
+
+def reject_pending_version(nlu_root: Path) -> dict[str, Any]:
+    """Reject pending model on disk — delete models_new and candidate directories."""
+    import shutil
+    reg = load_registry(nlu_root)
+    pending = reg.get("pending_run_index")
+    reg["pending_run_index"] = None
+
+    # Physical directory delete if models_new exists
+    models_new = nlu_root / "text_nlu" / "models_new"
+    if models_new.exists():
+        try:
+            shutil.rmtree(models_new, ignore_errors=True)
+        except Exception as e:
+            print(f"[NLU Registry] Warning while deleting candidate model folder: {e}", flush=True)
+
+    # Clean up candidate directory from storage if exists
+    storage_models = Path("/storage/nlu_models_candidate")
+    if Path("/storage").is_dir() and storage_models.exists():
+        try:
+            shutil.rmtree(storage_models, ignore_errors=True)
+        except Exception as e:
+            pass
+
+    # Update training history to mark candidate as rejected so it is ignored
+    try:
+        history_file = _paths(nlu_root)["history"]
+        history = _load_json(history_file, [])
+        if history and pending:
+            for item in reversed(history):
+                if item.get("run_index") == pending:
+                    item["status"] = "rejected"
+                    break
+            _save_json(history_file, history)
+    except Exception:
+        pass
 
     save_registry(nlu_root, reg)
     return reg
@@ -221,6 +269,20 @@ def rollback_to_previous_version(nlu_root: Path) -> dict[str, Any]:
             if storage_models.exists():
                 shutil.rmtree(storage_models, ignore_errors=True)
             shutil.copytree(storage_models_old, storage_models)
+            shutil.rmtree(storage_models_old, ignore_errors=True)
+
+        # Xóa thư mục models_old sau khi khôi phục thành công
+        shutil.rmtree(models_old, ignore_errors=True)
+        
+        # Commit Modal volume nếu đang chạy trên Modal
+        if Path("/storage").is_dir():
+            try:
+                import sys
+                sys.path.insert(0, str(Path(os.environ.get("EXPENSE_OCR_NLU_DIR", "/workspace"))))
+                from modal_app import volume
+                volume.commit()
+            except Exception:
+                pass
     except Exception as e:
         print(f"[NLU Registry] Lỗi khi khôi phục mô hình: {e}", flush=True)
         raise ValueError(f"Khôi phục thất bại: {e}")

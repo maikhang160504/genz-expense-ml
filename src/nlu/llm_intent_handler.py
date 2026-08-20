@@ -866,9 +866,24 @@ def run_llm_nlu_v2(
                         logger.info("[run_llm_nlu_v2] missing_slots for %s: %s", act_type, missing)
                         
                         missing_text_vi = ", ".join(missing).replace("amount", "số tiền").replace("category", "danh mục").replace("theme", "chủ đề").replace("verb", "hành động")
-                        result["nlg_response"] = f"Mimo cần thêm thông tin về **{missing_text_vi}** để thực hiện yêu cầu này. Bạn vui lòng bổ sung ở khung bên dưới nhé!"
+                        result["nlg_response"] = f"Mimo cần thêm thông tin về {missing_text_vi} để thực hiện yêu cầu này. Bạn vui lòng bổ sung ở khung bên dưới nhé!"
                 except Exception as e:
                     logger.warning("[run_llm_nlu_v2] missing_slots check error: %s", e)
+
+            # Multi-records extraction for Record intent
+            if intent == "Record":
+                try:
+                    from src.nlu.multi_record import extract_multi_records
+                    multi = extract_multi_records(text)
+                    result["multi_records"] = multi
+                    result["multi_record_task"] = len(multi) >= 2
+                except Exception as e:
+                    logger.warning("[run_llm_nlu_v2] multi_records extraction error: %s", e)
+                    result["multi_records"] = []
+                    result["multi_record_task"] = False
+            else:
+                result["multi_records"] = []
+                result["multi_record_task"] = False
 
             return result
 

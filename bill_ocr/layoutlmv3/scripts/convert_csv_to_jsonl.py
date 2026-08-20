@@ -129,9 +129,11 @@ def run_ocr_and_match_labels(image_path, csv_path, polygons, texts, labels):
         from receipt_ocr.pipeline import ReceiptOCRPipeline
         from receipt_ocr.model_paths import resolve_vietocr_weights_path
         
+        import torch
         vietocr_w = resolve_vietocr_weights_path(None)
-        print(f"Initializing ReceiptOCRPipeline for training matching with weights: {vietocr_w}...")
-        _ocr_pipeline = ReceiptOCRPipeline(vietocr_weights=vietocr_w, paddle_use_gpu=False).load()
+        paddle_use_gpu = False
+        print(f"Initializing ReceiptOCRPipeline for training matching with weights: {vietocr_w} (GPU: {paddle_use_gpu})...")
+        _ocr_pipeline = ReceiptOCRPipeline(vietocr_weights=vietocr_w, paddle_use_gpu=paddle_use_gpu).load()
 
     import cv2
     import numpy as np
@@ -312,10 +314,28 @@ def main():
     
     if has_raw_columns:
         print("Detected raw MC_OCR CSV format. Converting to word-level IOB format...")
-        for _, row in df.iterrows():
+        total_rows = len(df)
+        for row_idx, row in df.iterrows():
             img_id = row["img_id"]
             image_path = str(csv_path.parent / "imgs" / img_id)
             
+            # Update progress file periodically during OCR
+            current_row = row_idx + 1
+            ocr_pct = max(1, min(10, int((current_row / max(1, total_rows)) * 10)))
+            if current_row % 3 == 0 or current_row == total_rows:
+                try:
+                    progress_file = Path("/storage/layoutlmv3/training_progress.json")
+                    if progress_file.parent.exists():
+                        with open(progress_file, "w", encoding="utf-8") as pf:
+                            json.dump({
+                                "isTraining": True,
+                                "stage": "ocr_extraction",
+                                "progress_percent": ocr_pct,
+                                "message": f"Đang trích xuất OCR và hộp giới hạn ({current_row}/{total_rows} ảnh bằng PaddleOCR GPU)..."
+                            }, pf, ensure_ascii=False)
+                except Exception:
+                    pass
+
             try:
                 polygons = ast.literal_eval(row["anno_polygons"])
             except Exception as e:

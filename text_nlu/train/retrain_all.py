@@ -118,6 +118,19 @@ def main() -> None:
     with open(METRICS_PATH, "w", encoding="utf-8") as f:
         json.dump(metrics, f, ensure_ascii=False, indent=2)
     print(f"\nMetrics saved to {METRICS_PATH}")
+    
+    # Đồng bộ metrics trực tiếp vào /storage vĩnh viễn
+    if Path("/storage").is_dir():
+        for storage_dir in [Path("/storage/nlu_models_candidate"), Path("/storage/nlu_models")]:
+            try:
+                storage_dir.mkdir(parents=True, exist_ok=True)
+                dest_m = storage_dir / "retrain_all_metrics.json"
+                with open(dest_m, "w", encoding="utf-8") as f:
+                    json.dump(metrics, f, ensure_ascii=False, indent=2)
+                print(f"✅ Synced metrics to persistent storage: {dest_m}")
+            except Exception as e:
+                print(f"⚠️ Failed to sync metrics to {storage_dir}: {e}")
+                
     print("All training steps finished.")
 
 if __name__ == "__main__":

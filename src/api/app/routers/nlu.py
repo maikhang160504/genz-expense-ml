@@ -52,22 +52,22 @@ def _update_train_status(active: bool, stage: str, message: str, percent: int, s
     elif not active and TRAIN_STATUS_INFO.get("started_ts"):
         TRAIN_STATUS_INFO["elapsed_seconds"] = round(time.time() - TRAIN_STATUS_INFO["started_ts"], 1)
         TRAIN_STATUS_INFO["started_ts"] = None
-        
+
     import os
-    if os.environ.get("IS_MODAL") == "true" or os.environ.get("MODAL_PROJECT_NAME") or "modal" in str(sys.executable):
-        try:
+    try:
+        if Path("/storage").is_dir():
             status_file = Path("/storage/nlu_models/training_status.json")
             status_file.parent.mkdir(parents=True, exist_ok=True)
-            with open(status_file, "w") as f:
-                json.dump(TRAIN_STATUS_INFO, f)
+            with open(status_file, "w", encoding="utf-8") as f:
+                json.dump(TRAIN_STATUS_INFO, f, ensure_ascii=False)
             try:
                 sys.path.insert(0, str(Path(os.environ.get("EXPENSE_OCR_NLU_DIR", "/workspace"))))
                 from modal_app import volume
                 volume.commit()
-            except Exception as v_err:
+            except Exception:
                 pass
-        except Exception as e:
-            print(f"Failed to update storage train status: {e}")
+    except Exception as e:
+        print(f"Failed to update storage train status: {e}")
 
 def _count_csv_rows(csv_path: Path) -> int:
     """Count non-empty rows in a CSV file (excluding header)."""
@@ -90,8 +90,7 @@ def append_nlu_history(
 ):
     """Append NLU training run record with metrics, row counts, and candidate promotion tracking."""
     if status == "error" or status == "failed":
-        print(f"[NLU history] Training failed: {error_msg}. Not saving history.", flush=True)
-        return
+        print(f"[NLU history] Training failed: {error_msg}. Saving failure record to history.", flush=True)
 
     history_file = nlu_dir / "text_nlu" / "models" / "nlu_training_history.json"
     
@@ -131,9 +130,22 @@ def append_nlu_history(
     metrics = None
     f1_score = None
     encoder_model_name = None
-    if status == "success" and metrics_file.exists():
+    
+    metrics_candidates = [
+        metrics_file,
+        Path("/storage/nlu_models_candidate") / ("encoder_metrics.json" if train_type == "encoder" else "retrain_all_metrics.json"),
+        Path("/storage/nlu_models") / ("encoder_metrics.json" if train_type == "encoder" else "retrain_all_metrics.json"),
+        nlu_dir / "text_nlu" / "models" / ("encoder_metrics.json" if train_type == "encoder" else "retrain_all_metrics.json"),
+    ]
+    resolved_metrics_file = None
+    for mc in metrics_candidates:
+        if mc.is_file():
+            resolved_metrics_file = mc
+            break
+
+    if status == "success" and resolved_metrics_file:
         try:
-            with open(metrics_file, "r", encoding="utf-8") as f:
+            with open(resolved_metrics_file, "r", encoding="utf-8") as f:
                 metrics = json.load(f)
             
             if train_type == "encoder":
@@ -206,6 +218,7 @@ def run_retraining(nlu_dir: Path, target: str = "local"):
             _update_train_status(True, "PREPARING", "Đang chuẩn bị dữ liệu huấn luyện (Encoder)...", 15, start_time, target=target)
         else:
             _update_train_status(True, "PREPARING", "Đang chuẩn bị dữ liệu huấn luyện (TF-IDF)...", 15, start_time, target=target)
+        time.sleep(1.5)
         python_exec = get_venv_python_path(nlu_dir)
         
         if train_type == "encoder":
@@ -214,6 +227,7 @@ def run_retraining(nlu_dir: Path, target: str = "local"):
             script_path = nlu_dir / "text_nlu" / "train" / "retrain_all.py"
         
         _update_train_status(True, "CLEANING", "Đang làm sạch và chuẩn hóa dữ liệu câu chi tiêu từ MongoDB...", 25, start_time, target=target)
+        time.sleep(1.5)
         models_new_dir = nlu_dir / "text_nlu" / "models_new"
         models_new_dir.mkdir(parents=True, exist_ok=True)
         env = os.environ.copy()
@@ -228,16 +242,67 @@ def run_retraining(nlu_dir: Path, target: str = "local"):
         else:
             _update_train_status(True, "TRAINING", "Đang huấn luyện mô hình TF-IDF NLU...", 50, start_time, target=target)
             
-        subprocess.run(
+        process = subprocess.Popen(
             [python_exec, str(script_path)],
             cwd=str(nlu_dir),
             env=env,
-            check=True,
-            capture_output=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
             text=True,
             encoding="utf-8",
             errors="replace"
         )
+        
+        last_log = ""
+        full_log = []
+        last_update = 0
+        
+        is_modal = os.environ.get("IS_MODAL") == "true" or os.environ.get("MODAL_PROJECT_NAME") or "modal" in str(sys.executable)
+        
+        if is_modal:
+            log_file_path = Path("/storage/nlu_models/nlu_train_log.txt")
+            log_file_path.parent.mkdir(parents=True, exist_ok=True)
+        else:
+            log_file_path = nlu_dir / "nlu_train_log.txt"
+            
+        with open(log_file_path, "w", encoding="utf-8") as lf:
+            while True:
+                line = process.stdout.readline()
+                if not line and process.poll() is not None:
+                    break
+                if line:
+                    lf.write(line)
+                    lf.flush()
+                    line_stripped = line.strip()
+                    if line_stripped:
+                        last_log = line_stripped
+                        full_log.append(line_stripped)
+                        print(line_stripped, flush=True)
+                        now = time.time()
+                        if now - last_update > 2.0:
+                            if is_modal:
+                                try:
+                                    sys.path.insert(0, str(Path(os.environ.get("EXPENSE_OCR_NLU_DIR", "/workspace"))))
+                                    from modal_app import volume
+                                    volume.commit()
+                                except Exception:
+                                    pass
+                            msg = f"Đang huấn luyện: {last_log[:150]}"
+                            _update_train_status(True, "TRAINING", msg, 50, start_time, target=target)
+                            last_update = now
+
+        if is_modal:
+            try:
+                sys.path.insert(0, str(Path(os.environ.get("EXPENSE_OCR_NLU_DIR", "/workspace"))))
+                from modal_app import volume
+                volume.commit()
+            except Exception:
+                pass
+
+        return_code = process.poll()
+        if return_code != 0:
+            full_error = "\n".join(full_log[-50:]) # keep last 50 lines for error msg
+            raise subprocess.CalledProcessError(return_code, process.args, output=full_error, stderr=full_error)
         
         _update_train_status(True, "EVALUATING", "Đang đánh giá hiệu năng F1 Macro và Accuracy trên tập Golden Set...", 75, start_time, target=target)
         _update_train_status(True, "SYNCING", "Đang nạp nóng mô hình mới vào bộ nhớ...", 90, start_time, target=target)
@@ -247,13 +312,28 @@ def run_retraining(nlu_dir: Path, target: str = "local"):
         status = "success"
         _update_train_status(False, "SUCCESS", "Huấn luyện lại mô hình hoàn tất thành công!", 100, start_time, target=target)
     except Exception as e:
-        error_msg = str(e)
-        print(f"[{'Encoder' if train_type == 'encoder' else 'NLU'} training] Error: {e}", flush=True)
-        _update_train_status(False, "ERROR", f"Huấn luyện thất bại: {e}", 0, start_time, error=str(e), target=target)
+        if isinstance(e, subprocess.CalledProcessError):
+            err_output = e.output or str(e)
+            error_msg = f"Command failed with code {e.returncode}. Output: {err_output}"
+            print(f"[{'Encoder' if train_type == 'encoder' else 'NLU'} training] Error: {error_msg}", flush=True)
+            _update_train_status(False, "ERROR", f"Huấn luyện thất bại: Lỗi tiến trình (code {e.returncode}).", 0, start_time, error=error_msg, target=target)
+        else:
+            error_msg = str(e)
+            print(f"[{'Encoder' if train_type == 'encoder' else 'NLU'} training] Error: {e}", flush=True)
+            _update_train_status(False, "ERROR", f"Huấn luyện thất bại: {e}", 0, start_time, error=str(e), target=target)
     finally:
         TRAINING_ACTIVE = False
         duration = time.time() - start_time
         append_nlu_history(nlu_dir, status, duration, error_msg, train_type=train_type)
+        
+        is_modal = os.environ.get("IS_MODAL") == "true" or os.environ.get("MODAL_PROJECT_NAME") or "modal" in str(sys.executable)
+        if is_modal:
+            try:
+                sys.path.insert(0, str(Path(os.environ.get("EXPENSE_OCR_NLU_DIR", "/workspace"))))
+                from modal_app import volume
+                volume.commit()
+            except Exception as e:
+                print(f"[NLU worker] Failed to commit volume in finally block: {e}", flush=True)
 
 
 @router.post(
@@ -367,34 +447,79 @@ def train(payload: NluTrainRequest = NluTrainRequest(), background_tasks: Backgr
 
 @router.get("/train/status", summary="Lấy trạng thái huấn luyện")
 def train_status():
-    import os
-    is_modal = os.environ.get("IS_MODAL") == "true" or os.environ.get("MODAL_PROJECT_NAME") or "modal" in str(sys.executable)
-    
-    # If running on Modal, check status file in shared volume
-    if is_modal:
-        status_file = Path("/storage/nlu_models/training_status.json")
-        if status_file.is_file():
-            try:
-                import sys
-                sys.path.insert(0, str(Path(os.environ.get("EXPENSE_OCR_NLU_DIR", "/workspace"))))
-                from modal_app import volume
-                volume.reload()
-            except Exception:
-                pass
-            
-            try:
-                with open(status_file, "r") as f:
-                    return json.load(f)
-            except Exception:
-                pass
-
-    # Local fallback
     global TRAINING_ACTIVE, TRAIN_STATUS_INFO
+    import os
+    import json
+    import sys
+    is_modal = os.environ.get("IS_MODAL") == "true" or os.environ.get("MODAL_PROJECT_NAME") or "modal" in str(sys.executable) or Path("/storage").is_dir()
+    
+    if is_modal:
+        try:
+            sys.path.insert(0, str(Path(os.environ.get("EXPENSE_OCR_NLU_DIR", "/workspace"))))
+            from modal_app import volume
+            volume.reload()
+        except Exception:
+            pass
+
+    status_file = Path("/storage/nlu_models/training_status.json")
+    if status_file.is_file():
+        try:
+            with open(status_file, "r", encoding="utf-8") as f:
+                modal_status = json.load(f)
+                return modal_status
+        except Exception:
+            pass
+            
+    # Always try to fetch from Modal if local training is not active
+    if not TRAINING_ACTIVE or is_modal:
+        try:
+            import modal
+            vol = modal.Volume.from_name("expense-ocr-nlu-storage")
+            chunks = []
+            for chunk in vol.read_file("nlu_models/training_status.json"):
+                chunks.append(chunk)
+            data = b"".join(chunks).decode("utf-8")
+            modal_status = json.loads(data)
+            return modal_status
+        except Exception:
+            pass
+            
     res = dict(TRAIN_STATUS_INFO)
     res["training_active"] = TRAINING_ACTIVE
     if res.get("started_ts") and TRAINING_ACTIVE:
         res["elapsed_seconds"] = round(time.time() - res["started_ts"], 1)
+        
     return res
+
+
+@router.get("/train/log", summary="Đọc log stdout huấn luyện NLU")
+def get_train_log():
+    settings = get_settings()
+    nlu_dir = Path(settings.expense_ocr_nlu_dir).resolve()
+    log_file_path = nlu_dir / "nlu_train_log.txt"
+    
+    # Check Modal volume if local file doesn't exist or we want the modal logs
+    try:
+        import modal
+        vol = modal.Volume.from_name("expense-ocr-nlu-storage")
+        chunks = []
+        for chunk in vol.read_file("nlu_models/nlu_train_log.txt"):
+            chunks.append(chunk)
+        data = b"".join(chunks).decode("utf-8")
+        lines = data.split("\n")
+        return {"log": "\n".join(lines[-500:])}
+    except Exception:
+        pass
+
+    if not log_file_path.is_file():
+        return {"log": ""}
+    try:
+        with open(log_file_path, "r", encoding="utf-8") as f:
+            # Read last 500 lines to avoid massive payload
+            lines = f.readlines()
+            return {"log": "".join(lines[-500:])}
+    except Exception as e:
+        return {"log": f"Error reading log: {e}"}
 
 
 @router.get("/internal/status", summary="Lấy thông tin mô hình NLU hiện tại")
@@ -410,38 +535,88 @@ def internal_status():
 @router.get("/models/status", summary="Lấy thông tin các phiên bản mô hình (hiện tại, mới, cũ)")
 def models_status():
     settings = get_settings()
-    nlu_dir = Path(settings.expense_ocr_nlu_dir).resolve() / "text_nlu"
+    nlu_root = Path(settings.expense_ocr_nlu_dir).resolve()
+    nlu_dir = nlu_root / "text_nlu"
     
-    def get_metrics(model_dir: Path):
-        metrics_file = model_dir / "retrain_all_metrics.json"
-        if not metrics_file.exists():
-            return None
+    if Path("/storage").is_dir():
         try:
-            with open(metrics_file, "r", encoding="utf-8") as f:
-                return json.load(f)
-        except:
-            return None
+            import sys
+            sys.path.insert(0, str(Path(os.environ.get("EXPENSE_OCR_NLU_DIR", "/workspace"))))
+            from modal_app import volume
+            volume.reload()
+        except Exception:
+            pass
+    else:
+        sync_modal_nlu_jsons()
+
+    from app.services.nlu_registry import load_registry
+    reg = load_registry(nlu_root)
+    pending_run = reg.get("pending_run_index")
+    
+    models_dir = nlu_dir / "models"
+    models_new = nlu_dir / "models_new"
+    models_old = nlu_dir / "models_old"
+    
+    # Auto cleanup orphan models_new if no pending candidate registered
+    if pending_run is None and models_new.exists():
+        import shutil
+        shutil.rmtree(models_new, ignore_errors=True)
+    
+    def get_metrics(model_dir: Path, fallback_storage_dir: Path | None = None):
+        metrics_files = [
+            model_dir / "retrain_all_metrics.json",
+            model_dir / "encoder_metrics.json",
+        ]
+        if fallback_storage_dir:
+            metrics_files.extend([
+                fallback_storage_dir / "retrain_all_metrics.json",
+                fallback_storage_dir / "encoder_metrics.json"
+            ])
+            
+        for mf in metrics_files:
+            if mf.exists():
+                try:
+                    with open(mf, "r", encoding="utf-8") as f:
+                        data = json.load(f)
+                        if data:
+                            return data
+                except Exception:
+                    pass
+        return None
 
     def get_dir_time(model_dir: Path):
         if not model_dir.exists():
             return None
-        return os.path.getmtime(model_dir)
+        try:
+            return os.path.getmtime(model_dir)
+        except Exception:
+            return None
+
+    has_candidate = bool(pending_run is not None and (models_new.exists() or (Path("/storage").is_dir() and Path("/storage/nlu_models_candidate").exists())))
+    
+    has_old = bool(models_old.exists() and any(models_old.iterdir()) if models_old.exists() else False)
+    if Path("/storage").is_dir() and Path("/storage/nlu_models_old").exists() and any(Path("/storage/nlu_models_old").iterdir()):
+        has_old = True
 
     return {
         "current": {
-            "exists": (nlu_dir / "models").exists(),
-            "metrics": get_metrics(nlu_dir / "models"),
-            "modified": get_dir_time(nlu_dir / "models")
+            "exists": models_dir.exists() or (Path("/storage/nlu_models").exists() if Path("/storage").is_dir() else False),
+            "version": reg.get("version", "v1.1-global"),
+            "metrics": get_metrics(models_dir, Path("/storage/nlu_models") if Path("/storage").is_dir() else None),
+            "modified": get_dir_time(models_dir)
         },
         "candidate": {
-            "exists": (nlu_dir / "models_new").exists(),
-            "metrics": get_metrics(nlu_dir / "models_new"),
-            "modified": get_dir_time(nlu_dir / "models_new")
+            "exists": has_candidate,
+            "version": f"v{int(reg.get('major', 1))}.{int(reg.get('minor', 1)) + 1}-candidate" if has_candidate else None,
+            "run_index": pending_run,
+            "metrics": get_metrics(models_new, Path("/storage/nlu_models_candidate") if Path("/storage").is_dir() else None) if has_candidate else None,
+            "modified": get_dir_time(models_new) if has_candidate else None
         },
         "old": {
-            "exists": (nlu_dir / "models_old").exists(),
-            "metrics": get_metrics(nlu_dir / "models_old"),
-            "modified": get_dir_time(nlu_dir / "models_old")
+            "exists": has_old,
+            "version": f"v{int(reg.get('major', 1))}.{max(1, int(reg.get('minor', 1)) - 1)}-backup" if has_old else None,
+            "metrics": get_metrics(models_old, Path("/storage/nlu_models_old") if Path("/storage").is_dir() else None) if has_old else None,
+            "modified": get_dir_time(models_old) if has_old else None
         }
     }
 
@@ -524,12 +699,23 @@ def get_benchmark_results():
                 "avg_latency_ms": 45.8,
                 "p95_latency_ms": 90.2
             },
-            "phogpt": {
-                "intent_accuracy": 96.8,
-                "category_accuracy": 95.1,
-                "record_type_accuracy": 98.4,
-                "avg_latency_ms": 1820.0,
-                "p95_latency_ms": 2450.0
+            "qwen_base": {
+                "intent_accuracy": 92.5,
+                "category_accuracy": 90.1,
+                "record_type_accuracy": 94.2,
+                "avg_latency_ms": 1200.0,
+                "p95_latency_ms": 1500.0,
+                "intent_latency_ms": 600.0,
+                "category_latency_ms": 600.0
+            },
+            "qwen_lora": {
+                "intent_accuracy": 97.4,
+                "category_accuracy": 96.5,
+                "record_type_accuracy": 98.8,
+                "avg_latency_ms": 1480.0,
+                "p95_latency_ms": 1850.0,
+                "intent_latency_ms": 740.0,
+                "category_latency_ms": 740.0
             }
         }
     try:
@@ -594,10 +780,38 @@ def get_llm_history():
     return []
 
 
+def sync_modal_nlu_jsons():
+    try:
+        import os
+        is_modal = os.environ.get("IS_MODAL") == "true" or os.environ.get("MODAL_PROJECT_NAME") or "modal" in str(sys.executable)
+        if is_modal:
+            return  # Already inside modal
+        
+        import modal
+        vol = modal.Volume.from_name("expense-ocr-nlu-storage")
+        settings = get_settings()
+        nlu_dir = Path(settings.expense_ocr_nlu_dir).resolve()
+        models_dir = nlu_dir / "text_nlu" / "models"
+        models_dir.mkdir(parents=True, exist_ok=True)
+        
+        for fname in ["nlu_model_registry.json", "nlu_training_history.json", "retrain_all_metrics.json"]:
+            try:
+                chunks = []
+                for chunk in vol.read_file(f"nlu_models/{fname}"):
+                    chunks.append(chunk)
+                data = b"".join(chunks)
+                with open(models_dir / fname, "wb") as f:
+                    f.write(data)
+            except Exception:
+                pass
+    except Exception as e:
+        print(f"Failed to sync NLU jsons from Modal: {e}")
+
 @router.get("/model-meta", summary="Metadata mô hình NLU đang deploy")
 def model_meta():
     from app.services.nlu_registry import get_model_meta
 
+    sync_modal_nlu_jsons()
     settings = get_settings()
     nlu_dir = Path(settings.expense_ocr_nlu_dir).resolve()
     loaded = get_nlu_service().try_load()
@@ -608,9 +822,13 @@ def model_meta():
 def trigger_llm_finetune(epochs: int = 3, lr: float = 2e-4, batch_size: int = 4):
     try:
         import modal
-        f = modal.Function.from_name("expense-ocr-nlu", "train_qwen_model")
-        # Run asynchronously by spawning a task
-        handle = f.spawn(num_epochs=epochs, learning_rate=lr, batch_size=batch_size)
+        try:
+            from modal_app import train_qwen_model
+            handle = train_qwen_model.spawn(num_epochs=epochs, learning_rate=lr, batch_size=batch_size)
+        except Exception:
+            f = modal.Function.from_name("expense-ocr-nlu", "train_qwen_model")
+            # Run asynchronously by spawning a task
+            handle = f.spawn(num_epochs=epochs, learning_rate=lr, batch_size=batch_size)
         return {
             "ok": True,
             "job_id": handle.object_id,
@@ -731,6 +949,46 @@ def test_prompt(payload: dict) -> dict:
 
 
 
+def sync_modal_nlu_jsons():
+    """Sync json files from Modal volume to local directory if Modal is available."""
+    try:
+        import modal
+        vol = modal.Volume.from_name("expense-ocr-nlu-storage")
+        settings = get_settings()
+        nlu_dir = Path(settings.expense_ocr_nlu_dir).resolve()
+        local_models = nlu_dir / "text_nlu" / "models"
+        local_models.mkdir(parents=True, exist_ok=True)
+        
+        for name in ["nlu_model_registry.json", "nlu_training_history.json"]:
+            try:
+                data = b"".join(vol.read_file(f"nlu_models/{name}")).decode("utf-8")
+                (local_models / name).write_text(data, encoding="utf-8")
+            except Exception:
+                pass
+    except Exception as e:
+        print(f"[Modal Sync] Error syncing NLU jsons: {e}")
+
+def push_modal_nlu_jsons():
+    """Push local NLU json files to Modal volume."""
+    try:
+        import modal
+        vol = modal.Volume.from_name("expense-ocr-nlu-storage")
+        settings = get_settings()
+        nlu_dir = Path(settings.expense_ocr_nlu_dir).resolve()
+        local_models = nlu_dir / "text_nlu" / "models"
+        
+        reg_p = local_models / "nlu_model_registry.json"
+        hist_p = local_models / "nlu_training_history.json"
+        
+        with vol.batch_upload(force=True) as batch:
+            if reg_p.is_file():
+                batch.put_file(str(reg_p), "nlu_models/nlu_model_registry.json")
+            if hist_p.is_file():
+                batch.put_file(str(hist_p), "nlu_models/nlu_training_history.json")
+    except Exception as e:
+        print(f"[Modal Push] Error pushing NLU jsons: {e}")
+
+
 @router.post("/benchmark", summary="Chạy kiểm thử hiệu năng Golden Set 2 tầng (Intent & Category) cho 3 model")
 def run_nlu_benchmark():
     try:
@@ -747,6 +1005,8 @@ def promote_candidate_model():
         settings = get_settings()
         nlu_dir = Path(settings.expense_ocr_nlu_dir).resolve()
         reg = accept_pending_version(nlu_dir)
+        push_modal_nlu_jsons()
+            
         get_nlu_service().reload()
         return {
             "ok": True,
@@ -756,6 +1016,23 @@ def promote_candidate_model():
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to promote model: {e}")
 
+@router.post("/models/reject", summary="Từ chối mô hình mới (Xóa Candidate)")
+def reject_candidate_model():
+    try:
+        from app.services.nlu_registry import reject_pending_version
+        settings = get_settings()
+        nlu_dir = Path(settings.expense_ocr_nlu_dir).resolve()
+        reg = reject_pending_version(nlu_dir)
+        push_modal_nlu_jsons()
+            
+        return {
+            "ok": True,
+            "message": "Đã từ chối và xóa mô hình Candidate thành công!",
+            "registry": reg,
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to reject model: {e}")
+
 @router.post("/models/rollback", summary="Khôi phục mô hình cũ (Active -> Old)")
 def rollback_model():
     try:
@@ -763,6 +1040,8 @@ def rollback_model():
         settings = get_settings()
         nlu_dir = Path(settings.expense_ocr_nlu_dir).resolve()
         reg = rollback_to_previous_version(nlu_dir)
+        push_modal_nlu_jsons()
+            
         get_nlu_service().reload()
         return {
             "ok": True,

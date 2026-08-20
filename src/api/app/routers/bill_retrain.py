@@ -43,28 +43,28 @@ class VerifiedSample(BaseModel):
 class ExportRequest(BaseModel):
     samples: list[VerifiedSample]
     trigger_kaggle: bool = False
-    kaggle_job_type: str = Field(default="pick_retrain", pattern="^(pick_retrain|pick_train)$")
+    kaggle_job_type: str = Field(default="layoutlmv3", pattern="^(pick_retrain|pick_train|layoutlmv3|layoutlmv3_train|layoutlmv3_retrain)$")
     webhook_url: str | None = None
 
 
 class KagglePlanRequest(BaseModel):
-    job_type: str = Field(default="pick_retrain", pattern="^(pick_retrain|pick_train)$")
+    job_type: str = Field(default="layoutlmv3", pattern="^(pick_retrain|pick_train|layoutlmv3|layoutlmv3_train|layoutlmv3_retrain)$")
 
 
 class KaggleTriggerRequest(BaseModel):
-    job_type: str = Field(default="pick_retrain", pattern="^(pick_retrain|pick_train)$")
+    job_type: str = Field(default="layoutlmv3", pattern="^(pick_retrain|pick_train|layoutlmv3|layoutlmv3_train|layoutlmv3_retrain)$")
     webhook_url: str | None = None
     cloud_fallback_url: str | None = None
 
 
 class KaggleDeployRequest(BaseModel):
     source: str = Field(description="Local path, zip, or https URL to trained artifact")
-    job_type: str = Field(default="pick_retrain", pattern="^(pick_retrain|pick_train)$")
+    job_type: str = Field(default="layoutlmv3", pattern="^(pick_retrain|pick_train|layoutlmv3|layoutlmv3_train|layoutlmv3_retrain)$")
     batch_id: str | None = None
 
 
 class KaggleSyncRequest(BaseModel):
-    job_type: str = Field(default="pick_retrain", pattern="^(pick_retrain|pick_train)$")
+    job_type: str = Field(default="layoutlmv3", pattern="^(pick_retrain|pick_train|layoutlmv3|layoutlmv3_train|layoutlmv3_retrain)$")
     skip_download: bool = False
     download_dir: str | None = None
 
@@ -159,9 +159,22 @@ def get_ocr_history() -> list[dict[str, Any]]:
         return data
     return []
 
-def read_modal_json(path_str: str) -> dict:
+def read_modal_json(path_str: str) -> dict | None:
     from pathlib import Path
+    import os
     import json
+    import sys
+
+    # Reload volume if running on Modal container so writes from worker containers are seen
+    is_modal = os.environ.get("IS_MODAL") == "true" or os.environ.get("MODAL_PROJECT_NAME") or "modal" in str(sys.executable) or Path("/storage").is_dir()
+    if is_modal:
+        try:
+            sys.path.insert(0, str(Path(os.environ.get("EXPENSE_OCR_NLU_DIR", "/workspace"))))
+            from modal_app import volume
+            volume.reload()
+        except Exception:
+            pass
+
     p = Path(path_str)
     if p.is_file():
         try:
@@ -169,11 +182,27 @@ def read_modal_json(path_str: str) -> dict:
                 return json.load(f)
         except Exception:
             return None
+
+    # Check local workspace relative paths if running locally on Windows/Host
+    base_dir = Path(__file__).resolve().parents[4]
+    local_candidates = [
+        base_dir / p.name,
+        base_dir / "storage" / path_str.replace("/storage/", ""),
+        Path(os.environ.get("EXPENSE_OCR_NLU_DIR", ".")) / p.name,
+        Path(os.environ.get("EXPENSE_OCR_NLU_DIR", ".")) / "storage" / path_str.replace("/storage/", "")
+    ]
+    for cand in local_candidates:
+        if cand.is_file():
+            try:
+                with open(cand, "r", encoding="utf-8") as f:
+                    return json.load(f)
+            except Exception:
+                pass
     
     # Fallback to Modal Volume SDK if running locally
     try:
         import modal
-        vol = modal.Volume.lookup("expense-ocr-nlu-storage")
+        vol = modal.Volume.from_name("expense-ocr-nlu-storage")
         vol_path = path_str.replace("/storage/", "")
         chunks = []
         for chunk in vol.read_file(vol_path):
@@ -190,6 +219,36 @@ def get_modal_progress() -> dict[str, Any]:
     if data:
         return data
     return {"isTraining": False}
+
+
+@router.get("/modal/log")
+def get_modal_log() -> dict[str, Any]:
+    # Read the text log from Modal volume
+    path_str = "/storage/layoutlmv3_train_log.txt"
+    from pathlib import Path
+    p = Path(path_str)
+    if p.is_file():
+        try:
+            with open(p, "r", encoding="utf-8") as f:
+                lines = f.readlines()
+                return {"log": "".join(lines[-500:])}
+        except Exception:
+            return {"log": ""}
+            
+    # Fallback to Modal SDK
+    try:
+        import modal
+        vol = modal.Volume.from_name("expense-ocr-nlu-storage")
+        vol_path = path_str.replace("/storage/", "")
+        chunks = []
+        for chunk in vol.read_file(vol_path):
+            chunks.append(chunk)
+        data = b"".join(chunks).decode("utf-8")
+        lines = data.split("\n")
+        return {"log": "\n".join(lines[-500:])}
+    except Exception as e:
+        return {"log": f"Log not found or error reading log: {e}"}
+
 
 
 @router.get("/model/candidate")
@@ -214,10 +273,88 @@ def get_model_candidate() -> dict[str, Any]:
 @router.post("/model/promote")
 def promote_model() -> dict[str, Any]:
     try:
+        from pathlib import Path
+        import shutil
+        import json
+        
+        # 1. Direct local volume manipulation if /storage is mounted
+        candidate_path = Path("/storage/layoutlmv3/candidate_model.pth")
+        if candidate_path.parent.exists():
+            best_path = Path("/storage/layoutlmv3/model_best.pth")
+            previous_path = Path("/storage/layoutlmv3/model_previous.pth")
+            if not candidate_path.is_file():
+                return {"ok": False, "error": "No candidate model found."}
+            if best_path.is_file():
+                shutil.copy2(best_path, previous_path)
+            shutil.copy2(candidate_path, best_path)
+            
+            history_file = Path("/storage/layoutlmv3/ocr_training_history.json")
+            if history_file.is_file():
+                try:
+                    with open(history_file, "r", encoding="utf-8") as f:
+                        history = json.load(f)
+                    for run in reversed(history):
+                        if run.get("is_candidate"):
+                            run["is_candidate"] = False
+                            run["status"] = "success"
+                            break
+                    with open(history_file, "w", encoding="utf-8") as f:
+                        json.dump(history, f, indent=2, ensure_ascii=False)
+                except Exception as e:
+                    print(f"Error updating history: {e}")
+            
+            try:
+                from modal_app import volume
+                volume.commit()
+            except Exception:
+                pass
+            return {"ok": True, "message": "Đã duyệt áp dụng mô hình LayoutLMv3 mới thành công."}
+
+        # 2. Remote Modal execution fallback (synchronous remote call)
         import modal
         f = modal.Function.from_name("expense-ocr-nlu", "promote_layoutlmv3_model")
-        res = f.spawn()
-        return {"ok": True, "message": "Triggered model promotion successfully. (May require container restart)", "job_id": res.object_id}
+        res = f.remote()
+        return res
+    except Exception as e:
+        return {"ok": False, "error": str(e)}
+
+@router.post("/model/reject")
+def reject_model() -> dict[str, Any]:
+    try:
+        from pathlib import Path
+        import json
+        
+        # 1. Direct local volume manipulation if /storage is mounted
+        candidate_path = Path("/storage/layoutlmv3/candidate_model.pth")
+        if candidate_path.parent.exists():
+            if candidate_path.is_file():
+                candidate_path.unlink()
+            history_file = Path("/storage/layoutlmv3/ocr_training_history.json")
+            if history_file.is_file():
+                try:
+                    with open(history_file, "r", encoding="utf-8") as f:
+                        history = json.load(f)
+                    history = [run for run in history if not run.get("is_candidate")]
+                    with open(history_file, "w", encoding="utf-8") as f:
+                        json.dump(history, f, indent=2, ensure_ascii=False)
+                except Exception as e:
+                    print(f"Error updating history: {e}")
+            try:
+                from modal_app import volume
+                volume.commit()
+            except Exception:
+                pass
+            return {"ok": True, "message": "Đã từ chối và xóa mô hình candidate thành công."}
+
+        # 2. Remote Modal execution fallback (synchronous remote call)
+        import modal
+        try:
+            from modal_app import reject_layoutlmv3_model
+            res = reject_layoutlmv3_model.remote()
+        except Exception:
+            f = modal.Function.from_name("expense-ocr-nlu", "reject_layoutlmv3_model")
+            res = f.remote()
+        return res
     except Exception as e:
         return {"ok": False, "error": str(e)}
 
@@ -225,10 +362,29 @@ def promote_model() -> dict[str, Any]:
 @router.post("/model/rollback")
 def rollback_model() -> dict[str, Any]:
     try:
+        from pathlib import Path
+        import shutil
+        import json
+        
+        # 1. Direct local volume manipulation if /storage is mounted
+        previous_path = Path("/storage/layoutlmv3/model_previous.pth")
+        if previous_path.parent.exists():
+            best_path = Path("/storage/layoutlmv3/model_best.pth")
+            if not previous_path.is_file():
+                return {"ok": False, "error": "Không tìm thấy bản sao lưu mô hình trước đó."}
+            shutil.copy2(previous_path, best_path)
+            try:
+                from modal_app import volume
+                volume.commit()
+            except Exception:
+                pass
+            return {"ok": True, "message": "Đã khôi phục mô hình phiên bản trước thành công."}
+
+        # 2. Remote Modal execution fallback (synchronous remote call)
         import modal
         f = modal.Function.from_name("expense-ocr-nlu", "rollback_layoutlmv3_model")
-        res = f.spawn()
-        return {"ok": True, "message": "Triggered model rollback successfully. (May require container restart)", "job_id": res.object_id}
+        res = f.remote()
+        return res
     except Exception as e:
         return {"ok": False, "error": str(e)}
 

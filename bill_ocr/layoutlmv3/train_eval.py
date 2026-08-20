@@ -19,7 +19,12 @@ python -m bill_ocr.mc_ocr.layoutlmv3.train_eval test    # run inference & export
 ```
 """
 
+import sys
 import os
+
+if not hasattr(sys.stdout, 'isatty'):
+    sys.stdout.isatty = lambda: False
+
 import json
 import shutil
 import subprocess
@@ -54,8 +59,20 @@ VOLUME_TEST_CSV = Path("/storage/mcocr_test_df.csv")
 
 CHECKPOINT_PATH = Path("/workspace/bill_ocr/models/layoutlmv3/model_best.pth")
 VOLUME_CHECKPOINT = Path("/storage/layoutlmv3/candidate_model.pth")
+VOLUME_BEST_CHECKPOINT = Path("/storage/layoutlmv3/model_best.pth")
 RESULTS_PATH = Path("/storage/evaluation_metrics_layoutlmv3.txt")
 TEST_RESULT_CSV = Path("/storage/result.csv")
+
+def get_layoutlmv3_checkpoint_path() -> Path:
+    candidates = [
+        VOLUME_CHECKPOINT,
+        VOLUME_BEST_CHECKPOINT,
+        CHECKPOINT_PATH,
+    ]
+    for c in candidates:
+        if c.is_file():
+            return c
+    return CHECKPOINT_PATH
 
 # ---------------------------------------------------------------------------
 # Helper utilities
@@ -69,11 +86,19 @@ def copy_dataset(train: bool = True):
     target_dir.mkdir(parents=True, exist_ok=True)
     # Images
     src_img = VOLUME_TRAIN_IMG if train else VOLUME_TEST_IMG
-    shutil.copytree(src_img, target_dir / "imgs", dirs_exist_ok=True)
+    if src_img.exists():
+        shutil.copytree(src_img, target_dir / "imgs", dirs_exist_ok=True)
+    elif not train:
+        print(f"⚠️ Warning: Test images directory {src_img} not found. Skipping.")
+        
     # CSV
     src_csv = VOLUME_TRAIN_CSV if train else VOLUME_TEST_CSV
-    shutil.copy2(src_csv, target_dir / f"{split}_df.csv")
-    print(f"✅ {split.capitalize()} dataset copied to {target_dir}")
+    if src_csv.exists():
+        shutil.copy2(src_csv, target_dir / f"{split}_df.csv")
+    elif not train:
+        print(f"⚠️ Warning: Test CSV {src_csv} not found. Skipping.")
+        
+    print(f"✅ {split.capitalize()} dataset copy attempt completed")
 
 def convert_csv_to_jsonl(csv_path: Path, jsonl_dir: Path):
     """Run the conversion script located in ``layoutlmv3/scripts``.
@@ -278,7 +303,8 @@ class ProgressCallback(TrainerCallback):
     def on_log(self, args, state, control, logs=None, **kwargs):
         if logs and "loss" in logs:
             epoch = state.epoch or 0.0
-            percent = min(100, int((epoch / self.num_epochs) * 100))
+            # 10% is dedicated to OCR & data prep, 10%..95% is LayoutLMv3 training epochs
+            percent = min(95, max(10, int(10 + (epoch / max(1, self.num_epochs)) * 85)))
             
             data = {
                 "isTraining": True,
@@ -286,12 +312,19 @@ class ProgressCallback(TrainerCallback):
                 "progress_percent": percent,
                 "epoch": round(epoch, 2),
                 "loss": round(logs["loss"], 4),
-                "message": f"Đang huấn luyện (Epoch {int(epoch)}/{self.num_epochs}) - Loss: {logs['loss']:.4f}..."
+                "message": f"Đang huấn luyện LayoutLMv3 (Epoch {int(epoch)}/{self.num_epochs}) - Loss: {logs['loss']:.4f}"
             }
             try:
                 self.progress_file.parent.mkdir(parents=True, exist_ok=True)
                 with open(self.progress_file, "w", encoding="utf-8") as f:
                     json.dump(data, f, ensure_ascii=False)
+                try:
+                    import sys
+                    sys.path.insert(0, "/workspace")
+                    from modal_app import volume
+                    volume.commit()
+                except Exception:
+                    pass
             except Exception as e:
                 pass
 
@@ -322,6 +355,26 @@ def train(num_epochs: int = 5, learning_rate: float = 2e-5, seed: int = 42, earl
         copy_dataset(train=True)
         train_dir = DATA_ROOT / "train"
         
+        # Update progress to indicate OCR is running
+        try:
+            progress_file = Path("/storage/layoutlmv3/training_progress.json")
+            if progress_file.exists():
+                with open(progress_file, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                data["message"] = "Đang trích xuất OCR và hộp giới hạn bằng PaddleOCR (GPU). Quá trình này có thể mất 2-5 phút..."
+                with open(progress_file, "w", encoding="utf-8") as f:
+                    json.dump(data, f, ensure_ascii=False)
+                # Force commit if possible
+                try:
+                    import sys
+                    sys.path.insert(0, "/workspace")
+                    from modal_app import volume
+                    volume.commit()
+                except Exception:
+                    pass
+        except Exception:
+            pass
+            
         # Convert CSV → JSONL
         convert_csv_to_jsonl(train_dir / "train_df.csv", jsonl_dir)
         
@@ -429,6 +482,9 @@ def train(num_epochs: int = 5, learning_rate: float = 2e-5, seed: int = 42, earl
     VOLUME_CHECKPOINT.parent.mkdir(parents=True, exist_ok=True)
     shutil.copy2(CHECKPOINT_PATH, VOLUME_CHECKPOINT)
     print(f"✅ Checkpoint copied to volume at {VOLUME_CHECKPOINT}")
+    if not VOLUME_BEST_CHECKPOINT.is_file():
+        shutil.copy2(CHECKPOINT_PATH, VOLUME_BEST_CHECKPOINT)
+        print(f"✅ Initial best checkpoint saved to volume at {VOLUME_BEST_CHECKPOINT}")
 
 # ---------------------------------------------------------------------------
 def clean_single_tag(tag, token_str):
@@ -437,10 +493,31 @@ def clean_single_tag(tag, token_str):
 # Evaluation (same split as training for demo)
 # ---------------------------------------------------------------------------
 def evaluate():
-    if not CHECKPOINT_PATH.is_file():
-        raise FileNotFoundError(f"Checkpoint not found at {CHECKPOINT_PATH}")
+    try:
+        progress_file = Path("/storage/layoutlmv3/training_progress.json")
+        if progress_file.parent.exists():
+            with open(progress_file, "w", encoding="utf-8") as pf:
+                json.dump({
+                    "isTraining": True,
+                    "stage": "evaluating",
+                    "progress_percent": 97,
+                    "message": "Đang đánh giá chỉ số F1-Score trên tập kiểm thử và lưu candidate..."
+                }, pf, ensure_ascii=False)
+            try:
+                import sys
+                sys.path.insert(0, "/workspace")
+                from modal_app import volume
+                volume.commit()
+            except Exception:
+                pass
+    except Exception:
+        pass
+
+    checkpoint_file = get_layoutlmv3_checkpoint_path()
+    if not checkpoint_file.is_file():
+        raise FileNotFoundError(f"Checkpoint not found at {checkpoint_file}")
     # Load checkpoint
-    checkpoint = torch.load(CHECKPOINT_PATH, map_location="cpu")
+    checkpoint = torch.load(checkpoint_file, map_location="cpu")
     # Load dataset (must match training preprocessing)
     jsonl_dir = Path("/storage/layoutlmv3/jsonl")
     val_split_file = jsonl_dir / "val_split.jsonl"
@@ -533,16 +610,22 @@ def evaluate():
 # Test / inference – write predictions to CSV
 # ---------------------------------------------------------------------------
 def test():
-    if not CHECKPOINT_PATH.is_file():
-        raise FileNotFoundError(f"Checkpoint not found at {CHECKPOINT_PATH}")
+    checkpoint_file = get_layoutlmv3_checkpoint_path()
+    if not checkpoint_file.is_file():
+        raise FileNotFoundError(f"Checkpoint not found at {checkpoint_file}")
     # Load checkpoint
-    checkpoint = torch.load(CHECKPOINT_PATH, map_location="cpu")
+    checkpoint = torch.load(checkpoint_file, map_location="cpu")
     # Copy test data (if volume provided)
     copy_dataset(train=False)
     test_dir = DATA_ROOT / "test"
+    test_csv = test_dir / "test_df.csv"
+    if not test_csv.exists():
+        print("⚠️ Warning: Test CSV not found after copying. Skipping test inference.")
+        return
+        
     # Convert test CSV → JSONL
     jsonl_dir = DATA_ROOT / "jsonl_test"
-    convert_csv_to_jsonl(test_dir / "test_df.csv", jsonl_dir)
+    convert_csv_to_jsonl(test_csv, jsonl_dir)
     jsonl_file = jsonl_dir / "test_df.jsonl"
     if not jsonl_file.is_file() or jsonl_file.stat().st_size == 0:
         print("⚠️ Warning: Converted test JSONL is empty. Skipping test inference (requires pre-processed CSV with bounding boxes).")

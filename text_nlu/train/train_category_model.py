@@ -1,4 +1,5 @@
 import json
+import os
 import sys
 from pathlib import Path
 
@@ -86,6 +87,24 @@ def train_model(df: pd.DataFrame) -> tuple[TfidfVectorizer, LinearSVC]:
         "confusion_matrix": {"labels": labels, "matrix": cm.tolist()},
     }, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"Saved TF-IDF category metrics -> {metrics_out}")
+    if Path("/storage").is_dir():
+        for storage_dir in [Path("/storage/nlu_models_candidate"), Path("/storage/nlu_models")]:
+            try:
+                storage_dir.mkdir(parents=True, exist_ok=True)
+                (storage_dir / "tfidf_category_metrics.json").write_text(json.dumps({
+                    "accuracy": round(acc, 4),
+                    "test_set": int(len(y_test)),
+                    "weighted_precision": round(float(wp), 4),
+                    "weighted_recall": round(float(wr), 4),
+                    "weighted_f1": round(float(wf1), 4),
+                    "macro_precision": round(float(mp), 4),
+                    "macro_recall": round(float(mr), 4),
+                    "macro_f1": round(float(mf1), 4),
+                    "per_class_report": {k: v for k, v in per_class.items() if k not in ("accuracy", "macro avg", "weighted avg")},
+                    "confusion_matrix": {"labels": labels, "matrix": cm.tolist()},
+                }, ensure_ascii=False, indent=2), encoding="utf-8")
+            except Exception:
+                pass
 
     return vectorizer, model
 
@@ -95,8 +114,20 @@ def save_model(vectorizer: TfidfVectorizer, model: LinearSVC) -> None:
         "vectorizer": vectorizer,
         "model": model,
     }
+    MODEL_PATH.parent.mkdir(parents=True, exist_ok=True)
     joblib.dump(payload, MODEL_PATH)
     print(f"Saved category model to {MODEL_PATH}")
+    
+    # Đồng bộ trực tiếp vào /storage vĩnh viễn nếu môi trường hỗ trợ
+    if Path("/storage").is_dir():
+        for storage_dir in [Path("/storage/nlu_models_candidate"), Path("/storage/nlu_models")]:
+            try:
+                storage_dir.mkdir(parents=True, exist_ok=True)
+                dest = storage_dir / "category_model.joblib"
+                joblib.dump(payload, dest)
+                print(f"✅ Synced category model to persistent storage: {dest}")
+            except Exception as e:
+                print(f"⚠️ Failed to sync category model to {storage_dir}: {e}")
 
 
 def main() -> None:

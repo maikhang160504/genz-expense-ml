@@ -385,11 +385,11 @@ class PickKIEEngine:
         def post_process_predictions(words, raw_boxes, resolved_word_labels, w_img, h_img):
             refined_labels = list(resolved_word_labels)
             
-            # 1. Clean SELLER: Must be in the top 40% of the image
+            # 1. Clean SELLER: Must be in the top 45% of the image
             for idx, label in enumerate(refined_labels):
                 if "SELLER" in label:
                     x1, y1, x2, y2 = raw_boxes[idx]
-                    if y1 > h_img * 0.4:
+                    if y1 > h_img * 0.45:
                         refined_labels[idx] = "O"
                         
             # 2. Clean ADDRESS: Avoid table rows (usually middle 35%-75% height)
@@ -401,12 +401,15 @@ class PickKIEEngine:
                         if word_lower in ["hộp", "gói", "sữa", "chai", "lon", "cái", "thịt", "cá", "rau", "vnd", "vnd:", "đ", "d"]:
                             refined_labels[idx] = "O"
                             
-            # 3. Clean TIMESTAMP: Keep if it contains digits or is very close to a digit
+            # 3. Clean TIMESTAMP: Keep if it contains digits, is near a digit, or contains date/time keywords
             for idx, label in enumerate(refined_labels):
                 if "TIMESTAMP" in label:
                     word_lower = words[idx].lower()
                     has_digit = any(c.isdigit() for c in word_lower)
-                    if not has_digit:
+                    import re
+                    is_date_keyword = bool(re.search(r"ngay|thang|nam|date|time|gio|phut|giờ|phút|ngày|tháng|năm", word_lower))
+                    
+                    if not has_digit and not is_date_keyword:
                         nearby_has_digit = False
                         for offset in [-2, -1, 1, 2]:
                             n_idx = idx + offset
@@ -423,9 +426,9 @@ class PickKIEEngine:
             if total_cost_indices:
                 import re
                 
-                # Exclude lines containing cash/change keywords
+                # Exclude lines containing cash/change/payment keywords
                 re_exclude = re.compile(
-                    r"tien\s*mat|khach\s*dua|tien\s*khach|cash|received|tra\s*lai|tien\s*thua|thoi\s*lai|change|thoi|tra",
+                    r"tien\s*mat|khach\s*dua|tien\s*khach|cash|received|tra\s*lai|tien\s*thua|thoi\s*lai|change|thoi|tra|chuyen\s*khoan|visa|mastercard|atm|momo|vnpay|zalopay|thanh\s*toan\s*qua|tien\s*the|ck",
                     re.I
                 )
                 re_total = re.compile(

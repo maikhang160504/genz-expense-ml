@@ -172,27 +172,12 @@ class ReceiptOCRPipeline:
         return [line[0] for line in paddle_lines(result)]
 
     def _run_paddle(self, image_rgb: np.ndarray):
-
         self._init_paddle()
-
         try:
-
             return run_paddle_ocr(self._paddle, image_rgb)
-
-        except (OSError, NotImplementedError) as exc:
-
-            err = str(exc).upper()
-
-            if "CUDNN" not in err and "CUDA" not in err and "PIR" not in err:
-
-                if "ONEDNN" not in err and "MKLDNN" not in err:
-
-                    raise
-
+        except Exception as exc:
             self._paddle = None
-
             self._init_paddle(use_gpu=False)
-
             return run_paddle_ocr(self._paddle, image_rgb)
 
 

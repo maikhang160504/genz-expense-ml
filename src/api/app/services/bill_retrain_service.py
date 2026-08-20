@@ -233,8 +233,48 @@ def trigger_modal_layoutlmv3_train(num_epochs: int = 30, learning_rate: float = 
     """Trigger serverless LayoutLMv3 training on Modal Cloud."""
     try:
         import modal
-        f = modal.Function.from_name("expense-ocr-nlu", "train_layoutlmv3_model")
-        handle = f.spawn(num_epochs=num_epochs, learning_rate=learning_rate)
+        import json
+        
+        # Pre-set progress on Modal volume so UI immediately reflects training state during container cold-start
+        try:
+            progress_path = Path("/storage/layoutlmv3/training_progress.json")
+            init_data = {
+                "isTraining": True,
+                "stage": "starting",
+                "progress_percent": 1,
+                "message": "Đang khởi động Modal GPU container..."
+            }
+            if Path("/storage").is_dir():
+                progress_path.parent.mkdir(parents=True, exist_ok=True)
+                with open(progress_path, "w", encoding="utf-8") as f:
+                    json.dump(init_data, f, ensure_ascii=False)
+                try:
+                    from modal_app import volume
+                    volume.commit()
+                except Exception:
+                    pass
+            else:
+                import tempfile
+                import os
+                vol = modal.Volume.from_name("expense-ocr-nlu-storage")
+                with tempfile.NamedTemporaryFile("w", encoding="utf-8", delete=False) as tf:
+                    json.dump(init_data, tf, ensure_ascii=False)
+                    tf_name = tf.name
+                with vol.batch_upload(force=True) as batch:
+                    batch.put_file(tf_name, "layoutlmv3/training_progress.json")
+                try:
+                    os.unlink(tf_name)
+                except Exception:
+                    pass
+        except Exception as e_vol:
+            logger.warning(f"Failed to pre-set training progress on volume: {e_vol}")
+
+        try:
+            from modal_app import train_layoutlmv3_model
+            handle = train_layoutlmv3_model.spawn(num_epochs=num_epochs, learning_rate=learning_rate)
+        except Exception:
+            f = modal.Function.from_name("expense-ocr-nlu", "train_layoutlmv3_model")
+            handle = f.spawn(num_epochs=num_epochs, learning_rate=learning_rate)
         return {
             "ok": True,
             "job_id": handle.object_id,
